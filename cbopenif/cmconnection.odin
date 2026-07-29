@@ -17,7 +17,7 @@ CMConnectionVTable :: struct {
     GraphicalConnectionSet: proc "system" (this: ^CMConnectionIF, GraphicalConnection: VariantBool) -> HResult,
     PointsGet:              proc "system" (this: ^CMConnectionIF, Point: ^Points) -> HResult,
     PointsPut:              proc "system" (this: ^CMConnectionIF, Point: Points) -> HResult,
-    Missing24:              proc "system" (this: ^CMConnectionIF) -> HResult,
+    Missing14:              proc "system" (this: ^CMConnectionIF) -> HResult,
     Serialize:              proc "system" (this: ^CMConnectionIF, XML: ^BStr) -> HResult,
 }
 
