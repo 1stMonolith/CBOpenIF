@@ -64,7 +64,7 @@ FactoryVTable :: struct {
     NewHWUnit1:                         proc "system" (this: ^FactoryIF, Path, TypeID, TypeDescription, Guid: BStr, HWUnit: ^rawptr) -> HResult,
     NewHWChannel:                       proc "system" (this: ^FactoryIF, Address, Name, ConVariable, IODescription: BStr, HWChannel: ^rawptr) -> HResult,
     NewHWChannel1:                      proc "system" (this: ^FactoryIF, Address, Name, ConVariable, IODescription, Min, Max, Unit, Fraction: BStr, Reversed: VariantBool, HWChannel: ^rawptr) -> HResult,
-    NewParameterSetting:                proc "system" (this: ^FactoryIF, Name, ParameterValue: BStr, ParameterSetting: ^rawptr) -> HResult,
+    NewParameterSetting:                proc "system" (this: ^FactoryIF, Name, ParameterValue: BStr, ParameterSetting: ^ParameterSetting) -> HResult,
     NewVariable:                        proc "system" (this: ^FactoryIF, Name, TypeName: BStr, variable: ^Variable) -> HResult,
     NewVariable1:                       proc "system" (this: ^FactoryIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, variable: ^Variable) -> HResult,
     NewGlobalVariable:                  proc "system" (this: ^FactoryIF, Name, TypeName: BStr, GlobalVariable: ^GlobalVariable) -> HResult,

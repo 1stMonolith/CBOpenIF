@@ -164,6 +164,8 @@ name :: proc {
     externalvariable_name_set,
     parameter_name_,
     parameter_name_set,
+    parameter_setting_name_,
+    parameter_setting_name_set,
 }
 
 x :: proc {
@@ -187,6 +189,11 @@ type_name :: proc {
     externalvariable_type_name_set,
     parameter_type_name_,
     parameter_type_name_set,
+}
+
+parameter_value :: proc {
+    parameter_setting_parameter_value_,
+    parameter_setting_parameter_value_set,
 }
 
 attribute :: proc {
@@ -315,6 +322,7 @@ description :: proc {
     externalvariable_description_set,
     parameter_description_,
     parameter_description_set,
+    parameter_setting_description_
 }
 
 path :: proc {
@@ -421,6 +429,8 @@ add :: proc {
     externalvariables_add_at_index,
     parameters_add_,
     parameters_add_at_index,
+    parametersettings_add_,
+    parametersettings_add_at_index,
 }
 
 by_name :: proc {
@@ -435,6 +445,7 @@ by_name :: proc {
     globalvariables_global_by_name,
     externalvariables_external_by_name,
     parameters_external_by_name,
+    parametersettings_parametersetting_by_name,
 }
 
 by_index :: proc {
@@ -449,6 +460,7 @@ by_index :: proc {
     globalvariables_global_by_index,
     externalvariables_external_by_index,
     parameters_external_by_index,
+    parametersettings_parametersetting_by_index,
 }
 
 index :: proc {
@@ -463,6 +475,7 @@ index :: proc {
     globalvariables_global_index,
     externalvariables_external_index,
     parameters_external_index,
+    parametersettings_parametersetting_index,
 }
 
 count :: proc {
@@ -477,6 +490,7 @@ count :: proc {
     globalvariables_count,
     externalvariables_count,
     parameters_count,
+    parametersettings_count,
 }
 
 remove :: proc {
@@ -502,6 +516,8 @@ remove :: proc {
     externalvariables_remove_by_index,
     parameters_remove_by_name,
     parameters_remove_by_index,
+    parametersettings_remove_by_name,
+    parametersettings_remove_by_index,
 }
 
 release :: proc {
@@ -520,4 +536,5 @@ release :: proc {
     externalvariables_release,
     parameters_release,
     parameter_release,
+    parametersettings_release,
 }
