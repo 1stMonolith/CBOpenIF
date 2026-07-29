@@ -20,7 +20,13 @@ ComponentsVTable :: struct {
     Remove:    proc "system" (this: ^ComponentsIF, Index: i32) -> HResult,
 }
 
-components_add :: proc(components: Components, component: Component) -> (ok: bool) {
+components_add :: proc {
+    components_add_,
+    components_add_at_index,
+}
+
+@(private)
+components_add_ :: proc(components: Components, component: Component) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -44,6 +50,11 @@ components_add_at_index :: proc(components: Components, component: Component, in
     if failed(hr) do return
 
     return true
+}
+
+components_component :: proc {
+    components_component_by_name,
+    components_component_by_index,
 }
 
 components_component_by_name :: proc(components: Components, name: string) -> (component: Component, ok: bool) {

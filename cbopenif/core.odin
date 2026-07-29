@@ -401,7 +401,7 @@ deserialize :: proc {
 add :: proc {
     datatype_component_add_,
     datatype_component_add_at_index,
-    components_add,
+    components_add_,
     components_add_at_index,
     variables_add_,
     variables_add_at_index,
