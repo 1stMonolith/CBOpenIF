@@ -138,7 +138,14 @@ bool_to_variant :: proc(b: bool) -> Variant {
     v: Variant
     VariantInit(&v)
     v.vt = VariantTypeBool
-    if b do v.boolVal = VariantBoolTrue
-    if !b do v.boolVal = VariantBoolFalse
+    v.boolVal = VariantBoolTrue if b else VariantBoolFalse
     return v
+}
+
+bool_to_variantbool :: proc(b: bool) -> VariantBool {
+    return VariantBoolTrue if b else VariantBoolFalse
+}
+
+variantbool_to_bool :: proc(vb: VariantBool) -> bool {
+    return true if vb == VariantBoolTrue else false
 }

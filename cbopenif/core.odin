@@ -166,6 +166,8 @@ name :: proc {
     parameter_name_set,
     parameter_setting_name_,
     parameter_setting_name_set,
+    cmconnection_name_,
+    cmconnection_name_set,
 }
 
 x :: proc {
@@ -194,6 +196,21 @@ type_name :: proc {
 parameter_value :: proc {
     parameter_setting_parameter_value_,
     parameter_setting_parameter_value_set,
+}
+
+actual_parameter :: proc {
+    cmconnection_actual_parameter_,
+    cmconnection_actual_parameter_set,
+}
+
+graphical_connection :: proc {
+    cmconnection_graphical_connection_,
+    cmconnection_graphical_connection_set,
+}
+
+points :: proc {
+    cmconnection_points_,
+    cmconnection_points_set,
 }
 
 attribute :: proc {
@@ -394,6 +411,7 @@ serialize :: proc {
     globalvariable_serialize,
     externalvariable_serialize,
     parameter_serialize,
+    cmconnection_serialize,
 }
 
 deserialize :: proc {
@@ -404,6 +422,7 @@ deserialize :: proc {
     globalvariable_deserialize,
     externalvariable_deserialize,
     parameter_deserialize,
+    cmconnection_deserialize,
 }
 
 add :: proc {
@@ -431,6 +450,8 @@ add :: proc {
     parameters_add_at_index,
     parametersettings_add_,
     parametersettings_add_at_index,
+    cmconnections_add_,
+    cmconnections_add_at_index,
 }
 
 by_name :: proc {
@@ -446,6 +467,7 @@ by_name :: proc {
     externalvariables_external_by_name,
     parameters_external_by_name,
     parametersettings_parametersetting_by_name,
+    cmconnections_cmconnection_by_name,
 }
 
 by_index :: proc {
@@ -461,6 +483,7 @@ by_index :: proc {
     externalvariables_external_by_index,
     parameters_external_by_index,
     parametersettings_parametersetting_by_index,
+    cmconnections_cmconnection_by_index,
 }
 
 index :: proc {
@@ -476,6 +499,7 @@ index :: proc {
     externalvariables_external_index,
     parameters_external_index,
     parametersettings_parametersetting_index,
+    cmconnections_cmconnection_index,
 }
 
 count :: proc {
@@ -491,6 +515,7 @@ count :: proc {
     externalvariables_count,
     parameters_count,
     parametersettings_count,
+    cmconnections_count,
 }
 
 remove :: proc {
@@ -518,6 +543,8 @@ remove :: proc {
     parameters_remove_by_index,
     parametersettings_remove_by_name,
     parametersettings_remove_by_index,
+    cmconnections_remove_by_name,
+    cmconnections_remove_by_index,
 }
 
 release :: proc {
@@ -537,4 +564,5 @@ release :: proc {
     parameters_release,
     parameter_release,
     parametersettings_release,
+    cmconnections_release,
 }
