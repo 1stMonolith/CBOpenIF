@@ -9,15 +9,15 @@ VariablesIF :: struct #raw_union {
 
 VariablesVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    Add:                    proc "system" (this: ^VariablesIF, Variable: Variable) -> HResult,
-    AddBefore:              proc "system" (this: ^VariablesIF, Variable: Variable, Index: i32) -> HResult,
-    Add1:                   proc "system" (this: ^VariablesIF, Name, TypeName: BStr, Variable: ^Variable) -> HResult,
-    Add2:                   proc "system" (this: ^VariablesIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, Variable: ^Variable) -> HResult,
-    Find:                   proc "system" (this: ^VariablesIF, Name: BStr, Variable: ^Variable) -> HResult,
-    FindNr:                 proc "system" (this: ^VariablesIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:                   proc "system" (this: ^VariablesIF, Index: i32, Variable: ^Variable) -> HResult,
-    Count:                  proc "system" (this: ^VariablesIF, Count: ^i32) -> HResult,
-    Remove:                 proc "system" (this: ^VariablesIF, Index: i32) -> HResult,
+    Add:       proc "system" (this: ^VariablesIF, Variable: Variable) -> HResult,
+    AddBefore: proc "system" (this: ^VariablesIF, Variable: Variable, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^VariablesIF, Name, TypeName: BStr, Variable: ^Variable) -> HResult,
+    Add2:      proc "system" (this: ^VariablesIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, Variable: ^Variable) -> HResult,
+    Find:      proc "system" (this: ^VariablesIF, Name: BStr, Variable: ^Variable) -> HResult,
+    FindNr:    proc "system" (this: ^VariablesIF, Name: BStr, Index: ^i32) -> HResult,
+    Item:      proc "system" (this: ^VariablesIF, Index: i32, Variable: ^Variable) -> HResult,
+    Count:     proc "system" (this: ^VariablesIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^VariablesIF, Index: i32) -> HResult,
 }
 
 variables_add :: proc {

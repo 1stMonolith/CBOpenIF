@@ -9,17 +9,17 @@ SignalIF :: struct #raw_union {
 
 SignalVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    NameGet:                proc "system" (this: ^SignalIF, Name: ^BStr) -> HResult,
-    NamePut:                proc "system" (this: ^SignalIF, Name: BStr) -> HResult,
-    PathGet:                proc "system" (this: ^SignalIF, Path: ^BStr) -> HResult,
-    PathPut:                proc "system" (this: ^SignalIF, Path: BStr) -> HResult,
-    DirectionGet:           proc "system" (this: ^SignalIF, Attribute: ^BStr) -> HResult,
-    DirectionPut:           proc "system" (this: ^SignalIF, Attribute: BStr) -> HResult,
-    AcknowledgeGroupGet:    proc "system" (this: ^SignalIF, InitialValue: ^BStr) -> HResult,
-    AcknowledgeGroupPut:    proc "system" (this: ^SignalIF, InitialValue: BStr) -> HResult,
-    DescriptionGet:         proc "system" (this: ^SignalIF, Description: ^BStr) -> HResult,
-    DescriptionPut:         proc "system" (this: ^SignalIF, Description: BStr) -> HResult,
-    Serialize:              proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
+    NameGet:             proc "system" (this: ^SignalIF, Name: ^BStr) -> HResult,
+    NamePut:             proc "system" (this: ^SignalIF, Name: BStr) -> HResult,
+    PathGet:             proc "system" (this: ^SignalIF, Path: ^BStr) -> HResult,
+    PathPut:             proc "system" (this: ^SignalIF, Path: BStr) -> HResult,
+    DirectionGet:        proc "system" (this: ^SignalIF, Attribute: ^BStr) -> HResult,
+    DirectionPut:        proc "system" (this: ^SignalIF, Attribute: BStr) -> HResult,
+    AcknowledgeGroupGet: proc "system" (this: ^SignalIF, InitialValue: ^BStr) -> HResult,
+    AcknowledgeGroupPut: proc "system" (this: ^SignalIF, InitialValue: BStr) -> HResult,
+    DescriptionGet:      proc "system" (this: ^SignalIF, Description: ^BStr) -> HResult,
+    DescriptionPut:      proc "system" (this: ^SignalIF, Description: BStr) -> HResult,
+    Serialize:           proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
 }
 
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {

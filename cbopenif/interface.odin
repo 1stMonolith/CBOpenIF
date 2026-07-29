@@ -13,15 +13,15 @@ UnknownAndDispatchIF :: struct #raw_union {
 
 UnknownAndDispatchVTable :: struct {
     // IUnkown
-    QueryInterface:         proc "system" (this: ^UnknownAndDispatchIF, riid: ^GUID, ppvObject: ^rawptr) -> HResult,
-    AddRef:                 proc "system" (this: ^UnknownAndDispatchIF) -> u32,
-    Release:                proc "system" (this: ^UnknownAndDispatchIF) -> u32,
+    QueryInterface:   proc "system" (this: ^UnknownAndDispatchIF, riid: ^GUID, ppvObject: ^rawptr) -> HResult,
+    AddRef:           proc "system" (this: ^UnknownAndDispatchIF) -> u32,
+    Release:          proc "system" (this: ^UnknownAndDispatchIF) -> u32,
     
     // IDispatch
-    GetTypeInfoCount:       proc "system" (this: ^UnknownAndDispatchIF, pctinfo: ^u32) -> HResult,
-    GetTypeInfo:            proc "system" (this: ^UnknownAndDispatchIF, iTInfo: u32, lcid: u32, ppTInfo: ^rawptr) -> HResult,
-    GetIDsOfNames:          proc "system" (this: ^UnknownAndDispatchIF, riid: ^GUID, rgszNames: [^][^]u16, cNames: u32, lcid: u32, rgDispId: [^]i32) -> HResult,
-    Invoke:                 proc "system" (this: ^UnknownAndDispatchIF, dispIdMember: i32, riid: ^GUID, lcid: u32, wFlags: u16, pDispParams: rawptr, pVarResult: rawptr, pExcepInfo: rawptr, puArgErr: ^u32) -> HResult,
+    GetTypeInfoCount: proc "system" (this: ^UnknownAndDispatchIF, pctinfo: ^u32) -> HResult,
+    GetTypeInfo:      proc "system" (this: ^UnknownAndDispatchIF, iTInfo: u32, lcid: u32, ppTInfo: ^rawptr) -> HResult,
+    GetIDsOfNames:    proc "system" (this: ^UnknownAndDispatchIF, riid: ^GUID, rgszNames: [^][^]u16, cNames: u32, lcid: u32, rgDispId: [^]i32) -> HResult,
+    Invoke:           proc "system" (this: ^UnknownAndDispatchIF, dispIdMember: i32, riid: ^GUID, lcid: u32, wFlags: u16, pDispParams: rawptr, pVarResult: rawptr, pExcepInfo: rawptr, puArgErr: ^u32) -> HResult,
 }
 
 failed :: proc(hr: HResult) -> bool {

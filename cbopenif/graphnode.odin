@@ -9,12 +9,12 @@ GraphNodeIF :: struct #raw_union {
 
 GraphNodeVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    NameGet:          proc "system" (this: ^GraphNodeIF, Name: ^BStr) -> HResult,
-    NamePut:          proc "system" (this: ^GraphNodeIF, Name: BStr) -> HResult,
-    XGet:             proc "system" (this: ^GraphNodeIF, X: ^i64) -> HResult,
-    XPut:             proc "system" (this: ^GraphNodeIF, X: i64) -> HResult,
-    YGet:             proc "system" (this: ^GraphNodeIF, Y: ^i64) -> HResult,
-    YPut:             proc "system" (this: ^GraphNodeIF, Y: i64) -> HResult,
+    NameGet: proc "system" (this: ^GraphNodeIF, Name: ^BStr) -> HResult,
+    NamePut: proc "system" (this: ^GraphNodeIF, Name: BStr) -> HResult,
+    XGet:    proc "system" (this: ^GraphNodeIF, X: ^i64) -> HResult,
+    XPut:    proc "system" (this: ^GraphNodeIF, X: i64) -> HResult,
+    YGet:    proc "system" (this: ^GraphNodeIF, Y: ^i64) -> HResult,
+    YPut:    proc "system" (this: ^GraphNodeIF, Y: i64) -> HResult,
 }
 
 graphnode_new :: proc(name: string, x: i64, y: i64) -> (graphnode: GraphNode, ok: bool) {

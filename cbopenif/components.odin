@@ -9,15 +9,15 @@ ComponentsIF :: struct #raw_union {
 
 ComponentsVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    Add:                    proc "system" (this: ^ComponentsIF, Component: Component) -> HResult,
-    AddBefore:              proc "system" (this: ^ComponentsIF, Component: Component, Index: i32) -> HResult,
-    Add1:                   proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^Component) -> HResult,
-    Add2:                   proc "system" (this: ^ComponentsIF, Name, TypeName, Attribute, InitialValue, Description: BStr, Component: ^Component) -> HResult,
-    Find:                   proc "system" (this: ^ComponentsIF, Name: BStr, Component: ^Component) -> HResult,
-    FindNr:                 proc "system" (this: ^ComponentsIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:                   proc "system" (this: ^ComponentsIF, Index: i32, Component: ^Component) -> HResult,
-    Count:                  proc "system" (this: ^ComponentsIF, Count: ^i32) -> HResult,
-    Remove:                 proc "system" (this: ^ComponentsIF, Index: i32) -> HResult,
+    Add:       proc "system" (this: ^ComponentsIF, Component: Component) -> HResult,
+    AddBefore: proc "system" (this: ^ComponentsIF, Component: Component, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^Component) -> HResult,
+    Add2:      proc "system" (this: ^ComponentsIF, Name, TypeName, Attribute, InitialValue, Description: BStr, Component: ^Component) -> HResult,
+    Find:      proc "system" (this: ^ComponentsIF, Name: BStr, Component: ^Component) -> HResult,
+    FindNr:    proc "system" (this: ^ComponentsIF, Name: BStr, Index: ^i32) -> HResult,
+    Item:      proc "system" (this: ^ComponentsIF, Index: i32, Component: ^Component) -> HResult,
+    Count:     proc "system" (this: ^ComponentsIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^ComponentsIF, Index: i32) -> HResult,
 }
 
 components_add :: proc(components: Components, component: Component) -> (ok: bool) {
