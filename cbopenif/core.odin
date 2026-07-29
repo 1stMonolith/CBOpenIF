@@ -162,6 +162,8 @@ name :: proc {
     globalvariable_name_set,
     externalvariable_name_,
     externalvariable_name_set,
+    parameter_name_,
+    parameter_name_set,
 }
 
 x :: proc {
@@ -183,6 +185,8 @@ type_name :: proc {
     globalvariable_type_name_set,
     externalvariable_type_name_,
     externalvariable_type_name_set,
+    parameter_type_name_,
+    parameter_type_name_set,
 }
 
 attribute :: proc {
@@ -194,6 +198,8 @@ attribute :: proc {
     globalvariable_attribute_set,
     externalvariable_attribute_,
     externalvariable_attribute_set,
+    parameter_attribute_,
+    parameter_attribute_set,
 }
 
 initial_value :: proc {
@@ -214,6 +220,8 @@ read_permission :: proc {
     globalvariable_read_permission_set,
     externalvariable_read_permission_,
     externalvariable_read_permission_set,
+    parameter_read_permission_,
+    parameter_read_permission_set,
 }
 
 write_permission :: proc {
@@ -225,6 +233,8 @@ write_permission :: proc {
     globalvariable_write_permission_set,
     externalvariable_write_permission_,
     externalvariable_write_permission_set,
+    parameter_write_permission_,
+    parameter_write_permission_set,
 }
 
 access_level :: proc {
@@ -236,6 +246,8 @@ access_level :: proc {
     globalvariable_access_level_set,
     externalvariable_access_level_,
     externalvariable_access_level_set,
+    parameter_access_level_,
+    parameter_access_level_set,
 }
 
 authentication_level :: proc {
@@ -245,6 +257,8 @@ authentication_level :: proc {
     globalvariable_authentication_level_set,
     externalvariable_authentication_level_,
     externalvariable_authentication_level_set,
+    parameter_authentication_level_,
+    parameter_authentication_level_set,
 }
 
 safety_type :: proc {
@@ -256,6 +270,13 @@ safety_type :: proc {
     globalvariable_safety_type_set,
     externalvariable_safety_type_,
     externalvariable_safety_type_set,
+    parameter_safety_type_,
+    parameter_safety_type_set,
+}
+
+fdport :: proc {
+    parameter_fdport_,
+    parameter_fdport_set,
 }
 
 batch_property :: proc {
@@ -292,6 +313,8 @@ description :: proc {
     globalvariable_description_set,
     externalvariable_description_,
     externalvariable_description_set,
+    parameter_description_,
+    parameter_description_set,
 }
 
 path :: proc {
@@ -309,6 +332,7 @@ type_guid :: proc {
     variable_type_guid,
     globalvariable_type_guid,
     externalvariable_type_guid,
+    parameter_type_guid,
 }
 
 type_path :: proc {
@@ -316,6 +340,7 @@ type_path :: proc {
     variable_type_path,
     globalvariable_type_path,
     externalvariable_type_path,
+    parameter_type_path,
 }
 
 reserved_by_function :: proc {
@@ -360,6 +385,7 @@ serialize :: proc {
     signal_serialize,
     globalvariable_serialize,
     externalvariable_serialize,
+    parameter_serialize,
 }
 
 deserialize :: proc {
@@ -369,6 +395,7 @@ deserialize :: proc {
     signal_deserialize,
     globalvariable_deserialize,
     externalvariable_deserialize,
+    parameter_deserialize,
 }
 
 add :: proc {
@@ -392,6 +419,8 @@ add :: proc {
     globalvariables_add_at_index,
     externalvariables_add_,
     externalvariables_add_at_index,
+    parameters_add_,
+    parameters_add_at_index,
 }
 
 by_name :: proc {
@@ -405,6 +434,7 @@ by_name :: proc {
     signals_signal_by_name,
     globalvariables_global_by_name,
     externalvariables_external_by_name,
+    parameters_external_by_name,
 }
 
 by_index :: proc {
@@ -417,7 +447,8 @@ by_index :: proc {
     applicationvariables_signal_by_index,
     signals_signal_by_index,
     globalvariables_global_by_index,
-    externalvariables_external_by_index
+    externalvariables_external_by_index,
+    parameters_external_by_index,
 }
 
 index :: proc {
@@ -431,6 +462,7 @@ index :: proc {
     signals_signal_index,
     globalvariables_global_index,
     externalvariables_external_index,
+    parameters_external_index,
 }
 
 count :: proc {
@@ -444,6 +476,7 @@ count :: proc {
     signals_count,
     globalvariables_count,
     externalvariables_count,
+    parameters_count,
 }
 
 remove :: proc {
@@ -467,6 +500,8 @@ remove :: proc {
     globalvariables_remove_by_index,
     externalvariables_remove_by_name,
     externalvariables_remove_by_index,
+    parameters_remove_by_name,
+    parameters_remove_by_index,
 }
 
 release :: proc {
@@ -483,4 +518,6 @@ release :: proc {
     applicationvariables_release,
     externalvariable_release,
     externalvariables_release,
+    parameters_release,
+    parameter_release,
 }
