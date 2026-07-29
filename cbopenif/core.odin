@@ -432,7 +432,7 @@ add :: proc {
     components_add_at_index,
     variables_add_,
     variables_add_at_index,
-    graphnode_add_,
+    graphnodes_add_,
     graphnodes_add_at_index,
     applicationvariables_globals_add_,
     applicationvariables_globals_add_at_index,

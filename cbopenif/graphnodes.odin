@@ -19,13 +19,13 @@ GraphNodesVTable :: struct {
     Remove:    proc "system" (this: ^GraphNodesIF, Index: i32) -> HResult,
 }
 
-graphnode_add :: proc {
-    graphnode_add_,
+graphnodes_add :: proc {
+    graphnodes_add_,
     graphnodes_add_at_index,
 }
 
 @(private)
-graphnode_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
+graphnodes_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
     ok = false
 
     if !connected() do return
