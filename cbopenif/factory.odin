@@ -12,7 +12,7 @@ factoryif: ^FactoryIF
 
 FactoryVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    DeserializeExternalVariable:        proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ExternalVariable: ^rawptr) -> HResult,
+    DeserializeExternalVariable:        proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ExternalVariable: ^ExternalVariable) -> HResult,
     DeserializeGlobalVariable:          proc "system" (this: ^FactoryIF, XMLStr: ^BStr, GlobalVariable: ^GlobalVariable) -> HResult,
     DeserializeVariable:                proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Variable: ^Variable) -> HResult,
     DeserializeCMParameter:             proc "system" (this: ^FactoryIF, XMLStr: ^BStr, cmparameter: ^rawptr) -> HResult,
@@ -69,8 +69,8 @@ FactoryVTable :: struct {
     NewVariable1:                       proc "system" (this: ^FactoryIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, variable: ^Variable) -> HResult,
     NewGlobalVariable:                  proc "system" (this: ^FactoryIF, Name, TypeName: BStr, GlobalVariable: ^GlobalVariable) -> HResult,
     NewGlobalVariable1:                 proc "system" (this: ^FactoryIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, GlobalVariable: ^GlobalVariable) -> HResult,
-    NewExternalVariable:                proc "system" (this: ^FactoryIF, Name, Type: BStr, externalvariable: ^rawptr) -> HResult,
-    NewExternalVariable1:               proc "system" (this: ^FactoryIF, Name, Type, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, externalvariable: ^rawptr) -> HResult,
+    NewExternalVariable:                proc "system" (this: ^FactoryIF, Name, Type: BStr, ExternalVariable: ^ExternalVariable) -> HResult,
+    NewExternalVariable1:               proc "system" (this: ^FactoryIF, Name, Type, Attribute, ReadPermission, WritePermission, Description: BStr, ExternalVariable: ^ExternalVariable) -> HResult,
     NewParameter:                       proc "system" (this: ^FactoryIF, Name, Type: BStr, parameter: ^Parameter) -> HResult,
     NewParameter1:                      proc "system" (this: ^FactoryIF, Name, Type, Attribute: BStr, Direction: Direction, InitialValue, ReadPermission, WritePermission, Description: BStr, parameter: ^Parameter) -> HResult,
     NewCMParameter:                     proc "system" (this: ^FactoryIF, Name, Type: BStr, cmparameter: ^rawptr) -> HResult,

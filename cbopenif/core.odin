@@ -160,6 +160,8 @@ name :: proc {
     signal_name_set,
     globalvariable_name_,
     globalvariable_name_set,
+    externalvariable_name_,
+    externalvariable_name_set,
 }
 
 x :: proc {
@@ -179,6 +181,8 @@ type_name :: proc {
     variable_type_name_set,
     globalvariable_type_name_,
     globalvariable_type_name_set,
+    externalvariable_type_name_,
+    externalvariable_type_name_set,
 }
 
 attribute :: proc {
@@ -188,6 +192,8 @@ attribute :: proc {
     variable_attribute_set,
     globalvariable_attribute_,
     globalvariable_attribute_set,
+    externalvariable_attribute_,
+    externalvariable_attribute_set,
 }
 
 initial_value :: proc {
@@ -206,6 +212,8 @@ read_permission :: proc {
     variable_read_permission_set,
     globalvariable_read_permission_,
     globalvariable_read_permission_set,
+    externalvariable_read_permission_,
+    externalvariable_read_permission_set,
 }
 
 write_permission :: proc {
@@ -215,6 +223,8 @@ write_permission :: proc {
     variable_write_permission_set,
     globalvariable_write_permission_,
     globalvariable_write_permission_set,
+    externalvariable_write_permission_,
+    externalvariable_write_permission_set,
 }
 
 access_level :: proc {
@@ -224,6 +234,8 @@ access_level :: proc {
     variable_access_level_set,
     globalvariable_access_level_,
     globalvariable_access_level_set,
+    externalvariable_access_level_,
+    externalvariable_access_level_set,
 }
 
 authentication_level :: proc {
@@ -231,6 +243,8 @@ authentication_level :: proc {
     variable_authentication_level_set,
     globalvariable_authentication_level_,
     globalvariable_authentication_level_set,
+    externalvariable_authentication_level_,
+    externalvariable_authentication_level_set,
 }
 
 safety_type :: proc {
@@ -240,6 +254,8 @@ safety_type :: proc {
     variable_safety_type_set,
     globalvariable_safety_type_,
     globalvariable_safety_type_set,
+    externalvariable_safety_type_,
+    externalvariable_safety_type_set,
 }
 
 batch_property :: proc {
@@ -252,6 +268,8 @@ graph_nodes :: proc {
     variable_graph_nodes_set,
     globalvariable_graph_nodes_,
     globalvariable_graph_nodes_set,
+    externalvariable_graph_nodes_,
+    externalvariable_graph_nodes_set,
 }
 
 isp_value :: proc {
@@ -272,6 +290,8 @@ description :: proc {
     signal_description_set,
     globalvariable_description_,
     globalvariable_description_set,
+    externalvariable_description_,
+    externalvariable_description_set,
 }
 
 path :: proc {
@@ -288,12 +308,14 @@ type_guid :: proc {
     component_type_guid,
     variable_type_guid,
     globalvariable_type_guid,
+    externalvariable_type_guid,
 }
 
 type_path :: proc {
     component_type_path,
     variable_type_path,
     globalvariable_type_path,
+    externalvariable_type_path,
 }
 
 reserved_by_function :: proc {
@@ -337,6 +359,7 @@ serialize :: proc {
     applicationvariables_serialize,
     signal_serialize,
     globalvariable_serialize,
+    externalvariable_serialize,
 }
 
 deserialize :: proc {
@@ -345,6 +368,7 @@ deserialize :: proc {
     applicationvariables_deserialize,
     signal_deserialize,
     globalvariable_deserialize,
+    externalvariable_deserialize,
 }
 
 add :: proc {
@@ -449,4 +473,5 @@ release :: proc {
     globalvariables_release,
     globalvariable_release,
     applicationvariables_release,
+    externalvariable_release,
 }
