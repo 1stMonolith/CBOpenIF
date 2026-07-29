@@ -173,11 +173,15 @@ name :: proc {
 x :: proc {
     graphnode_x_,
     graphnode_x_set,
+    point_x_,
+    point_x_set,
 }
 
 y :: proc {
     graphnode_y_,
     graphnode_y_set,
+    point_y_,
+    point_y_set,
 }
 
 type_name :: proc {
@@ -452,6 +456,8 @@ add :: proc {
     parametersettings_add_at_index,
     cmconnections_add_,
     cmconnections_add_at_index,
+    points_add_,
+    points_add_at_index,
 }
 
 by_name :: proc {
@@ -484,6 +490,7 @@ by_index :: proc {
     parameters_external_by_index,
     parametersettings_parametersetting_by_index,
     cmconnections_cmconnection_by_index,
+    points_point_by_index
 }
 
 index :: proc {
@@ -516,6 +523,7 @@ count :: proc {
     parameters_count,
     parametersettings_count,
     cmconnections_count,
+    points_count,
 }
 
 remove :: proc {
@@ -545,6 +553,7 @@ remove :: proc {
     parametersettings_remove_by_index,
     cmconnections_remove_by_name,
     cmconnections_remove_by_index,
+    points_remove_by_index,
 }
 
 release :: proc {
@@ -565,4 +574,5 @@ release :: proc {
     parameter_release,
     parametersettings_release,
     cmconnections_release,
+    points_release,
 }
