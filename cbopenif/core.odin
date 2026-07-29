@@ -390,6 +390,8 @@ add :: proc {
     signals_add_at_index,
     globalvariables_add_,
     globalvariables_add_at_index,
+    externalvariables_add_,
+    externalvariables_add_at_index,
 }
 
 by_name :: proc {
@@ -402,6 +404,7 @@ by_name :: proc {
     applicationvariables_signal_by_name,
     signals_signal_by_name,
     globalvariables_global_by_name,
+    externalvariables_external_by_name,
 }
 
 by_index :: proc {
@@ -414,6 +417,7 @@ by_index :: proc {
     applicationvariables_signal_by_index,
     signals_signal_by_index,
     globalvariables_global_by_index,
+    externalvariables_external_by_index
 }
 
 index :: proc {
@@ -426,6 +430,7 @@ index :: proc {
     applicationvariables_signal_index,
     signals_signal_index,
     globalvariables_global_index,
+    externalvariables_external_index,
 }
 
 count :: proc {
@@ -438,6 +443,7 @@ count :: proc {
     applicationvariables_signal_count,
     signals_count,
     globalvariables_count,
+    externalvariables_count,
 }
 
 remove :: proc {
@@ -459,6 +465,8 @@ remove :: proc {
     signals_remove_by_index,
     globalvariables_remove_by_name,
     globalvariables_remove_by_index,
+    externalvariables_remove_by_name,
+    externalvariables_remove_by_index,
 }
 
 release :: proc {
@@ -474,4 +482,5 @@ release :: proc {
     globalvariable_release,
     applicationvariables_release,
     externalvariable_release,
+    externalvariables_release,
 }
