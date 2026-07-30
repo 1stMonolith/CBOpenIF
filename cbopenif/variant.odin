@@ -68,26 +68,26 @@ variant_free :: proc(variant: ^Variant) {
     VariantClear(variant)
 }
 
-string_to_variant :: proc(s: string) -> Variant {
-    v: Variant
-    VariantInit(&v)
-    v.vt = VariantTypeBstr
-    v.bstrVal = string_to_bstr(s)
-    return v
+string_to_variant :: proc(s: string) -> (variant: Variant) {
+    VariantInit(&variant)
+    variant.vt = VariantTypeBstr
+    variant.bstrVal = string_to_bstr(s)
+    return
 }
 
-bool_to_variant :: proc(b: bool) -> Variant {
-    v: Variant
-    VariantInit(&v)
-    v.vt = VariantTypeBool
-    v.boolVal = VariantBoolTrue if b else VariantBoolFalse
-    return v
+bool_to_variant :: proc(b: bool) -> (variant: Variant) {
+    VariantInit(&variant)
+    variant.vt = VariantTypeBool
+    variant.boolVal = VariantBoolTrue if b else VariantBoolFalse
+    return
 }
 
-bool_to_variantbool :: proc(b: bool) -> VariantBool {
-    return VariantBoolTrue if b else VariantBoolFalse
+bool_to_variantbool :: proc(b: bool) -> (variantbool: VariantBool) {
+    variantbool = VariantBoolTrue if b else VariantBoolFalse
+    return
 }
 
-variantbool_to_bool :: proc(vb: VariantBool) -> bool {
-    return true if vb == VariantBoolTrue else false
+variantbool_to_bool :: proc(vb: VariantBool) -> (b: bool) {
+    b = true if vb == VariantBoolTrue else false
+    return
 }
