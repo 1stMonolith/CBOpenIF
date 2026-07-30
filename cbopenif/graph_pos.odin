@@ -21,6 +21,18 @@ GraphPosVTable :: struct {
     YScalePut:   proc "system" (this: ^GraphPosIF, YScale: f64) -> HResult,
 }
 
+graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: GraphPos, ok: bool) {
+    graphpos = nil
+    ok = false
+
+    if !connected() do return
+    
+    hr := factoryif->NewGraphPos(x_pos, y_pos, rotation, x_scale, y_scale, cast(^GraphPos)&graphpos)
+    if failed(hr) do return
+    
+    return graphpos, true
+}
+
 graphpos_x :: proc {
     graphpos_x_,
     graphpos_x_set,

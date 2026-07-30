@@ -213,6 +213,16 @@ rotation :: proc {
     graphpos_rotation_set,
 }
 
+lower_left :: proc {
+    graphsize_lower_left_,
+    graphsize_lower_left_set,
+}
+
+upper_right :: proc {
+    graphsize_upper_right_,
+    graphsize_upper_right_set,
+}
+
 type_name :: proc {
     component_type_name_,
     component_type_name_set,
@@ -612,4 +622,5 @@ release :: proc {
     point_release,
     autopoint_release,
     graphpos_release,
+    graphsize_release,
 }
