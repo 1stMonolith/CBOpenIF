@@ -72,7 +72,7 @@ point_y_ :: proc(point: Point) -> (y: f64, ok: bool) {
     if point == nil do return
     if !connected() do return
     
-    hr := (^PointIF)(point)->XGet(&y)
+    hr := (^PointIF)(point)->YGet(&y)
     if failed(hr) do return
     
     return y, true
@@ -85,7 +85,7 @@ point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
     if point == nil do return
     if !connected() do return
     
-    hr := (^PointIF)(point)->XPut(y)
+    hr := (^PointIF)(point)->YPut(y)
     if failed(hr) do return
     
     return true

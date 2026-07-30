@@ -112,7 +112,7 @@ graphnode_y_ :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
     if graphnode == nil do return
     if !connected() do return
     
-    hr := (^GraphNodeIF)(graphnode)->XGet(&y)
+    hr := (^GraphNodeIF)(graphnode)->YGet(&y)
     if failed(hr) do return
     
     return y, true
@@ -125,7 +125,7 @@ graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
     if graphnode == nil do return
     if !connected() do return
     
-    hr := (^GraphNodeIF)(graphnode)->XPut(y)
+    hr := (^GraphNodeIF)(graphnode)->YPut(y)
     if failed(hr) do return
     
     return true
