@@ -14,7 +14,7 @@ CMConnectionVTable :: struct {
     ActualParameterGet:     proc "system" (this: ^CMConnectionIF, ActualParameter: ^BStr) -> HResult,
     ActualParameterPut:     proc "system" (this: ^CMConnectionIF, ActualParameter: BStr) -> HResult,
     GraphicalConnectionGet: proc "system" (this: ^CMConnectionIF, GraphicalConnection: ^VariantBool) -> HResult,
-    GraphicalConnectionSet: proc "system" (this: ^CMConnectionIF, GraphicalConnection: VariantBool) -> HResult,
+    GraphicalConnectionPut: proc "system" (this: ^CMConnectionIF, GraphicalConnection: VariantBool) -> HResult,
     PointsGet:              proc "system" (this: ^CMConnectionIF, Point: ^Points) -> HResult,
     PointsPut:              proc "system" (this: ^CMConnectionIF, Point: Points) -> HResult,
     Missing14:              proc "system" (this: ^CMConnectionIF) -> HResult,
@@ -167,7 +167,7 @@ cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphi
     if !connected() do return
 
     vb := bool_to_variantbool(graphical_connection)
-    hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionSet(vb)
+    hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(vb)
     if failed(hr) do return
     
     return true
