@@ -572,7 +572,7 @@ dest :: proc {
     sfctransition_dest_set,
 }
 
-initial_setp :: proc {
+initial_step :: proc {
     sfcstep_initial_step_,
     sfcstep_initial_step_set,
 }
