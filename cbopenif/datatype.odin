@@ -52,9 +52,9 @@ datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeDataType(&BStr, cast(^DataType)datatype)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeDataType(&bstr, cast(^DataType)datatype)
     if failed(hr) do return
     
     return true
@@ -67,12 +67,12 @@ datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 datatype_name :: proc {
@@ -88,12 +88,12 @@ datatype_name_ :: proc(datatype: DataType) -> (name: string, ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->NameGet(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->NameGet(&bstr)
     if failed(hr) do return
 
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 @(private)
@@ -103,9 +103,9 @@ datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    BStr := string_to_bstr(name)
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->NamePut(BStr)
+    bstr := string_to_bstr(name)
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->NamePut(bstr)
     if failed(hr) do return
 
     return true
@@ -220,12 +220,12 @@ datatype_description_ :: proc(datatype: DataType) -> (description: string, ok: b
     if datatype == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->DescriptionGet(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->DescriptionGet(&bstr)
     if failed(hr) do return
 
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 @(private)
@@ -234,9 +234,9 @@ datatype_description_set :: proc(datatype: DataType, description: string) -> (ok
 
     if datatype == nil do return
     
-    BStr := string_to_bstr(description)
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->DescriptionPut(BStr)
+    bstr := string_to_bstr(description)
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->DescriptionPut(bstr)
     if failed(hr) do return
 
     return true
@@ -255,12 +255,12 @@ datatype_guid_ :: proc(datatype: DataType) -> (guid: string, ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->GuidGet(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->GuidGet(&bstr)
     if failed(hr) do return
 
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 @(private)
@@ -270,9 +270,9 @@ datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    BStr := string_to_bstr(guid)
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->GuidPut(BStr)
+    bstr := string_to_bstr(guid)
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->GuidPut(bstr)
     if failed(hr) do return
 
     return true
@@ -291,12 +291,12 @@ datatype_reserved_by_function_ :: proc(datatype: DataType) -> (reserved_by_funct
     if datatype == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->ReservedByFunctionGet(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->ReservedByFunctionGet(&bstr)
     if failed(hr) do return
 
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 @(private)
@@ -306,9 +306,9 @@ datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_functi
     if datatype == nil do return
     if !connected() do return
     
-    BStr := string_to_bstr(reserved_by_function)
-    defer SysFreeString(BStr)
-    hr := (^DataTypeIF)(datatype)->ReservedByFunctionPut(BStr)
+    bstr := string_to_bstr(reserved_by_function)
+    defer SysFreeString(bstr)
+    hr := (^DataTypeIF)(datatype)->ReservedByFunctionPut(bstr)
     if failed(hr) do return
 
     return true

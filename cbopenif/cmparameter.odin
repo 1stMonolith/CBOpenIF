@@ -84,9 +84,9 @@ cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: 
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeCMParameter(&BStr, cast(^CMParameter)cmparameter)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeCMParameter(&bstr, cast(^CMParameter)cmparameter)
     if failed(hr) do return
     
     return true
@@ -99,12 +99,12 @@ cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: boo
     if cmparameter == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^CMParameterIF)(cmparameter)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^CMParameterIF)(cmparameter)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 cmparameter_name :: proc {

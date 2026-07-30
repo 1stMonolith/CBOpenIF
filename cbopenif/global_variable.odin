@@ -70,9 +70,9 @@ globalvariable_deserialize :: proc(global_variable: ^GlobalVariable, xml: string
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeGlobalVariable(&BStr, cast(^GlobalVariable)global_variable)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeGlobalVariable(&bstr, cast(^GlobalVariable)global_variable)
     if failed(hr) do return
     
     return true
@@ -85,12 +85,12 @@ globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: strin
     if global_variable == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^GlobalVariableIF)(global_variable)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^GlobalVariableIF)(global_variable)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 globalvariable_name :: proc {

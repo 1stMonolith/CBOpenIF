@@ -52,9 +52,9 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeSignal(&BStr, cast(^Signal)signal)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeSignal(&bstr, cast(^Signal)signal)
     if failed(hr) do return
     
     return true
@@ -67,12 +67,12 @@ signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
     if signal == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^SignalIF)(signal)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^SignalIF)(signal)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 signal_name :: proc {

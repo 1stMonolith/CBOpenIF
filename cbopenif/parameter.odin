@@ -71,9 +71,9 @@ parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) 
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeParameter(&BStr, cast(^Parameter)parameter)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeParameter(&bstr, cast(^Parameter)parameter)
     if failed(hr) do return
     
     return true
@@ -86,12 +86,12 @@ parameter_serialize :: proc(parameter: Parameter) -> (xml: string, ok: bool) {
     if parameter == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^ParameterIF)(parameter)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^ParameterIF)(parameter)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 parameter_name :: proc {

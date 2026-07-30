@@ -44,9 +44,9 @@ cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (o
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeCMConnection(&BStr, cast(^CMConnection)cmconnection)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeCMConnection(&bstr, cast(^CMConnection)cmconnection)
     if failed(hr) do return
     
     return true
@@ -59,12 +59,12 @@ cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: 
     if cmconnection == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^CMConnectionIF)(cmconnection)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^CMConnectionIF)(cmconnection)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 cmconnection_name :: proc {

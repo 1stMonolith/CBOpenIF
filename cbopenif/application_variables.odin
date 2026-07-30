@@ -42,9 +42,9 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeApplicationVariables(&BStr, cast(^ApplicationVariables)application_variables)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeApplicationVariables(&bstr, cast(^ApplicationVariables)application_variables)
     if failed(hr) do return
     
     return true
@@ -57,12 +57,12 @@ applicationvariables_serialize :: proc(application_variables: ApplicationVariabl
     if application_variables == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 applicationvariables_description :: proc {
@@ -78,12 +78,12 @@ applicationvariables_description_ :: proc(application_variables: ApplicationVari
     if application_variables == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&bstr)
     if failed(hr) do return
 
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 @(private)
@@ -92,9 +92,9 @@ applicationvariables_description_set :: proc(application_variables: ApplicationV
 
     if application_variables == nil do return
     
-    BStr := string_to_bstr(description)
-    defer SysFreeString(BStr)
-    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(BStr)
+    bstr := string_to_bstr(description)
+    defer SysFreeString(bstr)
+    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(bstr)
     if failed(hr) do return
 
     return true

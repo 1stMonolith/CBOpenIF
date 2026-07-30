@@ -66,9 +66,9 @@ externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: 
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeExternalVariable(&BStr, cast(^ExternalVariable)external_variable)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeExternalVariable(&bstr, cast(^ExternalVariable)external_variable)
     if failed(hr) do return
     
     return true
@@ -81,12 +81,12 @@ externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml:
     if external_variable == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^ExternalVariableIF)(external_variable)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^ExternalVariableIF)(external_variable)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 externalvariable_name :: proc {

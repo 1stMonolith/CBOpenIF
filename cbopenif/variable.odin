@@ -72,9 +72,9 @@ variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
 
     if !connected() do return
     
-    BStr := string_to_bstr(xml)
-    defer SysFreeString(BStr)
-    hr := factoryif->DeserializeVariable(&BStr, cast(^Variable)variable)
+    bstr := string_to_bstr(xml)
+    defer SysFreeString(bstr)
+    hr := factoryif->DeserializeVariable(&bstr, cast(^Variable)variable)
     if failed(hr) do return
     
     return true
@@ -87,12 +87,12 @@ variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
     if variable == nil do return
     if !connected() do return
     
-    BStr: BStr
-    defer SysFreeString(BStr)
-    hr := (^VariableIF)(variable)->Serialize(&BStr)
+    bstr: BStr
+    defer SysFreeString(bstr)
+    hr := (^VariableIF)(variable)->Serialize(&bstr)
     if failed(hr) do return
     
-    return bstr_to_string(BStr), true
+    return bstr_to_string(bstr), true
 }
 
 variable_name :: proc {
