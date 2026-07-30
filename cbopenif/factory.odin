@@ -1,8 +1,5 @@
 package cbopenif
 
-import "core:fmt"
-import "core:sys/windows"
-
 FactoryIF :: struct #raw_union {
     #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
     using vtable: ^FactoryVTable,
@@ -144,14 +141,12 @@ FactoryVTable :: struct {
 }
 
 factory_connect :: proc() -> (ok: bool) {
+    ok = false
 
-    if factoryif != nil do return true
+    if factoryif != nil do return
 
-    hr := windows.CoInitializeEx(nil, .APARTMENTTHREADED)
-    if failed(hr) {
-        fmt.printf("CoInitializeEx failed: 0x%08X\n", u32(hr))
-        return false
-    }
+    ok = com_initialize()
+    if !ok do return
 
     clsid := &GUID{
         0x3CEFCA96,
@@ -167,19 +162,13 @@ factory_connect :: proc() -> (ok: bool) {
         {0xB3, 0x9A, 0x12, 0xC7, 0x7F, 0xF5, 0xFF, 0x1A},
     }
 
-    hr = windows.CoCreateInstance(
-        clsid,
-        nil,
-        windows.CLSCTX_ALL,
-        iid,
-        cast(^rawptr)&factoryif,
-    )
-    if failed(hr) {
-        fmt.printf("CoCreateInstance failed: 0x%08X\n", u32(hr))
-        windows.CoUninitialize()
-        factoryif = nil
-        return false
+    ok = com_create_instance(clsid, iid, cast(^rawptr)&factoryif)
+    if !ok {
+        com_uninitialize()
+        cbopenif = nil
+        return
     }
+
     return true
 }
 
@@ -188,6 +177,7 @@ factory_disconnect :: proc()  -> (ok: bool) {
         factoryif->Release()
         factoryif = nil
     }
-    windows.CoUninitialize()
+    com_uninitialize()
+
     return true
 }

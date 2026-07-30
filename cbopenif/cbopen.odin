@@ -1,8 +1,5 @@
 package cbopenif
 
-import "core:fmt"
-import "core:sys/windows"
-
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,
     Mode             = 0x80040bc3,
@@ -241,13 +238,12 @@ CBOpenVTable :: struct {
 }
 
 cbopenif_connect :: proc() -> (ok: bool) {
-    if cbopenif != nil do return true
+    ok = false
+
+    if cbopenif != nil do return
     
-    hr := windows.CoInitializeEx(nil, .APARTMENTTHREADED)
-    if failed(hr) {
-        fmt.printf("CoInitializeEx failed: 0x%08X\n", u32(hr))
-        return false
-    }
+    ok = com_initialize()
+    if !ok do return
 
     clsid := &GUID{
         0x45902D56,
@@ -263,19 +259,13 @@ cbopenif_connect :: proc() -> (ok: bool) {
         {0xAB, 0x7F, 0x10, 0x38, 0x95, 0xFE, 0x89, 0x91},
     }
 
-    hr = windows.CoCreateInstance(
-        clsid,
-        nil,
-        windows.CLSCTX_LOCAL_SERVER | windows.CLSCTX_INPROC_SERVER,
-        iid,
-        cast(^rawptr)&cbopenif,
-    )
-    if failed(hr) {
-        fmt.printf("CoCreateInstance failed: 0x%08X\n", u32(hr))
-        windows.CoUninitialize()
+    ok = com_create_instance(clsid, iid, cast(^rawptr)&cbopenif)
+    if !ok {
+        com_uninitialize()
         cbopenif = nil
-        return false
+        return
     }
+
     return true
 }
 
@@ -284,7 +274,8 @@ cbopenif_disconnect :: proc() -> (ok: bool) {
         cbopenif->Release()
         cbopenif = nil
     }
-    windows.CoUninitialize()
+    com_uninitialize()
+
     return true
 }
 
