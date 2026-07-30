@@ -185,6 +185,8 @@ x :: proc {
     graphnode_x_set,
     point_x_,
     point_x_set,
+    graphpos_x_,
+    graphpos_x_set,
 }
 
 y :: proc {
@@ -192,6 +194,23 @@ y :: proc {
     graphnode_y_set,
     point_y_,
     point_y_set,
+    graphpos_y_,
+    graphpos_y_set,
+}
+
+xscale :: proc {
+    graphpos_xscale_,
+    graphpos_xscale_set,
+}
+
+yscale :: proc {
+    graphpos_yscale_,
+    graphpos_yscale_set,
+}
+
+rotation :: proc {
+    graphpos_rotation_,
+    graphpos_rotation_set,
 }
 
 type_name :: proc {
@@ -592,4 +611,5 @@ release :: proc {
     points_release,
     point_release,
     autopoint_release,
+    graphpos_release,
 }
