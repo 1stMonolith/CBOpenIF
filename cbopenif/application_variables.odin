@@ -43,7 +43,7 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeApplicationVariables(&bstr, cast(^ApplicationVariables)application_variables)
     if failed(hr) do return
     
@@ -58,7 +58,7 @@ applicationvariables_serialize :: proc(application_variables: ApplicationVariabl
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -79,7 +79,7 @@ applicationvariables_description_ :: proc(application_variables: ApplicationVari
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&bstr)
     if failed(hr) do return
 
@@ -93,7 +93,7 @@ applicationvariables_description_set :: proc(application_variables: ApplicationV
     if application_variables == nil do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(bstr)
     if failed(hr) do return
 

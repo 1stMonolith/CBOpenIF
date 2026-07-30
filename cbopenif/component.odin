@@ -73,7 +73,7 @@ component_name_ :: proc(component: Component) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->NameGet(&bstr)
     if failed(hr) do return
     
@@ -88,7 +88,7 @@ component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->NamePut(bstr)
     if failed(hr) do return
     
@@ -109,7 +109,7 @@ component_type_name_ :: proc(component: Component) -> (type_name: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->TypeNameGet(&bstr)
     if failed(hr) do return
     
@@ -124,7 +124,7 @@ component_type_name_set :: proc(component: Component, type_name: string) -> (ok:
     if !connected() do return
     
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -145,7 +145,7 @@ component_attribute_ :: proc(component: Component) -> (attribute: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AttributeGet(&bstr)
     if failed(hr) do return
 
@@ -160,7 +160,7 @@ component_attribute_set :: proc(component: Component, attribute: string) -> (ok:
     if !connected() do return
 
     bstr := string_to_bstr(attribute)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AttributePut(bstr)
     if failed(hr) do return
 
@@ -181,7 +181,7 @@ component_initial_value_ :: proc(component: Component) -> (inital_value: string,
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->InitialValueGet(&bstr)
     if failed(hr) do return
 
@@ -196,7 +196,7 @@ component_initial_value_set :: proc(component: Component, inital_value: string) 
     if !connected() do return
     
     bstr := string_to_bstr(inital_value)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->InitialValuePut(bstr)
     if failed(hr) do return
     
@@ -217,7 +217,7 @@ component_read_permission_ :: proc(component: Component) -> (read_permission: st
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->ReadPermissionGet(&bstr)
     if failed(hr) do return
 
@@ -232,7 +232,7 @@ component_read_permission_set :: proc(component: Component, read_permission: str
     if !connected() do return
 
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -253,7 +253,7 @@ component_write_permission_ :: proc(component: Component) -> (write_permission: 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -268,7 +268,7 @@ component_write_permission_set :: proc(component: Component, write_permission: s
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->WritePermissionPut(bstr)
     if failed(hr) do return
 
@@ -289,7 +289,7 @@ component_authentication_level_ :: proc(component: Component) -> (authentication
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -304,7 +304,7 @@ component_authentication_level_set :: proc(component: Component, authentication_
     if !connected() do return
 
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
 
@@ -325,7 +325,7 @@ component_description_ :: proc(component: Component) -> (description: string, ok
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->DescriptionGet(&bstr)
     if failed(hr) do return
 
@@ -340,7 +340,7 @@ component_description_set :: proc(component: Component, description: string) -> 
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->DescriptionPut(bstr)
     if failed(hr) do return
 
@@ -355,7 +355,7 @@ component_type_guid :: proc(component: Component) -> (type_guid: string, ok: boo
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->TypeGuidGet(&bstr)
     if failed(hr) do return
     
@@ -370,7 +370,7 @@ component_type_path :: proc(component: Component) -> (type_path: string, ok: boo
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->TypePathGet(&bstr)
     if failed(hr) do return
     
@@ -391,7 +391,7 @@ component_access_level_ :: proc(component: Component) -> (access_level: string, 
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -406,7 +406,7 @@ component_access_level_set :: proc(component: Component, access_level: string) -
     if !connected() do return
 
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -427,7 +427,7 @@ component_safety_type_ :: proc(component: Component) -> (safety_type: string, ok
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -442,7 +442,7 @@ component_safety_type_set :: proc(component: Component, safety_type: string) -> 
     if !connected() do return
 
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->SafetyTypePut(bstr)
     if failed(hr) do return
     
@@ -463,7 +463,7 @@ component_isp_value_ :: proc(component: Component) -> (isp_value: string, ok: bo
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->ISPValueGet(&bstr)
     if failed(hr) do return
     
@@ -478,7 +478,7 @@ component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok:
     if !connected() do return
 
     bstr := string_to_bstr(isp_value)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ComponentIF)(component)->ISPValuePut(bstr)
     if failed(hr) do return
 

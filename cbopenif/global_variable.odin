@@ -71,7 +71,7 @@ globalvariable_deserialize :: proc(global_variable: ^GlobalVariable, xml: string
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeGlobalVariable(&bstr, cast(^GlobalVariable)global_variable)
     if failed(hr) do return
     
@@ -86,7 +86,7 @@ globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: strin
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -107,7 +107,7 @@ globalvariable_name_ :: proc(global_variable: GlobalVariable) -> (name: string, 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -122,7 +122,7 @@ globalvariable_name_set :: proc(global_variable: GlobalVariable, name: string) -
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->NamePut(bstr)
     if failed(hr) do return
     
@@ -143,7 +143,7 @@ globalvariable_type_name_ :: proc(global_variable: GlobalVariable) -> (type_name
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->TypeNameGet(&bstr)
     if failed(hr) do return
 
@@ -158,7 +158,7 @@ globalvariable_type_name_set :: proc(global_variable: GlobalVariable, type_name:
     if !connected() do return
 
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -179,7 +179,7 @@ globalvariable_attribute_ :: proc(global_variable: GlobalVariable) -> (attribute
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AttributeGet(&bstr)
     if failed(hr) do return
     
@@ -194,7 +194,7 @@ globalvariable_attribute_set :: proc(global_variable: GlobalVariable, attribute:
     if !connected() do return
 
     bstr := string_to_bstr(attribute)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AttributePut(bstr)
     if failed(hr) do return
     
@@ -215,7 +215,7 @@ globalvariable_initial_value_ :: proc(global_variable: GlobalVariable) -> (inita
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->InitialValueGet(&bstr)
     if failed(hr) do return
     
@@ -230,7 +230,7 @@ globalvariable_initial_value_set :: proc(global_variable: GlobalVariable, inital
     if !connected() do return
     
     bstr := string_to_bstr(inital_value)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->InitialValuePut(bstr)
     if failed(hr) do return
     
@@ -251,7 +251,7 @@ globalvariable_description_ :: proc(global_variable: GlobalVariable) -> (descrip
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -266,7 +266,7 @@ globalvariable_description_set :: proc(global_variable: GlobalVariable, descript
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -287,7 +287,7 @@ globalvariable_read_permission_ :: proc(global_variable: GlobalVariable) -> (rea
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->ReadPermissionGet(&bstr)
     if failed(hr) do return
     
@@ -302,7 +302,7 @@ globalvariable_read_permission_set :: proc(global_variable: GlobalVariable, read
     if !connected() do return
     
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -323,7 +323,7 @@ globalvariable_write_permission_ :: proc(global_variable: GlobalVariable) -> (wr
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -338,7 +338,7 @@ globalvariable_write_permission_set :: proc(global_variable: GlobalVariable, wri
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->WritePermissionPut(bstr)
     if failed(hr) do return
     
@@ -359,7 +359,7 @@ globalvariable_authentication_level_ :: proc(global_variable: GlobalVariable) ->
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -374,7 +374,7 @@ globalvariable_authentication_level_set :: proc(global_variable: GlobalVariable,
     if !connected() do return
     
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -421,7 +421,7 @@ globalvariable_type_guid :: proc(global_variable: GlobalVariable) -> (guid: stri
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->TypeGuid(&bstr)
     if failed(hr) do return
     
@@ -436,7 +436,7 @@ globalvariable_type_path :: proc(global_variable: GlobalVariable) -> (path: stri
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->TypePath(&bstr)
     if failed(hr) do return
     
@@ -457,7 +457,7 @@ globalvariable_access_level_ :: proc(global_variable: GlobalVariable) -> (access
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -472,7 +472,7 @@ globalvariable_access_level_set :: proc(global_variable: GlobalVariable, access_
     if !connected() do return
     
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -493,7 +493,7 @@ globalvariable_safety_type_ :: proc(global_variable: GlobalVariable) -> (safety_
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -508,7 +508,7 @@ globalvariable_safety_type_set :: proc(global_variable: GlobalVariable, safety_t
     if !connected() do return
     
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GlobalVariableIF)(global_variable)->SafetyTypePut(bstr)
     if failed(hr) do return
     

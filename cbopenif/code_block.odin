@@ -25,7 +25,7 @@ codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) 
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeCodeBlock(&bstr, cast(^CodeBlock)codeblock)
     if failed(hr) do return
     
@@ -46,7 +46,7 @@ codeblock_name_ :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CodeBlockIF)(codeblock)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -61,7 +61,7 @@ codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CodeBlockIF)(codeblock)->NamePut(bstr)
     if failed(hr) do return
     

@@ -67,7 +67,7 @@ externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: 
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeExternalVariable(&bstr, cast(^ExternalVariable)external_variable)
     if failed(hr) do return
     
@@ -82,7 +82,7 @@ externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml:
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -103,7 +103,7 @@ externalvariable_name_ :: proc(external_variable: ExternalVariable) -> (name: st
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -118,7 +118,7 @@ externalvariable_name_set :: proc(external_variable: ExternalVariable, name: str
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->NamePut(bstr)
     if failed(hr) do return
     
@@ -139,7 +139,7 @@ externalvariable_type_name_ :: proc(external_variable: ExternalVariable) -> (typ
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->TypeNameGet(&bstr)
     if failed(hr) do return
 
@@ -154,7 +154,7 @@ externalvariable_type_name_set :: proc(external_variable: ExternalVariable, type
     if !connected() do return
 
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -175,7 +175,7 @@ externalvariable_attribute_ :: proc(external_variable: ExternalVariable) -> (att
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AttributeGet(&bstr)
     if failed(hr) do return
     
@@ -190,7 +190,7 @@ externalvariable_attribute_set :: proc(external_variable: ExternalVariable, attr
     if !connected() do return
 
     bstr := string_to_bstr(attribute)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AttributePut(bstr)
     if failed(hr) do return
     
@@ -211,7 +211,7 @@ externalvariable_description_ :: proc(external_variable: ExternalVariable) -> (d
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -226,7 +226,7 @@ externalvariable_description_set :: proc(external_variable: ExternalVariable, de
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -247,7 +247,7 @@ externalvariable_read_permission_ :: proc(external_variable: ExternalVariable) -
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->ReadPermissionGet(&bstr)
     if failed(hr) do return
     
@@ -262,7 +262,7 @@ externalvariable_read_permission_set :: proc(external_variable: ExternalVariable
     if !connected() do return
     
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -283,7 +283,7 @@ externalvariable_write_permission_ :: proc(external_variable: ExternalVariable) 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -298,7 +298,7 @@ externalvariable_write_permission_set :: proc(external_variable: ExternalVariabl
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->WritePermissionPut(bstr)
     if failed(hr) do return
     
@@ -319,7 +319,7 @@ externalvariable_authentication_level_ :: proc(external_variable: ExternalVariab
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -334,7 +334,7 @@ externalvariable_authentication_level_set :: proc(external_variable: ExternalVar
     if !connected() do return
     
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -381,7 +381,7 @@ externalvariable_type_guid :: proc(external_variable: ExternalVariable) -> (guid
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->TypeGuid(&bstr)
     if failed(hr) do return
     
@@ -396,7 +396,7 @@ externalvariable_type_path :: proc(external_variable: ExternalVariable) -> (path
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->TypePath(&bstr)
     if failed(hr) do return
     
@@ -417,7 +417,7 @@ externalvariable_access_level_ :: proc(external_variable: ExternalVariable) -> (
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -432,7 +432,7 @@ externalvariable_access_level_set :: proc(external_variable: ExternalVariable, a
     if !connected() do return
     
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -453,7 +453,7 @@ externalvariable_safety_type_ :: proc(external_variable: ExternalVariable) -> (s
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -468,7 +468,7 @@ externalvariable_safety_type_set :: proc(external_variable: ExternalVariable, sa
     if !connected() do return
     
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ExternalVariableIF)(external_variable)->SafetyTypePut(bstr)
     if failed(hr) do return
     

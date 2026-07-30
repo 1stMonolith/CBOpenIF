@@ -53,7 +53,7 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeSignal(&bstr, cast(^Signal)signal)
     if failed(hr) do return
     
@@ -68,7 +68,7 @@ signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -89,7 +89,7 @@ signal_name_ :: proc(signal: Signal) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -104,7 +104,7 @@ signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->NamePut(bstr)
     if failed(hr) do return
     
@@ -125,7 +125,7 @@ signal_description_ :: proc(signal: Signal) -> (description: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -140,7 +140,7 @@ signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -161,7 +161,7 @@ signal_path_ :: proc(signal: Signal) -> (path: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->PathGet(&bstr)
     if failed(hr) do return
     
@@ -176,7 +176,7 @@ signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(path)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^SignalIF)(signal)->NamePut(bstr)
     if failed(hr) do return
     

@@ -73,7 +73,7 @@ variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeVariable(&bstr, cast(^Variable)variable)
     if failed(hr) do return
     
@@ -88,7 +88,7 @@ variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -109,7 +109,7 @@ variable_name_ :: proc(variable: Variable) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -124,7 +124,7 @@ variable_name_set :: proc(variable: Variable, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->NamePut(bstr)
     if failed(hr) do return
     
@@ -145,7 +145,7 @@ variable_type_name_ :: proc(variable: Variable) -> (type_name: string, ok: bool)
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->TypeNameGet(&bstr)
     if failed(hr) do return
 
@@ -160,7 +160,7 @@ variable_type_name_set :: proc(variable: Variable, type_name: string) -> (ok: bo
     if !connected() do return
 
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -181,7 +181,7 @@ variable_attribute_ :: proc(variable: Variable) -> (attribute: string, ok: bool)
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AttributeGet(&bstr)
     if failed(hr) do return
     
@@ -196,7 +196,7 @@ variable_attribute_set :: proc(variable: Variable, attribute: string) -> (ok: bo
     if !connected() do return
 
     bstr := string_to_bstr(attribute)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AttributePut(bstr)
     if failed(hr) do return
     
@@ -217,7 +217,7 @@ variable_initial_value_ :: proc(variable: Variable) -> (inital_value: string, ok
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->InitialValueGet(&bstr)
     if failed(hr) do return
     
@@ -232,7 +232,7 @@ variable_initial_value_set :: proc(variable: Variable, inital_value: string) -> 
     if !connected() do return
     
     bstr := string_to_bstr(inital_value)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->InitialValuePut(bstr)
     if failed(hr) do return
     
@@ -253,7 +253,7 @@ variable_description_ :: proc(variable: Variable) -> (description: string, ok: b
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -268,7 +268,7 @@ variable_description_set :: proc(variable: Variable, description: string) -> (ok
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -289,7 +289,7 @@ variable_read_permission_ :: proc(variable: Variable) -> (read_permission: strin
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->ReadPermissionGet(&bstr)
     if failed(hr) do return
     
@@ -304,7 +304,7 @@ variable_read_permission_set :: proc(variable: Variable, read_permission: string
     if !connected() do return
     
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -325,7 +325,7 @@ variable_write_permission_ :: proc(variable: Variable) -> (write_permission: str
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -340,7 +340,7 @@ variable_write_permission_set :: proc(variable: Variable, write_permission: stri
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->WritePermissionPut(bstr)
     if failed(hr) do return
     
@@ -361,7 +361,7 @@ variable_authentication_level_ :: proc(variable: Variable) -> (authentication_le
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -376,7 +376,7 @@ variable_authentication_level_set :: proc(variable: Variable, authentication_lev
     if !connected() do return
     
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -397,7 +397,7 @@ variable_batch_property_ :: proc(variable: Variable) -> (batch_property: string,
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->BatchPropertyGet(&bstr)
     if failed(hr) do return
     
@@ -412,7 +412,7 @@ variable_batch_property_set :: proc(variable: Variable, batch_property: string) 
     if !connected() do return
     
     bstr := string_to_bstr(batch_property)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->BatchPropertyPut(bstr)
     if failed(hr) do return
     
@@ -459,7 +459,7 @@ variable_type_guid :: proc(variable: Variable) -> (guid: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->TypeGuid(&bstr)
     if failed(hr) do return
     
@@ -474,7 +474,7 @@ variable_type_path :: proc(variable: Variable) -> (path: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->TypePath(&bstr)
     if failed(hr) do return
     
@@ -495,7 +495,7 @@ variable_access_level_ :: proc(variable: Variable) -> (access_level: string, ok:
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -510,7 +510,7 @@ variable_access_level_set :: proc(variable: Variable, access_level: string) -> (
     if !connected() do return
     
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -531,7 +531,7 @@ variable_safety_type_ :: proc(variable: Variable) -> (safety_type: string, ok: b
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -546,7 +546,7 @@ variable_safety_type_set :: proc(variable: Variable, safety_type: string) -> (ok
     if !connected() do return
     
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^VariableIF)(variable)->SafetyTypePut(bstr)
     if failed(hr) do return
     

@@ -45,7 +45,7 @@ graphnode_name_ :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GraphNodeIF)(graphnode)->NameGet(&bstr)
     if failed(hr) do return
     
@@ -60,7 +60,7 @@ graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^GraphNodeIF)(graphnode)->NamePut(bstr)
     if failed(hr) do return
     

@@ -45,7 +45,7 @@ cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (o
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeCMConnection(&bstr, cast(^CMConnection)cmconnection)
     if failed(hr) do return
     
@@ -60,7 +60,7 @@ cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMConnectionIF)(cmconnection)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -81,7 +81,7 @@ cmconnection_name_ :: proc(cmconnection: CMConnection) -> (name: string, ok: boo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMConnectionIF)(cmconnection)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -96,7 +96,7 @@ cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: 
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMConnectionIF)(cmconnection)->NamePut(bstr)
     if failed(hr) do return
     
@@ -117,7 +117,7 @@ cmconnection_actual_parameter_ :: proc(cmconnection: CMConnection) -> (actual_pa
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMConnectionIF)(cmconnection)->ActualParameterGet(&bstr)
     if failed(hr) do return
 
@@ -132,7 +132,7 @@ cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_par
     if !connected() do return
 
     bstr := string_to_bstr(actual_parameter)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMConnectionIF)(cmconnection)->ActualParameterPut(bstr)
     if failed(hr) do return
     

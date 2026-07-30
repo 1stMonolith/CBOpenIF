@@ -85,7 +85,7 @@ cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: 
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeCMParameter(&bstr, cast(^CMParameter)cmparameter)
     if failed(hr) do return
     
@@ -100,7 +100,7 @@ cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: boo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -121,7 +121,7 @@ cmparameter_name_ :: proc(cmparameter: CMParameter) -> (name: string, ok: bool) 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -136,7 +136,7 @@ cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: boo
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->NamePut(bstr)
     if failed(hr) do return
     
@@ -157,7 +157,7 @@ cmparameter_type_name_ :: proc(cmparameter: CMParameter) -> (type_name: string, 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->TypeNameGet(&bstr)
     if failed(hr) do return
 
@@ -172,7 +172,7 @@ cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -
     if !connected() do return
 
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -193,7 +193,7 @@ cmparameter_initial_value_ :: proc(cmparameter: CMParameter) -> (inital_value: s
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->InitialValueGet(&bstr)
     if failed(hr) do return
     
@@ -208,7 +208,7 @@ cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: st
     if !connected() do return
     
     bstr := string_to_bstr(inital_value)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->InitialValuePut(bstr)
     if failed(hr) do return
     
@@ -229,7 +229,7 @@ cmparameter_description_ :: proc(cmparameter: CMParameter) -> (description: stri
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -244,7 +244,7 @@ cmparameter_description_set :: proc(cmparameter: CMParameter, description: strin
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -265,7 +265,7 @@ cmparameter_read_permission_ :: proc(cmparameter: CMParameter) -> (read_permissi
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->ReadPermissionGet(&bstr)
     if failed(hr) do return
     
@@ -280,7 +280,7 @@ cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permissio
     if !connected() do return
     
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -301,7 +301,7 @@ cmparameter_write_permission_ :: proc(cmparameter: CMParameter) -> (write_permis
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -316,7 +316,7 @@ cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permiss
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->WritePermissionPut(bstr)
     if failed(hr) do return
     
@@ -337,7 +337,7 @@ cmparameter_authentication_level_ :: proc(cmparameter: CMParameter) -> (authenti
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -352,7 +352,7 @@ cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentic
     if !connected() do return
     
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -373,7 +373,7 @@ cmparameter_batch_property_ :: proc(cmparameter: CMParameter) -> (batch_property
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -388,7 +388,7 @@ cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property:
     if !connected() do return
     
     bstr := string_to_bstr(batch_property)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -467,7 +467,7 @@ cmparameter_type_guid :: proc(cmparameter: CMParameter) -> (guid: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->TypeGuid(&bstr)
     if failed(hr) do return
     
@@ -482,7 +482,7 @@ cmparameter_type_path :: proc(cmparameter: CMParameter) -> (path: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->TypePath(&bstr)
     if failed(hr) do return
     
@@ -503,7 +503,7 @@ cmparameter_access_level_ :: proc(cmparameter: CMParameter) -> (access_level: st
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -518,7 +518,7 @@ cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: str
     if !connected() do return
     
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -539,7 +539,7 @@ cmparameter_safety_type_ :: proc(cmparameter: CMParameter) -> (safety_type: stri
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -554,7 +554,7 @@ cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: strin
     if !connected() do return
     
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->SafetyTypePut(bstr)
     if failed(hr) do return
     
@@ -575,7 +575,7 @@ cmparameter_direction_ :: proc(cmparameter: CMParameter) -> (direction: string, 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->DirectionGet(&bstr)
     if failed(hr) do return
     
@@ -590,7 +590,7 @@ cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -
     if !connected() do return
     
     bstr := string_to_bstr(direction)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->DirectionPut(bstr)
     if failed(hr) do return
     
@@ -611,7 +611,7 @@ cmparameter_fdport_ :: proc(cmparameter: CMParameter) -> (fdport: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->FDPortGet(&bstr)
     if failed(hr) do return
     
@@ -626,7 +626,7 @@ cmparameter_fdport_set :: proc(cmparameter: CMParameter, fdport: string) -> (ok:
     if !connected() do return
     
     bstr := string_to_bstr(fdport)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^CMParameterIF)(cmparameter)->FDPortPut(bstr)
     if failed(hr) do return
     

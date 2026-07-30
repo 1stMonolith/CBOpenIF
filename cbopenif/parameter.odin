@@ -72,7 +72,7 @@ parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) 
     if !connected() do return
     
     bstr := string_to_bstr(xml)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := factoryif->DeserializeParameter(&bstr, cast(^Parameter)parameter)
     if failed(hr) do return
     
@@ -87,7 +87,7 @@ parameter_serialize :: proc(parameter: Parameter) -> (xml: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->Serialize(&bstr)
     if failed(hr) do return
     
@@ -108,7 +108,7 @@ parameter_name_ :: proc(parameter: Parameter) -> (name: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->NameGet(&bstr)
     if failed(hr) do return
 
@@ -123,7 +123,7 @@ parameter_name_set :: proc(parameter: Parameter, name: string) -> (ok: bool) {
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->NamePut(bstr)
     if failed(hr) do return
     
@@ -144,7 +144,7 @@ parameter_type_name_ :: proc(parameter: Parameter) -> (type_name: string, ok: bo
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->TypeNameGet(&bstr)
     if failed(hr) do return
 
@@ -159,7 +159,7 @@ parameter_type_name_set :: proc(parameter: Parameter, type_name: string) -> (ok:
     if !connected() do return
 
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->TypeNamePut(bstr)
     if failed(hr) do return
     
@@ -180,7 +180,7 @@ parameter_attribute_ :: proc(parameter: Parameter) -> (attribute: string, ok: bo
     if !connected() do return
 
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AttributeGet(&bstr)
     if failed(hr) do return
     
@@ -195,7 +195,7 @@ parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok:
     if !connected() do return
 
     bstr := string_to_bstr(attribute)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AttributePut(bstr)
     if failed(hr) do return
     
@@ -216,7 +216,7 @@ parameter_description_ :: proc(parameter: Parameter) -> (description: string, ok
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->DescriptionGet(&bstr)
     if failed(hr) do return
     
@@ -231,7 +231,7 @@ parameter_description_set :: proc(parameter: Parameter, description: string) -> 
     if !connected() do return
     
     bstr := string_to_bstr(description)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->DescriptionPut(bstr)
     if failed(hr) do return
     
@@ -252,7 +252,7 @@ parameter_read_permission_ :: proc(parameter: Parameter) -> (read_permission: st
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->ReadPermissionGet(&bstr)
     if failed(hr) do return
     
@@ -267,7 +267,7 @@ parameter_read_permission_set :: proc(parameter: Parameter, read_permission: str
     if !connected() do return
     
     bstr := string_to_bstr(read_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->ReadPermissionPut(bstr)
     if failed(hr) do return
     
@@ -288,7 +288,7 @@ parameter_write_permission_ :: proc(parameter: Parameter) -> (write_permission: 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->WritePermissionGet(&bstr)
     if failed(hr) do return
     
@@ -303,7 +303,7 @@ parameter_write_permission_set :: proc(parameter: Parameter, write_permission: s
     if !connected() do return
     
     bstr := string_to_bstr(write_permission)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->WritePermissionPut(bstr)
     if failed(hr) do return
     
@@ -324,7 +324,7 @@ parameter_authentication_level_ :: proc(parameter: Parameter) -> (authentication
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AuthenticationLevelGet(&bstr)
     if failed(hr) do return
     
@@ -339,7 +339,7 @@ parameter_authentication_level_set :: proc(parameter: Parameter, authentication_
     if !connected() do return
     
     bstr := string_to_bstr(authentication_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AuthenticationLevelPut(bstr)
     if failed(hr) do return
     
@@ -354,7 +354,7 @@ parameter_type_guid :: proc(parameter: Parameter) -> (guid: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->TypeGuid(&bstr)
     if failed(hr) do return
     
@@ -369,7 +369,7 @@ parameter_type_path :: proc(parameter: Parameter) -> (path: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->TypePath(&bstr)
     if failed(hr) do return
     
@@ -390,7 +390,7 @@ parameter_access_level_ :: proc(parameter: Parameter) -> (access_level: string, 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AccessLevelGet(&bstr)
     if failed(hr) do return
     
@@ -405,7 +405,7 @@ parameter_access_level_set :: proc(parameter: Parameter, access_level: string) -
     if !connected() do return
     
     bstr := string_to_bstr(access_level)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->AccessLevelPut(bstr)
     if failed(hr) do return
     
@@ -426,7 +426,7 @@ parameter_safety_type_ :: proc(parameter: Parameter) -> (safety_type: string, ok
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -441,7 +441,7 @@ parameter_safety_type_set :: proc(parameter: Parameter, safety_type: string) -> 
     if !connected() do return
     
     bstr := string_to_bstr(safety_type)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->SafetyTypePut(bstr)
     if failed(hr) do return
     
@@ -462,7 +462,7 @@ parameter_fdport_ :: proc(parameter: Parameter) -> (fdport: string, ok: bool) {
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->SafetyTypeGet(&bstr)
     if failed(hr) do return
     
@@ -477,7 +477,7 @@ parameter_fdport_set :: proc(parameter: Parameter, fdport: string) -> (ok: bool)
     if !connected() do return
     
     bstr := string_to_bstr(fdport)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterIF)(parameter)->SafetyTypePut(bstr)
     if failed(hr) do return
     

@@ -43,3 +43,7 @@ bstr_to_string :: proc(bstr: BStr, allocator := context.allocator) -> string {
     if err != nil do return ""
     return s
 }
+
+bstr_free :: proc(bstr: BStr) {
+    SysFreeString(bstr)
+}

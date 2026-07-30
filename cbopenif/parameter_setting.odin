@@ -48,7 +48,7 @@ parameter_setting_name_ :: proc(parameter_setting: ParameterSetting) -> (name: s
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterSettingIF)(parameter_setting)->NameGet(&bstr)
     if failed(hr) do return
     
@@ -63,7 +63,7 @@ parameter_setting_name_set :: proc(parameter_setting: ParameterSetting, name: st
     if !connected() do return
     
     bstr := string_to_bstr(name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterSettingIF)(parameter_setting)->NamePut(bstr)
     if failed(hr) do return
     
@@ -84,7 +84,7 @@ parameter_setting_parameter_value_ :: proc(parameter_setting: ParameterSetting) 
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterSettingIF)(parameter_setting)->ParameterValueGet(&bstr)
     if failed(hr) do return
     
@@ -99,7 +99,7 @@ parameter_setting_parameter_value_set :: proc(parameter_setting: ParameterSettin
     if !connected() do return
     
     bstr := string_to_bstr(type_name)
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterSettingIF)(parameter_setting)->ParameterValuePut(bstr)
     if failed(hr) do return
     
@@ -114,7 +114,7 @@ parameter_setting_description_ :: proc(parameter_setting: ParameterSetting) -> (
     if !connected() do return
     
     bstr: BStr
-    defer SysFreeString(bstr)
+    defer bstr_free(bstr)
     hr := (^ParameterSettingIF)(parameter_setting)->DescriptionGet(&bstr)
     if failed(hr) do return
 
