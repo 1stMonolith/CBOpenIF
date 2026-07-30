@@ -204,6 +204,10 @@ name :: proc {
     stcodeblock_name_set,
     ilrow_name_,
     ilrow_name_set,
+    sfctransition_name_,
+    sfctransition_name_set,
+    sfcstep_name_,
+    sfcstep_name_set,
 }
 
 comment :: proc {
@@ -559,6 +563,43 @@ stcode :: proc {
     fbdcodeblock_stcode_set,
     stcodeblock_stcode_,
     stcodeblock_stcode_set,
+    sfcstcode_,
+    sfcstcode_set,
+}
+
+dest :: proc {
+    sfctransition_dest_,
+    sfctransition_dest_set,
+}
+
+initial_setp :: proc {
+    sfcstep_initial_step_,
+    sfcstep_initial_step_set,
+}
+
+p1_action_stcode :: proc {
+    sfcstep_p1_action_stcode_,
+    sfcstep_p1_action_stcode_set,
+}
+
+p0_action_stcode :: proc {
+    sfcstep_p0_action_stcode_,
+    sfcstep_p0_action_stcode_set,
+}
+
+n_action_stcode :: proc {
+    sfcstep_n_action_stcode_,
+    sfcstep_n_action_stcode_set,
+}
+
+priority :: proc {
+    sfcbranch_priority_,
+    sfcbranch_priority_set,
+}
+
+elements :: proc {
+    sfcbranch_elements_,
+    sfcbranch_elements_set,
 }
 
 serialize :: proc {
@@ -762,4 +803,9 @@ release :: proc {
     stcodeblock_release,
     ilrows_release,
     ilrow_release,
+    sfctransition_release,
+    sfcstep_release,
+    sfcbranch_release,
+    sfcsimultaneous_release,
+    sfcbranches_release,
 }
