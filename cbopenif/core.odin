@@ -502,6 +502,8 @@ add :: proc {
     cmconnections_add_at_index,
     points_add_,
     points_add_at_index,
+    cmparameters_add_,
+    cmparameters_add_at_index,
 }
 
 by_name :: proc {
@@ -518,6 +520,7 @@ by_name :: proc {
     parameters_external_by_name,
     parametersettings_parametersetting_by_name,
     cmconnections_cmconnection_by_name,
+    cmparameters_cmparameter_by_name,
 }
 
 by_index :: proc {
@@ -534,7 +537,8 @@ by_index :: proc {
     parameters_external_by_index,
     parametersettings_parametersetting_by_index,
     cmconnections_cmconnection_by_index,
-    points_point_by_index
+    points_point_by_index,
+    cmparameters_cmparameter_by_index,
 }
 
 index :: proc {
@@ -551,6 +555,7 @@ index :: proc {
     parameters_external_index,
     parametersettings_parametersetting_index,
     cmconnections_cmconnection_index,
+    cmparameters_cmparameter_index,
 }
 
 count :: proc {
@@ -568,6 +573,7 @@ count :: proc {
     parametersettings_count,
     cmconnections_count,
     points_count,
+    cmparameters_count,
 }
 
 remove :: proc {
@@ -598,6 +604,8 @@ remove :: proc {
     cmconnections_remove_by_name,
     cmconnections_remove_by_index,
     points_remove_by_index,
+    cmparameters_remove_by_name,
+    cmparameters_remove_by_index,
 }
 
 release :: proc {
@@ -623,4 +631,5 @@ release :: proc {
     autopoint_release,
     graphpos_release,
     graphsize_release,
+    cmparameters_release,
 }
