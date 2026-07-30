@@ -194,6 +194,14 @@ name :: proc {
     cmparameter_name_set,
     codeblock_name_,
     codeblock_name_set,
+    fdcodeblock_name_,
+    fdcodeblock_name_set,
+    ldcodeblock_name_,
+    ldcodeblock_name_set,
+    fbdcodeblock_name_,
+    fbdcodeblock_name_set,
+    stcodeblock_name_,
+    stcodeblock_name_set,
 }
 
 x :: proc {
@@ -525,6 +533,20 @@ is_fd :: proc {
     codeblock_is_fd,
 }
 
+xml_string :: proc {
+    fdcodeblock_xml_string_,
+    fdcodeblock_xml_string_set,
+}
+
+stcode :: proc {
+    ldcodeblock_stcode_,
+    ldcodeblock_stcode_set,
+    fbdcodeblock_stcode_,
+    fbdcodeblock_stcode_set,
+    stcodeblock_stcode_,
+    stcodeblock_stcode_set,
+}
+
 serialize :: proc {
     datatype_serialize,
     variable_serialize,
@@ -535,6 +557,10 @@ serialize :: proc {
     parameter_serialize,
     cmconnection_serialize,
     cmparameter_serialize,
+    fdcodeblock_serialize,
+    ldcodeblock_serialize,
+    fbdcodeblock_serialize,
+    stcodeblock_serialize,
 }
 
 deserialize :: proc {
@@ -711,4 +737,8 @@ release :: proc {
     cmparameters_release,
     cmparameter_release,
     codeblock_release,
+    fdcodeblock_release,
+    ldcodeblock_release,
+    fbdcodeblock_release,
+    stcodeblock_release,
 }
