@@ -180,6 +180,8 @@ name :: proc {
     cmconnection_name_set,
     cmparameter_name_,
     cmparameter_name_set,
+    codeblock_name_,
+    codeblock_name_set,
 }
 
 x :: proc {
@@ -487,6 +489,30 @@ signals :: proc {
     applicationvariables_signals_set,
 }
 
+is_st :: proc {
+    codeblock_is_st,
+}
+
+is_sfc :: proc {
+    codeblock_is_sfc,
+}
+
+is_il :: proc {
+    codeblock_is_il,
+}
+
+is_fbd :: proc {
+    codeblock_is_fbd,
+}
+
+is_ld :: proc {
+    codeblock_is_ld,
+}
+
+is_fd :: proc {
+    codeblock_is_fd,
+}
+
 serialize :: proc {
     datatype_serialize,
     variable_serialize,
@@ -509,6 +535,7 @@ deserialize :: proc {
     parameter_deserialize,
     cmconnection_deserialize,
     cmparameter_deserialize,
+    codeblock_deserialize,
 }
 
 add :: proc {
@@ -671,4 +698,5 @@ release :: proc {
     graphsize_release,
     cmparameters_release,
     cmparameter_release,
+    codeblock_release,
 }
