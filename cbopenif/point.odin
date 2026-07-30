@@ -15,6 +15,18 @@ PointVTable :: struct {
     YPut:    proc "system" (this: ^PointIF, Y: f64) -> HResult,
 }
 
+point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
+    point = nil
+    ok = false
+
+    if !connected() do return
+
+    hr := factoryif->NewPoint(x, y, cast(^Point)&point)
+    if failed(hr) do return
+
+    return point, true
+}
+
 point_x :: proc {
     point_x_,
     point_x_set,

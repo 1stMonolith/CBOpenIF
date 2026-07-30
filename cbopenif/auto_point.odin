@@ -13,6 +13,18 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
+autopoint_new :: proc(autopos: AutoPos) -> (autopoint: AutoPoint, ok: bool) {
+    autopoint = {}
+    ok = false
+
+    if !connected() do return
+
+    hr := factoryif->NewAutoPoint(i32(autopos), cast(^AutoPoint)&autopoint)
+    if failed(hr) do return
+
+    return autopoint, true
+}
+
 autopoint_autopos :: proc {
     autopoint_autopos_,
     autopoint_autopos_set,
