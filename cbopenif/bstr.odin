@@ -8,7 +8,6 @@ foreign import oleaut32 "system:oleaut32.lib"
 
 @(default_calling_convention="system")
 foreign oleaut32 {
-    SysAllocString    :: proc(psz: [^]u16) -> BStr ---
     SysAllocStringLen :: proc(psz: [^]u16, len: u32) -> BStr ---
     SysFreeString     :: proc(bstr: BStr) ---
     SysStringLen      :: proc(bstr: BStr) -> u32 ---
