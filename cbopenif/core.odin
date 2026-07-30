@@ -52,6 +52,16 @@ AutoPos :: enum i32 {
     Right  = 3,
 }
 
+i32_to_autopos :: proc(n: i32) -> (AutoPos, bool) {
+    switch n {
+        case 0: return .Top, true
+        case 1: return .Bottom, true
+        case 2: return .Left, true
+        case 3: return .Right, true
+    }
+    return {}, false
+}
+
 SFCPriorityValue :: enum i32 {
     Default = 0,
     Lowest  = 1,
@@ -310,6 +320,11 @@ fdport :: proc {
 batch_property :: proc {
     variable_batch_property_,
     variable_batch_property_set,
+}
+
+auto_pos :: proc {
+    autopoint_autopos_,
+    autopoint_autopos_set,
 }
 
 graph_nodes :: proc {
@@ -575,4 +590,6 @@ release :: proc {
     parametersettings_release,
     cmconnections_release,
     points_release,
+    point_release,
+    autopoint_release,
 }

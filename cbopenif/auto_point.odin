@@ -1,0 +1,57 @@
+package cbopenif
+
+AutoPoint  :: distinct rawptr
+
+AutoPointIF :: struct #raw_union {
+    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    using vtable: ^AutoPointVTable,
+}
+
+AutoPointVTable :: struct {
+    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    AutoPosGet: proc "system" (this: ^AutoPointIF, AutoPos: ^i32) -> HResult,
+    AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
+}
+
+autopoint_autopos :: proc {
+    autopoint_autopos_,
+    autopoint_autopos_set,
+}
+
+@(private)
+autopoint_autopos_ :: proc(autopoint: AutoPoint) -> (autopos: AutoPos, ok: bool) {
+    autopos = {}
+    ok = false
+
+    if autopoint == nil do return
+    if !connected() do return
+    
+    i32_ap: i32
+    hr := (^AutoPointIF)(autopoint)->AutoPosGet(&i32_ap)
+    if failed(hr) do return
+
+    ap: AutoPos
+    ap, ok = i32_to_autopos(i32_ap)
+    if !ok do return
+    
+    return ap, true
+}
+
+@(private)
+autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: AutoPos) -> (ok: bool) {
+    ok = false
+
+    if autopoint == nil do return
+    if !connected() do return
+    
+    hr := (^AutoPointIF)(autopoint)->AutoPosPut(i32(autopos))
+    if failed(hr) do return
+    
+    return true
+}
+
+autopoint_release :: proc(autopoint: AutoPoint) {
+    if autopoint != nil {
+        (^AutoPointIF)(autopoint)->Release()
+    }
+}
