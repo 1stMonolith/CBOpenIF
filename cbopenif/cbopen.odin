@@ -245,21 +245,21 @@ cbopenif_connect :: proc() -> (ok: bool) {
     ok = com_initialize()
     if !ok do return
 
-    clsid := &GUID{
+    clsid := GUID{
         0x45902D56,
         0xD537,
         0x486C,
         {0x89, 0x1B, 0x81, 0x1C, 0xDA, 0x41, 0x0C, 0x77},
     }
 
-    iid := &GUID{
+    iid := GUID{
         0xEDF53D60,
         0xF499,
         0x4EDC,
         {0xAB, 0x7F, 0x10, 0x38, 0x95, 0xFE, 0x89, 0x91},
     }
 
-    ok = com_create_instance(clsid, iid, cast(^rawptr)&cbopenif)
+    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&cbopenif)
     if !ok {
         com_uninitialize()
         cbopenif = nil

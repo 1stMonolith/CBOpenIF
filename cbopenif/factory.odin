@@ -148,21 +148,21 @@ factory_connect :: proc() -> (ok: bool) {
     ok = com_initialize()
     if !ok do return
 
-    clsid := &GUID{
+    clsid := GUID{
         0x3CEFCA96,
         0x1892,
         0x4539,
         {0x87, 0x47, 0x29, 0x2B, 0xB8, 0xAE, 0x1D, 0x4B},
     }
 
-    iid := &GUID{
+    iid := GUID{
         0x9198E466,
         0x81F5,
         0x4756,
         {0xB3, 0x9A, 0x12, 0xC7, 0x7F, 0xF5, 0xFF, 0x1A},
     }
 
-    ok = com_create_instance(clsid, iid, cast(^rawptr)&factoryif)
+    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&factoryif)
     if !ok {
         com_uninitialize()
         cbopenif = nil
