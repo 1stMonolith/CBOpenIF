@@ -22,8 +22,8 @@ UnknownAndDispatchVTable :: struct {
     Invoke:           proc "system" (this: ^UnknownAndDispatchIF, dispIdMember: i32, riid: ^GUID, lcid: u32, wFlags: u16, pDispParams: rawptr, pVarResult: rawptr, pExcepInfo: rawptr, puArgErr: ^u32) -> HResult,
 }
 
-com_initialize :: proc(reserved: rawptr = nil, co_init: windows.COINIT = .APARTMENTTHREADED) -> (ok: bool) {
-    hr := windows.CoInitializeEx(reserved, co_init)
+com_initialize :: proc() -> (ok: bool) {
+    hr := windows.CoInitializeEx(nil, windows.COINIT.APARTMENTTHREADED)
     if failed(hr) do return false
     return true
 }
