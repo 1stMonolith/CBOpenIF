@@ -11,7 +11,7 @@ GraphNodesVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
     Add:       proc "system" (this: ^GraphNodesIF, GraphNode: GraphNode) -> HResult,
     AddBefore: proc "system" (this: ^GraphNodesIF, GraphNode: GraphNode, Index: i32) -> HResult,
-    Add1:      proc "system" (this: ^GraphNodesIF, Name: BStr, X, Y: i64, GraphNode: ^GraphNode) -> HResult,
+    Add1:      proc "system" (this: ^GraphNodesIF, Name: BStr, X, Y: f64, GraphNode: ^GraphNode) -> HResult,
     Find:      proc "system" (this: ^GraphNodesIF, Name: BStr, GraphNode: ^GraphNode) -> HResult,
     FindNr:    proc "system" (this: ^GraphNodesIF, Name: BStr, Index: ^i32) -> HResult,
     Item:      proc "system" (this: ^GraphNodesIF, Index: i32, GraphNode: ^GraphNode) -> HResult,

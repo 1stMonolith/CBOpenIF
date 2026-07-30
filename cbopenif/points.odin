@@ -11,7 +11,7 @@ PointsVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
     Add:       proc "system" (this: ^PointsIF, Point: Point) -> HResult,
     AddBefore: proc "system" (this: ^PointsIF, Point: Point, Index: i32) -> HResult,
-    Add1:      proc "system" (this: ^PointsIF, X, Y: i64, Point: ^Point) -> HResult,
+    Add1:      proc "system" (this: ^PointsIF, X, Y: f64, Point: ^Point) -> HResult,
     Item:      proc "system" (this: ^PointsIF, Index: i32, Point: ^Point) -> HResult,
     Count:     proc "system" (this: ^PointsIF, Count: ^i32) -> HResult,
     Remove:    proc "system" (this: ^PointsIF, Index: i32) -> HResult,

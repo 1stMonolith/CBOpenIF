@@ -11,13 +11,13 @@ GraphNodeVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
     NameGet: proc "system" (this: ^GraphNodeIF, Name: ^BStr) -> HResult,
     NamePut: proc "system" (this: ^GraphNodeIF, Name: BStr) -> HResult,
-    XGet:    proc "system" (this: ^GraphNodeIF, X: ^i64) -> HResult,
-    XPut:    proc "system" (this: ^GraphNodeIF, X: i64) -> HResult,
-    YGet:    proc "system" (this: ^GraphNodeIF, Y: ^i64) -> HResult,
-    YPut:    proc "system" (this: ^GraphNodeIF, Y: i64) -> HResult,
+    XGet:    proc "system" (this: ^GraphNodeIF, X: ^f64) -> HResult,
+    XPut:    proc "system" (this: ^GraphNodeIF, X: f64) -> HResult,
+    YGet:    proc "system" (this: ^GraphNodeIF, Y: ^f64) -> HResult,
+    YPut:    proc "system" (this: ^GraphNodeIF, Y: f64) -> HResult,
 }
 
-graphnode_new :: proc(name: string, x: i64, y: i64) -> (graphnode: GraphNode, ok: bool) {
+graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok: bool) {
     graphnode = nil
     ok = false
 
@@ -73,7 +73,7 @@ graphnode_x :: proc {
 }
 
 @(private)
-graphnode_x_ :: proc(graphnode: GraphNode) -> (x: i64, ok: bool) {
+graphnode_x_ :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -87,7 +87,7 @@ graphnode_x_ :: proc(graphnode: GraphNode) -> (x: i64, ok: bool) {
 }
 
 @(private)
-graphnode_x_set :: proc(graphnode: GraphNode, x: i64) -> (ok: bool) {
+graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
     ok = false
 
     if graphnode == nil do return
@@ -105,7 +105,7 @@ graphnode_y :: proc {
 }
 
 @(private)
-graphnode_y_ :: proc(graphnode: GraphNode) -> (y: i64, ok: bool) {
+graphnode_y_ :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -119,7 +119,7 @@ graphnode_y_ :: proc(graphnode: GraphNode) -> (y: i64, ok: bool) {
 }
 
 @(private)
-graphnode_y_set :: proc(graphnode: GraphNode, y: i64) -> (ok: bool) {
+graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
     ok = false
 
     if graphnode == nil do return

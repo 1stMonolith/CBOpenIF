@@ -9,10 +9,10 @@ PointIF :: struct #raw_union {
 
 PointVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    XGet:    proc "system" (this: ^PointIF, X: ^i64) -> HResult,
-    XPut:    proc "system" (this: ^PointIF, X: i64) -> HResult,
-    YGet:    proc "system" (this: ^PointIF, Y: ^i64) -> HResult,
-    YPut:    proc "system" (this: ^PointIF, Y: i64) -> HResult,
+    XGet:    proc "system" (this: ^PointIF, X: ^f64) -> HResult,
+    XPut:    proc "system" (this: ^PointIF, X: f64) -> HResult,
+    YGet:    proc "system" (this: ^PointIF, Y: ^f64) -> HResult,
+    YPut:    proc "system" (this: ^PointIF, Y: f64) -> HResult,
 }
 
 point_x :: proc {
@@ -21,7 +21,7 @@ point_x :: proc {
 }
 
 @(private)
-point_x_ :: proc(point: Point) -> (x: i64, ok: bool) {
+point_x_ :: proc(point: Point) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -35,7 +35,7 @@ point_x_ :: proc(point: Point) -> (x: i64, ok: bool) {
 }
 
 @(private)
-point_x_set :: proc(point: Point, x: i64) -> (ok: bool) {
+point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
     ok = false
 
     if point == nil do return
@@ -53,7 +53,7 @@ point_y :: proc {
 }
 
 @(private)
-point_y_ :: proc(point: Point) -> (y: i64, ok: bool) {
+point_y_ :: proc(point: Point) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -67,7 +67,7 @@ point_y_ :: proc(point: Point) -> (y: i64, ok: bool) {
 }
 
 @(private)
-point_y_set :: proc(point: Point, y: i64) -> (ok: bool) {
+point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
     ok = false
 
     if point == nil do return
