@@ -157,6 +157,18 @@ connected :: proc() -> (ok: bool) {
  return false
 }
 
+online :: proc {
+    controlbuilder_online,
+}
+
+offline :: proc {
+    controlbuilder_offline,
+}
+
+get_setting :: proc {
+    controlbuilder_get_setting,
+}
+
 name :: proc {
     datatype_name_,
     datatype_name_set,
