@@ -202,6 +202,18 @@ name :: proc {
     fbdcodeblock_name_set,
     stcodeblock_name_,
     stcodeblock_name_set,
+    ilrow_name_,
+    ilrow_name_set,
+}
+
+comment :: proc {
+    ilrow_row_comment_,
+    ilrow_row_comment_set,
+}
+
+is_comment :: proc {
+    ilrow_is_row_comment_,
+    ilrow_is_row_comment_set,
 }
 
 x :: proc {
@@ -439,6 +451,8 @@ description :: proc {
     parameter_setting_description_,
     cmparameter_description_,
     cmparameter_description_set,
+    ilrow_description_,
+    ilrow_description_set,
 }
 
 path :: proc {
@@ -607,6 +621,8 @@ add :: proc {
     points_add_at_index,
     cmparameters_add_,
     cmparameters_add_at_index,
+    ilrows_add_,
+    ilrows_add_at_index,
 }
 
 by_name :: proc {
@@ -642,6 +658,7 @@ by_index :: proc {
     cmconnections_cmconnection_by_index,
     points_point_by_index,
     cmparameters_cmparameter_by_index,
+    ilrows_ilrow,
 }
 
 index :: proc {
@@ -677,6 +694,7 @@ count :: proc {
     cmconnections_count,
     points_count,
     cmparameters_count,
+    ilrows_count,
 }
 
 remove :: proc {
@@ -709,6 +727,7 @@ remove :: proc {
     points_remove_by_index,
     cmparameters_remove_by_name,
     cmparameters_remove_by_index,
+    ilrows_remove,
 }
 
 release :: proc {
@@ -741,4 +760,6 @@ release :: proc {
     ldcodeblock_release,
     fbdcodeblock_release,
     stcodeblock_release,
+    ilrows_release,
+    ilrow_release,
 }
