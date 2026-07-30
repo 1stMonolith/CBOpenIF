@@ -178,6 +178,8 @@ name :: proc {
     parameter_setting_name_set,
     cmconnection_name_,
     cmconnection_name_set,
+    cmparameter_name_,
+    cmparameter_name_set,
 }
 
 x :: proc {
@@ -234,6 +236,8 @@ type_name :: proc {
     externalvariable_type_name_set,
     parameter_type_name_,
     parameter_type_name_set,
+    cmparameter_type_name_,
+    cmparameter_type_name_set,
 }
 
 parameter_value :: proc {
@@ -276,6 +280,8 @@ initial_value :: proc {
     variable_initial_value_set,
     globalvariable_initial_value_,
     globalvariable_initial_value_set,
+    cmparameter_initial_value_,
+    cmparameter_initial_value_set,
 }
 
 read_permission :: proc {
@@ -289,6 +295,8 @@ read_permission :: proc {
     externalvariable_read_permission_set,
     parameter_read_permission_,
     parameter_read_permission_set,
+    cmparameter_read_permission_,
+    cmparameter_read_permission_set,
 }
 
 write_permission :: proc {
@@ -302,6 +310,8 @@ write_permission :: proc {
     externalvariable_write_permission_set,
     parameter_write_permission_,
     parameter_write_permission_set,
+    cmparameter_write_permission_,
+    cmparameter_write_permission_set,
 }
 
 access_level :: proc {
@@ -315,6 +325,8 @@ access_level :: proc {
     externalvariable_access_level_set,
     parameter_access_level_,
     parameter_access_level_set,
+    cmparameter_access_level_,
+    cmparameter_access_level_set,
 }
 
 authentication_level :: proc {
@@ -326,6 +338,8 @@ authentication_level :: proc {
     externalvariable_authentication_level_set,
     parameter_authentication_level_,
     parameter_authentication_level_set,
+    cmparameter_authentication_level_,
+    cmparameter_authentication_level_set,
 }
 
 safety_type :: proc {
@@ -339,21 +353,32 @@ safety_type :: proc {
     externalvariable_safety_type_set,
     parameter_safety_type_,
     parameter_safety_type_set,
+    cmparameter_safety_type_,
+    cmparameter_safety_type_set,
 }
 
 fdport :: proc {
     parameter_fdport_,
     parameter_fdport_set,
+    cmparameter_fdport_,
+    cmparameter_fdport_set,
 }
 
 batch_property :: proc {
     variable_batch_property_,
     variable_batch_property_set,
+    cmparameter_batch_property_,
+    cmparameter_batch_property_set,
 }
 
 auto_pos :: proc {
     autopoint_autopos_,
     autopoint_autopos_set,
+}
+
+auto_point :: proc {
+    cmparameter_auto_point_,
+    cmparameter_auto_point_set,
 }
 
 graph_nodes :: proc {
@@ -363,6 +388,8 @@ graph_nodes :: proc {
     globalvariable_graph_nodes_set,
     externalvariable_graph_nodes_,
     externalvariable_graph_nodes_set,
+    cmparameter_graph_nodes_,
+    cmparameter_graph_nodes_set,
 }
 
 isp_value :: proc {
@@ -387,7 +414,9 @@ description :: proc {
     externalvariable_description_set,
     parameter_description_,
     parameter_description_set,
-    parameter_setting_description_
+    parameter_setting_description_,
+    cmparameter_description_,
+    cmparameter_description_set,
 }
 
 path :: proc {
@@ -406,6 +435,12 @@ type_guid :: proc {
     globalvariable_type_guid,
     externalvariable_type_guid,
     parameter_type_guid,
+    cmparameter_type_guid,
+}
+
+direction :: proc {
+    cmparameter_direction_,
+    cmparameter_direction_set,
 }
 
 type_path :: proc {
@@ -414,6 +449,7 @@ type_path :: proc {
     globalvariable_type_path,
     externalvariable_type_path,
     parameter_type_path,
+    cmparameter_type_path,
 }
 
 reserved_by_function :: proc {
@@ -460,6 +496,7 @@ serialize :: proc {
     externalvariable_serialize,
     parameter_serialize,
     cmconnection_serialize,
+    cmparameter_serialize,
 }
 
 deserialize :: proc {
@@ -471,6 +508,7 @@ deserialize :: proc {
     externalvariable_deserialize,
     parameter_deserialize,
     cmconnection_deserialize,
+    cmparameter_deserialize,
 }
 
 add :: proc {
@@ -632,4 +670,5 @@ release :: proc {
     graphpos_release,
     graphsize_release,
     cmparameters_release,
+    cmparameter_release,
 }
