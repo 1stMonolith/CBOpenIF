@@ -66,7 +66,7 @@ parameters_external_by_name :: proc(parameters: Parameters, name: string) -> (pa
     if parameters == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->Find(bstr_name, &parameter)
     if failed(hr) do return
     
@@ -94,7 +94,7 @@ parameters_external_index :: proc(parameters: Parameters, name: string) -> (inde
     if parameters == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

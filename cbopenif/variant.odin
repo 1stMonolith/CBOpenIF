@@ -60,6 +60,14 @@ Variant :: struct #raw_union {
     },
 }
 
+variant_init :: proc(variant: ^Variant) {
+    VariantInit(variant)
+}
+
+variant_free :: proc(variant: ^Variant) {
+    VariantClear(variant)
+}
+
 string_to_variant :: proc(s: string) -> Variant {
     v: Variant
     VariantInit(&v)

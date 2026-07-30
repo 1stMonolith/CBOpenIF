@@ -25,8 +25,8 @@ parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting
     bstr_name := string_to_bstr(name)
     bstr_value := string_to_bstr(value)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_value)
+        bstr_free(bstr_name)
+        bstr_free(bstr_value)
     }
     hr := factoryif->NewParameterSetting(bstr_name, bstr_value, cast(^ParameterSetting)&parameter_setting)
     if failed(hr) do return

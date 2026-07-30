@@ -30,7 +30,7 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
     if !connected() do return
     
     bstr_description := string_to_bstr(description)
-    SysFreeString(bstr_description)
+    bstr_free(bstr_description)
     hr := factoryif->NewApplicationVariables(bstr_description, cast(^ApplicationVariables)&application_variables)
     if failed(hr) do return
 

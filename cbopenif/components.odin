@@ -65,7 +65,7 @@ components_component_by_name :: proc(components: Components, name: string) -> (c
     if components == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ComponentsIF)(components)->Find(bstr_name, &component)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ components_component_index :: proc(components: Components, name: string) -> (ind
     if components == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ComponentsIF)(components)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

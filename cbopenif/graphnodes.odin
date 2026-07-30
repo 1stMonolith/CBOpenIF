@@ -64,7 +64,7 @@ graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (g
     if graphnodes == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^GraphNodesIF)(graphnodes)->Find(bstr_name, &graphnode)
     if failed(hr) do return
     
@@ -92,7 +92,7 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
     if graphnodes == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^GraphNodesIF)(graphnodes)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

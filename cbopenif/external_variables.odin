@@ -65,7 +65,7 @@ externalvariables_external_by_name :: proc(external_variables: ExternalVariables
     if external_variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->Find(bstr_name, &external_variable)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ externalvariables_external_index :: proc(external_variables: ExternalVariables, 
     if external_variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

@@ -36,10 +36,10 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     variant_acknowledge_group := string_to_variant(acknowledge_group)
     
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_path)
-        SysFreeString(bstr_direction)
-        VariantClear(&variant_acknowledge_group)
+        bstr_free(bstr_name)
+        bstr_free(bstr_path)
+        bstr_free(bstr_direction)
+        variant_free(&variant_acknowledge_group)
     }
     hr := factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^Signal)&signal)
     if failed(hr) do return

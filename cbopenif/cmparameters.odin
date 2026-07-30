@@ -65,7 +65,7 @@ cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: strin
     if cmparameters == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^CMParametersIF)(cmparameters)->Find(bstr_name, &cmparameter)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
     if cmparameters == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^CMParametersIF)(cmparameters)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

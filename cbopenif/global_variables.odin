@@ -65,7 +65,7 @@ globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: 
     if global_variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->Find(bstr_name, &global_variable)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ globalvariables_global_index :: proc(global_variables: GlobalVariables, name: st
     if global_variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

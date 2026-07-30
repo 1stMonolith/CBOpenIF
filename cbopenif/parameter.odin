@@ -52,13 +52,13 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
     bstr_writepermission := string_to_bstr(writepermission)
     bstr_description := string_to_bstr(description)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_type_name)
-        SysFreeString(bstr_attribute)
-        SysFreeString(bstr_initial_value)
-        SysFreeString(bstr_readpermission)
-        SysFreeString(bstr_writepermission)
-        SysFreeString(bstr_description)
+        bstr_free(bstr_name)
+        bstr_free(bstr_type_name)
+        bstr_free(bstr_attribute)
+        bstr_free(bstr_initial_value)
+        bstr_free(bstr_readpermission)
+        bstr_free(bstr_writepermission)
+        bstr_free(bstr_description)
     }
     hr := factoryif->NewParameter1(bstr_name, bstr_type_name, bstr_attribute, i32(direction), bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^Parameter)&parameter)
     if failed(hr) do return

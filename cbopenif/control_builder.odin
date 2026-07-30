@@ -13,7 +13,7 @@ controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool)
     is_online = (vb == VariantBoolTrue)
 
     if bstr_messages != nil {
-        defer SysFreeString(bstr_messages)
+        defer bstr_free(bstr_messages)
         messages = bstr_to_string(bstr_messages)
     }
 
@@ -30,25 +30,25 @@ controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
     }
 
     if bstr_messages != nil {
-        defer SysFreeString(bstr_messages)
+        defer bstr_free(bstr_messages)
         messages = bstr_to_string(bstr_messages)
     }
 
     return messages, true
 }
 
-controlbuilder_get_setting :: proc(setting_name: string) -> (value: Variant, ok: bool) {
+controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
     if !connected() do return {}, false
-    VariantInit(&value) // caller must VariantClear(&value) when done, OR we clear on failure only!
+    variant_init(&setting) // caller must variant_free(&value) when done, OR we clear on failure only!
 
     bstr_name := string_to_bstr(setting_name)
-    defer SysFreeString(bstr_name)
+    defer bstr_free(bstr_name)
 
-    hr := cbopenif->GetSetting(bstr_name, &value)
+    hr := cbopenif->GetSetting(bstr_name, &setting)
     if failed(hr) {
-        VariantClear(&value)
+        variant_free(&setting)
         return {}, false
     }
 
-    return value, true
+    return setting, true
 }

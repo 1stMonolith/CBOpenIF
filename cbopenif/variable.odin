@@ -53,13 +53,13 @@ variable_new :: proc(name: string, type: string, attribute := "", initialvalue :
     bstr_writepermission := string_to_bstr(writepermission)
     bstr_description := string_to_bstr(description)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_type)
-        SysFreeString(bstr_attribute)
-        SysFreeString(bstr_initialvalue)
-        SysFreeString(bstr_readpermission)
-        SysFreeString(bstr_writepermission)
-        SysFreeString(bstr_description)
+        bstr_free(bstr_name)
+        bstr_free(bstr_type)
+        bstr_free(bstr_attribute)
+        bstr_free(bstr_initialvalue)
+        bstr_free(bstr_readpermission)
+        bstr_free(bstr_writepermission)
+        bstr_free(bstr_description)
     }
     hr := factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^Variable)&variable)
     if failed(hr) do return

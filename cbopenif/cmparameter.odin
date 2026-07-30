@@ -58,13 +58,13 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
     bstr_write_permission := string_to_bstr(write_permission)
     bstr_description := string_to_bstr(description)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_type_name)
-        SysFreeString(bstr_attribute)
-        SysFreeString(bstr_initial_value)
-        SysFreeString(bstr_read_permission)
-        SysFreeString(bstr_write_permission)
-        SysFreeString(bstr_description)
+        bstr_free(bstr_name)
+        bstr_free(bstr_type_name)
+        bstr_free(bstr_attribute)
+        bstr_free(bstr_initial_value)
+        bstr_free(bstr_read_permission)
+        bstr_free(bstr_write_permission)
+        bstr_free(bstr_description)
     }
 
     ap: AutoPoint

@@ -38,8 +38,8 @@ datatype_new :: proc(name: string, description := "", hidden := VariantBoolFalse
     bstr_name := string_to_bstr(name)
     bstr_description := string_to_bstr(description)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_description)
+        bstr_free(bstr_name)
+        bstr_free(bstr_description)
     }
     hr := factoryif->NewDataType1(bstr_name, bstr_description, protected, hidden, scope, cast(^DataType)&datatype)
     if failed(hr) do return
@@ -501,7 +501,7 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     if !ok do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     components_component_index(components, name)
     if !ok do return
     

@@ -65,7 +65,7 @@ variables_variable_by_name :: proc(variables: Variables, name: string) -> (varia
     if variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->Find(bstr_name, &variable)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
     if variables == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

@@ -30,8 +30,8 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
     bstr_name := string_to_bstr(name)
     bstr_actual_parameter := string_to_bstr(actual_parameter)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_actual_parameter)
+        bstr_free(bstr_name)
+        bstr_free(bstr_actual_parameter)
     }
     hr := factoryif->NewCMConnection1(bstr_name, bstr_actual_parameter, bool_to_variantbool(graphical_connection), cast(^CMConnection)&cmconnection)
     if failed(hr) do return

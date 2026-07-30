@@ -24,7 +24,7 @@ graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok
     if !connected() do return
     
     bstr_name := string_to_bstr(name)
-    defer SysFreeString(bstr_name)
+    defer bstr_free(bstr_name)
     hr := factoryif->NewGraphNode(bstr_name, x, y, cast(^GraphNode)&graphnode)
     if failed(hr) do return
     

@@ -65,7 +65,7 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: s
     if cmconnections == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->Find(bstr_name, &cmconnection)
     if failed(hr) do return
     
@@ -93,7 +93,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
     if cmconnections == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->FindNr(bstr_name, &index)
     if failed(hr) do return
     

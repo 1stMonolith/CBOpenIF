@@ -47,11 +47,11 @@ component_new :: proc(name: string, type: string, attribute := "", initialvalue 
     bstr_initialvalue := string_to_bstr(initialvalue)
     bstr_description := string_to_bstr(description)
     defer {
-        SysFreeString(bstr_name)
-        SysFreeString(bstr_type)
-        SysFreeString(bstr_attribute)
-        SysFreeString(bstr_initialvalue)
-        SysFreeString(bstr_description)
+        bstr_free(bstr_name)
+        bstr_free(bstr_type)
+        bstr_free(bstr_attribute)
+        bstr_free(bstr_initialvalue)
+        bstr_free(bstr_description)
     }
     hr := factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^Component)&component)
     if failed(hr) do return

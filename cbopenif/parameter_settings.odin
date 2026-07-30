@@ -64,7 +64,7 @@ parametersettings_parametersetting_by_name :: proc(parameter_settings: Parameter
     if parameter_settings == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ParameterSettingsIF)(parameter_settings)->Find(bstr_name, &parameter_setting)
     if failed(hr) do return
     
@@ -92,7 +92,7 @@ parametersettings_parametersetting_index :: proc(parameter_settings: ParameterSe
     if parameter_settings == nil do return
     
     bstr_name := string_to_bstr(name)
-    SysFreeString(bstr_name)
+    bstr_free(bstr_name)
     hr := (^ParameterSettingsIF)(parameter_settings)->FindNr(bstr_name, &index)
     if failed(hr) do return
     
