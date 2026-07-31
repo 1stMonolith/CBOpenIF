@@ -44,12 +44,11 @@ parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting
 }
 
 parameter_setting_name :: proc {
-    parameter_setting_name_,
+    parameter_setting_name_get,
     parameter_setting_name_set,
 }
 
-@(private)
-parameter_setting_name_ :: proc(parameter_setting: rawptr) -> (name: string, ok: bool) {
+parameter_setting_name_get :: proc(parameter_setting: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -64,7 +63,6 @@ parameter_setting_name_ :: proc(parameter_setting: rawptr) -> (name: string, ok:
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_setting_name_set :: proc(parameter_setting: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -80,12 +78,11 @@ parameter_setting_name_set :: proc(parameter_setting: rawptr, name: string) -> (
 }
 
 parameter_setting_parameter_value :: proc {
-    parameter_setting_parameter_value_,
+    parameter_setting_parameter_value_get,
     parameter_setting_parameter_value_set,
 }
 
-@(private)
-parameter_setting_parameter_value_ :: proc(parameter_setting: rawptr) -> (type_name: string, ok: bool) {
+parameter_setting_parameter_value_get :: proc(parameter_setting: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -100,7 +97,6 @@ parameter_setting_parameter_value_ :: proc(parameter_setting: rawptr) -> (type_n
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -115,7 +111,7 @@ parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_na
     return true
 }
 
-parameter_setting_description_ :: proc(parameter_setting: rawptr) -> (description: string, ok: bool) {
+parameter_setting_description_get :: proc(parameter_setting: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 

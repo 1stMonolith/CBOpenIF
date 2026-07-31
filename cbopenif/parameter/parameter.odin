@@ -12,6 +12,7 @@ import "../enumtypes"
 @(private) GUID        :: com.GUID
 @(private) VariantBool :: variant.VariantBool
 @(private) Direction   :: enumtypes.DirectionType
+@(private) AutoPos     :: enumtypes.AutoPos
 
 ParameterIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -106,12 +107,11 @@ parameter_serialize :: proc(parameter: rawptr) -> (xml: string, ok: bool) {
 }
 
 parameter_name :: proc {
-    parameter_name_,
+    parameter_name_get,
     parameter_name_set,
 }
 
-@(private)
-parameter_name_ :: proc(parameter: rawptr) -> (name: string, ok: bool) {
+parameter_name_get :: proc(parameter: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -126,7 +126,6 @@ parameter_name_ :: proc(parameter: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_name_set :: proc(parameter: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -142,12 +141,11 @@ parameter_name_set :: proc(parameter: rawptr, name: string) -> (ok: bool) {
 }
 
 parameter_type_name :: proc {
-    parameter_type_name_,
+    parameter_type_name_get,
     parameter_type_name_set,
 }
 
-@(private)
-parameter_type_name_ :: proc(parameter: rawptr) -> (type_name: string, ok: bool) {
+parameter_type_name_get :: proc(parameter: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -162,7 +160,6 @@ parameter_type_name_ :: proc(parameter: rawptr) -> (type_name: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_type_name_set :: proc(parameter: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -178,12 +175,11 @@ parameter_type_name_set :: proc(parameter: rawptr, type_name: string) -> (ok: bo
 }
 
 parameter_attribute :: proc {
-    parameter_attribute_,
+    parameter_attribute_get,
     parameter_attribute_set,
 }
 
-@(private)
-parameter_attribute_ :: proc(parameter: rawptr) -> (attribute: string, ok: bool) {
+parameter_attribute_get :: proc(parameter: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -198,7 +194,6 @@ parameter_attribute_ :: proc(parameter: rawptr) -> (attribute: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_attribute_set :: proc(parameter: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
@@ -214,12 +209,11 @@ parameter_attribute_set :: proc(parameter: rawptr, attribute: string) -> (ok: bo
 }
 
 parameter_description :: proc {
-    parameter_description_,
+    parameter_description_get,
     parameter_description_set,
 }
 
-@(private)
-parameter_description_ :: proc(parameter: rawptr) -> (description: string, ok: bool) {
+parameter_description_get :: proc(parameter: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -234,7 +228,6 @@ parameter_description_ :: proc(parameter: rawptr) -> (description: string, ok: b
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_description_set :: proc(parameter: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -250,12 +243,11 @@ parameter_description_set :: proc(parameter: rawptr, description: string) -> (ok
 }
 
 parameter_read_permission :: proc {
-    parameter_read_permission_,
+    parameter_read_permission_get,
     parameter_read_permission_set,
 }
 
-@(private)
-parameter_read_permission_ :: proc(parameter: rawptr) -> (read_permission: string, ok: bool) {
+parameter_read_permission_get :: proc(parameter: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -270,7 +262,6 @@ parameter_read_permission_ :: proc(parameter: rawptr) -> (read_permission: strin
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_read_permission_set :: proc(parameter: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
@@ -286,12 +277,11 @@ parameter_read_permission_set :: proc(parameter: rawptr, read_permission: string
 }
 
 parameter_write_permission :: proc {
-    parameter_write_permission_,
+    parameter_write_permission_get,
     parameter_write_permission_set,
 }
 
-@(private)
-parameter_write_permission_ :: proc(parameter: rawptr) -> (write_permission: string, ok: bool) {
+parameter_write_permission_get :: proc(parameter: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -306,7 +296,6 @@ parameter_write_permission_ :: proc(parameter: rawptr) -> (write_permission: str
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_write_permission_set :: proc(parameter: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
@@ -322,12 +311,11 @@ parameter_write_permission_set :: proc(parameter: rawptr, write_permission: stri
 }
 
 parameter_authentication_level :: proc {
-    parameter_authentication_level_,
+    parameter_authentication_level_get,
     parameter_authentication_level_set,
 }
 
-@(private)
-parameter_authentication_level_ :: proc(parameter: rawptr) -> (authentication_level: string, ok: bool) {
+parameter_authentication_level_get :: proc(parameter: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -342,7 +330,6 @@ parameter_authentication_level_ :: proc(parameter: rawptr) -> (authentication_le
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_authentication_level_set :: proc(parameter: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
@@ -357,7 +344,7 @@ parameter_authentication_level_set :: proc(parameter: rawptr, authentication_lev
     return true
 }
 
-parameter_type_guid :: proc(parameter: rawptr) -> (guid: string, ok: bool) {
+parameter_type_guid_get :: proc(parameter: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -372,7 +359,7 @@ parameter_type_guid :: proc(parameter: rawptr) -> (guid: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-parameter_type_path :: proc(parameter: rawptr) -> (path: string, ok: bool) {
+parameter_type_path_get :: proc(parameter: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -388,12 +375,11 @@ parameter_type_path :: proc(parameter: rawptr) -> (path: string, ok: bool) {
 }
 
 parameter_access_level :: proc {
-    parameter_access_level_,
+    parameter_access_level_get,
     parameter_access_level_set,
 }
 
-@(private)
-parameter_access_level_ :: proc(parameter: rawptr) -> (access_level: string, ok: bool) {
+parameter_access_level_get :: proc(parameter: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -408,7 +394,6 @@ parameter_access_level_ :: proc(parameter: rawptr) -> (access_level: string, ok:
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_access_level_set :: proc(parameter: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
@@ -424,12 +409,11 @@ parameter_access_level_set :: proc(parameter: rawptr, access_level: string) -> (
 }
 
 parameter_safety_type :: proc {
-    parameter_safety_type_,
+    parameter_safety_type_get,
     parameter_safety_type_set,
 }
 
-@(private)
-parameter_safety_type_ :: proc(parameter: rawptr) -> (safety_type: string, ok: bool) {
+parameter_safety_type_get :: proc(parameter: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -444,7 +428,6 @@ parameter_safety_type_ :: proc(parameter: rawptr) -> (safety_type: string, ok: b
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_safety_type_set :: proc(parameter: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 
@@ -460,12 +443,11 @@ parameter_safety_type_set :: proc(parameter: rawptr, safety_type: string) -> (ok
 }
 
 parameter_fdport :: proc {
-    parameter_fdport_,
+    parameter_fdport_get,
     parameter_fdport_set,
 }
 
-@(private)
-parameter_fdport_ :: proc(parameter: rawptr) -> (fdport: string, ok: bool) {
+parameter_fdport_get :: proc(parameter: rawptr) -> (fdport: string, ok: bool) {
     fdport = ""
     ok = false
 
@@ -480,7 +462,6 @@ parameter_fdport_ :: proc(parameter: rawptr) -> (fdport: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 parameter_fdport_set :: proc(parameter: rawptr, fdport: string) -> (ok: bool) {
     ok = false
 

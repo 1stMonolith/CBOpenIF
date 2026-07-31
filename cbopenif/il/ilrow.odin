@@ -69,12 +69,11 @@ ilrow_new_comment :: proc(comment: string) -> (ilrow: rawptr, ok: bool) {
 }
 
 ilrow_name :: proc {
-    ilrow_name_,
+    ilrow_name_get,
     ilrow_name_set,
 }
 
-@(private)
-ilrow_name_ :: proc(ilrow: rawptr) -> (name: string, ok: bool) {
+ilrow_name_get :: proc(ilrow: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -89,7 +88,6 @@ ilrow_name_ :: proc(ilrow: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 ilrow_name_set :: proc(ilrow: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -105,12 +103,11 @@ ilrow_name_set :: proc(ilrow: rawptr, name: string) -> (ok: bool) {
 }
 
 ilrow_description :: proc {
-    ilrow_description_,
+    ilrow_description_get,
     ilrow_description_set,
 }
 
-@(private)
-ilrow_description_ :: proc(ilrow: rawptr) -> (description: string, ok: bool) {
+ilrow_description_get :: proc(ilrow: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -125,7 +122,6 @@ ilrow_description_ :: proc(ilrow: rawptr) -> (description: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 ilrow_description_set :: proc(ilrow: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -141,12 +137,11 @@ ilrow_description_set :: proc(ilrow: rawptr, description: string) -> (ok: bool) 
 }
 
 ilrow_row_comment :: proc {
-    ilrow_row_comment_,
+    ilrow_row_comment_get,
     ilrow_row_comment_set,
 }
 
-@(private)
-ilrow_row_comment_ :: proc(ilrow: rawptr) -> (row_comment: string, ok: bool) {
+ilrow_row_comment_get :: proc(ilrow: rawptr) -> (row_comment: string, ok: bool) {
     row_comment = ""
     ok = false
 
@@ -161,7 +156,6 @@ ilrow_row_comment_ :: proc(ilrow: rawptr) -> (row_comment: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 ilrow_row_comment_set :: proc(ilrow: rawptr, row_comment: string) -> (ok: bool) {
     ok = false
 
@@ -177,11 +171,11 @@ ilrow_row_comment_set :: proc(ilrow: rawptr, row_comment: string) -> (ok: bool) 
 }
 
 ilrow_is_row_comment :: proc {
-    ilrow_is_row_comment_,
+    ilrow_is_row_comment_get,
     ilrow_is_row_comment_set,
 }
 
-ilrow_is_row_comment_ :: proc(ilrow: rawptr) -> (is_row_comment: bool, ok: bool) {
+ilrow_is_row_comment_get :: proc(ilrow: rawptr) -> (is_row_comment: bool, ok: bool) {
     is_row_comment = false
     ok = false
 

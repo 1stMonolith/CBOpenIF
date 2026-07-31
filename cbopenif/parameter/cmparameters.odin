@@ -27,7 +27,6 @@ cmparameters_add :: proc {
     cmparameters_add_at_index,
 }
 
-@(private)
 cmparameters_add_ :: proc(cmparameters: rawptr, cmparameter: rawptr) -> (ok: bool) {
     ok = false
 

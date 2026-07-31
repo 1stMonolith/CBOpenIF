@@ -27,7 +27,6 @@ cmconnections_add :: proc {
     cmconnections_add_at_index,
 }
 
-@(private)
 cmconnections_add_ :: proc(cmconnections: rawptr, cmconnection: rawptr) -> (ok: bool) {
     ok = false
 

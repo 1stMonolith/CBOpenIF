@@ -26,7 +26,6 @@ signals_add :: proc {
     signals_add_at_index,
 }
 
-@(private)
 signals_add_ :: proc(signals: rawptr, signal: rawptr) -> (ok: bool) {
     ok = false
 

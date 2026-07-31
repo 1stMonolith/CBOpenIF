@@ -32,12 +32,11 @@ graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: rawptr, ok
 }
 
 graphsize_lower_left :: proc {
-    graphsize_lower_left_,
+    graphsize_lower_left_get,
     graphsize_lower_left_set,
 }
 
-@(private)
-graphsize_lower_left_ :: proc(graphsize: rawptr) -> (lower_left: rawptr, ok: bool) {
+graphsize_lower_left_get :: proc(graphsize: rawptr) -> (lower_left: rawptr, ok: bool) {
     lower_left = nil
     ok = false
 
@@ -50,7 +49,6 @@ graphsize_lower_left_ :: proc(graphsize: rawptr) -> (lower_left: rawptr, ok: boo
     return lower_left, true
 }
 
-@(private)
 graphsize_lower_left_set :: proc(graphsize: rawptr, lower_left: rawptr) -> (ok: bool) {
     ok = false
 
@@ -64,12 +62,11 @@ graphsize_lower_left_set :: proc(graphsize: rawptr, lower_left: rawptr) -> (ok: 
 }
 
 graphsize_upper_right :: proc {
-    graphsize_upper_right_,
+    graphsize_upper_right_get,
     graphsize_upper_right_set,
 }
 
-@(private)
-graphsize_upper_right_ :: proc(graphsize: rawptr) -> (upper_right: rawptr, ok: bool) {
+graphsize_upper_right_get :: proc(graphsize: rawptr) -> (upper_right: rawptr, ok: bool) {
     upper_right = nil
     ok = false
 
@@ -82,7 +79,6 @@ graphsize_upper_right_ :: proc(graphsize: rawptr) -> (upper_right: rawptr, ok: b
     return upper_right, true
 }
 
-@(private)
 graphsize_upper_right_set :: proc(graphsize: rawptr, upper_right: rawptr) -> (ok: bool) {
     ok = false
 

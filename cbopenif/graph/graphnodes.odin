@@ -26,7 +26,6 @@ graphnodes_add :: proc {
     graphnodes_add_at_index,
 }
 
-@(private)
 graphnodes_add_ :: proc(graphnodes: rawptr, graphnode: rawptr) -> (ok: bool) {
     ok = false
 

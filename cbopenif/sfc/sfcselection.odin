@@ -29,12 +29,11 @@ sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: rawptr, ok: bool
 }
 
 sfcselection_branches :: proc {
-    sfcselection_branches_,
+    sfcselection_branches_get,
     sfcselection_branches_set,
 }
 
-@(private)
-sfcselection_branches_ :: proc(sfcselection: rawptr) -> (branches: rawptr, ok: bool) {
+sfcselection_branches_get :: proc(sfcselection: rawptr) -> (branches: rawptr, ok: bool) {
     branches = nil
     ok = false
 
@@ -47,7 +46,6 @@ sfcselection_branches_ :: proc(sfcselection: rawptr) -> (branches: rawptr, ok: b
     return branches, true
 }
 
-@(private)
 sfcselection_branches_set :: proc(sfcselection: rawptr, branches: rawptr) -> (ok: bool) {
     ok = false
 

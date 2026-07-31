@@ -48,12 +48,11 @@ sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_
 }
 
 sfcstep_name :: proc {
-    sfcstep_name_,
+    sfcstep_name_get,
     sfcstep_name_set,
 }
 
-@(private)
-sfcstep_name_ :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
+sfcstep_name_get :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -68,7 +67,6 @@ sfcstep_name_ :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfcstep_name_set :: proc(sfcstep: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -84,12 +82,11 @@ sfcstep_name_set :: proc(sfcstep: rawptr, name: string) -> (ok: bool) {
 }
 
 sfcstep_initial_step :: proc {
-    sfcstep_initial_step_,
+    sfcstep_initial_step_get,
     sfcstep_initial_step_set,
 }
 
-@(private)
-sfcstep_initial_step_ :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool) {
+sfcstep_initial_step_get :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool) {
     initial_step = false
     ok = false
 
@@ -103,7 +100,6 @@ sfcstep_initial_step_ :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool)
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 sfcstep_initial_step_set :: proc(sfcstep: rawptr, initial_step: bool) -> (ok: bool) {
     ok = false
 
@@ -117,12 +113,11 @@ sfcstep_initial_step_set :: proc(sfcstep: rawptr, initial_step: bool) -> (ok: bo
 }
 
 sfcstep_p1_action_stcode :: proc {
-    sfcstep_p1_action_stcode_,
+    sfcstep_p1_action_stcode_get,
     sfcstep_p1_action_stcode_set,
 }
 
-@(private)
-sfcstep_p1_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_p1_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -137,7 +132,6 @@ sfcstep_p1_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfcstep_p1_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
@@ -153,12 +147,11 @@ sfcstep_p1_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bo
 }
 
 sfcstep_p0_action_stcode :: proc {
-    sfcstep_p0_action_stcode_,
+    sfcstep_p0_action_stcode_get,
     sfcstep_p0_action_stcode_set,
 }
 
-@(private)
-sfcstep_p0_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_p0_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -173,7 +166,6 @@ sfcstep_p0_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfcstep_p0_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
@@ -189,12 +181,11 @@ sfcstep_p0_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bo
 }
 
 sfcstep_n_action_stcode :: proc {
-    sfcstep_n_action_stcode_,
+    sfcstep_n_action_stcode_get,
     sfcstep_n_action_stcode_set,
 }
 
-@(private)
-sfcstep_n_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_n_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -209,7 +200,6 @@ sfcstep_n_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) 
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfcstep_n_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 

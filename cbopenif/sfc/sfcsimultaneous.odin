@@ -29,12 +29,11 @@ sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: rawptr, ok
 }
 
 sfcsimultaneous_branches :: proc {
-    sfcsimultaneous_branches_,
+    sfcsimultaneous_branches_get,
     sfcsimultaneous_branches_set,
 }
 
-@(private)
-sfcsimultaneous_branches_ :: proc(sfcsimultaneous: rawptr) -> (branches: rawptr, ok: bool) {
+sfcsimultaneous_branches_get :: proc(sfcsimultaneous: rawptr) -> (branches: rawptr, ok: bool) {
     branches = nil
     ok = false
 
@@ -47,7 +46,6 @@ sfcsimultaneous_branches_ :: proc(sfcsimultaneous: rawptr) -> (branches: rawptr,
     return branches, true
 }
 
-@(private)
 sfcsimultaneous_branches_set :: proc(sfcsimultaneous: rawptr, branches: rawptr) -> (ok: bool) {
     ok = false
 

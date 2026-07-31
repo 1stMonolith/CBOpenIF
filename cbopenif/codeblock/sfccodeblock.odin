@@ -50,12 +50,11 @@ sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time :
 }
 
 sfccodeblock_name :: proc {
-    sfccodeblock_name_,
+    sfccodeblock_name_get,
     sfccodeblock_name_set,
 }
 
-@(private)
-sfccodeblock_name_ :: proc(sfccodeblock: rawptr) -> (name: string, ok: bool) {
+sfccodeblock_name_get :: proc(sfccodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -70,7 +69,6 @@ sfccodeblock_name_ :: proc(sfccodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfccodeblock_name_set :: proc(sfccodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -86,12 +84,11 @@ sfccodeblock_name_set :: proc(sfccodeblock: rawptr, name: string) -> (ok: bool) 
 }
 
 sfccodeblock_seq_control :: proc {
-    sfccodeblock_seq_control_,
+    sfccodeblock_seq_control_get,
     sfccodeblock_seq_control_set,
 }
 
-@(private)
-sfccodeblock_seq_control_ :: proc(sfccodeblock: rawptr) -> (seq_control: bool, ok: bool) {
+sfccodeblock_seq_control_get :: proc(sfccodeblock: rawptr) -> (seq_control: bool, ok: bool) {
     seq_control = false
     ok = false
 
@@ -105,7 +102,6 @@ sfccodeblock_seq_control_ :: proc(sfccodeblock: rawptr) -> (seq_control: bool, o
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 sfccodeblock_seq_control_set :: proc(sfccodeblock: rawptr, seq_control: bool) -> (ok: bool) {
     ok = false
 
@@ -119,12 +115,11 @@ sfccodeblock_seq_control_set :: proc(sfccodeblock: rawptr, seq_control: bool) ->
 }
 
 sfccodeblock_step_elapsed_time :: proc {
-    sfccodeblock_step_elapsed_time_,
+    sfccodeblock_step_elapsed_time_get,
     sfccodeblock_step_elapsed_time_set,
 }
 
-@(private)
-sfccodeblock_step_elapsed_time_ :: proc(sfccodeblock: rawptr) -> (step_elapsed_time: bool, ok: bool) {
+sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: rawptr) -> (step_elapsed_time: bool, ok: bool) {
     step_elapsed_time = false
     ok = false
 
@@ -138,7 +133,6 @@ sfccodeblock_step_elapsed_time_ :: proc(sfccodeblock: rawptr) -> (step_elapsed_t
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: rawptr, step_elapsed_time: bool) -> (ok: bool) {
     ok = false
 
@@ -152,12 +146,11 @@ sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: rawptr, step_elapsed_ti
 }
 
 sfccodeblock_viewer_aspect :: proc {
-    sfccodeblock_viewer_aspect_,
+    sfccodeblock_viewer_aspect_get,
     sfccodeblock_viewer_aspect_set,
 }
 
-@(private)
-sfccodeblock_viewer_aspect_ :: proc(sfccodeblock: rawptr) -> (viewer_aspect: bool, ok: bool) {
+sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: rawptr) -> (viewer_aspect: bool, ok: bool) {
     viewer_aspect = false
     ok = false
 
@@ -171,7 +164,6 @@ sfccodeblock_viewer_aspect_ :: proc(sfccodeblock: rawptr) -> (viewer_aspect: boo
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: rawptr, viewer_aspect: bool) -> (ok: bool) {
     ok = false
 
@@ -185,12 +177,11 @@ sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: rawptr, viewer_aspect: bool
 }
 
 sfccodeblock_elements :: proc {
-    sfccodeblock_elements_,
+    sfccodeblock_elements_get,
     sfccodeblock_elements_set,
 }
 
-@(private)
-sfccodeblock_elements_ :: proc(sfccodeblock: rawptr) -> (elements: rawptr, ok: bool) {
+sfccodeblock_elements_get :: proc(sfccodeblock: rawptr) -> (elements: rawptr, ok: bool) {
     elements = nil
     ok = false
 
@@ -203,7 +194,6 @@ sfccodeblock_elements_ :: proc(sfccodeblock: rawptr) -> (elements: rawptr, ok: b
     return elements, true
 }
 
-@(private)
 sfccodeblock_elements_set :: proc(sfccodeblock: rawptr, elements: rawptr) -> (ok: bool) {
     ok = false
 

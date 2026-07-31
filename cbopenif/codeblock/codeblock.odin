@@ -6,10 +6,10 @@ import "../bstr"
 import "../variant"
 import "../factory"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
+ @(private) HResult     :: com.HResult
+ @(private) BStr        :: bstr.BStr
+ @(private) GUID        :: com.GUID
+ @(private) VariantBool :: variant.VariantBool
 
 CodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -42,12 +42,11 @@ codeblock_deserialize :: proc(codeblock: ^rawptr, xml: string) -> (ok: bool) {
 }
 
 codeblock_name :: proc {
-    codeblock_name_,
+    codeblock_name_get,
     codeblock_name_set,
 }
 
-@(private)
-codeblock_name_ :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
+codeblock_name_get :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -62,7 +61,6 @@ codeblock_name_ :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 codeblock_name_set :: proc(codeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
 

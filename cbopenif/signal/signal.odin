@@ -6,11 +6,11 @@ import "../bstr"
 import "../variant"
 import "../factory"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) Variant     :: variant.Variant
-@(private) VariantBool :: variant.VariantBool
+ HResult     :: com.HResult
+ BStr        :: bstr.BStr
+ GUID        :: com.GUID
+ Variant     :: variant.Variant
+ VariantBool :: variant.VariantBool
 
 SignalIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -86,12 +86,11 @@ signal_serialize :: proc(signal: rawptr) -> (xml: string, ok: bool) {
 }
 
 signal_name :: proc {
-    signal_name_,
+    signal_name_get,
     signal_name_set,
 }
 
-@(private)
-signal_name_ :: proc(signal: rawptr) -> (name: string, ok: bool) {
+signal_name_get :: proc(signal: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -106,7 +105,6 @@ signal_name_ :: proc(signal: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 signal_name_set :: proc(signal: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -122,12 +120,11 @@ signal_name_set :: proc(signal: rawptr, name: string) -> (ok: bool) {
 }
 
 signal_description :: proc {
-    signal_description_,
+    signal_description_get,
     signal_description_set,
 }
 
-@(private)
-signal_description_ :: proc(signal: rawptr) -> (description: string, ok: bool) {
+signal_description_get :: proc(signal: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -142,7 +139,6 @@ signal_description_ :: proc(signal: rawptr) -> (description: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 signal_description_set :: proc(signal: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -158,12 +154,11 @@ signal_description_set :: proc(signal: rawptr, description: string) -> (ok: bool
 }
 
 signal_path :: proc {
-    signal_path_,
+    signal_path_get,
     signal_path_set,
 }
 
-@(private)
-signal_path_ :: proc(signal: rawptr) -> (path: string, ok: bool) {
+signal_path_get :: proc(signal: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -178,7 +173,6 @@ signal_path_ :: proc(signal: rawptr) -> (path: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 signal_path_set :: proc(signal: rawptr, path: string) -> (ok: bool) {
     ok = false
 

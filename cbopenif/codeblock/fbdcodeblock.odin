@@ -56,12 +56,11 @@ fbdcodeblock_serialize :: proc(fbdcodeblock: rawptr) -> (xml: string, ok: bool) 
 }
 
 fbdcodeblock_name :: proc {
-    fbdcodeblock_name_,
+    fbdcodeblock_name_get,
     fbdcodeblock_name_set,
 }
 
-@(private)
-fbdcodeblock_name_ :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) {
+fbdcodeblock_name_get :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -76,7 +75,7 @@ fbdcodeblock_name_ :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
+
 fbdcodeblock_name_set :: proc(fbdcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
@@ -92,12 +91,11 @@ fbdcodeblock_name_set :: proc(fbdcodeblock: rawptr, name: string) -> (ok: bool) 
 }
 
 fbdcodeblock_stcode :: proc {
-    fbdcodeblock_stcode_,
+    fbdcodeblock_stcode_get,
     fbdcodeblock_stcode_set,
 }
 
-@(private)
-fbdcodeblock_stcode_ :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bool) {
+fbdcodeblock_stcode_get :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -112,7 +110,6 @@ fbdcodeblock_stcode_ :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 fbdcodeblock_stcode_set :: proc(fbdcodeblock: rawptr, stcode: string) -> (ok: bool) {
     ok = false
     

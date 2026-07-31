@@ -93,12 +93,11 @@ externalvariable_serialize :: proc(external_variable: rawptr) -> (xml: string, o
 }
 
 externalvariable_name :: proc {
-    externalvariable_name_,
+    externalvariable_name_get,
     externalvariable_name_set,
 }
 
-@(private)
-externalvariable_name_ :: proc(external_variable: rawptr) -> (name: string, ok: bool) {
+externalvariable_name_get :: proc(external_variable: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -113,7 +112,6 @@ externalvariable_name_ :: proc(external_variable: rawptr) -> (name: string, ok: 
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_name_set :: proc(external_variable: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -129,12 +127,11 @@ externalvariable_name_set :: proc(external_variable: rawptr, name: string) -> (o
 }
 
 externalvariable_type_name :: proc {
-    externalvariable_type_name_,
+    externalvariable_type_name_get,
     externalvariable_type_name_set,
 }
 
-@(private)
-externalvariable_type_name_ :: proc(external_variable: rawptr) -> (type_name: string, ok: bool) {
+externalvariable_type_name_get :: proc(external_variable: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -149,7 +146,6 @@ externalvariable_type_name_ :: proc(external_variable: rawptr) -> (type_name: st
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_type_name_set :: proc(external_variable: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -165,12 +161,11 @@ externalvariable_type_name_set :: proc(external_variable: rawptr, type_name: str
 }
 
 externalvariable_attribute :: proc {
-    externalvariable_attribute_,
+    externalvariable_attribute_get,
     externalvariable_attribute_set,
 }
 
-@(private)
-externalvariable_attribute_ :: proc(external_variable: rawptr) -> (attribute: string, ok: bool) {
+externalvariable_attribute_get :: proc(external_variable: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -185,7 +180,6 @@ externalvariable_attribute_ :: proc(external_variable: rawptr) -> (attribute: st
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_attribute_set :: proc(external_variable: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
@@ -201,12 +195,11 @@ externalvariable_attribute_set :: proc(external_variable: rawptr, attribute: str
 }
 
 externalvariable_description :: proc {
-    externalvariable_description_,
+    externalvariable_description_get,
     externalvariable_description_set,
 }
 
-@(private)
-externalvariable_description_ :: proc(external_variable: rawptr) -> (description: string, ok: bool) {
+externalvariable_description_get :: proc(external_variable: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -221,7 +214,6 @@ externalvariable_description_ :: proc(external_variable: rawptr) -> (description
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_description_set :: proc(external_variable: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -237,12 +229,11 @@ externalvariable_description_set :: proc(external_variable: rawptr, description:
 }
 
 externalvariable_read_permission :: proc {
-    externalvariable_read_permission_,
+    externalvariable_read_permission_get,
     externalvariable_read_permission_set,
 }
 
-@(private)
-externalvariable_read_permission_ :: proc(external_variable: rawptr) -> (read_permission: string, ok: bool) {
+externalvariable_read_permission_get :: proc(external_variable: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -257,7 +248,6 @@ externalvariable_read_permission_ :: proc(external_variable: rawptr) -> (read_pe
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_read_permission_set :: proc(external_variable: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
@@ -273,12 +263,11 @@ externalvariable_read_permission_set :: proc(external_variable: rawptr, read_per
 }
 
 externalvariable_write_permission :: proc {
-    externalvariable_write_permission_,
+    externalvariable_write_permission_get,
     externalvariable_write_permission_set,
 }
 
-@(private)
-externalvariable_write_permission_ :: proc(external_variable: rawptr) -> (write_permission: string, ok: bool) {
+externalvariable_write_permission_get :: proc(external_variable: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -293,7 +282,6 @@ externalvariable_write_permission_ :: proc(external_variable: rawptr) -> (write_
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_write_permission_set :: proc(external_variable: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
@@ -309,12 +297,11 @@ externalvariable_write_permission_set :: proc(external_variable: rawptr, write_p
 }
 
 externalvariable_authentication_level :: proc {
-    externalvariable_authentication_level_,
+    externalvariable_authentication_level_get,
     externalvariable_authentication_level_set,
 }
 
-@(private)
-externalvariable_authentication_level_ :: proc(external_variable: rawptr) -> (authentication_level: string, ok: bool) {
+externalvariable_authentication_level_get :: proc(external_variable: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -329,7 +316,6 @@ externalvariable_authentication_level_ :: proc(external_variable: rawptr) -> (au
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_authentication_level_set :: proc(external_variable: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
@@ -345,12 +331,11 @@ externalvariable_authentication_level_set :: proc(external_variable: rawptr, aut
 }
 
 externalvariable_graph_nodes :: proc {
-    externalvariable_graph_nodes_,
+    externalvariable_graph_nodes_get,
     externalvariable_graph_nodes_set,
 }
 
-@(private)
-externalvariable_graph_nodes_ :: proc(external_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
+externalvariable_graph_nodes_get :: proc(external_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
     graph_nodes = nil
     ok = false
 
@@ -363,7 +348,6 @@ externalvariable_graph_nodes_ :: proc(external_variable: rawptr) -> (graph_nodes
     return graph_nodes, true
 }
 
-@(private)
 externalvariable_graph_nodes_set :: proc(external_variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
     ok = false
 
@@ -376,7 +360,7 @@ externalvariable_graph_nodes_set :: proc(external_variable: rawptr, graph_nodes:
     return true
 }
 
-externalvariable_type_guid :: proc(external_variable: rawptr) -> (guid: string, ok: bool) {
+externalvariable_type_guid_get :: proc(external_variable: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -391,7 +375,7 @@ externalvariable_type_guid :: proc(external_variable: rawptr) -> (guid: string, 
     return bstr.to_string(bs), true
 }
 
-externalvariable_type_path :: proc(external_variable: rawptr) -> (path: string, ok: bool) {
+externalvariable_type_path_get :: proc(external_variable: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -407,12 +391,11 @@ externalvariable_type_path :: proc(external_variable: rawptr) -> (path: string, 
 }
 
 externalvariable_access_level :: proc {
-    externalvariable_access_level_,
+    externalvariable_access_level_get,
     externalvariable_access_level_set,
 }
 
-@(private)
-externalvariable_access_level_ :: proc(external_variable: rawptr) -> (access_level: string, ok: bool) {
+externalvariable_access_level_get :: proc(external_variable: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -427,7 +410,6 @@ externalvariable_access_level_ :: proc(external_variable: rawptr) -> (access_lev
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_access_level_set :: proc(external_variable: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
@@ -443,12 +425,11 @@ externalvariable_access_level_set :: proc(external_variable: rawptr, access_leve
 }
 
 externalvariable_safety_type :: proc {
-    externalvariable_safety_type_,
+    externalvariable_safety_type_get,
     externalvariable_safety_type_set,
 }
 
-@(private)
-externalvariable_safety_type_ :: proc(external_variable: rawptr) -> (safety_type: string, ok: bool) {
+externalvariable_safety_type_get :: proc(external_variable: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -463,7 +444,6 @@ externalvariable_safety_type_ :: proc(external_variable: rawptr) -> (safety_type
     return bstr.to_string(bs), true
 }
 
-@(private)
 externalvariable_safety_type_set :: proc(external_variable: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 

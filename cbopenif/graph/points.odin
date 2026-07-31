@@ -23,7 +23,6 @@ points_add :: proc {
     points_add_at_index,
 }
 
-@(private)
 points_add_ :: proc(points: rawptr, point: rawptr) -> (ok: bool) {
     ok = false
 

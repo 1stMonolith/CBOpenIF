@@ -69,12 +69,11 @@ applicationvariables_serialize :: proc(application_variables: rawptr) -> (xml: s
 }
 
 applicationvariables_description :: proc {
-    applicationvariables_description_,
+    applicationvariables_description_get,
     applicationvariables_description_set,
 }
 
-@(private)
-applicationvariables_description_ :: proc(application_variables: rawptr) -> (description: string, ok: bool) {
+applicationvariables_description_get :: proc(application_variables: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -89,7 +88,6 @@ applicationvariables_description_ :: proc(application_variables: rawptr) -> (des
     return bstr.to_string(bs), true
 }
 
-@(private)
 applicationvariables_description_set :: proc(application_variables: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -104,12 +102,11 @@ applicationvariables_description_set :: proc(application_variables: rawptr, desc
 }
 
 applicationvariables_globals :: proc {
-    applicationvariables_globals_,
+    applicationvariables_globals_get,
     applicationvariables_globals_set,
 }
 
-@(private)
-applicationvariables_globals_ :: proc(application_variables: rawptr) -> (global_variables: rawptr, ok: bool) {
+applicationvariables_globals_get :: proc(application_variables: rawptr) -> (global_variables: rawptr, ok: bool) {
     global_variables = nil
     ok = false
 
@@ -122,7 +119,6 @@ applicationvariables_globals_ :: proc(application_variables: rawptr) -> (global_
     return global_variables, true
 }
 
-@(private)
 applicationvariables_globals_set :: proc(application_variables: rawptr, global_variables: rawptr) -> (ok: bool) {
     ok = false
 
@@ -137,12 +133,11 @@ applicationvariables_globals_set :: proc(application_variables: rawptr, global_v
 }
 
 applicationvariables_variables :: proc {
-    applicationvariables_variables_,
+    applicationvariables_variables_get,
     applicationvariables_variables_set,
 }
 
-@(private)
-applicationvariables_variables_ :: proc(application_variables: rawptr) -> (variables: rawptr, ok: bool) {
+applicationvariables_variables_get :: proc(application_variables: rawptr) -> (variables: rawptr, ok: bool) {
     variables = nil
     ok = false
 
@@ -155,7 +150,6 @@ applicationvariables_variables_ :: proc(application_variables: rawptr) -> (varia
     return variables, true
 }
 
-@(private)
 applicationvariables_variables_set :: proc(application_variables: rawptr, variables: rawptr) -> (ok: bool) {
     ok = false
 
@@ -170,12 +164,11 @@ applicationvariables_variables_set :: proc(application_variables: rawptr, variab
 }
 
 applicationvariables_signals :: proc {
-    applicationvariables_signals_,
+    applicationvariables_signals_get,
     applicationvariables_signals_set,
 }
 
-@(private)
-applicationvariables_signals_ :: proc(application_variables: rawptr) -> (signals: rawptr, ok: bool) {
+applicationvariables_signals_get :: proc(application_variables: rawptr) -> (signals: rawptr, ok: bool) {
     signals = nil
     ok = false
 
@@ -188,7 +181,6 @@ applicationvariables_signals_ :: proc(application_variables: rawptr) -> (signals
     return signals, true
 }
 
-@(private)
 applicationvariables_signals_set :: proc(application_variables: rawptr, signals: rawptr) -> (ok: bool) {
     ok = false
 

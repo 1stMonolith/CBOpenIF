@@ -81,12 +81,11 @@ datatype_serialize :: proc(datatype: rawptr) -> (xml: string, ok: bool) {
 }
 
 datatype_name :: proc {
-    datatype_name_,
+    datatype_name_get,
     datatype_name_set,
 }
 
-@(private)
-datatype_name_ :: proc(datatype: rawptr) -> (name: string, ok: bool) {
+datatype_name_get :: proc(datatype: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -101,7 +100,6 @@ datatype_name_ :: proc(datatype: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 datatype_name_set :: proc(datatype: rawptr, name: string) -> (ok: bool) {
     ok = false
     
@@ -117,12 +115,11 @@ datatype_name_set :: proc(datatype: rawptr, name: string) -> (ok: bool) {
 }
 
 datatype_protected :: proc {
-    datatype_protected_,
+    datatype_protected_get,
     datatype_protected_set,
 }
 
-@(private)
-datatype_protected_ :: proc(datatype: rawptr) -> (protected: bool, ok: bool) {
+datatype_protected_get :: proc(datatype: rawptr) -> (protected: bool, ok: bool) {
     protected = {}
     ok = false
 
@@ -136,7 +133,6 @@ datatype_protected_ :: proc(datatype: rawptr) -> (protected: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 datatype_protected_set :: proc(datatype: rawptr, protected: bool) -> (ok: bool) {
     ok = false
     
@@ -150,12 +146,11 @@ datatype_protected_set :: proc(datatype: rawptr, protected: bool) -> (ok: bool) 
 }
 
 datatype_hidden :: proc {
-    datatype_hidden_,
+    datatype_hidden_get,
     datatype_hidden_set,
 }
 
-@(private)
-datatype_hidden_ :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
+datatype_hidden_get :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
     hidden = {}
     ok = false
     
@@ -169,7 +164,6 @@ datatype_hidden_ :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
 datatype_hidden_set :: proc(datatype: rawptr, hidden: bool) -> (ok: bool) {
     ok = false
 
@@ -183,12 +177,11 @@ datatype_hidden_set :: proc(datatype: rawptr, hidden: bool) -> (ok: bool) {
 }
 
 datatype_scope :: proc {
-    datatype_scope_,
+    datatype_scope_get,
     datatype_scope_set,
 }
 
-@(private)
-datatype_scope_ :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
+datatype_scope_get :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
     scope = {}
     ok = false
 
@@ -202,7 +195,6 @@ datatype_scope_ :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
     return scope, true
 }
 
-@(private)
 datatype_scope_set :: proc(datatype: rawptr, scope: Scope) -> (ok: bool) {
     ok = false
 
@@ -216,12 +208,11 @@ datatype_scope_set :: proc(datatype: rawptr, scope: Scope) -> (ok: bool) {
 }
 
 datatype_description :: proc {
-    datatype_description_,
+    datatype_description_get,
     datatype_description_set,
 }
 
-@(private)
-datatype_description_ :: proc(datatype: rawptr) -> (description: string, ok: bool) {
+datatype_description_get :: proc(datatype: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -236,7 +227,6 @@ datatype_description_ :: proc(datatype: rawptr) -> (description: string, ok: boo
     return bstr.to_string(bs), true
 }
 
-@(private)
 datatype_description_set :: proc(datatype: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -252,12 +242,11 @@ datatype_description_set :: proc(datatype: rawptr, description: string) -> (ok: 
 }
 
 datatype_guid :: proc {
-    datatype_guid_,
+    datatype_guid_get,
     datatype_guid_set,
 }
 
-@(private)
-datatype_guid_ :: proc(datatype: rawptr) -> (guid: string, ok: bool) {
+datatype_guid_get :: proc(datatype: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -272,7 +261,6 @@ datatype_guid_ :: proc(datatype: rawptr) -> (guid: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 datatype_guid_set :: proc(datatype: rawptr, guid: string) -> (ok: bool) {
     ok = false
 
@@ -288,12 +276,11 @@ datatype_guid_set :: proc(datatype: rawptr, guid: string) -> (ok: bool) {
 }
 
 datatype_reserved_by_function :: proc {
-    datatype_reserved_by_function_,
+    datatype_reserved_by_function_get,
     datatype_reserved_by_function_set,
 }
 
-@(private)
-datatype_reserved_by_function_ :: proc(datatype: rawptr) -> (reserved_by_function: string, ok: bool) {
+datatype_reserved_by_function_get :: proc(datatype: rawptr) -> (reserved_by_function: string, ok: bool) {
     reserved_by_function = ""
     ok = false
 
@@ -308,7 +295,6 @@ datatype_reserved_by_function_ :: proc(datatype: rawptr) -> (reserved_by_functio
     return bstr.to_string(bs), true
 }
 
-@(private)
 datatype_reserved_by_function_set :: proc(datatype: rawptr, reserved_by_function: string) -> (ok: bool) {
     ok = false
 
@@ -324,12 +310,11 @@ datatype_reserved_by_function_set :: proc(datatype: rawptr, reserved_by_function
 }
 
 datatype_components :: proc {
-    datatype_components_,
+    datatype_components_get,
     datatype_components_set,
 }
 
-@(private)
-datatype_components_ :: proc(datatype: rawptr) -> (components: rawptr, ok: bool) {
+datatype_components_get :: proc(datatype: rawptr) -> (components: rawptr, ok: bool) {
     components = nil
     ok = false
 
@@ -342,7 +327,6 @@ datatype_components_ :: proc(datatype: rawptr) -> (components: rawptr, ok: bool)
     return components, true
 }
 
-@(private)
 datatype_components_set :: proc(datatype: rawptr, components: rawptr) -> (ok: bool) {
     ok = false
 

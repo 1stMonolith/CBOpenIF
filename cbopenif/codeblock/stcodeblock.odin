@@ -56,12 +56,11 @@ stcodeblock_serialize :: proc(stcodeblock: rawptr) -> (xml: string, ok: bool) {
 }
 
 stcodeblock_name :: proc {
-    stcodeblock_name_,
+    stcodeblock_name_get,
     stcodeblock_name_set,
 }
 
-@(private)
-stcodeblock_name_ :: proc(stcodeblock: rawptr) -> (name: string, ok: bool) {
+stcodeblock_name_get :: proc(stcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -76,7 +75,6 @@ stcodeblock_name_ :: proc(stcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 stcodeblock_name_set :: proc(stcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
@@ -92,12 +90,11 @@ stcodeblock_name_set :: proc(stcodeblock: rawptr, name: string) -> (ok: bool) {
 }
 
 stcodeblock_stcode :: proc {
-    stcodeblock_stcode_,
+    stcodeblock_stcode_get,
     stcodeblock_stcode_set,
 }
 
-@(private)
-stcodeblock_stcode_ :: proc(stcodeblock: rawptr) -> (stcode: string, ok: bool) {
+stcodeblock_stcode_get :: proc(stcodeblock: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -112,7 +109,6 @@ stcodeblock_stcode_ :: proc(stcodeblock: rawptr) -> (stcode: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 stcodeblock_stcode_set :: proc(stcodeblock: rawptr, stcode: string) -> (ok: bool) {
     ok = false
     

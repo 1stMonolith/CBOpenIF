@@ -24,7 +24,6 @@ ilrows_add :: proc {
     ilrows_add_at_index,
 }
 
-@(private)
 ilrows_add_ :: proc(ilrows: rawptr, ilrow: rawptr) -> (ok: bool) {
     ok = false
 
@@ -49,10 +48,6 @@ ilrows_add_at_index :: proc(ilrows: rawptr, ilrow: rawptr, index: i32) -> (ok: b
     if com.failed(hr) do return
 
     return true
-}
-
-ilrows_ilrow :: proc {
-    ilrows_ilrow_by_index,
 }
 
 ilrows_ilrow_by_index :: proc(ilrows: rawptr, index: i32) -> (ilrow: rawptr, ok: bool) {

@@ -53,12 +53,11 @@ ilcodeblock_serialize :: proc(ilcodeblock: rawptr) -> (xml: string, ok: bool) {
 }
 
 ilcodeblock_name :: proc {
-    ilcodeblock_name_,
+    ilcodeblock_name_get,
     ilcodeblock_name_set,
 }
 
-@(private)
-ilcodeblock_name_ :: proc(ilcodeblock: rawptr) -> (name: string, ok: bool) {
+ilcodeblock_name_get :: proc(ilcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -73,7 +72,6 @@ ilcodeblock_name_ :: proc(ilcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 ilcodeblock_name_set :: proc(ilcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
@@ -89,12 +87,11 @@ ilcodeblock_name_set :: proc(ilcodeblock: rawptr, name: string) -> (ok: bool) {
 }
 
 ilcodeblock_stcode :: proc {
-    ilcodeblock_stcode_,
+    ilcodeblock_stcode_get,
     ilcodeblock_stcode_set,
 }
 
-@(private)
-ilcodeblock_stcode_ :: proc(ilcodeblock: rawptr) -> (ilrows: rawptr, ok: bool) {
+ilcodeblock_stcode_get :: proc(ilcodeblock: rawptr) -> (ilrows: rawptr, ok: bool) {
     ilrows = nil
     ok = false
 
@@ -107,7 +104,6 @@ ilcodeblock_stcode_ :: proc(ilcodeblock: rawptr) -> (ilrows: rawptr, ok: bool) {
     return ilrows, true
 }
 
-@(private)
 ilcodeblock_stcode_set :: proc(ilcodeblock: rawptr, ilrows: rawptr) -> (ok: bool) {
     ok = false
     

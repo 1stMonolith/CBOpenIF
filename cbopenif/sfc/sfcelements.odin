@@ -100,7 +100,6 @@ sfcelements_add :: proc {
     sfcelements_add_at_index,
 }
 
-@(private)
 sfcelements_add_ :: proc(sfcelements: rawptr, isfcelement: rawptr) -> (ok: bool) {
     ok = false
 
@@ -114,7 +113,7 @@ sfcelements_add_ :: proc(sfcelements: rawptr, isfcelement: rawptr) -> (ok: bool)
     return true
 }
 
-@(private)
+
 sfcelements_add_at_index :: proc(sfcelements: rawptr, isfcelement: rawptr, index: i32) -> (ok: bool) {
     ok = false
 

@@ -27,7 +27,6 @@ externalvariables_add :: proc {
     externalvariables_add_at_index,
 }
 
-@(private)
 externalvariables_add_ :: proc(external_variables: rawptr, external_variable: rawptr) -> (ok: bool) {
     ok = false
 

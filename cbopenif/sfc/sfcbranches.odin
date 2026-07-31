@@ -25,7 +25,6 @@ sfcbranches_add :: proc {
     sfcbranches_add_at_index,
 }
 
-@(private)
 sfcbranches_add_ :: proc(sfcbranches: rawptr, branch: rawptr) -> (ok: bool) {
     ok = false
 
@@ -39,7 +38,6 @@ sfcbranches_add_ :: proc(sfcbranches: rawptr, branch: rawptr) -> (ok: bool) {
     return true
 }
 
-@(private)
 sfcbranches_add_at_index :: proc(sfcbranches: rawptr, branch: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
@@ -56,10 +54,9 @@ sfcbranches_add_at_index :: proc(sfcbranches: rawptr, branch: rawptr, index: i32
 sfcbranches_add_branch :: proc {
     sfcbranches_add_branch_,
     sfcbranches_add_branch_before,
-    // sfcbranches_add_branch_after, TODO
+    // sfcbranches_add_branch_after,   TODO!
 }
 
-@(private)
 sfcbranches_add_branch_ :: proc(sfcbranches: rawptr) -> (branch: rawptr, ok: bool) {
     branch = nil
     ok = false
@@ -73,7 +70,6 @@ sfcbranches_add_branch_ :: proc(sfcbranches: rawptr) -> (branch: rawptr, ok: boo
     return branch, true
 }
 
-@(private)
 sfcbranches_add_branch_before :: proc(sfcbranches: rawptr, index: ^i32) -> (branch: rawptr, ok: bool) {
     branch = nil
     ok = false
@@ -88,9 +84,7 @@ sfcbranches_add_branch_before :: proc(sfcbranches: rawptr, index: ^i32) -> (bran
     return branch, true
 }
 
-/* TODO
-@(private)
-sfcbranches_add_branch_after :: proc(sfcbranches: SFCBranches, index: ^i32) -> (branch: SFCBranch, ok: bool) {
+sfcbranches_add_branch_after :: proc(sfcbranches: rawptr, index: ^i32) -> (branch: rawptr, ok: bool) {
     branch = nil
     ok = false
 
@@ -103,7 +97,6 @@ sfcbranches_add_branch_after :: proc(sfcbranches: SFCBranches, index: ^i32) -> (
 
     return branch, true
 }
-*/
 
 sfcbranches_branch :: proc(sfcbranches: rawptr, index: i32) -> (branch: rawptr, ok: bool) {
     branch = nil

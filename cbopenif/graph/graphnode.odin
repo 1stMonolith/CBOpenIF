@@ -35,12 +35,11 @@ graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: rawptr, ok: b
 }
 
 graphnode_name :: proc {
-    graphnode_name_,
+    graphnode_name_get,
     graphnode_name_set,
 }
 
-@(private)
-graphnode_name_ :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
+graphnode_name_get :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -55,7 +54,6 @@ graphnode_name_ :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 graphnode_name_set :: proc(graphnode: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -71,12 +69,11 @@ graphnode_name_set :: proc(graphnode: rawptr, name: string) -> (ok: bool) {
 }
 
 graphnode_x :: proc {
-    graphnode_x_,
+    graphnode_x_get,
     graphnode_x_set,
 }
 
-@(private)
-graphnode_x_ :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
+graphnode_x_get :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -89,7 +86,6 @@ graphnode_x_ :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-@(private)
 graphnode_x_set :: proc(graphnode: rawptr, x: f64) -> (ok: bool) {
     ok = false
 
@@ -103,12 +99,11 @@ graphnode_x_set :: proc(graphnode: rawptr, x: f64) -> (ok: bool) {
 }
 
 graphnode_y :: proc {
-    graphnode_y_,
+    graphnode_y_get,
     graphnode_y_set,
 }
 
-@(private)
-graphnode_y_ :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
+graphnode_y_get :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -121,7 +116,6 @@ graphnode_y_ :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-@(private)
 graphnode_y_set :: proc(graphnode: rawptr, y: f64) -> (ok: bool) {
     ok = false
 

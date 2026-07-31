@@ -27,7 +27,6 @@ variables_add :: proc {
     variables_add_at_index,
 }
 
-@(private)
 variables_add_ :: proc(variables: rawptr, variable: rawptr) -> (ok: bool) {
     ok = false
 

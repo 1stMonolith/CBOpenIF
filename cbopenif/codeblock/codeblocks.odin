@@ -35,7 +35,11 @@ CodeBlocksVTable :: struct {
     AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, Code: rawptr) -> HResult,
 }
 
-@(private)
+codeblocks_add :: proc {
+    codeblocks_add_,
+    codeblocks_add_at_index,
+}
+
 codeblocks_add_ :: proc(codeblocks: rawptr, codeblock: rawptr) -> (ok: bool) {
     ok = false
 
@@ -49,7 +53,7 @@ codeblocks_add_ :: proc(codeblocks: rawptr, codeblock: rawptr) -> (ok: bool) {
     return true
 }
 
-@(private)
+
 codeblocks_add_at_index :: proc(codeblocks: rawptr, codeblock: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
@@ -146,7 +150,6 @@ codeblocks_codeblock :: proc {
     codeblocks_codeblock_by_index,
 }
 
-@(private)
 codeblocks_codeblock_by_name :: proc(codeblocks: rawptr, name: string) -> (codeblock: rawptr, ok: bool) {
     codeblock = nil
     ok = false
@@ -162,7 +165,6 @@ codeblocks_codeblock_by_name :: proc(codeblocks: rawptr, name: string) -> (codeb
     return codeblock, true
 }
 
-@(private)
 codeblocks_codeblock_by_index :: proc(codeblocks: rawptr, index: i32) -> (codeblock: rawptr, ok: bool) {
     codeblock = nil
     ok = false

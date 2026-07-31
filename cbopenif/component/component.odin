@@ -69,12 +69,11 @@ component_new :: proc(name: string, type: string, attribute := "", initialvalue 
 }
 
 component_name :: proc {
-    component_name_,
+    component_name_get,
     component_name_set,
 }
 
-@(private)
-component_name_ :: proc(component: rawptr) -> (name: string, ok: bool) {
+component_name_get :: proc(component: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -89,7 +88,6 @@ component_name_ :: proc(component: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_name_set :: proc(component: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -105,12 +103,11 @@ component_name_set :: proc(component: rawptr, name: string) -> (ok: bool) {
 }
 
 component_type_name :: proc {
-    component_type_name_,
+    component_type_name_get,
     component_type_name_set,
 }
 
-@(private)
-component_type_name_ :: proc(component: rawptr) -> (type_name: string, ok: bool) {
+component_type_name_get :: proc(component: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -125,7 +122,6 @@ component_type_name_ :: proc(component: rawptr) -> (type_name: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_type_name_set :: proc(component: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -141,12 +137,11 @@ component_type_name_set :: proc(component: rawptr, type_name: string) -> (ok: bo
 }
 
 component_attribute :: proc {
-    component_attribute_,
+    component_attribute_get,
     component_attribute_set,
 }
 
-@(private)
-component_attribute_ :: proc(component: rawptr) -> (attribute: string, ok: bool) {
+component_attribute_get :: proc(component: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -161,7 +156,6 @@ component_attribute_ :: proc(component: rawptr) -> (attribute: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_attribute_set :: proc(component: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
@@ -177,12 +171,11 @@ component_attribute_set :: proc(component: rawptr, attribute: string) -> (ok: bo
 }
 
 component_initial_value :: proc {
-    component_initial_value_,
+    component_initial_value_get,
     component_initial_value_set,
 }
 
-@(private)
-component_initial_value_ :: proc(component: rawptr) -> (inital_value: string, ok: bool) {
+component_initial_value_get :: proc(component: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
@@ -197,7 +190,6 @@ component_initial_value_ :: proc(component: rawptr) -> (inital_value: string, ok
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_initial_value_set :: proc(component: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
@@ -213,12 +205,11 @@ component_initial_value_set :: proc(component: rawptr, inital_value: string) -> 
 }
 
 component_read_permission :: proc {
-    component_read_permission_,
+    component_read_permission_get,
     component_read_permission_set,
 }
 
-@(private)
-component_read_permission_ :: proc(component: rawptr) -> (read_permission: string, ok: bool) {
+component_read_permission_get :: proc(component: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -233,7 +224,6 @@ component_read_permission_ :: proc(component: rawptr) -> (read_permission: strin
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_read_permission_set :: proc(component: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
@@ -249,12 +239,11 @@ component_read_permission_set :: proc(component: rawptr, read_permission: string
 }
 
 component_write_permission :: proc {
-    component_write_permission_,
+    component_write_permission_get,
     component_write_permission_set,
 }
 
-@(private)
-component_write_permission_ :: proc(component: rawptr) -> (write_permission: string, ok: bool) {
+component_write_permission_get :: proc(component: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -269,7 +258,6 @@ component_write_permission_ :: proc(component: rawptr) -> (write_permission: str
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_write_permission_set :: proc(component: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
@@ -285,12 +273,11 @@ component_write_permission_set :: proc(component: rawptr, write_permission: stri
 }
 
 component_authentication_level :: proc {
-    component_authentication_level_,
+    component_authentication_level_get,
     component_authentication_level_set,
 }
 
-@(private)
-component_authentication_level_ :: proc(component: rawptr) -> (authentication_level: string, ok: bool) {
+component_authentication_level_get :: proc(component: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -305,7 +292,6 @@ component_authentication_level_ :: proc(component: rawptr) -> (authentication_le
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_authentication_level_set :: proc(component: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
@@ -321,12 +307,11 @@ component_authentication_level_set :: proc(component: rawptr, authentication_lev
 }
 
 component_description :: proc {
-    component_description_,
+    component_description_get,
     component_description_set,
 }
 
-@(private)
-component_description_ :: proc(component: rawptr) -> (description: string, ok: bool) {
+component_description_get :: proc(component: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -341,7 +326,6 @@ component_description_ :: proc(component: rawptr) -> (description: string, ok: b
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_description_set :: proc(component: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -356,7 +340,7 @@ component_description_set :: proc(component: rawptr, description: string) -> (ok
     return true
 }
 
-component_type_guid :: proc(component: rawptr) -> (type_guid: string, ok: bool) {
+component_type_guid_get :: proc(component: rawptr) -> (type_guid: string, ok: bool) {
     type_guid = ""
     ok = false
 
@@ -371,7 +355,7 @@ component_type_guid :: proc(component: rawptr) -> (type_guid: string, ok: bool) 
     return bstr.to_string(bs), true
 }
 
-component_type_path :: proc(component: rawptr) -> (type_path: string, ok: bool) {
+component_type_path_get :: proc(component: rawptr) -> (type_path: string, ok: bool) {
     type_path = ""
     ok = false
     
@@ -387,12 +371,11 @@ component_type_path :: proc(component: rawptr) -> (type_path: string, ok: bool) 
 }
 
 component_access_level :: proc {
-    component_access_level_,
+    component_access_level_get,
     component_access_level_set,
 }
 
-@(private)
-component_access_level_ :: proc(component: rawptr) -> (access_level: string, ok: bool) {
+component_access_level_get :: proc(component: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -407,7 +390,6 @@ component_access_level_ :: proc(component: rawptr) -> (access_level: string, ok:
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_access_level_set :: proc(component: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
@@ -423,12 +405,11 @@ component_access_level_set :: proc(component: rawptr, access_level: string) -> (
 }
 
 component_safety_type :: proc {
-    component_safety_type_,
+    component_safety_type_get,
     component_safety_type_set,
 }
 
-@(private)
-component_safety_type_ :: proc(component: rawptr) -> (safety_type: string, ok: bool) {
+component_safety_type_get :: proc(component: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -443,7 +424,6 @@ component_safety_type_ :: proc(component: rawptr) -> (safety_type: string, ok: b
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_safety_type_set :: proc(component: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 
@@ -459,12 +439,11 @@ component_safety_type_set :: proc(component: rawptr, safety_type: string) -> (ok
 }
 
 component_isp_value :: proc {
-    component_isp_value_,
+    component_isp_value_get,
     component_isp_value_set,
 }
 
-@(private)
-component_isp_value_ :: proc(component: rawptr) -> (isp_value: string, ok: bool) {
+component_isp_value_get :: proc(component: rawptr) -> (isp_value: string, ok: bool) {
     isp_value = ""
     ok = false
 
@@ -479,7 +458,6 @@ component_isp_value_ :: proc(component: rawptr) -> (isp_value: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 component_isp_value_set :: proc(component: rawptr, isp_value: string) -> (ok: bool) {
     ok = false
 

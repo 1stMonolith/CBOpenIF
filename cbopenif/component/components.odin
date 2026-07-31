@@ -27,7 +27,6 @@ components_add :: proc {
     components_add_at_index,
 }
 
-@(private)
 components_add_ :: proc(components: rawptr, component: rawptr) -> (ok: bool) {
     ok = false
 

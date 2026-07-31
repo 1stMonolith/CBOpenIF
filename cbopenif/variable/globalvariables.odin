@@ -27,7 +27,6 @@ globalvariables_add :: proc {
     globalvariables_add_at_index,
 }
 
-@(private)
 globalvariables_add_ :: proc(global_variables: rawptr, global_variable: rawptr) -> (ok: bool) {
     ok = false
 

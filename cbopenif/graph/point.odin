@@ -30,12 +30,11 @@ point_new :: proc(x, y: f64) -> (point: rawptr, ok: bool) {
 }
 
 point_x :: proc {
-    point_x_,
+    point_x_get,
     point_x_set,
 }
 
-@(private)
-point_x_ :: proc(point: rawptr) -> (x: f64, ok: bool) {
+point_x_get :: proc(point: rawptr) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -48,7 +47,6 @@ point_x_ :: proc(point: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-@(private)
 point_x_set :: proc(point: rawptr, x: f64) -> (ok: bool) {
     ok = false
 
@@ -62,12 +60,11 @@ point_x_set :: proc(point: rawptr, x: f64) -> (ok: bool) {
 }
 
 point_y :: proc {
-    point_y_,
+    point_y_get,
     point_y_set,
 }
 
-@(private)
-point_y_ :: proc(point: rawptr) -> (y: f64, ok: bool) {
+point_y_get :: proc(point: rawptr) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -80,7 +77,6 @@ point_y_ :: proc(point: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-@(private)
 point_y_set :: proc(point: rawptr, y: f64) -> (ok: bool) {
     ok = false
 

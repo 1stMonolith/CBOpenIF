@@ -6,10 +6,10 @@ import "../bstr"
 import "../variant"
 import "../factory"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
+ HResult     :: com.HResult
+ BStr        :: bstr.BStr
+ GUID        :: com.GUID
+ VariantBool :: variant.VariantBool
 
 CMConnectionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -77,12 +77,11 @@ cmconnection_serialize :: proc(cmconnection: rawptr) -> (xml: string, ok: bool) 
 }
 
 cmconnection_name :: proc {
-    cmconnection_name_,
+    cmconnection_name_get,
     cmconnection_name_set,
 }
 
-@(private)
-cmconnection_name_ :: proc(cmconnection: rawptr) -> (name: string, ok: bool) {
+cmconnection_name_get :: proc(cmconnection: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -97,7 +96,6 @@ cmconnection_name_ :: proc(cmconnection: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 cmconnection_name_set :: proc(cmconnection: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -113,12 +111,11 @@ cmconnection_name_set :: proc(cmconnection: rawptr, name: string) -> (ok: bool) 
 }
 
 cmconnection_actual_parameter :: proc {
-    cmconnection_actual_parameter_,
+    cmconnection_actual_parameter_get,
     cmconnection_actual_parameter_set,
 }
 
-@(private)
-cmconnection_actual_parameter_ :: proc(cmconnection: rawptr) -> (actual_parameter: string, ok: bool) {
+cmconnection_actual_parameter_get :: proc(cmconnection: rawptr) -> (actual_parameter: string, ok: bool) {
     actual_parameter = ""
     ok = false
 
@@ -133,7 +130,6 @@ cmconnection_actual_parameter_ :: proc(cmconnection: rawptr) -> (actual_paramete
     return bstr.to_string(bs), true
 }
 
-@(private)
 cmconnection_actual_parameter_set :: proc(cmconnection: rawptr, actual_parameter: string) -> (ok: bool) {
     ok = false
 
@@ -149,12 +145,12 @@ cmconnection_actual_parameter_set :: proc(cmconnection: rawptr, actual_parameter
 }
 
 cmconnection_graphical_connection :: proc {
-    cmconnection_graphical_connection_,
+    cmconnection_graphical_connection_get,
     cmconnection_graphical_connection_set,
 }
 
-@(private)
-cmconnection_graphical_connection_ :: proc(cmconnection: rawptr) -> (graphical_connection: bool, ok: bool) {
+
+cmconnection_graphical_connection_get :: proc(cmconnection: rawptr) -> (graphical_connection: bool, ok: bool) {
     graphical_connection = false
     ok = false
 
@@ -168,7 +164,7 @@ cmconnection_graphical_connection_ :: proc(cmconnection: rawptr) -> (graphical_c
     return variant.variantbool_to_bool(vb), true
 }
 
-@(private)
+
 cmconnection_graphical_connection_set :: proc(cmconnection: rawptr, graphical_connection: bool) -> (ok: bool) {
     ok = false
 
@@ -183,12 +179,12 @@ cmconnection_graphical_connection_set :: proc(cmconnection: rawptr, graphical_co
 }
 
 cmconnection_points :: proc {
-    cmconnection_points_,
+    cmconnection_points_get,
     cmconnection_points_set,
 }
 
-@(private)
-cmconnection_points_ :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool) {
+
+cmconnection_points_get :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool) {
     points = nil
     ok = false
 
@@ -201,7 +197,7 @@ cmconnection_points_ :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool)
     return points, true
 }
 
-@(private)
+
 cmconnection_points_set :: proc(cmconnection: rawptr, points: rawptr) -> (ok: bool) {
     ok = false
 

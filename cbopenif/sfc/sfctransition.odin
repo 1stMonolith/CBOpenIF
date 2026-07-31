@@ -41,12 +41,11 @@ sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransit
 }
 
 sfctransition_name :: proc {
-    sfctransition_name_,
+    sfctransition_name_get,
     sfctransition_name_set,
 }
 
-@(private)
-sfctransition_name_ :: proc(sfctransition: rawptr) -> (name: string, ok: bool) {
+sfctransition_name_get :: proc(sfctransition: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -61,7 +60,6 @@ sfctransition_name_ :: proc(sfctransition: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfctransition_name_set :: proc(sfctransition: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -77,12 +75,11 @@ sfctransition_name_set :: proc(sfctransition: rawptr, name: string) -> (ok: bool
 }
 
 sfctransition_dest :: proc {
-    sfctransition_dest_,
+    sfctransition_dest_get,
     sfctransition_dest_set,
 }
 
-@(private)
-sfctransition_dest_ :: proc(sfctransition: rawptr) -> (dest: string, ok: bool) {
+sfctransition_dest_get :: proc(sfctransition: rawptr) -> (dest: string, ok: bool) {
     dest = ""
     ok = false
 
@@ -97,7 +94,6 @@ sfctransition_dest_ :: proc(sfctransition: rawptr) -> (dest: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfctransition_dest_set :: proc(sfctransition: rawptr, dest: string) -> (ok: bool) {
     ok = false
 
@@ -112,13 +108,12 @@ sfctransition_dest_set :: proc(sfctransition: rawptr, dest: string) -> (ok: bool
     return true
 }
 
-sfcstcode :: proc {
-    sfcstcode_,
-    sfcstcode_set,
+sfctransition_stcode :: proc {
+    sfctransition_stcode_get,
+    sfctransition_stcode_set,
 }
 
-@(private)
-sfcstcode_ :: proc(sfctransition: rawptr) -> (stcode: string, ok: bool) {
+sfctransition_stcode_get :: proc(sfctransition: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -133,8 +128,7 @@ sfcstcode_ :: proc(sfctransition: rawptr) -> (stcode: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
-sfcstcode_set :: proc(sfctransition: rawptr, stcode: string) -> (ok: bool) {
+sfctransition_stcode_set :: proc(sfctransition: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return

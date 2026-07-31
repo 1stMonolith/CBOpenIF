@@ -1,10 +1,11 @@
-package graph
+package autopoint
 
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../enumtypes"
 
+@(private) HResult :: com.HResult
 @(private) AutoPos :: enumtypes.AutoPos
 
 AutoPointIF :: struct #raw_union {
@@ -18,7 +19,7 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
-autopoint_new :: proc(autopos: i32) -> (autopoint: rawptr, ok: bool) {
+autopoint_new :: proc(autopos: AutoPos) -> (autopoint: rawptr, ok: bool) {
     autopoint = {}
     ok = false
 
@@ -31,12 +32,11 @@ autopoint_new :: proc(autopos: i32) -> (autopoint: rawptr, ok: bool) {
 }
 
 autopoint_autopos :: proc {
-    autopoint_autopos_,
+    autopoint_autopos_get,
     autopoint_autopos_set,
 }
 
-@(private)
-autopoint_autopos_ :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool) {
+autopoint_autopos_get :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool) {
     autopos = {}
     ok = false
 
@@ -54,7 +54,6 @@ autopoint_autopos_ :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool) {
     return ap, true
 }
 
-@(private)
 autopoint_autopos_set :: proc(autopoint: rawptr, autopos: AutoPos) -> (ok: bool) {
     ok = false
 

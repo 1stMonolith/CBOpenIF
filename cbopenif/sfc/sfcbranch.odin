@@ -4,7 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../enumtypes"
 
-@(private) SFCPriorityValue :: enumtypes.SFCPriorityValue
+ SFCPriorityValue :: enumtypes.SFCPriorityValue
 
 SFCBranchIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -21,12 +21,11 @@ SFCBranchVTable :: struct {
 }
 
 sfcbranch_priority :: proc {
-    sfcbranch_priority_,
+    sfcbranch_priority_get,
     sfcbranch_priority_set,
 }
 
-@(private)
-sfcbranch_priority_ :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityValue, ok: bool) {
+sfcbranch_priority_get :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityValue, ok: bool) {
     priority = .Default
     ok = false
 
@@ -39,7 +38,6 @@ sfcbranch_priority_ :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityValue, o
     return priority, true
 }
 
-@(private)
 sfcbranch_priority_set :: proc(sfcbranch: rawptr, priority: SFCPriorityValue) -> (ok: bool) {
     ok = false
 
@@ -53,12 +51,11 @@ sfcbranch_priority_set :: proc(sfcbranch: rawptr, priority: SFCPriorityValue) ->
 }
 
 sfcbranch_elements :: proc {
-    sfcbranch_elements_,
+    sfcbranch_elements_get,
     sfcbranch_elements_set,
 }
 
-@(private)
-sfcbranch_elements_ :: proc(sfcbranch: rawptr) -> (elements: rawptr, ok: bool) {
+sfcbranch_elements_get :: proc(sfcbranch: rawptr) -> (elements: rawptr, ok: bool) {
     elements = nil
     ok = false
 
@@ -71,7 +68,6 @@ sfcbranch_elements_ :: proc(sfcbranch: rawptr) -> (elements: rawptr, ok: bool) {
     return elements, true
 }
 
-@(private)
 sfcbranch_elements_set :: proc(sfcbranch: rawptr, elements: rawptr) -> (ok: bool) {
     ok = false
 

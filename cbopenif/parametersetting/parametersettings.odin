@@ -22,12 +22,11 @@ ParameterSettingsVTable :: struct {
 }
 
 parametersettings_add :: proc {
-    parametersettings_add_,
+    parametersettings_add_get,
     parametersettings_add_at_index,
 }
 
-@(private)
-parametersettings_add_ :: proc(parameter_settings: rawptr, parameter_setting: rawptr) -> (ok: bool) {
+parametersettings_add_get :: proc(parameter_settings: rawptr, parameter_setting: rawptr) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return

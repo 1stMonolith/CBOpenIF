@@ -97,12 +97,11 @@ globalvariable_serialize :: proc(global_variable: rawptr) -> (xml: string, ok: b
 }
 
 globalvariable_name :: proc {
-    globalvariable_name_,
+    globalvariable_name_get,
     globalvariable_name_set,
 }
 
-@(private)
-globalvariable_name_ :: proc(global_variable: rawptr) -> (name: string, ok: bool) {
+globalvariable_name_get :: proc(global_variable: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -117,7 +116,6 @@ globalvariable_name_ :: proc(global_variable: rawptr) -> (name: string, ok: bool
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_name_set :: proc(global_variable: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -133,12 +131,11 @@ globalvariable_name_set :: proc(global_variable: rawptr, name: string) -> (ok: b
 }
 
 globalvariable_type_name :: proc {
-    globalvariable_type_name_,
+    globalvariable_type_name_get,
     globalvariable_type_name_set,
 }
 
-@(private)
-globalvariable_type_name_ :: proc(global_variable: rawptr) -> (type_name: string, ok: bool) {
+globalvariable_type_name_get :: proc(global_variable: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -153,7 +150,6 @@ globalvariable_type_name_ :: proc(global_variable: rawptr) -> (type_name: string
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_type_name_set :: proc(global_variable: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -169,12 +165,11 @@ globalvariable_type_name_set :: proc(global_variable: rawptr, type_name: string)
 }
 
 globalvariable_attribute :: proc {
-    globalvariable_attribute_,
+    globalvariable_attribute_get,
     globalvariable_attribute_set,
 }
 
-@(private)
-globalvariable_attribute_ :: proc(global_variable: rawptr) -> (attribute: string, ok: bool) {
+globalvariable_attribute_get :: proc(global_variable: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -189,7 +184,6 @@ globalvariable_attribute_ :: proc(global_variable: rawptr) -> (attribute: string
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_attribute_set :: proc(global_variable: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
@@ -205,12 +199,11 @@ globalvariable_attribute_set :: proc(global_variable: rawptr, attribute: string)
 }
 
 globalvariable_initial_value :: proc {
-    globalvariable_initial_value_,
+    globalvariable_initial_value_get,
     globalvariable_initial_value_set,
 }
 
-@(private)
-globalvariable_initial_value_ :: proc(global_variable: rawptr) -> (inital_value: string, ok: bool) {
+globalvariable_initial_value_get :: proc(global_variable: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
@@ -225,7 +218,6 @@ globalvariable_initial_value_ :: proc(global_variable: rawptr) -> (inital_value:
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_initial_value_set :: proc(global_variable: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
@@ -241,12 +233,11 @@ globalvariable_initial_value_set :: proc(global_variable: rawptr, inital_value: 
 }
 
 globalvariable_description :: proc {
-    globalvariable_description_,
+    globalvariable_description_get,
     globalvariable_description_set,
 }
 
-@(private)
-globalvariable_description_ :: proc(global_variable: rawptr) -> (description: string, ok: bool) {
+globalvariable_description_get :: proc(global_variable: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -261,7 +252,6 @@ globalvariable_description_ :: proc(global_variable: rawptr) -> (description: st
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_description_set :: proc(global_variable: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -277,12 +267,11 @@ globalvariable_description_set :: proc(global_variable: rawptr, description: str
 }
 
 globalvariable_read_permission :: proc {
-    globalvariable_read_permission_,
+    globalvariable_read_permission_get,
     globalvariable_read_permission_set,
 }
 
-@(private)
-globalvariable_read_permission_ :: proc(global_variable: rawptr) -> (read_permission: string, ok: bool) {
+globalvariable_read_permission_get :: proc(global_variable: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -297,7 +286,6 @@ globalvariable_read_permission_ :: proc(global_variable: rawptr) -> (read_permis
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_read_permission_set :: proc(global_variable: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
@@ -313,12 +301,11 @@ globalvariable_read_permission_set :: proc(global_variable: rawptr, read_permiss
 }
 
 globalvariable_write_permission :: proc {
-    globalvariable_write_permission_,
+    globalvariable_write_permission_get,
     globalvariable_write_permission_set,
 }
 
-@(private)
-globalvariable_write_permission_ :: proc(global_variable: rawptr) -> (write_permission: string, ok: bool) {
+globalvariable_write_permission_get :: proc(global_variable: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -333,7 +320,6 @@ globalvariable_write_permission_ :: proc(global_variable: rawptr) -> (write_perm
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_write_permission_set :: proc(global_variable: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
@@ -349,12 +335,11 @@ globalvariable_write_permission_set :: proc(global_variable: rawptr, write_permi
 }
 
 globalvariable_authentication_level :: proc {
-    globalvariable_authentication_level_,
+    globalvariable_authentication_level_get,
     globalvariable_authentication_level_set,
 }
 
-@(private)
-globalvariable_authentication_level_ :: proc(global_variable: rawptr) -> (authentication_level: string, ok: bool) {
+globalvariable_authentication_level_get :: proc(global_variable: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -369,7 +354,6 @@ globalvariable_authentication_level_ :: proc(global_variable: rawptr) -> (authen
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_authentication_level_set :: proc(global_variable: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
@@ -385,12 +369,11 @@ globalvariable_authentication_level_set :: proc(global_variable: rawptr, authent
 }
 
 globalvariable_graph_nodes :: proc {
-    globalvariable_graph_nodes_,
+    globalvariable_graph_nodes_get,
     globalvariable_graph_nodes_set,
 }
 
-@(private)
-globalvariable_graph_nodes_ :: proc(global_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
+globalvariable_graph_nodes_get :: proc(global_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
     graph_nodes = nil
     ok = false
 
@@ -403,7 +386,6 @@ globalvariable_graph_nodes_ :: proc(global_variable: rawptr) -> (graph_nodes: ra
     return graph_nodes, true
 }
 
-@(private)
 globalvariable_graph_nodes_set :: proc(global_variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
     ok = false
 
@@ -416,7 +398,7 @@ globalvariable_graph_nodes_set :: proc(global_variable: rawptr, graph_nodes: raw
     return true
 }
 
-globalvariable_type_guid :: proc(global_variable: rawptr) -> (guid: string, ok: bool) {
+globalvariable_type_guid_get :: proc(global_variable: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -431,7 +413,7 @@ globalvariable_type_guid :: proc(global_variable: rawptr) -> (guid: string, ok: 
     return bstr.to_string(bs), true
 }
 
-globalvariable_type_path :: proc(global_variable: rawptr) -> (path: string, ok: bool) {
+globalvariable_type_path_get :: proc(global_variable: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -447,12 +429,11 @@ globalvariable_type_path :: proc(global_variable: rawptr) -> (path: string, ok: 
 }
 
 globalvariable_access_level :: proc {
-    globalvariable_access_level_,
+    globalvariable_access_level_get,
     globalvariable_access_level_set,
 }
 
-@(private)
-globalvariable_access_level_ :: proc(global_variable: rawptr) -> (access_level: string, ok: bool) {
+globalvariable_access_level_get :: proc(global_variable: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -467,7 +448,6 @@ globalvariable_access_level_ :: proc(global_variable: rawptr) -> (access_level: 
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_access_level_set :: proc(global_variable: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
@@ -483,12 +463,11 @@ globalvariable_access_level_set :: proc(global_variable: rawptr, access_level: s
 }
 
 globalvariable_safety_type :: proc {
-    globalvariable_safety_type_,
+    globalvariable_safety_type_get,
     globalvariable_safety_type_set,
 }
 
-@(private)
-globalvariable_safety_type_ :: proc(global_variable: rawptr) -> (safety_type: string, ok: bool) {
+globalvariable_safety_type_get :: proc(global_variable: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -503,7 +482,6 @@ globalvariable_safety_type_ :: proc(global_variable: rawptr) -> (safety_type: st
     return bstr.to_string(bs), true
 }
 
-@(private)
 globalvariable_safety_type_set :: proc(global_variable: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 

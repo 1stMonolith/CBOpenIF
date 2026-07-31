@@ -34,12 +34,11 @@ sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: rawptr, ok: bool) {
 }
 
 sfcsubsequence_name :: proc {
-    sfcsubsequence_name_,
+    sfcsubsequence_name_get,
     sfcsubsequence_name_set,
 }
 
-@(private)
-sfcsubsequence_name_ :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bool) {
+sfcsubsequence_name_get :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -54,7 +53,6 @@ sfcsubsequence_name_ :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bool)
     return bstr.to_string(bs), true
 }
 
-@(private)
 sfcsubsequence_name_set :: proc(sfcsubsequence: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -70,12 +68,11 @@ sfcsubsequence_name_set :: proc(sfcsubsequence: rawptr, name: string) -> (ok: bo
 }
 
 sfcsubsequence_elements :: proc {
-    sfcsubsequence_elements_,
+    sfcsubsequence_elements_get,
     sfcsubsequence_elements_set,
 }
 
-@(private)
-sfcsubsequence_elements_ :: proc(sfcsubsequence: rawptr) -> (sfcelements: rawptr, ok: bool) {
+sfcsubsequence_elements_get :: proc(sfcsubsequence: rawptr) -> (sfcelements: rawptr, ok: bool) {
     sfcelements = nil
     ok = false
 
@@ -88,7 +85,6 @@ sfcsubsequence_elements_ :: proc(sfcsubsequence: rawptr) -> (sfcelements: rawptr
     return sfcelements, true
 }
 
-@(private)
 sfcsubsequence_elements_set :: proc(sfcsubsequence: rawptr, sfcelements: rawptr) -> (ok: bool) {
     ok = false
 

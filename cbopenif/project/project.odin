@@ -1,6 +1,11 @@
 package project
 
-project_new :: proc(name, dir, guid, template: string) -> (ok: bool) {
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../cbopen"
+
+new :: proc(name, dir, guid, template: string) -> (ok: bool) {
     if !controlbuilder.connected() do return false
     bstr_name     := bstr.from_string(name)
     bstr_dir      := bstr.from_string(dir)
@@ -12,36 +17,36 @@ project_new :: proc(name, dir, guid, template: string) -> (ok: bool) {
         bstr.free(bstr_guid)
         bstr.free(bstr_template)
     }
-    hr := cbopenif->NewProject(bstr_name, bstr_dir, bstr_guid, bstr_template)
+    hr := cbopen.cbopenif->NewProject(bstr_name, bstr_dir, bstr_guid, bstr_template)
     if com.failed(hr) {
         return false
     }
     return true
 }
 
-project_open :: proc(file_path: string) -> (ok: bool) {
+open :: proc(file_path: string) -> (ok: bool) {
     if !controlbuilder.connected() do return false
     bstr_file_path     := bstr.from_string(file_path)
     defer bstr.free(bstr_file_path)
-    hr := cbopenif->OpenProject(bstr_file_path)
+    hr := cbopen.cbopenif->OpenProject(bstr_file_path)
     if com.failed(hr) {
         return false
     }
     return true
 }
 
-project_close :: proc() -> (ok: bool) {
+close :: proc() -> (ok: bool) {
     if !controlbuilder.connected() do return false
-    hr := cbopenif->CloseProject()
+    hr := cbopen.cbopenif->CloseProject()
     if com.failed(hr) {
         return false
     }
     return true
 }
 
-project_refresh :: proc() -> (ok: bool) {
+refresh :: proc() -> (ok: bool) {
     if !controlbuilder.connected() do return false
-    hr := cbopenif->RefreshProject()
+    hr := cbopen.cbopenif->RefreshProject()
     if com.failed(hr) {
         return false
     }

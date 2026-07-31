@@ -28,7 +28,6 @@ parameters_add :: proc {
     parameters_add_at_index,
 }
 
-@(private)
 parameters_add_ :: proc(parameters: rawptr, parameter: rawptr) -> (ok: bool) {
     ok = false
 

@@ -105,12 +105,11 @@ variable_serialize :: proc(variable: rawptr) -> (xml: string, ok: bool) {
 }
 
 variable_name :: proc {
-    variable_name_,
+    variable_name_get,
     variable_name_set,
 }
 
-@(private)
-variable_name_ :: proc(variable: rawptr) -> (name: string, ok: bool) {
+variable_name_get :: proc(variable: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -125,7 +124,6 @@ variable_name_ :: proc(variable: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_name_set :: proc(variable: rawptr, name: string) -> (ok: bool) {
     ok = false
 
@@ -141,12 +139,11 @@ variable_name_set :: proc(variable: rawptr, name: string) -> (ok: bool) {
 }
 
 variable_type_name :: proc {
-    variable_type_name_,
+    variable_type_name_get,
     variable_type_name_set,
 }
 
-@(private)
-variable_type_name_ :: proc(variable: rawptr) -> (type_name: string, ok: bool) {
+variable_type_name_get :: proc(variable: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -161,7 +158,6 @@ variable_type_name_ :: proc(variable: rawptr) -> (type_name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_type_name_set :: proc(variable: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
@@ -177,12 +173,11 @@ variable_type_name_set :: proc(variable: rawptr, type_name: string) -> (ok: bool
 }
 
 variable_attribute :: proc {
-    variable_attribute_,
+    variable_attribute_get,
     variable_attribute_set,
 }
 
-@(private)
-variable_attribute_ :: proc(variable: rawptr) -> (attribute: string, ok: bool) {
+variable_attribute_get :: proc(variable: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -197,7 +192,6 @@ variable_attribute_ :: proc(variable: rawptr) -> (attribute: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_attribute_set :: proc(variable: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
@@ -213,12 +207,11 @@ variable_attribute_set :: proc(variable: rawptr, attribute: string) -> (ok: bool
 }
 
 variable_initial_value :: proc {
-    variable_initial_value_,
+    variable_initial_value_get,
     variable_initial_value_set,
 }
 
-@(private)
-variable_initial_value_ :: proc(variable: rawptr) -> (inital_value: string, ok: bool) {
+variable_initial_value_get :: proc(variable: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
@@ -233,7 +226,6 @@ variable_initial_value_ :: proc(variable: rawptr) -> (inital_value: string, ok: 
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_initial_value_set :: proc(variable: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
@@ -249,12 +241,11 @@ variable_initial_value_set :: proc(variable: rawptr, inital_value: string) -> (o
 }
 
 variable_description :: proc {
-    variable_description_,
+    variable_description_get,
     variable_description_set,
 }
 
-@(private)
-variable_description_ :: proc(variable: rawptr) -> (description: string, ok: bool) {
+variable_description_get :: proc(variable: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -269,7 +260,6 @@ variable_description_ :: proc(variable: rawptr) -> (description: string, ok: boo
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_description_set :: proc(variable: rawptr, description: string) -> (ok: bool) {
     ok = false
 
@@ -285,12 +275,11 @@ variable_description_set :: proc(variable: rawptr, description: string) -> (ok: 
 }
 
 variable_read_permission :: proc {
-    variable_read_permission_,
+    variable_read_permission_get,
     variable_read_permission_set,
 }
 
-@(private)
-variable_read_permission_ :: proc(variable: rawptr) -> (read_permission: string, ok: bool) {
+variable_read_permission_get :: proc(variable: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -305,7 +294,6 @@ variable_read_permission_ :: proc(variable: rawptr) -> (read_permission: string,
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_read_permission_set :: proc(variable: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
@@ -321,12 +309,11 @@ variable_read_permission_set :: proc(variable: rawptr, read_permission: string) 
 }
 
 variable_write_permission :: proc {
-    variable_write_permission_,
+    variable_write_permission_get,
     variable_write_permission_set,
 }
 
-@(private)
-variable_write_permission_ :: proc(variable: rawptr) -> (write_permission: string, ok: bool) {
+variable_write_permission_get :: proc(variable: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -341,7 +328,6 @@ variable_write_permission_ :: proc(variable: rawptr) -> (write_permission: strin
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_write_permission_set :: proc(variable: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
@@ -357,12 +343,11 @@ variable_write_permission_set :: proc(variable: rawptr, write_permission: string
 }
 
 variable_authentication_level :: proc {
-    variable_authentication_level_,
+    variable_authentication_level_get,
     variable_authentication_level_set,
 }
 
-@(private)
-variable_authentication_level_ :: proc(variable: rawptr) -> (authentication_level: string, ok: bool) {
+variable_authentication_level_get :: proc(variable: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -377,7 +362,6 @@ variable_authentication_level_ :: proc(variable: rawptr) -> (authentication_leve
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_authentication_level_set :: proc(variable: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
@@ -393,12 +377,11 @@ variable_authentication_level_set :: proc(variable: rawptr, authentication_level
 }
 
 variable_batch_property :: proc {
-    variable_batch_property_,
+    variable_batch_property_get,
     variable_batch_property_set,
 }
 
-@(private)
-variable_batch_property_ :: proc(variable: rawptr) -> (batch_property: string, ok: bool) {
+variable_batch_property_get :: proc(variable: rawptr) -> (batch_property: string, ok: bool) {
     batch_property = ""
     ok = false
 
@@ -413,7 +396,6 @@ variable_batch_property_ :: proc(variable: rawptr) -> (batch_property: string, o
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_batch_property_set :: proc(variable: rawptr, batch_property: string) -> (ok: bool) {
     ok = false
 
@@ -429,12 +411,11 @@ variable_batch_property_set :: proc(variable: rawptr, batch_property: string) ->
 }
 
 variable_graph_nodes :: proc {
-    variable_graph_nodes_,
+    variable_graph_nodes_get,
     variable_graph_nodes_set,
 }
 
-@(private)
-variable_graph_nodes_ :: proc(variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
+variable_graph_nodes_get :: proc(variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
     graph_nodes = nil
     ok = false
 
@@ -447,7 +428,6 @@ variable_graph_nodes_ :: proc(variable: rawptr) -> (graph_nodes: rawptr, ok: boo
     return graph_nodes, true
 }
 
-@(private)
 variable_graph_nodes_set :: proc(variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
     ok = false
 
@@ -460,7 +440,7 @@ variable_graph_nodes_set :: proc(variable: rawptr, graph_nodes: rawptr) -> (ok: 
     return true
 }
 
-variable_type_guid :: proc(variable: rawptr) -> (guid: string, ok: bool) {
+variable_type_guid_get :: proc(variable: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -475,7 +455,7 @@ variable_type_guid :: proc(variable: rawptr) -> (guid: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-variable_type_path :: proc(variable: rawptr) -> (path: string, ok: bool) {
+variable_type_path_get :: proc(variable: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -491,12 +471,11 @@ variable_type_path :: proc(variable: rawptr) -> (path: string, ok: bool) {
 }
 
 variable_access_level :: proc {
-    variable_access_level_,
+    variable_access_level_get,
     variable_access_level_set,
 }
 
-@(private)
-variable_access_level_ :: proc(variable: rawptr) -> (access_level: string, ok: bool) {
+variable_access_level_get :: proc(variable: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -511,7 +490,6 @@ variable_access_level_ :: proc(variable: rawptr) -> (access_level: string, ok: b
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_access_level_set :: proc(variable: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
@@ -527,12 +505,11 @@ variable_access_level_set :: proc(variable: rawptr, access_level: string) -> (ok
 }
 
 variable_safety_type :: proc {
-    variable_safety_type_,
+    variable_safety_type_get,
     variable_safety_type_set,
 }
 
-@(private)
-variable_safety_type_ :: proc(variable: rawptr) -> (safety_type: string, ok: bool) {
+variable_safety_type_get :: proc(variable: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -547,7 +524,6 @@ variable_safety_type_ :: proc(variable: rawptr) -> (safety_type: string, ok: boo
     return bstr.to_string(bs), true
 }
 
-@(private)
 variable_safety_type_set :: proc(variable: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 

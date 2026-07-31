@@ -36,12 +36,11 @@ graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos
 }
 
 graphpos_x :: proc {
-    graphpos_x_,
+    graphpos_x_get,
     graphpos_x_set,
 }
 
-@(private)
-graphpos_x_ :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
+graphpos_x_get :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -54,7 +53,6 @@ graphpos_x_ :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-@(private)
 graphpos_x_set :: proc(graphpos: rawptr, x: f64) -> (ok: bool) {
     ok = false
 
@@ -68,12 +66,11 @@ graphpos_x_set :: proc(graphpos: rawptr, x: f64) -> (ok: bool) {
 }
 
 graphpos_y :: proc {
-    graphpos_y_,
+    graphpos_y_get,
     graphpos_y_set,
 }
 
-@(private)
-graphpos_y_ :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
+graphpos_y_get :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -86,7 +83,6 @@ graphpos_y_ :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-@(private)
 graphpos_y_set :: proc(graphpos: rawptr, y: f64) -> (ok: bool) {
     ok = false
 
@@ -100,12 +96,11 @@ graphpos_y_set :: proc(graphpos: rawptr, y: f64) -> (ok: bool) {
 }
 
 graphpos_rotation :: proc {
-    graphpos_rotation_,
+    graphpos_rotation_get,
     graphpos_rotation_set,
 }
 
-@(private)
-graphpos_rotation_ :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
+graphpos_rotation_get :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
     rotation = 0
     ok = false
 
@@ -118,7 +113,6 @@ graphpos_rotation_ :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
     return rotation, true
 }
 
-@(private)
 graphpos_rotation_set :: proc(graphpos: rawptr, rotation: f64) -> (ok: bool) {
     ok = false
 
@@ -132,12 +126,11 @@ graphpos_rotation_set :: proc(graphpos: rawptr, rotation: f64) -> (ok: bool) {
 }
 
 graphpos_xscale :: proc {
-    graphpos_xscale_,
+    graphpos_xscale_get,
     graphpos_xscale_set,
 }
 
-@(private)
-graphpos_xscale_ :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
+graphpos_xscale_get :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
     xscale = 0
     ok = false
 
@@ -150,7 +143,6 @@ graphpos_xscale_ :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
     return xscale, true
 }
 
-@(private)
 graphpos_xscale_set :: proc(graphpos: rawptr, xscale: f64) -> (ok: bool) {
     ok = false
 
@@ -164,12 +156,11 @@ graphpos_xscale_set :: proc(graphpos: rawptr, xscale: f64) -> (ok: bool) {
 }
 
 graphpos_yscale :: proc {
-    graphpos_yscale_,
+    graphpos_yscale_get,
     graphpos_yscale_set,
 }
 
-@(private)
-graphpos_yscale_ :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
+graphpos_yscale_get :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
     yscale = 0
     ok = false
 
@@ -182,7 +173,6 @@ graphpos_yscale_ :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
     return yscale, true
 }
 
-@(private)
 graphpos_yscale_set :: proc(graphpos: rawptr, yscale: f64) -> (ok: bool) {
     ok = false
 
