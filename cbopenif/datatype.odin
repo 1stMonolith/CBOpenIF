@@ -362,6 +362,7 @@ datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
 
     count, ok = components_count(components)
     if !ok do return
@@ -384,6 +385,7 @@ datatype_component_remove_by_name :: proc(datatype: DataType, name: string) -> (
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
     
     ok = components_remove(components, name)
     if !ok do return
@@ -401,6 +403,7 @@ datatype_component_remove_by_index :: proc(datatype: DataType, index: i32) -> (o
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
     
     ok = components_remove(components, index)
     if !ok do return
@@ -424,6 +427,7 @@ datatype_component_add_ :: proc(datatype: DataType, component: Component) -> (ok
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
 
     ok = components_add(components, component)
     if !ok do return
@@ -441,6 +445,7 @@ datatype_component_add_at_index :: proc(datatype: DataType, component: Component
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
 
     ok = components_add_at_index(components, component, index)
     if !ok do return
@@ -464,6 +469,7 @@ datatype_component_by_name :: proc(datatype: DataType, name: string) -> (compone
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
     
     component, ok = components_component_by_name(components, name)
     if !ok do return
@@ -482,6 +488,7 @@ datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (componen
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
     
     component, ok = components_component_by_index(components, index)
     if !ok do return
@@ -499,10 +506,11 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     components: Components
     components, ok = datatype_components(datatype)
     if !ok do return
+    defer components_release(components)
     
     bstr_name := string_to_bstr(name)
-    bstr_free(bstr_name)
-    components_component_index(components, name)
+    defer bstr_free(bstr_name)
+    index, ok = components_component_index(components, name)
     if !ok do return
     
     return index, true
