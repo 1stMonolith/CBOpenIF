@@ -46,7 +46,7 @@ applicationvariables_deserialize :: proc(application_variables: ^rawptr, xml: st
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeApplicationVariables(&bstr, cast(^rawptr)application_variables)
+    hr := factoryif->DeserializeApplicationVariables(&bs, cast(^rawptr)application_variables)
     if com.failed(hr) do return
     
     return true

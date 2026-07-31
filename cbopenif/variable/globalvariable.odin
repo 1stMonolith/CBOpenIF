@@ -74,7 +74,7 @@ globalvariable_deserialize :: proc(global_variable: ^rawptr, xml: string) -> (ok
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeGlobalVariable(&bstr, cast(^rawptr)global_variable)
+    hr := factoryif->DeserializeGlobalVariable(&bs, cast(^rawptr)global_variable)
     if com.failed(hr) do return
     
     return true

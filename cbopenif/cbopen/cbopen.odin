@@ -1,27 +1,14 @@
 package cbopen
 
 import "../com"
-@(private) HResult        :: com.HResult
-@(private) GUID           :: com.GUID
-@(private) IUnknownIF     :: com.IUnknownIF
-@(private) IUnknownVTable :: com.IUnknownVTable
-
 import "../bstr"
-@(private) BStr :: bstr.BStr
-
 import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) GUID        :: com.GUID
+@(private) BStr        :: bstr.BStr
 @(private) Variant     :: variant.Variant
 @(private) VariantBool :: variant.VariantBool
-
-import "../enumtypes"
-@(private) SignalType              :: enumtypes.SignalType
-@(private) CodeBlockType           :: enumtypes.CodeBlockType
-@(private) VariableType            :: enumtypes.VariableType
-@(private) ParameterType           :: enumtypes.ParameterType
-@(private) FolderType              :: enumtypes.FolderType
-@(private) HardwareFileType        :: enumtypes.HardwareFileType
-@(private) ExecutionInstanceType   :: enumtypes.ExecutionInstanceType
-@(private) HardwareLibraryFileType :: enumtypes.HardwareLibraryFileType
 
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,
@@ -134,17 +121,17 @@ CBOpenVTable :: struct {
     SetSetting:                          proc "system" (this: ^CBOpenIF, name: BStr, value: Variant) -> HResult,
     GetApplicationControlModules:        proc "system" (this: ^CBOpenIF, name: BStr, content: ^BStr) -> HResult,
     SetApplicationControlModules:        proc "system" (this: ^CBOpenIF, name, content: BStr, messages: ^BStr) -> HResult,
-    NewParameter:                        proc "system" (this: ^CBOpenIF, type: ParameterType, Name, data_type, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
-    GetParameter:                        proc "system" (this: ^CBOpenIF, type: ParameterType, path: BStr, content: ^BStr) -> HResult,
-    SetParameter:                        proc "system" (this: ^CBOpenIF, type: ParameterType, path, content: BStr, messages: ^BStr) -> HResult,
-    DeleteParameter:                     proc "system" (this: ^CBOpenIF, type: ParameterType, path: BStr) -> HResult,
-    NewVariable:                         proc "system" (this: ^CBOpenIF, type: VariableType, Name, data_type, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
-    GetVariable:                         proc "system" (this: ^CBOpenIF, type: VariableType, path: BStr, content: ^BStr) -> HResult,
-    SetVariable:                         proc "system" (this: ^CBOpenIF, type: VariableType, path, content: BStr, messages: ^BStr) -> HResult,
-    DeleteVariable:                      proc "system" (this: ^CBOpenIF, type: VariableType, path: BStr) -> HResult,
+    NewParameter:                        proc "system" (this: ^CBOpenIF, type: i32, Name, data_type, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
+    GetParameter:                        proc "system" (this: ^CBOpenIF, type: i32, path: BStr, content: ^BStr) -> HResult,
+    SetParameter:                        proc "system" (this: ^CBOpenIF, type: i32, path, content: BStr, messages: ^BStr) -> HResult,
+    DeleteParameter:                     proc "system" (this: ^CBOpenIF, type: i32, path: BStr) -> HResult,
+    NewVariable:                         proc "system" (this: ^CBOpenIF, type: i32, Name, data_type, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
+    GetVariable:                         proc "system" (this: ^CBOpenIF, type: i32, path: BStr, content: ^BStr) -> HResult,
+    SetVariable:                         proc "system" (this: ^CBOpenIF, type: i32, path, content: BStr, messages: ^BStr) -> HResult,
+    DeleteVariable:                      proc "system" (this: ^CBOpenIF, type: i32, path: BStr) -> HResult,
     GetCMConnection:                     proc "system" (this: ^CBOpenIF, path: BStr, content: ^BStr) -> HResult,
     SetCMConnection:                     proc "system" (this: ^CBOpenIF, path, content: BStr, messages: ^BStr) -> HResult,
-    NewCodeBlock:                        proc "system" (this: ^CBOpenIF, type: CodeBlockType, Name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
+    NewCodeBlock:                        proc "system" (this: ^CBOpenIF, type: i32, Name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
     GetCodeBlock:                        proc "system" (this: ^CBOpenIF, path: BStr, content: ^BStr) -> HResult,
     SetCodeBlock:                        proc "system" (this: ^CBOpenIF, Path, content: BStr, messages: ^BStr) -> HResult,
     DeleteCodeBlock:                     proc "system" (this: ^CBOpenIF, path: BStr) -> HResult,
@@ -205,7 +192,7 @@ CBOpenVTable :: struct {
     CopyHardwareLibrary:                 proc "system" (this: ^CBOpenIF, sourceHardwareLibraryName, destinationHardwareLibraryName, destinationHardwareLibraryGUID: BStr) -> HResult,
     RefreshHardwareLibrary:              proc "system" (this: ^CBOpenIF, name: BStr) -> HResult,
     ReplaceConnectedHardwareLibrary:     proc "system" (this: ^CBOpenIF, controller_name, connectedHardwareLibraryName, replacingHardwareLibraryName: BStr) -> HResult,
-    AddHardwareTypeFile:                 proc "system" (this: ^CBOpenIF, name, hardwareTypeGUID: BStr, fileType: HardwareFileType, file_path, version, buildVersion, buildDate, fwName: BStr) -> HResult,
+    AddHardwareTypeFile:                 proc "system" (this: ^CBOpenIF, name, hardwareTypeGUID: BStr, fileType: i32, file_path, version, buildVersion, buildDate, fwName: BStr) -> HResult,
     InsertHardwareType:                  proc "system" (this: ^CBOpenIF, type_name, library_name, hardwareTypeGUID, hardwareTypeID: BStr) -> HResult,
     ReplaceConnectedLibrary:             proc "system" (this: ^CBOpenIF, app_or_lib_name, connectedLibraryName, replacingLibraryName: BStr) -> HResult,
     NewProjectInEnvironment:             proc "system" (this: ^CBOpenIF, projectName, guid, template_name, environmentGuidOrName: BStr) -> HResult,
@@ -216,11 +203,11 @@ CBOpenVTable :: struct {
     WriteInformation:                    proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
     WriteWarning:                        proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
     WriteError:                          proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
-    NewFolder:                           proc "system" (this: ^CBOpenIF, type: FolderType, name, path, guid: BStr) -> HResult,
-    RenameFolder:                        proc "system" (this: ^CBOpenIF, type: FolderType, path, new_name: BStr) -> HResult,
-    DeleteFolder:                        proc "system" (this: ^CBOpenIF, type: FolderType, path: BStr) -> HResult,
-    MoveFolder:                          proc "system" (this: ^CBOpenIF, type: FolderType, path, new_path: BStr) -> HResult,
-    MoveFolderObject:                    proc "system" (this: ^CBOpenIF, type: FolderType, objectName, new_path: BStr) -> HResult,
+    NewFolder:                           proc "system" (this: ^CBOpenIF, type: i32, name, path, guid: BStr) -> HResult,
+    RenameFolder:                        proc "system" (this: ^CBOpenIF, type: i32, path, new_name: BStr) -> HResult,
+    DeleteFolder:                        proc "system" (this: ^CBOpenIF, type: i32, path: BStr) -> HResult,
+    MoveFolder:                          proc "system" (this: ^CBOpenIF, type: i32, path, new_path: BStr) -> HResult,
+    MoveFolderObject:                    proc "system" (this: ^CBOpenIF, type: i32, objectName, new_path: BStr) -> HResult,
     NewDiagram:                          proc "system" (this: ^CBOpenIF, name, application_name, content: BStr, messages: ^BStr) -> HResult,
     GetDiagram:                          proc "system" (this: ^CBOpenIF, path: BStr, content: ^BStr) -> HResult,
     SetDiagram:                          proc "system" (this: ^CBOpenIF, path, content: BStr, messages: ^BStr) -> HResult,
@@ -228,8 +215,8 @@ CBOpenVTable :: struct {
     RenameDiagram:                       proc "system" (this: ^CBOpenIF, path, newDiagramName: BStr) -> HResult,
     InsertDiagram:                       proc "system" (this: ^CBOpenIF, name, application_name, guid: BStr) -> HResult,
     InsertHardwareDefinitionFile:        proc "system" (this: ^CBOpenIF, name, file_path: BStr, fileAdded: ^Variant, messages: ^BStr) -> HResult,
-    GetExecutionOrder:                   proc "system" (this: ^CBOpenIF, typeOfExecutionInstance: ExecutionInstanceType, application_name: BStr, content: ^BStr) -> HResult,
-    SetExecutionOrder:                   proc "system" (this: ^CBOpenIF, typeOfExecutionInstance: ExecutionInstanceType, application_name, content: BStr, messages: ^BStr) -> HResult,
+    GetExecutionOrder:                   proc "system" (this: ^CBOpenIF, typeOfExecutionInstance: i32, application_name: BStr, content: ^BStr) -> HResult,
+    SetExecutionOrder:                   proc "system" (this: ^CBOpenIF, typeOfExecutionInstance: i32, application_name, content: BStr, messages: ^BStr) -> HResult,
     NewDiagramType:                      proc "system" (this: ^CBOpenIF, diagramTypeName, app_or_lib_name, content: BStr, messages: ^BStr) -> HResult,
     GetDiagramType:                      proc "system" (this: ^CBOpenIF, diagramTypePath: BStr, diagramTypeContent: ^BStr) -> HResult,
     SetDiagramType:                      proc "system" (this: ^CBOpenIF, diagramTypePath, diagramTypeContent: BStr, messages: ^BStr) -> HResult,
@@ -241,13 +228,13 @@ CBOpenVTable :: struct {
     SetDiagramInstance:                  proc "system" (this: ^CBOpenIF, path, content: BStr, messages: ^BStr) -> HResult,
     DeleteDiagramInstance:               proc "system" (this: ^CBOpenIF, path: BStr) -> HResult,
     RenameDiagramInstance:               proc "system" (this: ^CBOpenIF, path, new_name: BStr) -> HResult,
-    NewSignal:                           proc "system" (this: ^CBOpenIF, type: SignalType, name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
-    GetSignal:                           proc "system" (this: ^CBOpenIF, type: SignalType, name, path_to_parent: BStr, content: ^BStr) -> HResult,
-    SetSignal:                           proc "system" (this: ^CBOpenIF, type: SignalType, name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
-    DeleteSignal:                        proc "system" (this: ^CBOpenIF, type: SignalType, name, path_to_parent: BStr) -> HResult,
-    AddHardwareLibraryFile:              proc "system" (this: ^CBOpenIF, name: BStr, typeOfFile: HardwareLibraryFileType, file_path, version: BStr) -> HResult,
+    NewSignal:                           proc "system" (this: ^CBOpenIF, type: i32, name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
+    GetSignal:                           proc "system" (this: ^CBOpenIF, type: i32, name, path_to_parent: BStr, content: ^BStr) -> HResult,
+    SetSignal:                           proc "system" (this: ^CBOpenIF, type: i32, name, path_to_parent, content: BStr, messages: ^BStr) -> HResult,
+    DeleteSignal:                        proc "system" (this: ^CBOpenIF, type: i32, name, path_to_parent: BStr) -> HResult,
+    AddHardwareLibraryFile:              proc "system" (this: ^CBOpenIF, name: BStr, typeOfFile: i32, file_path, version: BStr) -> HResult,
     GetHardwareLibraryFiles:             proc "system" (this: ^CBOpenIF, name: BStr, hardwareLibraryFiles: ^BStr) -> HResult,
-    DeleteHardwareLibraryFile:           proc "system" (this: ^CBOpenIF, name: BStr, typeOfFile: HardwareLibraryFileType, file_name: BStr) -> HResult,
+    DeleteHardwareLibraryFile:           proc "system" (this: ^CBOpenIF, name: BStr, typeOfFile: i32, file_name: BStr) -> HResult,
     SetHardwareType:                     proc "system" (this: ^CBOpenIF, library_name, type_name, content: BStr, messages: ^BStr) -> HResult,
     GetHardwareDefinitionInfo:           proc "system" (this: ^CBOpenIF, library_name, type_name: BStr, content: ^BStr) -> HResult,
     InsertHardwareUnit:                  proc "system" (this: ^CBOpenIF, parentHwPath, guid: BStr) -> HResult,

@@ -38,8 +38,8 @@ sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time :
     defer bstr.free(bstr_name)
     hr := factoryif->NewSFCCodeBlock1(
         bstr_name,
-        bool_to_variantbool(seq_control),
-        bool_to_variantbool(step_elapsed_time),
+        variant.bool_to_variantbool(seq_control),
+        variant.bool_to_variantbool(step_elapsed_time),
         cast(^rawptr)&sfccodeblock,
     )
     if com.failed(hr) do return
@@ -100,7 +100,7 @@ sfccodeblock_seq_control_ :: proc(sfccodeblock: rawptr) -> (seq_control: bool, o
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -110,7 +110,7 @@ sfccodeblock_seq_control_set :: proc(sfccodeblock: rawptr, seq_control: bool) ->
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(bool_to_variantbool(seq_control))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(variant.bool_to_variantbool(seq_control))
     if com.failed(hr) do return
 
     return true
@@ -133,7 +133,7 @@ sfccodeblock_step_elapsed_time_ :: proc(sfccodeblock: rawptr) -> (step_elapsed_t
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimeGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -143,7 +143,7 @@ sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: rawptr, step_elapsed_ti
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(bool_to_variantbool(step_elapsed_time))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(variant.bool_to_variantbool(step_elapsed_time))
     if com.failed(hr) do return
 
     return true
@@ -166,7 +166,7 @@ sfccodeblock_viewer_aspect_ :: proc(sfccodeblock: rawptr) -> (viewer_aspect: boo
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -176,7 +176,7 @@ sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: rawptr, viewer_aspect: bool
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(bool_to_variantbool(viewer_aspect))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(variant.bool_to_variantbool(viewer_aspect))
     if com.failed(hr) do return
 
     return true

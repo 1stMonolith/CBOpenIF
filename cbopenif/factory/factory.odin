@@ -1,15 +1,12 @@
 package factory
 
 import "../com"
-@(private) HResult        :: com.HResult
-@(private) GUID           :: com.GUID
-@(private) IUnknownIF     :: com.IUnknownIF
-@(private) IUnknownVTable :: com.IUnknownVTable
-
 import "../bstr"
-@(private) BStr :: bstr.BStr
-
 import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) GUID        :: com.GUID
+@(private) BStr        :: bstr.BStr
 @(private) Variant     :: variant.Variant
 @(private) VariantBool :: variant.VariantBool
 
@@ -32,24 +29,24 @@ FactoryVTable :: struct {
     DeserializeCMConnection:            proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CMConnection: ^rawptr) -> HResult,
     DeserializeDataType:                proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Datatype: ^rawptr) -> HResult,
     NewDataType:                        proc "system" (this: ^FactoryIF, Name, Description: BStr, DataType: ^rawptr) -> HResult,
-    NewDataType1:                       proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: Scope, DataType: ^rawptr) -> HResult,
+    NewDataType1:                       proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: i32, DataType: ^rawptr) -> HResult,
     DeserializeApplicationVariables:    proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ApplicationVariables: ^rawptr) -> HResult,
     NewApplicationVariables:            proc "system" (this: ^FactoryIF, Description: BStr, ApplicationVariables: ^rawptr) -> HResult,
     DeserializeFunctionBlockType:       proc "system" (this: ^FactoryIF, XMLStr: ^BStr, FunctionBlockType: ^rawptr) -> HResult,
     NewFunctionBlockType:               proc "system" (this: ^FactoryIF, Name, Description: BStr, FunctionBlockType: ^rawptr) -> HResult,
-    NewFunctionBlockType1:              proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: Scope, FunctionBlockType: ^rawptr) -> HResult,
+    NewFunctionBlockType1:              proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: i32, FunctionBlockType: ^rawptr) -> HResult,
     DeserializeFunctionBlock:           proc "system" (this: ^FactoryIF, XMLStr: ^BStr, functionblock: ^rawptr) -> HResult,
     NewFunctionBlock:                   proc "system" (this: ^FactoryIF, Name, Type: BStr, functionblock: ^rawptr) -> HResult,
     NewFunctionBlock1:                  proc "system" (this: ^FactoryIF, Name, Type, Task, Guid, Description: BStr, FunctionBlock: ^rawptr) -> HResult,
     DeserializeControlModuleType:       proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ControlModuleType: ^rawptr) -> HResult,
     NewControlModuleType:               proc "system" (this: ^FactoryIF, Name, Description: BStr, ControlModuleType: ^rawptr) -> HResult,
-    NewControlModuleType1:              proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: Scope, InteractionWindow: BStr, AlarmOwner: VariantBool, Guid: BStr, GraphSize: rawptr, ControlModuleType: ^rawptr) -> HResult,
+    NewControlModuleType1:              proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: i32, InteractionWindow: BStr, AlarmOwner: VariantBool, Guid: BStr, GraphSize: rawptr, ControlModuleType: ^rawptr) -> HResult,
     DeserializeProgram:                 proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Program: ^rawptr) -> HResult,
     NewProgram:                         proc "system" (this: ^FactoryIF, Name, Description: BStr, Program: ^rawptr) -> HResult,
     NewProgram1:                        proc "system" (this: ^FactoryIF, Name, Description, TaskCOnnection, Guid, InstGuid: BStr, Program: ^rawptr) -> HResult,
     DeserializeControlModule:           proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ControlModule: ^rawptr) -> HResult,
     NewControlModule:                   proc "system" (this: ^FactoryIF, Name, Type: BStr, ControlModule: ^rawptr) -> HResult,
-    NewControlModule1:                  proc "system" (this: ^FactoryIF, Name, Type, Task: BStr, VisibilityInGraphics: VisibilityInGraphics, Guid, Description: BStr, GraphPos: rawptr, ControlModule: ^rawptr) -> HResult,
+    NewControlModule1:                  proc "system" (this: ^FactoryIF, Name, Type, Task: BStr, VisibilityInGraphics: i32, Guid, Description: BStr, GraphPos: rawptr, ControlModule: ^rawptr) -> HResult,
     DeserializeControlModules:          proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ControlModules: ^rawptr) -> HResult,
     NewControlModules:                  proc "system" (this: ^FactoryIF, ControlModules: ^rawptr) -> HResult,
     NewSingleControlModuleType:         proc "system" (this: ^FactoryIF, Name, Description: BStr, SingleControlModuleType: ^rawptr) -> HResult,
@@ -57,10 +54,10 @@ FactoryVTable :: struct {
     DeserializeSingleControlModuleType: proc "system" (this: ^FactoryIF, XMLStr: ^BStr, SingleControlModuleType: ^rawptr) -> HResult,
     DeserializeSingleControlModuleInst: proc "system" (this: ^FactoryIF, XMLStr: ^BStr, SingleControlModuleInst: ^rawptr) -> HResult,
     NewSingleControlModuleInst:         proc "system" (this: ^FactoryIF, Name: BStr, SingleControlModuleInst: ^rawptr) -> HResult,
-    NewSingleControlModuleInst1:        proc "system" (this: ^FactoryIF, Name, Task: BStr, VisibilityInGraphics: VisibilityInGraphics, Guid, InstGuide: BStr, GraphPos: rawptr, SingleControlModuleInst: ^rawptr) -> HResult,
+    NewSingleControlModuleInst1:        proc "system" (this: ^FactoryIF, Name, Task: BStr, VisibilityInGraphics: i32, Guid, InstGuide: BStr, GraphPos: rawptr, SingleControlModuleInst: ^rawptr) -> HResult,
     DeserializeTask:                    proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Task: ^rawptr) -> HResult,
-    NewTask:                            proc "system" (this: ^FactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: TaskPriority, Task: ^rawptr) -> HResult,
-    NewTask1:                           proc "system" (this: ^FactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: TaskPriority, Offset: i32, OutputUpdate: OutputUpdate, Task: ^rawptr) -> HResult,
+    NewTask:                            proc "system" (this: ^FactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: i32, Task: ^rawptr) -> HResult,
+    NewTask1:                           proc "system" (this: ^FactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: i32, Offset: i32, OutputUpdate: i32, Task: ^rawptr) -> HResult,
     DeserializeConnectedApplications:   proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ConnectedApplications: ^rawptr) -> HResult,
     NewConnectedApplication:            proc "system" (this: ^FactoryIF, Name: BStr, ConnectedApplication: ^rawptr) -> HResult,
     NewConnectedApplication1:           proc "system" (this: ^FactoryIF, Name: BStr, MajorVersion, MinorVersion, Revision: i32, ConnectedApplication: ^rawptr) -> HResult,
@@ -86,7 +83,7 @@ FactoryVTable :: struct {
     NewCMParameter:                     proc "system" (this: ^FactoryIF, Name, TypeName: BStr, CMParameter: ^rawptr) -> HResult,
     NewCMParameter1:                    proc "system" (this: ^FactoryIF, Name, TypeName, Attribute, InitialValue, ReadPermission, WritePermission, Description: BStr, AutoPoint: rawptr, CMParameter: ^rawptr) -> HResult,
     NewExtensibleParameter:             proc "system" (this: ^FactoryIF, Name, Type: BStr, extensibleparameter: ^rawptr) -> HResult,
-    NewExtensibleParameter1:            proc "system" (this: ^FactoryIF, Name, Type, Attribute: BStr, Direction: Direction, InitialValue, Description: BStr, extensibleparameter: ^rawptr) -> HResult,
+    NewExtensibleParameter1:            proc "system" (this: ^FactoryIF, Name, Type, Attribute: BStr, Direction: i32, InitialValue, Description: BStr, extensibleparameter: ^rawptr) -> HResult,
     NewComponent:                       proc "system" (this: ^FactoryIF, Name, TypeName: BStr, Component: ^rawptr) -> HResult,
     NewComponent1:                      proc "system" (this: ^FactoryIF, Name, TypeName, Attribute, InitialValue, Description: BStr, Component: ^rawptr) -> HResult,
     NewCMConnection:                    proc "system" (this: ^FactoryIF, Name, ActualParameter: BStr, CMConnection: ^rawptr) -> HResult,
@@ -94,7 +91,7 @@ FactoryVTable :: struct {
     NewAutoPoint:                       proc "system" (this: ^FactoryIF, AutoPos: i32, AutoPoint: ^rawptr) -> HResult,
     NewPoint:                           proc "system" (this: ^FactoryIF, X, Y: f64, Point: ^rawptr) -> HResult,
     NewGraphPos:                        proc "system" (this: ^FactoryIF, XPos, YPos, Rotation, XScale, YScale: f64, GraphPos: ^rawptr) -> HResult,
-    NewGraphSize:                       proc "system" (this: ^FactoryIF, LowerLeft, UpperRight: Point, GraphSize: ^rawptr) -> HResult,
+    NewGraphSize:                       proc "system" (this: ^FactoryIF, LowerLeft, UpperRight: rawptr, GraphSize: ^rawptr) -> HResult,
     NewGraphNode:                       proc "system" (this: ^FactoryIF, Name: BStr, X, Y: f64, GraphNode: ^rawptr) -> HResult,
     NewSTCodeBlock:                     proc "system" (this: ^FactoryIF, Name: BStr, STCodeBlock: ^rawptr) -> HResult,
     NewSTCodeBlock1:                    proc "system" (this: ^FactoryIF, Name: BStr, STCode: ^BStr, STCodeBlock: ^rawptr) -> HResult,
@@ -145,7 +142,7 @@ FactoryVTable :: struct {
     NewExecutionInstance:               proc "system" (this: ^FactoryIF, Name: BStr, ExecutionInstance: ^rawptr) -> HResult,
     DeserializeDiagramType:             proc "system" (this: ^FactoryIF, XMLStr: ^BStr, DiagramType: ^rawptr) -> HResult,
     NewDiagramType:                     proc "system" (this: ^FactoryIF, Name, Description: BStr, DiagramType: ^rawptr) -> HResult,
-    NewDiagramType1:                    proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: Scope, AlarmOwner: VariantBool, Guid: BStr, DiagramType: ^rawptr) -> HResult,
+    NewDiagramType1:                    proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: i32, AlarmOwner: VariantBool, Guid: BStr, DiagramType: ^rawptr) -> HResult,
     DeserializeDiagramInstance:         proc "system" (this: ^FactoryIF, XMLStr: ^BStr, DiagramInstance: ^rawptr) -> HResult,
     NewDiagramInstance:                 proc "system" (this: ^FactoryIF, Name, Type: BStr, _DiagramInstance: ^rawptr) -> HResult,
     NewDiagramInstance1:                proc "system" (this: ^FactoryIF, Name, Type, Guid, Description: BStr, _DiagramInstance: ^rawptr) -> HResult,
@@ -158,7 +155,7 @@ factory_connect :: proc() -> (ok: bool) {
 
     if factoryif != nil do return
 
-    ok = com_initialize()
+    ok = com.initialize()
     if !ok do return
 
     clsid := GUID{
@@ -175,10 +172,10 @@ factory_connect :: proc() -> (ok: bool) {
         {0xB3, 0x9A, 0x12, 0xC7, 0x7F, 0xF5, 0xFF, 0x1A},
     }
 
-    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&factoryif)
+    ok = com.create_instance(&clsid, &iid, cast(^rawptr)&factoryif)
     if !ok {
-        com_uninitialize()
-        cbopenif = nil
+        com.uninitialize()
+        factoryif = nil
         return
     }
 
@@ -190,7 +187,7 @@ factory_disconnect :: proc()  -> (ok: bool) {
         factoryif->Release()
         factoryif = nil
     }
-    com_uninitialize()
+    com.uninitialize()
 
     return true
 }

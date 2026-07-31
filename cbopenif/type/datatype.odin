@@ -45,7 +45,7 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
         bstr.free(bstr_name)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewDataType1(bstr_name, bstr_description, bool_to_variantbool(protected), bool_to_variantbool(hidden), scope, cast(^rawptr)&datatype)
+    hr := factoryif->NewDataType1(bstr_name, bstr_description, variant.bool_to_variantbool(protected), variant.bool_to_variantbool(hidden), scope, cast(^rawptr)&datatype)
     if com.failed(hr) do return
 
     return datatype, true
@@ -58,7 +58,7 @@ datatype_deserialize :: proc(datatype: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeDataType(&bstr, cast(^rawptr)datatype)
+    hr := factoryif->DeserializeDataType(&bs, cast(^rawptr)datatype)
     if com.failed(hr) do return
     
     return true
@@ -132,7 +132,7 @@ datatype_protected_ :: proc(datatype: rawptr) -> (protected: bool, ok: bool) {
     hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -142,7 +142,7 @@ datatype_protected_set :: proc(datatype: rawptr, protected: bool) -> (ok: bool) 
     if datatype == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ProtectedPut(bool_to_variantbool(protected))
+    hr := (^DataTypeIF)(datatype)->ProtectedPut(variant.bool_to_variantbool(protected))
     if com.failed(hr) do return
 
     return true
@@ -165,7 +165,7 @@ datatype_hidden_ :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
     hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -175,7 +175,7 @@ datatype_hidden_set :: proc(datatype: rawptr, hidden: bool) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^DataTypeIF)(datatype)->HiddenPut(bool_to_variantbool(hidden))
+    hr := (^DataTypeIF)(datatype)->HiddenPut(variant.bool_to_variantbool(hidden))
     if com.failed(hr) do return
 
     return true

@@ -39,7 +39,7 @@ sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_
         bstr.free(bstr_n)
         bstr.free(bstr_p0)
     }
-    hr := factoryif->NewSFCStep1(bstr_name, bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^rawptr)&sfcstep)
+    hr := factoryif->NewSFCStep1(bstr_name, variant.bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^rawptr)&sfcstep)
     if com.failed(hr) do return
 
     return sfcstep, true
@@ -98,7 +98,7 @@ sfcstep_initial_step_ :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool)
     hr := (^SFCStepIF)(sfcstep)->InitialStepGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -108,7 +108,7 @@ sfcstep_initial_step_set :: proc(sfcstep: rawptr, initial_step: bool) -> (ok: bo
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCStepIF)(sfcstep)->InitialStepPut(bool_to_variantbool(initial_step))
+    hr := (^SFCStepIF)(sfcstep)->InitialStepPut(variant.bool_to_variantbool(initial_step))
     if com.failed(hr) do return
 
     return true

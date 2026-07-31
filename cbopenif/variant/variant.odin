@@ -71,14 +71,14 @@ free :: proc(variant: ^Variant) {
     VariantClear(variant)
 }
 
-from_string :: proc(s: string) -> (variant: Variant) {
+string_to_variant :: proc(s: string) -> (variant: Variant) {
     VariantInit(&variant)
     variant.vt = VariantTypeBstr
     variant.bstrVal = bstr.from_string(s)
     return
 }
 
-from_bool :: proc(b: bool) -> (variant: Variant) {
+bool_to_variant :: proc(b: bool) -> (variant: Variant) {
     VariantInit(&variant)
     variant.vt = VariantTypeBool
     variant.boolVal = VariantBoolTrue if b else VariantBoolFalse

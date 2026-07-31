@@ -27,7 +27,7 @@ IUnknownVTable :: struct {
 
 initialize :: proc() -> (ok: bool) {
     hr := windows.CoInitializeEx(nil, windows.COINIT.APARTMENTTHREADED)
-    if com.failed(hr) do return false
+    if failed(hr) do return false
     return true
 }
 
@@ -41,7 +41,7 @@ create_instance :: proc(clsid: windows.REFCLSID, iid: windows.REFIID, vtable: ^w
         iid,
         vtable,
     )
-    if com.failed(hr) do return
+    if failed(hr) do return
 
     return true
 }

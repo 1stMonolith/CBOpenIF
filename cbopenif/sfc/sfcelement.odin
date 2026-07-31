@@ -48,7 +48,7 @@ sfcelement_is_step :: proc(sfcelement: rawptr) -> (is_step: bool, ok: bool) {
     hr := (^SFCElementIF)(sfcelement)->IsSFCStepGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_transition :: proc(sfcelement: rawptr) -> (is_transition: bool, ok: bool) {
@@ -62,7 +62,7 @@ sfcelement_is_transition :: proc(sfcelement: rawptr) -> (is_transition: bool, ok
     hr := (^SFCElementIF)(sfcelement)->IsSFCTransitionGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_subsequence :: proc(sfcelement: rawptr) -> (is_subsequence: bool, ok: bool) {
@@ -76,7 +76,7 @@ sfcelement_is_subsequence :: proc(sfcelement: rawptr) -> (is_subsequence: bool, 
     hr := (^SFCElementIF)(sfcelement)->IsSFCSubSequenceGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_selection :: proc(sfcelement: rawptr) -> (is_selection: bool, ok: bool) {
@@ -90,7 +90,7 @@ sfcelement_is_selection :: proc(sfcelement: rawptr) -> (is_selection: bool, ok: 
     hr := (^SFCElementIF)(sfcelement)->IsSFCSelectionGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_simultaneous :: proc(sfcelement: rawptr) -> (is_simultaneous: bool, ok: bool) {
@@ -104,7 +104,7 @@ sfcelement_is_simultaneous :: proc(sfcelement: rawptr) -> (is_simultaneous: bool
     hr := (^SFCElementIF)(sfcelement)->IsSFCSimultaneousGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 sfcelement_release :: proc(sfcelement: rawptr) {

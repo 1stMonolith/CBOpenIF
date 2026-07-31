@@ -62,7 +62,7 @@ signal_deserialize :: proc(signal: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeSignal(&bstr, cast(^rawptr)signal)
+    hr := factoryif->DeserializeSignal(&bs, cast(^rawptr)signal)
     if com.failed(hr) do return
     
     return true

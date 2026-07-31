@@ -190,7 +190,7 @@ ilrow_is_row_comment_ :: proc(ilrow: rawptr) -> (is_row_comment: bool, ok: bool)
     hr := (^ILRowIF)(ilrow)->IsRowCommentGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 ilrow_is_row_comment_set :: proc(ilrow: rawptr, is_row_comment: bool) -> (ok: bool) {
@@ -199,7 +199,7 @@ ilrow_is_row_comment_set :: proc(ilrow: rawptr, is_row_comment: bool) -> (ok: bo
     if ilrow == nil do return
     if !controlbuilder.connected() do return
     
-    vb := bool_to_variantbool(is_row_comment)
+    vb := variant.bool_to_variantbool(is_row_comment)
     hr := (^ILRowIF)(ilrow)->IsRowCommentPut(vb)
     if com.failed(hr) do return
 

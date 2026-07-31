@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
@@ -23,8 +24,8 @@ CMConnectionVTable :: struct {
     ActualParameterPut:     proc "system" (this: ^CMConnectionIF, ActualParameter: BStr) -> HResult,
     GraphicalConnectionGet: proc "system" (this: ^CMConnectionIF, GraphicalConnection: ^VariantBool) -> HResult,
     GraphicalConnectionPut: proc "system" (this: ^CMConnectionIF, GraphicalConnection: VariantBool) -> HResult,
-    PointsGet:              proc "system" (this: ^CMConnectionIF, Point: ^Points) -> HResult,
-    PointsPut:              proc "system" (this: ^CMConnectionIF, Point: Points) -> HResult,
+    PointsGet:              proc "system" (this: ^CMConnectionIF, Point: ^rawptr) -> HResult,
+    PointsPut:              proc "system" (this: ^CMConnectionIF, Point: rawptr) -> HResult,
     Missing14:              proc "system" (this: ^CMConnectionIF) -> HResult,
     Serialize:              proc "system" (this: ^CMConnectionIF, XML: ^BStr) -> HResult,
 }
@@ -41,7 +42,7 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
         bstr.free(bstr_name)
         bstr.free(bstr_actual_parameter)
     }
-    hr := factoryif->NewCMConnection1(bstr_name, bstr_actual_parameter, bool_to_variantbool(graphical_connection), cast(^rawptr)&cmconnection)
+    hr := factory.factoryif->NewCMConnection1(bstr_name, bstr_actual_parameter, variant.bool_to_variantbool(graphical_connection), cast(^rawptr)&cmconnection)
     if com.failed(hr) do return
     
     return cmconnection, true
@@ -54,7 +55,7 @@ cmconnection_deserialize :: proc(cmconnection: ^rawptr, xml: string) -> (ok: boo
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeCMConnection(&bstr, cast(^rawptr)cmconnection)
+    hr := factory.factoryif->DeserializeCMConnection(&bs, cast(^rawptr)cmconnection)
     if com.failed(hr) do return
     
     return true
@@ -164,7 +165,7 @@ cmconnection_graphical_connection_ :: proc(cmconnection: rawptr) -> (graphical_c
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionGet(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 @(private)
@@ -174,7 +175,7 @@ cmconnection_graphical_connection_set :: proc(cmconnection: rawptr, graphical_co
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
 
-    vb := bool_to_variantbool(graphical_connection)
+    vb := variant.bool_to_variantbool(graphical_connection)
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(vb)
     if com.failed(hr) do return
     
@@ -187,7 +188,7 @@ cmconnection_points :: proc {
 }
 
 @(private)
-cmconnection_points_ :: proc(cmconnection: rawptr) -> (points: Points, ok: bool) {
+cmconnection_points_ :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool) {
     points = nil
     ok = false
 
@@ -201,7 +202,7 @@ cmconnection_points_ :: proc(cmconnection: rawptr) -> (points: Points, ok: bool)
 }
 
 @(private)
-cmconnection_points_set :: proc(cmconnection: rawptr, points: Points) -> (ok: bool) {
+cmconnection_points_set :: proc(cmconnection: rawptr, points: rawptr) -> (ok: bool) {
     ok = false
 
     if cmconnection == nil do return

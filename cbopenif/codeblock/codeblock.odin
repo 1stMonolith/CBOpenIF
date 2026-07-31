@@ -34,7 +34,7 @@ codeblock_deserialize :: proc(codeblock: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeCodeBlock(&bstr, cast(^rawptr)codeblock)
+    hr := factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)codeblock)
     if com.failed(hr) do return
     
     return true
@@ -87,7 +87,7 @@ codeblock_is_st :: proc(codeblock: rawptr) -> (is_st: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsSTCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_is_sfc :: proc(codeblock: rawptr) -> (is_sfc: bool, ok: bool) {
@@ -101,7 +101,7 @@ codeblock_is_sfc :: proc(codeblock: rawptr) -> (is_sfc: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsSFCCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_is_il :: proc(codeblock: rawptr) -> (is_il: bool, ok: bool) {
@@ -115,7 +115,7 @@ codeblock_is_il :: proc(codeblock: rawptr) -> (is_il: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsILCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_is_fbd :: proc(codeblock: rawptr) -> (is_fbd: bool, ok: bool) {
@@ -129,7 +129,7 @@ codeblock_is_fbd :: proc(codeblock: rawptr) -> (is_fbd: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsFBDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_is_ld :: proc(codeblock: rawptr) -> (is_ld: bool, ok: bool) {
@@ -143,7 +143,7 @@ codeblock_is_ld :: proc(codeblock: rawptr) -> (is_ld: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsLDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_is_fd :: proc(codeblock: rawptr) -> (is_fd: bool, ok: bool) {
@@ -157,7 +157,7 @@ codeblock_is_fd :: proc(codeblock: rawptr) -> (is_fd: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsFDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variantbool_to_bool(vb), true
+    return variant.variantbool_to_bool(vb), true
 }
 
 codeblock_release :: proc(codeblock: rawptr) {

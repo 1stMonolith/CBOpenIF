@@ -81,7 +81,7 @@ parameter_deserialize :: proc(parameter: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeParameter(&bstr, cast(^rawptr)parameter)
+    hr := factoryif->DeserializeParameter(&bs, cast(^rawptr)parameter)
     if com.failed(hr) do return
     
     return true

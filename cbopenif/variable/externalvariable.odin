@@ -70,7 +70,7 @@ externalvariable_deserialize :: proc(external_variable: ^rawptr, xml: string) ->
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeExternalVariable(&bstr, cast(^rawptr)external_variable)
+    hr := factoryif->DeserializeExternalVariable(&bs, cast(^rawptr)external_variable)
     if com.failed(hr) do return
     
     return true

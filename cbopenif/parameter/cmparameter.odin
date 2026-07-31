@@ -88,7 +88,7 @@ cmparameter_deserialize :: proc(cmparameter: ^rawptr, xml: string) -> (ok: bool)
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeCMParameter(&bstr, cast(^rawptr)cmparameter)
+    hr := factoryif->DeserializeCMParameter(&bs, cast(^rawptr)cmparameter)
     if com.failed(hr) do return
     
     return true
