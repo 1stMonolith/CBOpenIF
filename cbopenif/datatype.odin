@@ -233,6 +233,7 @@ datatype_description_set :: proc(datatype: DataType, description: string) -> (ok
     ok = false
 
     if datatype == nil do return
+    if !connected() do return
     
     bstr := string_to_bstr(description)
     defer bstr_free(bstr)
