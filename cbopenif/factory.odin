@@ -15,7 +15,7 @@ FactoryVTable :: struct {
     DeserializeCMParameter:             proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CMParameter: ^CMParameter) -> HResult,
     DeserializeExtensibleParameter:     proc "system" (this: ^FactoryIF, XMLStr: ^BStr, extensibleparameter: ^rawptr) -> HResult,
     DeserializeParameter:               proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Parameter: ^Parameter) -> HResult,
-    DeserializeCodeBlock:               proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CodeBlock: ^CodeBlock) -> HResult,
+    DeserializeICodeBlock:              proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ICodeBlock: ^ICodeBlock) -> HResult,
     DeserializeCMConnection:            proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CMConnection: ^CMConnection) -> HResult,
     DeserializeDataType:                proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Datatype: ^DataType) -> HResult,
     NewDataType:                        proc "system" (this: ^FactoryIF, Name, Description: BStr, DataType: ^DataType) -> HResult,

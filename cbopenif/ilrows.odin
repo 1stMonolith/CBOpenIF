@@ -50,7 +50,11 @@ ilrows_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bo
     return true
 }
 
-ilrows_ilrow :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: bool) {
+ilrows_ilrow :: proc {
+    ilrows_ilrow_by_index,
+}
+
+ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: bool) {
     ilrow = nil
     ok = false
 

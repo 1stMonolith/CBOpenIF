@@ -126,7 +126,11 @@ sfcelements_add_at_index :: proc(sfcelements: SFCElements, isfcelement: ISFCElem
     return true
 }
 
-sfcelements_element :: proc(sfcelements: SFCElements, index: i32) -> (isfcelement: ISFCElement, ok: bool) {
+sfcelement_sfelement :: proc {
+    sfcelements_sfcelement_by_index,
+}
+
+sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) -> (isfcelement: ISFCElement, ok: bool) {
     isfcelement = nil
     ok = false
 

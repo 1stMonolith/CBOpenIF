@@ -192,8 +192,8 @@ name :: proc {
     cmconnection_name_set,
     cmparameter_name_,
     cmparameter_name_set,
-    codeblock_name_,
-    codeblock_name_set,
+    icodeblock_name_,
+    icodeblock_name_set,
     fdcodeblock_name_,
     fdcodeblock_name_set,
     ldcodeblock_name_,
@@ -532,27 +532,27 @@ signals :: proc {
 }
 
 is_st :: proc {
-    codeblock_is_st,
+    icodeblock_is_st,
 }
 
 is_sfc :: proc {
-    codeblock_is_sfc,
+    icodeblock_is_sfc,
 }
 
 is_il :: proc {
-    codeblock_is_il,
+    icodeblock_is_il,
 }
 
 is_fbd :: proc {
-    codeblock_is_fbd,
+    icodeblock_is_fbd,
 }
 
 is_ld :: proc {
-    codeblock_is_ld,
+    icodeblock_is_ld,
 }
 
 is_fd :: proc {
-    codeblock_is_fd,
+    icodeblock_is_fd,
 }
 
 is_step :: proc {
@@ -679,7 +679,7 @@ deserialize :: proc {
     parameter_deserialize,
     cmconnection_deserialize,
     cmparameter_deserialize,
-    codeblock_deserialize,
+    icodeblock_deserialize,
 }
 
 add :: proc {
@@ -722,6 +722,14 @@ add :: proc {
     sfcelements_add_sfcsubsequence,
     sfcelements_add_,
     sfcelements_add_at_index,
+    codeblocks_add_,
+	codeblocks_add_at_index,
+	codeblocks_add_st,
+	codeblocks_add_ld,
+	codeblocks_add_fbd,
+	codeblocks_add_il,
+	codeblocks_add_sfc,
+	codeblocks_add_fd,
 }
 
 by_name :: proc {
@@ -739,6 +747,7 @@ by_name :: proc {
     parametersettings_parametersetting_by_name,
     cmconnections_cmconnection_by_name,
     cmparameters_cmparameter_by_name,
+    codeblocks_codeblock_by_name,
 }
 
 by_index :: proc {
@@ -757,8 +766,9 @@ by_index :: proc {
     cmconnections_cmconnection_by_index,
     points_point_by_index,
     cmparameters_cmparameter_by_index,
-    ilrows_ilrow,
-    sfcelements_element,
+    ilrows_ilrow_by_index,
+    sfcelements_sfcelement_by_index,
+    codeblocks_codeblock_by_index,
 }
 
 index :: proc {
@@ -776,6 +786,7 @@ index :: proc {
     parametersettings_parametersetting_index,
     cmconnections_cmconnection_index,
     cmparameters_cmparameter_index,
+    codeblocks_codeblock_index,
 }
 
 count :: proc {
@@ -796,6 +807,7 @@ count :: proc {
     cmparameters_count,
     ilrows_count,
     sfcelements_count,
+    codeblocks_count,
 }
 
 remove :: proc {
@@ -830,6 +842,7 @@ remove :: proc {
     cmparameters_remove_by_index,
     ilrows_remove,
     sfcelements_remove,
+    codeblocks_remove,
 }
 
 release :: proc {
@@ -857,7 +870,7 @@ release :: proc {
     graphsize_release,
     cmparameters_release,
     cmparameter_release,
-    codeblock_release,
+    icodeblock_release,
     fdcodeblock_release,
     ldcodeblock_release,
     fbdcodeblock_release,
@@ -874,4 +887,5 @@ release :: proc {
     isfcelement_release,
     sfccodeblock_release,
     sfcelements_release,
+    codeblocks_release,
 }
