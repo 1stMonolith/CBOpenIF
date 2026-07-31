@@ -630,7 +630,7 @@ elements :: proc {
     sfccodeblock_elements_set,
 }
 
-braches :: proc {
+branches :: proc {
     sfcselection_branches_,
     sfcselection_branches_set,
 }
@@ -664,7 +664,7 @@ serialize :: proc {
     ldcodeblock_serialize,
     fbdcodeblock_serialize,
     stcodeblock_serialize,
-    sfccodeblock_serialize
+    sfccodeblock_serialize,
 }
 
 deserialize :: proc {
@@ -713,11 +713,11 @@ add :: proc {
     cmparameters_add_at_index,
     ilrows_add_,
     ilrows_add_at_index,
-    sfcelements_add_step,
-    sfcelements_add_transition,
-    sfcelements_add_sfcselectionection,
-    sfcelements_add_sfcsimultaneousultaneous,
-    sfcelements_add_sfcsubsequenceuence,
+    sfcelements_add_sfcstep,
+    sfcelements_add_sfctransition,
+    sfcelements_add_sfcselection,
+    sfcelements_add_sfcsimultaneous,
+    sfcelements_add_sfcsubsequence,
     sfcelements_add_,
     sfcelements_add_at_index,
 }

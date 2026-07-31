@@ -28,7 +28,7 @@ SFCElementsVTable :: struct {
     Remove:           proc "system" (this: ^SFCElementsIF, Index: i32) -> HResult,
 }
 
-sfcelements_add_step :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
+sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -41,7 +41,7 @@ sfcelements_add_step :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok:
     return true
 }
 
-sfcelements_add_transition :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
+sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -54,7 +54,7 @@ sfcelements_add_transition :: proc(sfcelements: SFCElements, sfctransition: SFCT
     return true
 }
 
-sfcelements_add_sfcselectionection :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
+sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -67,7 +67,7 @@ sfcelements_add_sfcselectionection :: proc(sfcelements: SFCElements, sfcselectio
     return true
 }
 
-sfcelements_add_sfcsimultaneousultaneous :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
+sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -80,7 +80,7 @@ sfcelements_add_sfcsimultaneousultaneous :: proc(sfcelements: SFCElements, sfcsi
     return true
 }
 
-sfcelements_add_sfcsubsequenceuence :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
+sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
     ok = false
 
     if !connected() do return
