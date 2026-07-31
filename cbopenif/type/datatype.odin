@@ -5,6 +5,9 @@ import "../controlbuilder"
 import "../bstr"
 import "../variant"
 import "../factory"
+import "../component"
+
+DataType :: distinct rawptr
 
 DataTypeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -33,7 +36,7 @@ DataTypeVTable :: struct {
     Serialize:             proc "system" (this: ^DataTypeIF, XMLStr: ^BStr) -> HResult,
 }
 
-datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := Scope.Public) -> (datatype: rawptr, ok: bool) {
+datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := Scope.Public) -> (datatype: DataType, ok: bool) {
     datatype = nil
     ok = false
 
@@ -51,7 +54,7 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
     return datatype, true
 }
 
-datatype_deserialize :: proc(datatype: ^rawptr, xml: string) -> (ok: bool) {
+datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -64,7 +67,7 @@ datatype_deserialize :: proc(datatype: ^rawptr, xml: string) -> (ok: bool) {
     return true
 }
 
-datatype_serialize :: proc(datatype: rawptr) -> (xml: string, ok: bool) {
+datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -84,7 +87,7 @@ datatype_name :: proc {
     datatype_name_set,
 }
 
-datatype_name_get :: proc(datatype: rawptr) -> (name: string, ok: bool) {
+datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -99,7 +102,7 @@ datatype_name_get :: proc(datatype: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-datatype_name_set :: proc(datatype: rawptr, name: string) -> (ok: bool) {
+datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
     ok = false
     
     if datatype == nil do return
@@ -118,7 +121,7 @@ datatype_protected :: proc {
     datatype_protected_set,
 }
 
-datatype_protected_get :: proc(datatype: rawptr) -> (protected: bool, ok: bool) {
+datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
     protected = {}
     ok = false
 
@@ -132,7 +135,7 @@ datatype_protected_get :: proc(datatype: rawptr) -> (protected: bool, ok: bool) 
     return variant.variantbool_to_bool(vb), true
 }
 
-datatype_protected_set :: proc(datatype: rawptr, protected: bool) -> (ok: bool) {
+datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool) {
     ok = false
     
     if datatype == nil do return
@@ -149,7 +152,7 @@ datatype_hidden :: proc {
     datatype_hidden_set,
 }
 
-datatype_hidden_get :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
+datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     hidden = {}
     ok = false
     
@@ -163,7 +166,7 @@ datatype_hidden_get :: proc(datatype: rawptr) -> (hidden: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-datatype_hidden_set :: proc(datatype: rawptr, hidden: bool) -> (ok: bool) {
+datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -180,7 +183,7 @@ datatype_scope :: proc {
     datatype_scope_set,
 }
 
-datatype_scope_get :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
+datatype_scope_get :: proc(datatype: DataType) -> (scope: Scope, ok: bool) {
     scope = {}
     ok = false
 
@@ -194,7 +197,7 @@ datatype_scope_get :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
     return Scope(s), true
 }
 
-datatype_scope_set :: proc(datatype: rawptr, scope: Scope) -> (ok: bool) {
+datatype_scope_set :: proc(datatype: DataType, scope: Scope) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -211,7 +214,7 @@ datatype_description :: proc {
     datatype_description_set,
 }
 
-datatype_description_get :: proc(datatype: rawptr) -> (description: string, ok: bool) {
+datatype_description_get :: proc(datatype: DataType) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -226,7 +229,7 @@ datatype_description_get :: proc(datatype: rawptr) -> (description: string, ok: 
     return bstr.to_string(bs), true
 }
 
-datatype_description_set :: proc(datatype: rawptr, description: string) -> (ok: bool) {
+datatype_description_set :: proc(datatype: DataType, description: string) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -245,7 +248,7 @@ datatype_guid :: proc {
     datatype_guid_set,
 }
 
-datatype_guid_get :: proc(datatype: rawptr) -> (guid: string, ok: bool) {
+datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
@@ -260,7 +263,7 @@ datatype_guid_get :: proc(datatype: rawptr) -> (guid: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-datatype_guid_set :: proc(datatype: rawptr, guid: string) -> (ok: bool) {
+datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -279,7 +282,7 @@ datatype_reserved_by_function :: proc {
     datatype_reserved_by_function_set,
 }
 
-datatype_reserved_by_function_get :: proc(datatype: rawptr) -> (reserved_by_function: string, ok: bool) {
+datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_function: string, ok: bool) {
     reserved_by_function = ""
     ok = false
 
@@ -294,7 +297,7 @@ datatype_reserved_by_function_get :: proc(datatype: rawptr) -> (reserved_by_func
     return bstr.to_string(bs), true
 }
 
-datatype_reserved_by_function_set :: proc(datatype: rawptr, reserved_by_function: string) -> (ok: bool) {
+datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_function: string) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -313,20 +316,21 @@ datatype_components :: proc {
     datatype_components_set,
 }
 
-datatype_components_get :: proc(datatype: rawptr) -> (components: rawptr, ok: bool) {
+datatype_components_get :: proc(datatype: DataType) -> (components: component.Components, ok: bool) {
     components = nil
     ok = false
 
     if datatype == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ComponentsGet(&components)
+    p: rawptr
+    hr := (^DataTypeIF)(datatype)->ComponentsGet(&p)
     if com.failed(hr) do return
 
-    return components, true
+    return component.Components(p), true
 }
 
-datatype_components_set :: proc(datatype: rawptr, components: rawptr) -> (ok: bool) {
+datatype_components_set :: proc(datatype: DataType, components: component.Components) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -338,7 +342,7 @@ datatype_components_set :: proc(datatype: rawptr, components: rawptr) -> (ok: bo
     return true
 }
 
-datatype_release :: proc(datatype: rawptr) {
+datatype_release :: proc(datatype: DataType) {
     if datatype != nil {
         (^DataTypeIF)(datatype)->Release()
     }

@@ -11,6 +11,8 @@ import "../factory"
 @(private) GUID        :: com.GUID
 @(private) VariantBool :: variant.VariantBool
 
+Component :: distinct rawptr
+
 ComponentIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ComponentVTable,
@@ -44,7 +46,7 @@ ComponentVTable :: struct {
     ISPValuePut:            proc "system" (this: ^ComponentIF, ISPValue: BStr) -> HResult,
 }
 
-component_new :: proc(name: string, type: string, attribute := "", initialvalue := "", description := "") -> (component: rawptr, ok: bool) {
+component_new :: proc(name: string, type: string, attribute := "", initialvalue := "", description := "") -> (component: Component, ok: bool) {
     component = nil
     ok = false
 
@@ -73,7 +75,7 @@ component_name :: proc {
     component_name_set,
 }
 
-component_name_get :: proc(component: rawptr) -> (name: string, ok: bool) {
+component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -88,7 +90,7 @@ component_name_get :: proc(component: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-component_name_set :: proc(component: rawptr, name: string) -> (ok: bool) {
+component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -107,7 +109,7 @@ component_type_name :: proc {
     component_type_name_set,
 }
 
-component_type_name_get :: proc(component: rawptr) -> (type_name: string, ok: bool) {
+component_type_name_get :: proc(component: Component) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
@@ -122,7 +124,7 @@ component_type_name_get :: proc(component: rawptr) -> (type_name: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-component_type_name_set :: proc(component: rawptr, type_name: string) -> (ok: bool) {
+component_type_name_set :: proc(component: Component, type_name: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -141,7 +143,7 @@ component_attribute :: proc {
     component_attribute_set,
 }
 
-component_attribute_get :: proc(component: rawptr) -> (attribute: string, ok: bool) {
+component_attribute_get :: proc(component: Component) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
@@ -156,7 +158,7 @@ component_attribute_get :: proc(component: rawptr) -> (attribute: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-component_attribute_set :: proc(component: rawptr, attribute: string) -> (ok: bool) {
+component_attribute_set :: proc(component: Component, attribute: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -175,7 +177,7 @@ component_initial_value :: proc {
     component_initial_value_set,
 }
 
-component_initial_value_get :: proc(component: rawptr) -> (inital_value: string, ok: bool) {
+component_initial_value_get :: proc(component: Component) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
@@ -190,7 +192,7 @@ component_initial_value_get :: proc(component: rawptr) -> (inital_value: string,
     return bstr.to_string(bs), true
 }
 
-component_initial_value_set :: proc(component: rawptr, inital_value: string) -> (ok: bool) {
+component_initial_value_set :: proc(component: Component, inital_value: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -209,7 +211,7 @@ component_read_permission :: proc {
     component_read_permission_set,
 }
 
-component_read_permission_get :: proc(component: rawptr) -> (read_permission: string, ok: bool) {
+component_read_permission_get :: proc(component: Component) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
@@ -224,7 +226,7 @@ component_read_permission_get :: proc(component: rawptr) -> (read_permission: st
     return bstr.to_string(bs), true
 }
 
-component_read_permission_set :: proc(component: rawptr, read_permission: string) -> (ok: bool) {
+component_read_permission_set :: proc(component: Component, read_permission: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -243,7 +245,7 @@ component_write_permission :: proc {
     component_write_permission_set,
 }
 
-component_write_permission_get :: proc(component: rawptr) -> (write_permission: string, ok: bool) {
+component_write_permission_get :: proc(component: Component) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
@@ -258,7 +260,7 @@ component_write_permission_get :: proc(component: rawptr) -> (write_permission: 
     return bstr.to_string(bs), true
 }
 
-component_write_permission_set :: proc(component: rawptr, write_permission: string) -> (ok: bool) {
+component_write_permission_set :: proc(component: Component, write_permission: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -277,7 +279,7 @@ component_authentication_level :: proc {
     component_authentication_level_set,
 }
 
-component_authentication_level_get :: proc(component: rawptr) -> (authentication_level: string, ok: bool) {
+component_authentication_level_get :: proc(component: Component) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
@@ -292,7 +294,7 @@ component_authentication_level_get :: proc(component: rawptr) -> (authentication
     return bstr.to_string(bs), true
 }
 
-component_authentication_level_set :: proc(component: rawptr, authentication_level: string) -> (ok: bool) {
+component_authentication_level_set :: proc(component: Component, authentication_level: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -311,7 +313,7 @@ component_description :: proc {
     component_description_set,
 }
 
-component_description_get :: proc(component: rawptr) -> (description: string, ok: bool) {
+component_description_get :: proc(component: Component) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -326,7 +328,7 @@ component_description_get :: proc(component: rawptr) -> (description: string, ok
     return bstr.to_string(bs), true
 }
 
-component_description_set :: proc(component: rawptr, description: string) -> (ok: bool) {
+component_description_set :: proc(component: Component, description: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -340,7 +342,7 @@ component_description_set :: proc(component: rawptr, description: string) -> (ok
     return true
 }
 
-component_type_guid_get :: proc(component: rawptr) -> (type_guid: string, ok: bool) {
+component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok: bool) {
     type_guid = ""
     ok = false
 
@@ -355,7 +357,7 @@ component_type_guid_get :: proc(component: rawptr) -> (type_guid: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-component_type_path_get :: proc(component: rawptr) -> (type_path: string, ok: bool) {
+component_type_path_get :: proc(component: Component) -> (type_path: string, ok: bool) {
     type_path = ""
     ok = false
     
@@ -375,7 +377,7 @@ component_access_level :: proc {
     component_access_level_set,
 }
 
-component_access_level_get :: proc(component: rawptr) -> (access_level: string, ok: bool) {
+component_access_level_get :: proc(component: Component) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
@@ -390,7 +392,7 @@ component_access_level_get :: proc(component: rawptr) -> (access_level: string, 
     return bstr.to_string(bs), true
 }
 
-component_access_level_set :: proc(component: rawptr, access_level: string) -> (ok: bool) {
+component_access_level_set :: proc(component: Component, access_level: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -409,7 +411,7 @@ component_safety_type :: proc {
     component_safety_type_set,
 }
 
-component_safety_type_get :: proc(component: rawptr) -> (safety_type: string, ok: bool) {
+component_safety_type_get :: proc(component: Component) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
@@ -424,7 +426,7 @@ component_safety_type_get :: proc(component: rawptr) -> (safety_type: string, ok
     return bstr.to_string(bs), true
 }
 
-component_safety_type_set :: proc(component: rawptr, safety_type: string) -> (ok: bool) {
+component_safety_type_set :: proc(component: Component, safety_type: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -443,7 +445,7 @@ component_isp_value :: proc {
     component_isp_value_set,
 }
 
-component_isp_value_get :: proc(component: rawptr) -> (isp_value: string, ok: bool) {
+component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok: bool) {
     isp_value = ""
     ok = false
 
@@ -458,7 +460,7 @@ component_isp_value_get :: proc(component: rawptr) -> (isp_value: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-component_isp_value_set :: proc(component: rawptr, isp_value: string) -> (ok: bool) {
+component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
@@ -472,7 +474,7 @@ component_isp_value_set :: proc(component: rawptr, isp_value: string) -> (ok: bo
     return true
 }
 
-component_release :: proc(component: rawptr) {
+component_release :: proc(component: Component) {
     if component != nil {
         (^ComponentIF)(component)->Release()
     }
