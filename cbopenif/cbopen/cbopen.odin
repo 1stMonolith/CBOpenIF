@@ -1,4 +1,27 @@
-package com
+package cbopen
+
+import "../com"
+@(private) HResult        :: com.HResult
+@(private) GUID           :: com.GUID
+@(private) IUnknownIF     :: com.IUnknownIF
+@(private) IUnknownVTable :: com.IUnknownVTable
+
+import "../bstr"
+@(private) BStr :: bstr.BStr
+
+import "../variant"
+@(private) Variant     :: variant.Variant
+@(private) VariantBool :: variant.VariantBool
+
+import "../type"
+@(private) SignalType              :: type.SignalType
+@(private) CodeBlockType           :: type.CodeBlockType
+@(private) VariableType            :: type.VariableType
+@(private) ParameterType           :: type.ParameterType
+@(private) FolderType              :: type.FolderType
+@(private) HardwareFileType        :: type.HardwareFileType
+@(private) ExecutionInstanceType   :: type.ExecutionInstanceType
+@(private) HardwareLibraryFileType :: type.HardwareLibraryFileType
 
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,
@@ -189,7 +212,7 @@ CBOpenVTable :: struct {
     OpenProjectInEnvironment:            proc "system" (this: ^CBOpenIF, projectGuidOrName, environmentGuidOrName: BStr) -> HResult,
     RenameHardwareLibrary:               proc "system" (this: ^CBOpenIF, name, new_name: BStr) -> HResult,
     GetProjectAndEnvironmentInformation: proc "system" (this: ^CBOpenIF, projectName, projectGuid, environmentName, environmentGuid: ^BStr) -> HResult,
-    SetStorage:                          proc "system" (this: ^CBOpenIF, pIAcStorage: rawptr) -> HResult,   // IAcStorage*
+    SetStorage:                          proc "system" (this: ^CBOpenIF, pIAcStorage: rawptr) -> HResult,
     WriteInformation:                    proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
     WriteWarning:                        proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
     WriteError:                          proc "system" (this: ^CBOpenIF, message: BStr) -> HResult,
@@ -237,12 +260,12 @@ CBOpenVTable :: struct {
     LoopCheckDownloadAndGoOnline:        proc "system" (this: ^CBOpenIF, isOnline: ^Variant, messages: ^BStr) -> HResult,
 }
 
-cbopenif_connect :: proc() -> (ok: bool) {
+connect :: proc() -> (ok: bool) {
     ok = false
 
     if cbopenif != nil do return
     
-    ok = com_initialize()
+    ok = com.initialize()
     if !ok do return
 
     clsid := GUID{
@@ -259,9 +282,9 @@ cbopenif_connect :: proc() -> (ok: bool) {
         {0xAB, 0x7F, 0x10, 0x38, 0x95, 0xFE, 0x89, 0x91},
     }
 
-    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&cbopenif)
+    ok = com.create_instance(&clsid, &iid, cast(^rawptr)&cbopenif)
     if !ok {
-        com_uninitialize()
+        com.uninitialize()
         cbopenif = nil
         return
     }
@@ -269,12 +292,12 @@ cbopenif_connect :: proc() -> (ok: bool) {
     return true
 }
 
-cbopenif_disconnect :: proc() -> (ok: bool) {
+disconnect :: proc() -> (ok: bool) {
     if cbopenif != nil {
         cbopenif->Release()
         cbopenif = nil
     }
-    com_uninitialize()
+    com.uninitialize()
 
     return true
 }

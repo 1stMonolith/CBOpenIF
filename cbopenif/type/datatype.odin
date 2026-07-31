@@ -1,18 +1,23 @@
 package type
 
+import "../controlbuilder"
+
 import "../com"
 @(private) HResult        :: com.HResult
 @(private) IUnknownIF     :: com.IUnknownIF
 @(private) IUnknownVTable :: com.IUnknownVTable
 
 import "../bstr"
-@(private) BStr           :: bstr.BStr
+@(private) BStr :: bstr.BStr
 
 import "../variant"
-@(private) VariantBool    :: variant.VariantBool
+@(private) VariantBool :: variant.VariantBool
 
-import "../components"
-@(private) Components     :: components.Components
+import "../type"
+@(private) ScopeType :: type.ScopeType
+
+import "../component"
+@(private) Components :: component.Components
 
 DataType :: distinct rawptr
 
@@ -29,8 +34,8 @@ DataTypeVTable :: struct {
     ProtectedPut:          proc "system" (this: ^DataTypeIF, Protected: VariantBool) -> HResult,
     HiddenGet:             proc "system" (this: ^DataTypeIF, Hidden: ^VariantBool) -> HResult,
     HiddenPut:             proc "system" (this: ^DataTypeIF, Hidden: VariantBool) -> HResult,
-    ScopeGet:              proc "system" (this: ^DataTypeIF, Scope: ^Scope) -> HResult,
-    ScopePut:              proc "system" (this: ^DataTypeIF, Scope: Scope) -> HResult,
+    ScopeGet:              proc "system" (this: ^DataTypeIF, Scope: ^ScopeType) -> HResult,
+    ScopePut:              proc "system" (this: ^DataTypeIF, Scope: ScopeType) -> HResult,
     DescriptionGet:        proc "system" (this: ^DataTypeIF, Description: ^BStr) -> HResult,
     DescriptionPut:        proc "system" (this: ^DataTypeIF, Description: BStr) -> HResult,
     GuidGet:               proc "system" (this: ^DataTypeIF, Guid: ^BStr) -> HResult,
@@ -47,8 +52,8 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
     datatype = nil
     ok = false
 
-    if !connected() do return
-    
+    if !controlbuilder.connected() do return
+
     bstr_name := bstr.from_string(name)
     bstr_description := bstr.from_string(description)
     defer {
@@ -64,7 +69,7 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
 datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr := bstr.from_string(xml)
     defer bstr.free(bstr)
@@ -79,7 +84,7 @@ datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr: BStr
     defer bstr.free(bstr)
@@ -100,7 +105,7 @@ datatype_name_ :: proc(datatype: DataType) -> (name: string, ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr: BStr
     defer bstr.free(bstr)
@@ -115,7 +120,7 @@ datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
     ok = false
     
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr := bstr.from_string(name)
     defer bstr.free(bstr)
@@ -136,7 +141,7 @@ datatype_protected_ :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
@@ -150,7 +155,7 @@ datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool
     ok = false
     
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^DataTypeIF)(datatype)->ProtectedPut(bool_to_variantbool(protected))
     if com.failed(hr) do return
@@ -169,7 +174,7 @@ datatype_hidden_ :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     ok = false
     
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
@@ -183,7 +188,7 @@ datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^DataTypeIF)(datatype)->HiddenPut(bool_to_variantbool(hidden))
     if com.failed(hr) do return
@@ -202,7 +207,7 @@ datatype_scope_ :: proc(datatype: DataType) -> (scope: Scope, ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^DataTypeIF)(datatype)->ScopeGet(&scope)
     if com.failed(hr) do return
@@ -215,7 +220,7 @@ datatype_scope_set :: proc(datatype: DataType, scope: Scope) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^DataTypeIF)(datatype)->ScopePut(scope)
     if com.failed(hr) do return
@@ -234,7 +239,7 @@ datatype_description_ :: proc(datatype: DataType) -> (description: string, ok: b
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr: BStr
     defer bstr.free(bstr)
@@ -249,7 +254,7 @@ datatype_description_set :: proc(datatype: DataType, description: string) -> (ok
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr := bstr.from_string(description)
     defer bstr.free(bstr)
@@ -270,7 +275,7 @@ datatype_guid_ :: proc(datatype: DataType) -> (guid: string, ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr: BStr
     defer bstr.free(bstr)
@@ -285,7 +290,7 @@ datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr := bstr.from_string(guid)
     defer bstr.free(bstr)
@@ -306,7 +311,7 @@ datatype_reserved_by_function_ :: proc(datatype: DataType) -> (reserved_by_funct
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr: BStr
     defer bstr.free(bstr)
@@ -321,7 +326,7 @@ datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_functi
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     bstr := bstr.from_string(reserved_by_function)
     defer bstr.free(bstr)
@@ -342,7 +347,7 @@ datatype_components_ :: proc(datatype: DataType) -> (components: Components, ok:
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^DataTypeIF)(datatype)->ComponentsGet(&components)
     if com.failed(hr) do return
@@ -355,7 +360,7 @@ datatype_components_set :: proc(datatype: DataType, components: Components) -> (
     ok = false
 
     if datatype == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^DataTypeIF)(datatype)->ComponentsPut(components)
     if com.failed(hr) do return
@@ -373,7 +378,7 @@ datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
     count = 0
     ok = false
     
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components
@@ -396,7 +401,7 @@ datatype_component_remove :: proc {
 datatype_component_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components
@@ -414,7 +419,7 @@ datatype_component_remove_by_name :: proc(datatype: DataType, name: string) -> (
 datatype_component_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components
@@ -437,7 +442,7 @@ datatype_component_add :: proc {
 datatype_component_add_ :: proc(datatype: DataType, component: Component) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
     if component == nil do return
 
@@ -455,7 +460,7 @@ datatype_component_add_ :: proc(datatype: DataType, component: Component) -> (ok
 datatype_component_add_at_index :: proc(datatype: DataType, component: Component, index: i32) -> (ok: bool) {
     ok = false
     
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
     if component == nil do return
 
@@ -480,7 +485,7 @@ datatype_component_by_name :: proc(datatype: DataType, name: string) -> (compone
     component = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components
@@ -499,7 +504,7 @@ datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (componen
     component = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components
@@ -517,7 +522,7 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     index = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if datatype == nil do return
 
     components: Components

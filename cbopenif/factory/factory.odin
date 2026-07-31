@@ -1,4 +1,31 @@
-package com
+package factory
+
+import "../com"
+@(private) HResult        :: com.HResult
+@(private) GUID           :: com.GUID
+@(private) IUnknownIF     :: com.IUnknownIF
+@(private) IUnknownVTable :: com.IUnknownVTable
+
+import "../bstr"
+@(private) BStr :: bstr.BStr
+
+import "../variant"
+@(private) Variant     :: variant.Variant
+@(private) VariantBool :: variant.VariantBool
+
+import "../type"
+@(private) DataType      :: type.DataType
+@(private) ParameterType :: type.ParameterType
+@(private) VariableType  :: type.VariableType
+
+import "../variable"
+@(private) ApplicationVariables :: variable.ApplicationVariables
+@(private) ExternalVariable     :: variable.ExternalVariable
+@(private) ExternalVariables    :: variable.ExternalVariables
+@(private) GlobalVariable       :: variable.GlobalVariable
+@(private) GlobalVariables      :: variable.GlobalVariables
+@(private) Variable             :: variable.Variable
+@(private) Variables            :: variable.Variables
 
 FactoryIF :: struct #raw_union {
     #subtype iunknown: IUnknownIF,
@@ -15,7 +42,7 @@ FactoryVTable :: struct {
     DeserializeCMParameter:             proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CMParameter: ^CMParameter) -> HResult,
     DeserializeExtensibleParameter:     proc "system" (this: ^FactoryIF, XMLStr: ^BStr, extensibleparameter: ^rawptr) -> HResult,
     DeserializeParameter:               proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Parameter: ^Parameter) -> HResult,
-    DeserializeICodeBlock:              proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ICodeBlock: ^ICodeBlock) -> HResult,
+    DeserializeCodeBlock:               proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CodeBlock: ^CodeBlock) -> HResult,
     DeserializeCMConnection:            proc "system" (this: ^FactoryIF, XMLStr: ^BStr, CMConnection: ^CMConnection) -> HResult,
     DeserializeDataType:                proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Datatype: ^DataType) -> HResult,
     NewDataType:                        proc "system" (this: ^FactoryIF, Name, Description: BStr, DataType: ^DataType) -> HResult,

@@ -9,8 +9,8 @@ CodeBlocksIF :: struct #raw_union {
 
 CodeBlocksVTable :: struct {
     using iunknown_vtable: IUnknownVTable,
-    Add:              proc "system" (this: ^CodeBlocksIF, ICodeBlock: ICodeBlock) -> HResult,
-    AddBefore:        proc "system" (this: ^CodeBlocksIF, ICodeBlock: ICodeBlock, BeforeIndex: i32) -> HResult,
+    Add:              proc "system" (this: ^CodeBlocksIF, CodeBlock: CodeBlock) -> HResult,
+    AddBefore:        proc "system" (this: ^CodeBlocksIF, CodeBlock: CodeBlock, BeforeIndex: i32) -> HResult,
     AddSTCodeBlock:   proc "system" (this: ^CodeBlocksIF, Code: STCodeBlock) -> HResult,
     AddSTCodeBlock1:  proc "system" (this: ^CodeBlocksIF, Name: BStr, Code: ^STCodeBlock) -> HResult,
     AddSTCodeBlock2:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCode: ^BStr, Code: ^STCodeBlock) -> HResult,
@@ -25,9 +25,9 @@ CodeBlocksVTable :: struct {
     AddSFCCodeBlock:  proc "system" (this: ^CodeBlocksIF, Code: SFCCodeBlock) -> HResult,
     AddSFCCodeBlock1: proc "system" (this: ^CodeBlocksIF, Name: BStr, Code: ^SFCCodeBlock) -> HResult,
     AddSFCCodeBlock2: proc "system" (this: ^CodeBlocksIF, Name: BStr, SeqControl, StepElapsedTime: VariantBool, Code: ^SFCCodeBlock) -> HResult,
-    Find:             proc "system" (this: ^CodeBlocksIF, Name: BStr, ICodeBlock: ^ICodeBlock) -> HResult,
+    Find:             proc "system" (this: ^CodeBlocksIF, Name: BStr, CodeBlock: ^CodeBlock) -> HResult,
     FindNr:           proc "system" (this: ^CodeBlocksIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:             proc "system" (this: ^CodeBlocksIF, Index: i32, ICodeBlock: ^ICodeBlock) -> HResult,
+    Item:             proc "system" (this: ^CodeBlocksIF, Index: i32, CodeBlock: ^CodeBlock) -> HResult,
     Count:            proc "system" (this: ^CodeBlocksIF, Count: ^i32) -> HResult,
     Remove:           proc "system" (this: ^CodeBlocksIF, Index: i32) -> HResult,
     AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, Code: FDCodeBlock) -> HResult,
@@ -45,7 +45,7 @@ codeblocks_add :: proc {
 }
 
 @(private)
-codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: ICodeBlock) -> (ok: bool) {
+codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -59,7 +59,7 @@ codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: ICodeBlock) -> (ok: b
 }
 
 @(private)
-codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: ICodeBlock, index: i32) -> (ok: bool) {
+codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, index: i32) -> (ok: bool) {
     ok = false
 
     if !connected() do return
@@ -156,7 +156,7 @@ codeblocks_codeblock :: proc {
 }
 
 @(private)
-codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: ICodeBlock, ok: bool) {
+codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
     codeblock = nil
     ok = false
 
@@ -172,7 +172,7 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
 }
 
 @(private)
-codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: ICodeBlock, ok: bool) {
+codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
     codeblock = nil
     ok = false
 

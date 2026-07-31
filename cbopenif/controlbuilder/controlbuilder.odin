@@ -1,6 +1,26 @@
 package controlbuilder
 
-controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
+import "../cbopen"
+import "../factory"
+
+connect :: proc() -> (ok: bool) {
+    cbopen.connect()
+    factory.connect()
+    return true
+}
+
+disconnect :: proc() -> (ok: bool) {
+    cbopen.disconnect()
+    factory.disconnect()
+    return true
+}
+
+connected :: proc() -> (ok: bool) {
+    if (cbopen.cbopenif != nil) & (factory.factoryif != nil) do return true
+    return false
+}
+
+online :: proc() -> (is_online: bool, messages: string, ok: bool) {
     if !connected() do return false, "", false
     vb: VariantBool
     bstr_messages: BStr
@@ -20,7 +40,7 @@ controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool)
     return is_online, messages, false
 }
 
-controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
+offline :: proc() -> (messages: string, ok: bool) {
     if !connected() do return "", false
     bstr_messages: BStr
 
@@ -37,7 +57,7 @@ controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
     return messages, true
 }
 
-controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
+get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
     if !connected() do return {}, false
     variant_init(&setting) // caller must variant_free(&value) when done, OR we clear on failure only!
 

@@ -1,9 +1,5 @@
 package signal
 
-SignalType :: enum {
-    Siganl = 0
-}
-
 Signal :: distinct rawptr
 
 SignalIF :: struct #raw_union {

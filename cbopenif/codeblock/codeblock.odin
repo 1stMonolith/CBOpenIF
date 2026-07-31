@@ -1,14 +1,5 @@
 package codeblock
 
-CodeBlockType :: enum i32 {
-    ST  = 0,
-    SFC = 1,
-    FBD = 2,
-    LD  = 3,
-    IL  = 4,
-    FD  = 5,
-}
-
 CodeBlock :: distinct rawptr
 
 CodeBlockIF :: struct #raw_union {

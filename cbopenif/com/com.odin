@@ -2,6 +2,9 @@ package com
 
 import "core:sys/windows"
 
+import "../bstr"
+@(private) BStr :: bstr.BStr
+
 GUID    :: windows.GUID
 HResult :: windows.HRESULT
 
