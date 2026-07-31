@@ -29,7 +29,7 @@ DataTypeVTable :: struct {
     Serialize:             proc "system" (this: ^DataTypeIF, XMLStr: ^BStr) -> HResult,
 }
 
-datatype_new :: proc(name: string, description := "", hidden := VariantBoolFalse, protected := VariantBoolFalse, scope := Scope.Public) -> (datatype: DataType, ok: bool) {
+datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := Scope.Public) -> (datatype: DataType, ok: bool) {
     datatype = nil
     ok = false
 
@@ -41,7 +41,7 @@ datatype_new :: proc(name: string, description := "", hidden := VariantBoolFalse
         bstr_free(bstr_name)
         bstr_free(bstr_description)
     }
-    hr := factoryif->NewDataType1(bstr_name, bstr_description, protected, hidden, scope, cast(^DataType)&datatype)
+    hr := factoryif->NewDataType1(bstr_name, bstr_description, bool_to_variantbool(protected), bool_to_variantbool(hidden), scope, cast(^DataType)&datatype)
     if failed(hr) do return
 
     return datatype, true
@@ -117,27 +117,28 @@ datatype_protected :: proc {
 }
 
 @(private)
-datatype_protected_ :: proc(datatype: DataType) -> (protected: VariantBool, ok: bool) {
+datatype_protected_ :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
     protected = {}
     ok = false
 
     if datatype == nil do return
     if !connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ProtectedGet(&protected)
+    vb := bool_to_variantbool(protected)
+    hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
     if failed(hr) do return
 
-    return protected, true
+    return variantbool_to_bool(vb), true
 }
 
 @(private)
-datatype_protected_set :: proc(datatype: DataType, protected: VariantBool) -> (ok: bool) {
+datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool) {
     ok = false
     
     if datatype == nil do return
     if !connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ProtectedPut(protected)
+    hr := (^DataTypeIF)(datatype)->ProtectedPut(bool_to_variantbool(protected))
     if failed(hr) do return
 
     return true
@@ -149,27 +150,28 @@ datatype_hidden :: proc {
 }
 
 @(private)
-datatype_hidden_ :: proc(datatype: DataType) -> (hidden: VariantBool, ok: bool) {
+datatype_hidden_ :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     hidden = {}
     ok = false
     
     if datatype == nil do return
     if !connected() do return
     
-    hr := (^DataTypeIF)(datatype)->HiddenGet(&hidden)
+    vb := bool_to_variantbool(hidden)
+    hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
     if failed(hr) do return
 
-    return hidden, true
+    return variantbool_to_bool(vb), true
 }
 
 @(private)
-datatype_hidden_set :: proc(datatype: DataType, hidden: VariantBool) -> (ok: bool) {
+datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
     if !connected() do return
     
-    hr := (^DataTypeIF)(datatype)->HiddenPut(hidden)
+    hr := (^DataTypeIF)(datatype)->HiddenPut(bool_to_variantbool(hidden))
     if failed(hr) do return
 
     return true
