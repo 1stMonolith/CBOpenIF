@@ -68,9 +68,9 @@ components_component_by_name :: proc(components: Components, name: string) -> (c
     if components == nil do return
     
     bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
     p: rawptr
     hr := (^ComponentsIF)(components)->Find(bstr_name, &p)
+    defer bstr.free(bstr_name)
     if com.failed(hr) do return
     
     return Component(p), true
@@ -131,7 +131,8 @@ components_remove_by_name :: proc(components: Components, name: string) -> (ok: 
 
     index: i32
     index, ok = components_component_index(components, name)
-    
+    if !ok do return
+
     hr := (^ComponentsIF)(components)->Remove(index)
     if com.failed(hr) do return
     
