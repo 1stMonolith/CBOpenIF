@@ -1,27 +1,5 @@
 package cbopenif
 
-ParameterType :: enum i32 {
-    Parameter     = 0,
-    Extensible    = 1,
-    ControlModule = 2,
-}
-
-VariableType :: enum i32 {
-    Variable              = 0,
-    ExternalVariable      = 1,
-    GlobalVariable        = 2,
-    CommunicationVariable = 3,
-}
-
-CodeBlockType :: enum i32 {
-    ST  = 0,
-    SFC = 1,
-    FBD = 2,
-    LD  = 3,
-    IL  = 4,
-    FD  = 5,
-}
-
 HardwareFileType :: enum i32 {
     Firmware         = 0,
     Update           = 1,
@@ -43,32 +21,6 @@ VisibilityInGraphics :: enum i32 {
     Default   = 0,
     Visible   = 1,
     Invisible = 2,
-}
-
-AutoPos :: enum i32 {
-    Top    = 0,
-    Bottom = 1,
-    Left   = 2,
-    Right  = 3,
-}
-
-i32_to_autopos :: proc(n: i32) -> (AutoPos, bool) {
-    switch n {
-        case 0: return .Top, true
-        case 1: return .Bottom, true
-        case 2: return .Left, true
-        case 3: return .Right, true
-    }
-    return {}, false
-}
-
-SFCPriorityValue :: enum i32 {
-    Default = 0,
-    Lowest  = 1,
-    Low     = 2,
-    Medium  = 3,
-    High    = 4,
-    Highest = 5,
 }
 
 MessageType :: enum i32 {
@@ -123,10 +75,6 @@ ExecutionInstanceType :: enum {
     Diagrams = 0
 }
 
-SignalType :: enum {
-    Siganl = 0
-}
-
 HardwareLibraryFileType :: enum {
     HelpFile = 0,
     IconFile = 1
@@ -153,8 +101,8 @@ disconnect :: proc() -> (ok: bool) {
 }
 
 connected :: proc() -> (ok: bool) {
- if (cbopenif != nil) & (factoryif != nil) do return true
- return false
+    if (cbopenif != nil) & (factoryif != nil) do return true
+    return false
 }
 
 online :: proc {
