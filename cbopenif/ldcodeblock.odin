@@ -3,12 +3,12 @@ package cbopenif
 LDCodeBlock :: distinct rawptr
 
 LDCodeBlockIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^LDCodeBlockVTable,
 }
 
 LDCodeBlockVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:   proc "system" (this: ^LDCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^LDCodeBlockIF, Name: BStr) -> HResult,
     STCodeGet: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,

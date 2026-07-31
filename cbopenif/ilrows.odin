@@ -3,12 +3,12 @@ package cbopenif
 ILRows  :: distinct rawptr
 
 ILRowsIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ILRowsVTable,
 }
 
 ILRowsVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     Add:        proc "system" (this: ^ILRowsIF, ILRow: ILRow) -> HResult,
     AddBefore:  proc "system" (this: ^ILRowsIF, ILRow: ILRow, Index: i32) -> HResult,
     AddRow:     proc "system" (this: ^ILRowsIF, Label, Instruction, Operand, Description: BStr, ILRow: ^ILRow) -> HResult,

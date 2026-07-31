@@ -3,12 +3,12 @@ package cbopenif
 GraphSize  :: distinct rawptr
 
 GraphSizeIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^GraphSizeVTable,
 }
 
 GraphSizeVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     LowerLeftGet:  proc "system" (this: ^GraphSizeIF, LowerLeft: ^Point) -> HResult,
     Missing8:      proc "system" (this: ^GraphSizeIF) -> HResult,
     LowerLeftPut:  proc "system" (this: ^GraphSizeIF, LowerLeft: Point) -> HResult,

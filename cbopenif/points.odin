@@ -3,12 +3,12 @@ package cbopenif
 Points :: distinct rawptr
 
 PointsIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^PointsVTable,
 }
 
 PointsVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     Add:       proc "system" (this: ^PointsIF, Point: Point) -> HResult,
     AddBefore: proc "system" (this: ^PointsIF, Point: Point, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^PointsIF, X, Y: f64, Point: ^Point) -> HResult,

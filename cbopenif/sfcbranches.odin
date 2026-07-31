@@ -3,12 +3,12 @@ package cbopenif
 SFCBranches :: distinct rawptr
 
 SFCBranchesIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^SFCBranchesVTable,
 }
 
 SFCBranchesVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     Add:             proc "system" (this: ^SFCBranchesIF, SFCBranch: SFCBranch) -> HResult,
     AddBefore:       proc "system" (this: ^SFCBranchesIF, SFCBranch: SFCBranch, BeforeIndex: i32) -> HResult,
     AddBranch:       proc "system" (this: ^SFCBranchesIF, SFCBranch: ^SFCBranch) -> HResult,

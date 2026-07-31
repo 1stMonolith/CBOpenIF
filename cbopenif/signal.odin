@@ -3,12 +3,12 @@ package cbopenif
 Signal :: distinct rawptr
 
 SignalIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^SignalVTable,
 }
 
 SignalVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:             proc "system" (this: ^SignalIF, Name: ^BStr) -> HResult,
     NamePut:             proc "system" (this: ^SignalIF, Name: BStr) -> HResult,
     PathGet:             proc "system" (this: ^SignalIF, Path: ^BStr) -> HResult,

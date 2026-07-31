@@ -3,12 +3,12 @@ package cbopenif
 SFCBranch :: distinct rawptr
 
 SFCBranchIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^SFCBranchVTable,
 }
 
 SFCBranchVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     PriorityGet: proc "system" (this: ^SFCBranchIF, SFCPriority: ^SFCPriorityValue) -> HResult,
     PriorityPut: proc "system" (this: ^SFCBranchIF, SFCPriority: SFCPriorityValue) -> HResult,
     ElementsGet: proc "system" (this: ^SFCBranchIF, SFCElements: ^SFCElements) -> HResult,

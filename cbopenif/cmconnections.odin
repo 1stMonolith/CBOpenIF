@@ -3,12 +3,12 @@ package cbopenif
 CMConnections :: distinct rawptr
 
 CMConnectionsIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^CMConnectionsVTable,
 }
 
 CMConnectionsVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     Add:       proc "system" (this: ^CMConnectionsIF, CMConnection: CMConnection) -> HResult,
     AddBefore: proc "system" (this: ^CMConnectionsIF, CMConnection: CMConnection, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^CMConnectionsIF, Name, ActualParameter: BStr, CMConnection: ^CMConnection) -> HResult,

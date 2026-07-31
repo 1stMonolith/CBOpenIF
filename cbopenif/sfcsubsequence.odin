@@ -3,12 +3,12 @@ package cbopenif
 SFCSubSequence :: distinct rawptr
 
 SFCSubSequenceIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^SFCSubSequenceVTable,
 }
 
 SFCSubSequenceVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:     proc "system" (this: ^SFCSubSequenceIF, Name: ^BStr) -> HResult,
     NamePut:     proc "system" (this: ^SFCSubSequenceIF, Name: BStr) -> HResult,
     ElementsGet: proc "system" (this: ^SFCSubSequenceIF, SFCElements: ^SFCElements) -> HResult,

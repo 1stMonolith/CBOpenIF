@@ -3,12 +3,12 @@ package cbopenif
 FBDCodeBlock :: distinct rawptr
 
 FBDCodeBlockIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^FBDCodeBlockVTable,
 }
 
 FBDCodeBlockVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:   proc "system" (this: ^FBDCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^FBDCodeBlockIF, Name: BStr) -> HResult,
     STCodeGet: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,

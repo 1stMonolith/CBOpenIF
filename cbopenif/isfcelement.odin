@@ -3,12 +3,12 @@ package cbopenif
 ISFCElement :: distinct rawptr
 
 ISFCElementIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ISFCElementVTable,
 }
 
 ISFCElementVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     IsSFCStepGet:         proc "system" (this: ^ISFCElementIF, IsSFCStep: ^VariantBool) -> HResult,
     IsSFCTransitionGet:   proc "system" (this: ^ISFCElementIF, IsSFCTransition: ^VariantBool) -> HResult,
     IsSFCSubSequenceGet:  proc "system" (this: ^ISFCElementIF, IsSFCSubSequence: ^VariantBool) -> HResult,

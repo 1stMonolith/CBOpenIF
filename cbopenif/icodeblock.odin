@@ -3,12 +3,12 @@ package cbopenif
 ICodeBlock :: distinct rawptr
 
 ICodeBlockIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ICodeBlockVTable,
 }
 
 ICodeBlockVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:        proc "system" (this: ^ICodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:        proc "system" (this: ^ICodeBlockIF, Name: BStr) -> HResult,
     IsSTCodeBlock:  proc "system" (this: ^ICodeBlockIF, IsSTCodeBlock: ^VariantBool) -> HResult,
@@ -156,4 +156,23 @@ icodeblock_release :: proc(icodeblock: ICodeBlock) {
     if icodeblock != nil {
         (^ICodeBlockIF)(icodeblock)->Release()
     }
+}
+
+icodeblock_as_st :: proc(icodeblock: ICodeBlock) -> (stcodeblock: STCodeBlock, ok: bool) {
+    stcodeblock = nil
+    ok = false
+
+    if icodeblock == nil do return
+
+    IID := GUID{
+        0x79C9A3E8,
+        0x451D,
+        0x4EE8,
+        {0xB9, 0xFF, 0xA4, 0x1A, 0xA9, 0x02, 0x4B, 0x65},
+    }
+
+    hr := (^IUnknowIF)(icodeblock)->QueryInterface(&IID, cast(^rawptr)&stcodeblock)
+    if failed(hr) do return
+
+    return stcodeblock, true
 }

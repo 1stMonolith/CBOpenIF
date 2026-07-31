@@ -3,12 +3,12 @@ package cbopenif
 DataType :: distinct rawptr
 
 DataTypeIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^DataTypeVTable,
 }
 
 DataTypeVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:               proc "system" (this: ^DataTypeIF, Name: ^BStr) -> HResult,
     NamePut:               proc "system" (this: ^DataTypeIF, Name: BStr) -> HResult,
     ProtectedGet:          proc "system" (this: ^DataTypeIF, Protected: ^VariantBool) -> HResult,

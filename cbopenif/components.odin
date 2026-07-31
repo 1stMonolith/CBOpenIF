@@ -3,12 +3,12 @@ package cbopenif
 Components :: distinct rawptr
 
 ComponentsIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ComponentsVTable,
 }
 
 ComponentsVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     Add:       proc "system" (this: ^ComponentsIF, Component: Component) -> HResult,
     AddBefore: proc "system" (this: ^ComponentsIF, Component: Component, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^Component) -> HResult,

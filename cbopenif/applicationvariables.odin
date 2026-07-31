@@ -3,12 +3,12 @@ package cbopenif
 ApplicationVariables :: distinct rawptr
 
 ApplicationVariablesIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ApplicationVariablesVTable,
 }
 
 ApplicationVariablesVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     GlobalVariablesGet: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: ^GlobalVariables) -> HResult,
     Missing8:           proc "system" (this: ^ApplicationVariablesIF) -> HResult,
     GlobalVariablesPut: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: GlobalVariables) -> HResult,

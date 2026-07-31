@@ -3,12 +3,12 @@ package cbopenif
 Parameter   :: distinct rawptr
 
 ParameterIF :: struct #raw_union {
-    #subtype unnknown_and_dispatch: UnknownAndDispatchIF,
+    #subtype iunknown: IUnknowIF,
     using vtable: ^ParameterVTable,
 }
 
 ParameterVTable :: struct {
-    using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
+    using iunknown_vtable: IUnknowVTable,
     NameGet:                proc "system" (this: ^ParameterIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^ParameterIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^ParameterIF, TypeName: ^BStr) -> HResult,
