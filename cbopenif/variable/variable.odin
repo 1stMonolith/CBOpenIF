@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
@@ -69,7 +70,7 @@ variable_new :: proc(name: string, type: string, attribute := "", initialvalue :
         bstr.free(bstr_writepermission)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&variable)
+    hr := factory.factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&variable)
     if com.failed(hr) do return
     
     return variable, true
@@ -82,7 +83,7 @@ variable_deserialize :: proc(variable: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeVariable(&bs, cast(^rawptr)variable)
+    hr := factory.factoryif->DeserializeVariable(&bs, cast(^rawptr)variable)
     if com.failed(hr) do return
     
     return true
@@ -561,7 +562,7 @@ variable_safety_type_set :: proc(variable: rawptr, safety_type: string) -> (ok: 
     return true
 }
 
-variable_release :: proc(variable: Variable) {
+variable_release :: proc(variable: rawptr) {
     if variable != nil {
         (^VariableIF)(variable)->Release()
     }

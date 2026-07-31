@@ -3,6 +3,7 @@ package variable
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 GlobalVariableIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -61,7 +62,7 @@ globalvariable_new :: proc(name: string, type: string, attribute := "", initialv
         bstr.free(bstr_writepermission)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewGlobalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&global_variable)
+    hr := factory.factoryif->NewGlobalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&global_variable)
     if com.failed(hr) do return
     
     return global_variable, true
@@ -74,7 +75,7 @@ globalvariable_deserialize :: proc(global_variable: ^rawptr, xml: string) -> (ok
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeGlobalVariable(&bs, cast(^rawptr)global_variable)
+    hr := factory.factoryif->DeserializeGlobalVariable(&bs, cast(^rawptr)global_variable)
     if com.failed(hr) do return
     
     return true

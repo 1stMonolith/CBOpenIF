@@ -58,7 +58,7 @@ signals_signal :: proc {
     signals_signal_by_index,
 }
 
-signals_signal_by_name :: proc(signals: rawptr, name: string) -> (signal: Signal, ok: bool) {
+signals_signal_by_name :: proc(signals: rawptr, name: string) -> (signal: rawptr, ok: bool) {
     signal = nil
     ok = false
 

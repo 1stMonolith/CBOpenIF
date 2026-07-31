@@ -1,7 +1,16 @@
 package controlbuilder
 
+import "../com"
+import "../variant"
+import "../bstr"
 import "../cbopen"
 import "../factory"
+
+@(private) BStr             :: bstr.BStr
+@(private) Variant          :: variant.Variant
+@(private) VariantBool      :: variant.VariantBool
+@(private) VariantBoolTrue  :: variant.VariantBoolTrue
+@(private) VariantBoolFalse :: variant.VariantBoolFalse
 
 connect :: proc() -> (ok: bool) {
     cbopen.connect()
@@ -21,11 +30,11 @@ disconnect :: proc() -> (ok: bool) {
 }
 
 online :: proc() -> (is_online: bool, messages: string, ok: bool) {
-    if !controlbuilder.connected() do return false, "", false
+    if !connected() do return false, "", false
     vb: VariantBool
     bstr_messages: BStr
 
-    hr := cbopenif->Online(&vb, &bstr_messages)
+    hr := cbopen.cbopenif->Online(&vb, &bstr_messages)
     if com.failed(hr) {
         return false, "", false
     }
@@ -41,10 +50,10 @@ online :: proc() -> (is_online: bool, messages: string, ok: bool) {
 }
 
 offline :: proc() -> (messages: string, ok: bool) {
-    if !controlbuilder.connected() do return "", false
+    if !connected() do return "", false
     bstr_messages: BStr
 
-    hr := cbopenif->Offline(&bstr_messages)
+    hr := cbopen.cbopenif->Offline(&bstr_messages)
     if com.failed(hr) {
         return "", false
     }
@@ -58,15 +67,15 @@ offline :: proc() -> (messages: string, ok: bool) {
 }
 
 get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
-    if !controlbuilder.connected() do return {}, false
-    variant_init(&setting) // caller must variant_free(&value) when done, OR we clear on failure only!
+    if !connected() do return {}, false
+    variant.init(&setting) // caller must variant_free(&value) when done, OR we clear on failure only!
 
     bstr_name := bstr.from_string(setting_name)
     defer bstr.free(bstr_name)
 
-    hr := cbopenif->GetSetting(bstr_name, &setting)
+    hr := cbopen.cbopenif->GetSetting(bstr_name, &setting)
     if com.failed(hr) {
-        variant_free(&setting)
+        variant.free(&setting)
         return {}, false
     }
 

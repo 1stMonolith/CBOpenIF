@@ -4,11 +4,14 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
+import "../enumtypes"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
 @(private) GUID        :: com.GUID
 @(private) VariantBool :: variant.VariantBool
+@(private) Direction   :: enumtypes.DirectionType
 
 ParameterIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -23,8 +26,8 @@ ParameterVTable :: struct {
     TypeNamePut:            proc "system" (this: ^ParameterIF, TypeName: BStr) -> HResult,
     AttributeGet:           proc "system" (this: ^ParameterIF, Attribute: ^BStr) -> HResult,
     AttributePut:           proc "system" (this: ^ParameterIF, Attribute: BStr) -> HResult,
-    DirectionGet:           proc "system" (this: ^ParameterIF, Direction: ^Direction) -> HResult,
-    DirectionPut:           proc "system" (this: ^ParameterIF, Direction: Direction) -> HResult,
+    DirectionGet:           proc "system" (this: ^ParameterIF, Direction: ^i32) -> HResult,
+    DirectionPut:           proc "system" (this: ^ParameterIF, Direction: i32) -> HResult,
     InitialValueGet:        proc "system" (this: ^ParameterIF, InitialValue: ^BStr) -> HResult,
     InitialValuePut:        proc "system" (this: ^ParameterIF, InitialValue: BStr) -> HResult,
     DescriptionGet:         proc "system" (this: ^ParameterIF, Description: ^BStr) -> HResult,
@@ -68,7 +71,7 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
         bstr.free(bstr_writepermission)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewParameter1(bstr_name, bstr_type_name, bstr_attribute, i32(direction), bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&parameter)
+    hr := factory.factoryif->NewParameter1(bstr_name, bstr_type_name, bstr_attribute, i32(direction), bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&parameter)
     if com.failed(hr) do return
     
     return parameter, true
@@ -81,7 +84,7 @@ parameter_deserialize :: proc(parameter: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeParameter(&bs, cast(^rawptr)parameter)
+    hr := factory.factoryif->DeserializeParameter(&bs, cast(^rawptr)parameter)
     if com.failed(hr) do return
     
     return true

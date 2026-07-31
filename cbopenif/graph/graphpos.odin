@@ -2,7 +2,7 @@ package graph
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
 
 GraphPosIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -29,7 +29,7 @@ graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos
 
     if !controlbuilder.connected() do return
     
-    hr := factoryif->NewGraphPos(x_pos, y_pos, rotation, x_scale, y_scale, cast(^rawptr)&graphpos)
+    hr := factory.factoryif->NewGraphPos(x_pos, y_pos, rotation, x_scale, y_scale, cast(^rawptr)&graphpos)
     if com.failed(hr) do return
     
     return graphpos, true

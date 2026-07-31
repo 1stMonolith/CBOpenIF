@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 
 DataTypeIF :: struct #raw_union {
@@ -19,8 +20,8 @@ DataTypeVTable :: struct {
     ProtectedPut:          proc "system" (this: ^DataTypeIF, Protected: VariantBool) -> HResult,
     HiddenGet:             proc "system" (this: ^DataTypeIF, Hidden: ^VariantBool) -> HResult,
     HiddenPut:             proc "system" (this: ^DataTypeIF, Hidden: VariantBool) -> HResult,
-    ScopeGet:              proc "system" (this: ^DataTypeIF, Scope: ^ScopeType) -> HResult,
-    ScopePut:              proc "system" (this: ^DataTypeIF, Scope: ScopeType) -> HResult,
+    ScopeGet:              proc "system" (this: ^DataTypeIF, Scope: ^i32) -> HResult,
+    ScopePut:              proc "system" (this: ^DataTypeIF, Scope: i32) -> HResult,
     DescriptionGet:        proc "system" (this: ^DataTypeIF, Description: ^BStr) -> HResult,
     DescriptionPut:        proc "system" (this: ^DataTypeIF, Description: BStr) -> HResult,
     GuidGet:               proc "system" (this: ^DataTypeIF, Guid: ^BStr) -> HResult,
@@ -45,7 +46,7 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
         bstr.free(bstr_name)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewDataType1(bstr_name, bstr_description, variant.bool_to_variantbool(protected), variant.bool_to_variantbool(hidden), scope, cast(^rawptr)&datatype)
+    hr := factory.factoryif->NewDataType1(bstr_name, bstr_description, variant.bool_to_variantbool(protected), variant.bool_to_variantbool(hidden), i32(scope), cast(^rawptr)&datatype)
     if com.failed(hr) do return
 
     return datatype, true
@@ -58,7 +59,7 @@ datatype_deserialize :: proc(datatype: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeDataType(&bs, cast(^rawptr)datatype)
+    hr := factory.factoryif->DeserializeDataType(&bs, cast(^rawptr)datatype)
     if com.failed(hr) do return
     
     return true
@@ -194,7 +195,8 @@ datatype_scope_ :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
     if datatype == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^DataTypeIF)(datatype)->ScopeGet(&scope)
+    s := i32(scope)
+    hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com.failed(hr) do return
 
     return scope, true
@@ -207,7 +209,7 @@ datatype_scope_set :: proc(datatype: rawptr, scope: Scope) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ScopePut(scope)
+    hr := (^DataTypeIF)(datatype)->ScopePut(i32(scope))
     if com.failed(hr) do return
 
     return true
@@ -357,166 +359,4 @@ datatype_release :: proc(datatype: rawptr) {
     if datatype != nil {
         (^DataTypeIF)(datatype)->Release()
     }
-}
-
-datatype_component_count :: proc(datatype: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
-    
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-
-    count, ok = components_count(components)
-    if !ok do return
-
-    return count, true
-}
-
-datatype_component_remove :: proc {
-    datatype_component_remove_by_name,
-    datatype_component_remove_by_index,
-}
-
-@(private)
-datatype_component_remove_by_name :: proc(datatype: rawptr, name: string) -> (ok: bool) {
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-    
-    ok = components_remove(components, name)
-    if !ok do return
-    
-    return true
-}
-
-@(private)
-datatype_component_remove_by_index :: proc(datatype: rawptr, index: i32) -> (ok: bool) {
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-    
-    ok = components_remove(components, index)
-    if !ok do return
-    
-    return true
-}
-
-datatype_component_add :: proc {
-    datatype_component_add_,
-    datatype_component_add_at_index,
-}
-
-@(private)
-datatype_component_add_ :: proc(datatype: rawptr, component: rawptr) -> (ok: bool) {
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-    if component == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-
-    ok = components_add(components, component)
-    if !ok do return
-
-    return true
-}
-
-datatype_component_add_at_index :: proc(datatype: rawptr, component: rawptr, index: i32) -> (ok: bool) {
-    ok = false
-    
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-    if component == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-
-    ok = components_add_at_index(components, component, index)
-    if !ok do return
-    
-    return true
-}
-
-datatype_component :: proc {
-    datatype_component_by_name,
-    datatype_component_by_index,
-}
-
-@(private)
-datatype_component_by_name :: proc(datatype: rawptr, name: string) -> (component: rawptr, ok: bool) {
-    component = nil
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-    
-    component, ok = components_component_by_name(components, name)
-    if !ok do return
-    
-    return component, true
-}
-
-@(private)
-datatype_component_by_index :: proc(datatype: rawptr, index: i32) -> (component: rawptr, ok: bool) {
-    component = nil
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-    
-    component, ok = components_component_by_index(components, index)
-    if !ok do return
-    
-    return component, true
-}
-
-datatype_component_index :: proc(datatype: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if datatype == nil do return
-
-    components: Components
-    components, ok = datatype_components(datatype)
-    if !ok do return
-    defer components_release(components)
-    
-    index, ok = components_component_index(components, name)
-    if !ok do return
-    
-    return index, true
 }

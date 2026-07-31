@@ -2,7 +2,7 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
 
 SFCSelectionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -22,7 +22,7 @@ sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: rawptr, ok: bool
 
     if !controlbuilder.connected() do return
 
-    hr := factoryif->NewSFCSelection(nr_of_branches, cast(^rawptr)&sfcselection)
+    hr := factory.factoryif->NewSFCSelection(nr_of_branches, cast(^rawptr)&sfcselection)
     if com.failed(hr) do return
 
     return sfcselection, true

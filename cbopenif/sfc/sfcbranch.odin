@@ -2,7 +2,9 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../enumtypes"
+
+@(private) SFCPriorityValue :: enumtypes.SFCPriorityValue
 
 SFCBranchIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

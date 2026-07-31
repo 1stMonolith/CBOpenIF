@@ -3,6 +3,7 @@ package codeblock
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 ILCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -30,7 +31,7 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: rawptr, ok: bool) {
 
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := factoryif->NewILCodeBlock(bstr_name, cast(^rawptr)&ilcodeblock)
+    hr := factory.factoryif->NewILCodeBlock(bstr_name, cast(^rawptr)&ilcodeblock)
     if com.failed(hr) do return
 
     return ilcodeblock, true

@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
@@ -61,7 +62,7 @@ component_new :: proc(name: string, type: string, attribute := "", initialvalue 
         bstr.free(bstr_initialvalue)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^rawptr)&component)
+    hr := factory.factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^rawptr)&component)
     if com.failed(hr) do return
     
     return component, true

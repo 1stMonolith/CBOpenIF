@@ -2,7 +2,6 @@ package il
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 
 ILRowsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

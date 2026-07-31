@@ -3,6 +3,8 @@ package codeblock
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
+import "../variant"
 
 SFCCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -36,7 +38,7 @@ sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time :
 
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
-    hr := factoryif->NewSFCCodeBlock1(
+    hr := factory.factoryif->NewSFCCodeBlock1(
         bstr_name,
         variant.bool_to_variantbool(seq_control),
         variant.bool_to_variantbool(step_elapsed_time),

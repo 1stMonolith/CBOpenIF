@@ -2,7 +2,7 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../variant"
 
 SFCElementType :: enum i32 {
     Step         = 0,

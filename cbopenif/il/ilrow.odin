@@ -3,6 +3,8 @@ package il
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
+import "../variant"
 
 ILRowIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -46,7 +48,7 @@ ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: r
         bstr.free(bstr_operand)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewILRow(bstr_name, bstr_instruction, bstr_operand, bstr_description, cast(^rawptr)&ilrow)
+    hr := factory.factoryif->NewILRow(bstr_name, bstr_instruction, bstr_operand, bstr_description, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
 
     return ilrow, true
@@ -60,7 +62,7 @@ ilrow_new_comment :: proc(comment: string) -> (ilrow: rawptr, ok: bool) {
 
     bstr_comment := bstr.from_string(comment)
     bstr.free(bstr_comment)
-    hr := factoryif->NewILComment(bstr_comment, cast(^rawptr)&ilrow)
+    hr := factory.factoryif->NewILComment(bstr_comment, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
 
     return ilrow, true

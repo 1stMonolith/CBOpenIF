@@ -3,6 +3,7 @@ package graph
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 GraphNodeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -27,7 +28,7 @@ graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: rawptr, ok: b
     
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
-    hr := factoryif->NewGraphNode(bstr_name, x, y, cast(^rawptr)&graphnode)
+    hr := factory.factoryif->NewGraphNode(bstr_name, x, y, cast(^rawptr)&graphnode)
     if com.failed(hr) do return
     
     return graphnode, true

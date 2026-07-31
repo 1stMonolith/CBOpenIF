@@ -122,3 +122,12 @@ i32_to_autopos :: proc(n: i32) -> (AutoPos, bool) {
     }
     return {}, false
 }
+
+SFCPriorityValue :: enum i32 {
+    Default = 0,
+    Lowest  = 1,
+    Low     = 2,
+    Medium  = 3,
+    High    = 4,
+    Highest = 5
+}

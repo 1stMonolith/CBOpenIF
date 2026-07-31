@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
@@ -34,7 +35,7 @@ codeblock_deserialize :: proc(codeblock: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)codeblock)
+    hr := factory.factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)codeblock)
     if com.failed(hr) do return
     
     return true
@@ -179,7 +180,7 @@ codeblock_as_st :: proc(codeblock: rawptr) -> (stcodeblock: rawptr, ok: bool) {
         {0xB9, 0xFF, 0xA4, 0x1A, 0xA9, 0x02, 0x4B, 0x65},
     }
 
-    hr := (^IUnknownIF)(codeblock)->QueryInterface(&IID, cast(^rawptr)&stcodeblock)
+    hr := (^com.IUnknownIF)(codeblock)->QueryInterface(&IID, cast(^rawptr)&stcodeblock)
     if com.failed(hr) do return
 
     return stcodeblock, true

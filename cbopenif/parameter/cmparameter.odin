@@ -3,6 +3,10 @@ package parameter
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
+import "../enumtypes"
+
+@(private) AutoPoint :: enumtypes.AutoPoint
 
 CMParameterIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -30,9 +34,9 @@ CMParameterVTable :: struct {
     AutoPointGet:           proc "system" (this: ^CMParameterIF, AutoPoint: ^rawptr) -> HResult,
     Missing24:              proc "system" (this: ^CMParameterIF) -> HResult,
     AutoPointPut:           proc "system" (this: ^CMParameterIF, AutoPoint: rawptr) -> HResult,
-    GraphNodesGet:          proc "system" (this: ^CMParameterIF, GraphNodes: ^GraphNodes) -> HResult,
+    GraphNodesGet:          proc "system" (this: ^CMParameterIF, GraphNodes: ^rawptr) -> HResult,
     Missing27:              proc "system" (this: ^CMParameterIF) -> HResult,
-    GraphNodesPut:          proc "system" (this: ^CMParameterIF, GraphNodes: GraphNodes) -> HResult,
+    GraphNodesPut:          proc "system" (this: ^CMParameterIF, GraphNodes: rawptr) -> HResult,
     TypeGuid:               proc "system" (this: ^CMParameterIF, TypeGuid: ^BStr) -> HResult,
     TypePath:               proc "system" (this: ^CMParameterIF, TypePath: ^BStr) -> HResult,
     Serialize:              proc "system" (this: ^CMParameterIF, XML: ^BStr) -> HResult,
@@ -75,7 +79,7 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
         if !ok do return
     }
 
-    hr := factoryif->NewCMParameter1(bstr_name, bstr_type_name, bstr_attribute, bstr_initial_value, bstr_read_permission, bstr_write_permission, bstr_description, ap, cast(^rawptr)&cmparameter)
+    hr := factory.factoryif->NewCMParameter1(bstr_name, bstr_type_name, bstr_attribute, bstr_initial_value, bstr_read_permission, bstr_write_permission, bstr_description, ap, cast(^rawptr)&cmparameter)
     if com.failed(hr) do return
     
     return cmparameter, true
@@ -88,7 +92,7 @@ cmparameter_deserialize :: proc(cmparameter: ^rawptr, xml: string) -> (ok: bool)
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeCMParameter(&bs, cast(^rawptr)cmparameter)
+    hr := factory.factoryif->DeserializeCMParameter(&bs, cast(^rawptr)cmparameter)
     if com.failed(hr) do return
     
     return true

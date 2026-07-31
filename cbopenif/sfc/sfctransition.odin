@@ -3,6 +3,7 @@ package sfc
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 SFCTransitionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -33,7 +34,7 @@ sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransit
         bstr.free(bstr_stcode)
         bstr.free(bstr_dest)
     }
-    hr := factoryif->NewSFCTransition1(bstr_name, bstr_stcode, bstr_dest, cast(^rawptr)&sfctransition)
+    hr := factory.factoryif->NewSFCTransition1(bstr_name, bstr_stcode, bstr_dest, cast(^rawptr)&sfctransition)
     if com.failed(hr) do return
 
     return sfctransition, true

@@ -3,6 +3,7 @@ package variable
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 ExternalVariableIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -57,7 +58,7 @@ externalvariable_new :: proc(name: string, type: string, attribute := "", readpe
         bstr.free(bstr_writepermission)
         bstr.free(bstr_description)
     }
-    hr := factoryif->NewExternalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&external_variable)
+    hr := factory.factoryif->NewExternalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&external_variable)
     if com.failed(hr) do return
     
     return external_variable, true
@@ -70,7 +71,7 @@ externalvariable_deserialize :: proc(external_variable: ^rawptr, xml: string) ->
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeExternalVariable(&bs, cast(^rawptr)external_variable)
+    hr := factory.factoryif->DeserializeExternalVariable(&bs, cast(^rawptr)external_variable)
     if com.failed(hr) do return
     
     return true

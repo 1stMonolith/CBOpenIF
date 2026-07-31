@@ -2,7 +2,7 @@ package graph
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
 
 GraphSizeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -25,7 +25,7 @@ graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: rawptr, ok
 
     if !controlbuilder.connected() do return
     
-    hr := factoryif->NewGraphSize(lower_left, upper_right, cast(^rawptr)&graphsize)
+    hr := factory.factoryif->NewGraphSize(lower_left, upper_right, cast(^rawptr)&graphsize)
     if com.failed(hr) do return
     
     return graphsize, true

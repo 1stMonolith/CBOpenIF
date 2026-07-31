@@ -3,6 +3,8 @@ package sfc
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
+import "../variant"
 
 SFCStepIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -39,7 +41,7 @@ sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_
         bstr.free(bstr_n)
         bstr.free(bstr_p0)
     }
-    hr := factoryif->NewSFCStep1(bstr_name, variant.bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^rawptr)&sfcstep)
+    hr := factory.factoryif->NewSFCStep1(bstr_name, variant.bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^rawptr)&sfcstep)
     if com.failed(hr) do return
 
     return sfcstep, true

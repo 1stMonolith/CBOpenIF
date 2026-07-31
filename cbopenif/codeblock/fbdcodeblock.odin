@@ -3,6 +3,7 @@ package codeblock
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 FBDCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -33,7 +34,7 @@ fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: rawptr, ok: boo
         bstr.free(bstr_name)
         bstr.free(bstr_stcode)
     }
-    hr := factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&fbdcodeblock)
+    hr := factory.factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&fbdcodeblock)
     if com.failed(hr) do return
 
     return fbdcodeblock, true

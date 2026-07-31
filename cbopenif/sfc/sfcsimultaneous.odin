@@ -2,7 +2,7 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
 
 SFCSimultaneousIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -22,7 +22,7 @@ sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: rawptr, ok
 
     if !controlbuilder.connected() do return
 
-    hr := factoryif->NewSFCSimultaneous(nr_of_branches, cast(^rawptr)&sfcsimultaneous)
+    hr := factory.factoryif->NewSFCSimultaneous(nr_of_branches, cast(^rawptr)&sfcsimultaneous)
     if com.failed(hr) do return
 
     return sfcsimultaneous, true

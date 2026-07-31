@@ -150,7 +150,7 @@ FactoryVTable :: struct {
     NewSignal:                          proc "system" (this: ^FactoryIF, Name, Path, Direction: BStr, AcknowledgeGroup: Variant, Signal: ^rawptr) -> HResult,
 }
 
-factory_connect :: proc() -> (ok: bool) {
+connect :: proc() -> (ok: bool) {
     ok = false
 
     if factoryif != nil do return
@@ -182,7 +182,7 @@ factory_connect :: proc() -> (ok: bool) {
     return true
 }
 
-factory_disconnect :: proc()  -> (ok: bool) {
+disconnect :: proc()  -> (ok: bool) {
     if factoryif != nil {
         factoryif->Release()
         factoryif = nil

@@ -2,7 +2,7 @@ package graph
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
 
 PointIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -23,7 +23,7 @@ point_new :: proc(x, y: f64) -> (point: rawptr, ok: bool) {
 
     if !controlbuilder.connected() do return
 
-    hr := factoryif->NewPoint(x, y, cast(^rawptr)&point)
+    hr := factory.factoryif->NewPoint(x, y, cast(^rawptr)&point)
     if com.failed(hr) do return
 
     return point, true

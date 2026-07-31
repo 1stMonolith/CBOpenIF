@@ -4,10 +4,12 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
 @(private) GUID        :: com.GUID
+@(private) Variant     :: variant.Variant
 @(private) VariantBool :: variant.VariantBool
 
 SignalIF :: struct #raw_union {
@@ -41,15 +43,15 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     bstr_direction := bstr.from_string(direction)
 
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    variant_acknowledge_group := string_to_variant(acknowledge_group)
+    variant_acknowledge_group := variant.string_to_variant(acknowledge_group)
     
     defer {
         bstr.free(bstr_name)
         bstr.free(bstr_path)
         bstr.free(bstr_direction)
-        variant_free(&variant_acknowledge_group)
+        variant.free(&variant_acknowledge_group)
     }
-    hr := factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^rawptr)&signal)
+    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^rawptr)&signal)
     if com.failed(hr) do return
     
     return signal, true
@@ -62,7 +64,7 @@ signal_deserialize :: proc(signal: ^rawptr, xml: string) -> (ok: bool) {
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
-    hr := factoryif->DeserializeSignal(&bs, cast(^rawptr)signal)
+    hr := factory.factoryif->DeserializeSignal(&bs, cast(^rawptr)signal)
     if com.failed(hr) do return
     
     return true

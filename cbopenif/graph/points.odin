@@ -2,7 +2,6 @@ package graph
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 
 PointsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

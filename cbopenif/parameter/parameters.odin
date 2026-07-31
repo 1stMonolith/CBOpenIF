@@ -12,7 +12,7 @@ ParametersIF :: struct #raw_union {
 ParametersVTable :: struct {
     using iunknownvtable: com.IUnknownVTable,
     Add:       proc "system" (this: ^ParametersIF, Parameter: rawptr) -> HResult,
-    AddBefore: proc "system" (this: ^ParametersIF, Parameter: Pararawptrmeter, Index: i32) -> HResult,
+    AddBefore: proc "system" (this: ^ParametersIF, Parameter: rawptr, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^ParametersIF, Name, TypeName: BStr, Parameter: ^rawptr) -> HResult,
     Add2:      proc "system" (this: ^ParametersIF, Name, TypeName, Attribute, Direction, InitialValue, ReadPermission, WritePermission, Description: BStr, Parameter: ^rawptr) -> HResult,
     Find:      proc "system" (this: ^ParametersIF, Name: BStr, Parameter: ^rawptr) -> HResult,

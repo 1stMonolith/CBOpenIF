@@ -2,7 +2,10 @@ package graph
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../factory"
+import "../enumtypes"
+
+@(private) AutoPos :: enumtypes.AutoPos
 
 AutoPointIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -15,13 +18,13 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
-autopoint_new :: proc(autopos: AutoPos) -> (autopoint: rawptr, ok: bool) {
+autopoint_new :: proc(autopos: i32) -> (autopoint: rawptr, ok: bool) {
     autopoint = {}
     ok = false
 
     if !controlbuilder.connected() do return
 
-    hr := factoryif->NewAutoPoint(i32(autopos), cast(^rawptr)&autopoint)
+    hr := factory.factoryif->NewAutoPoint(i32(autopos), cast(^rawptr)&autopoint)
     if com.failed(hr) do return
 
     return autopoint, true
@@ -45,7 +48,7 @@ autopoint_autopos_ :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool) {
     if com.failed(hr) do return
 
     ap: AutoPos
-    ap, ok = i32_to_autopos(i32_ap)
+    ap, ok = enumtypes.i32_to_autopos(i32_ap)
     if !ok do return
     
     return ap, true

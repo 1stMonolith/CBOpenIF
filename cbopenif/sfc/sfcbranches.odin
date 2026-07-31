@@ -2,7 +2,6 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 
 SFCBranchesIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

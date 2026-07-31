@@ -3,6 +3,7 @@ package sfc
 import "../com"
 import "../controlbuilder"
 import "../bstr"
+import "../factory"
 
 SFCSubSequenceIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -26,7 +27,7 @@ sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: rawptr, ok: bool) {
 
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
-    hr := factoryif->NewSFCSubSequence(bstr_name, cast(^rawptr)&sfcsubsequence)
+    hr := factory.factoryif->NewSFCSubSequence(bstr_name, cast(^rawptr)&sfcsubsequence)
     if com.failed(hr) do return
 
     return sfcsubsequence, true

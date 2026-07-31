@@ -4,6 +4,7 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
+import "../factory"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
@@ -36,7 +37,7 @@ parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting
         bstr.free(bstr_name)
         bstr.free(bstr_value)
     }
-    hr := factoryif->NewParameterSetting(bstr_name, bstr_value, cast(^rawptr)&parameter_setting)
+    hr := factory.factoryif->NewParameterSetting(bstr_name, bstr_value, cast(^rawptr)&parameter_setting)
     if com.failed(hr) do return
     
     return parameter_setting, true
