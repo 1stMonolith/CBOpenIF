@@ -1,7 +1,6 @@
 package cbopenif
 
 SFCBranch :: distinct rawptr
-SFCElements :: distinct rawptr   // collection returned by the property
 
 SFCBranchIF :: struct #raw_union {
     #subtype unnknown_and_dispatch: UnknownAndDispatchIF,

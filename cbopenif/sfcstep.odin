@@ -9,10 +9,10 @@ SFCStepIF :: struct #raw_union {
 
 SFCStepVTable :: struct {
     using unnknown_and_dispatch_vtable: UnknownAndDispatchVTable,
-    NameGet:             proc "system" (this: ^SFCStepIF, Name: ^BStr) -> HResult,
-    NamePut:             proc "system" (this: ^SFCStepIF, Name: BStr) -> HResult,
-    InitialStepGet:      proc "system" (this: ^SFCStepIF, InitialStep: ^VariantBool) -> HResult,
-    InitialStepPut:      proc "system" (this: ^SFCStepIF, InitialStep: VariantBool) -> HResult,
+    NameGet:           proc "system" (this: ^SFCStepIF, Name: ^BStr) -> HResult,
+    NamePut:           proc "system" (this: ^SFCStepIF, Name: BStr) -> HResult,
+    InitialStepGet:    proc "system" (this: ^SFCStepIF, InitialStep: ^VariantBool) -> HResult,
+    InitialStepPut:    proc "system" (this: ^SFCStepIF, InitialStep: VariantBool) -> HResult,
     P1ActionSTCodeGet: proc "system" (this: ^SFCStepIF, P1ActionSTCode: ^BStr) -> HResult,
     P1ActionSTCodePut: proc "system" (this: ^SFCStepIF, P1ActionSTCode: BStr) -> HResult,
     P0ActionSTCodeGet: proc "system" (this: ^SFCStepIF, P0ActionSTCode: ^BStr) -> HResult,
@@ -37,14 +37,7 @@ sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_
         bstr_free(bstr_n)
         bstr_free(bstr_p0)
     }
-    hr := factoryif->NewSFCStep1(
-        bstr_name,
-        bool_to_variantbool(initial_step),
-        bstr_p1,
-        bstr_n,
-        bstr_p0,
-        cast(^rawptr)&sfcstep,
-    )
+    hr := factoryif->NewSFCStep1(bstr_name, bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^SFCStep)&sfcstep)
     if failed(hr) do return
 
     return sfcstep, true

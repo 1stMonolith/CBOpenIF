@@ -208,6 +208,10 @@ name :: proc {
     sfctransition_name_set,
     sfcstep_name_,
     sfcstep_name_set,
+    sfcsubsequence_name_,
+    sfcsubsequence_name_set,
+    sfccodeblock_name_,
+    sfccodeblock_name_set,
 }
 
 comment :: proc {
@@ -551,6 +555,26 @@ is_fd :: proc {
     codeblock_is_fd,
 }
 
+is_step :: proc {
+    isfcelement_is_step,
+}
+
+is_transition :: proc {
+    isfcelement_is_transition,
+}
+
+is_subsequence :: proc {
+    isfcelement_is_subsequence,
+}
+
+is_selection :: proc {
+    isfcelement_is_selection,
+}
+
+is_simultaneous :: proc {
+    isfcelement_is_simultaneous,
+}
+
 xml_string :: proc {
     fdcodeblock_xml_string_,
     fdcodeblock_xml_string_set,
@@ -600,6 +624,30 @@ priority :: proc {
 elements :: proc {
     sfcbranch_elements_,
     sfcbranch_elements_set,
+    sfcsubsequence_elements_,
+    sfcsubsequence_elements_set,
+    sfccodeblock_elements_,
+    sfccodeblock_elements_set,
+}
+
+braches :: proc {
+    sfcselection_branches_,
+    sfcselection_branches_set,
+}
+
+seq_control :: proc {
+    sfccodeblock_seq_control_,
+    sfccodeblock_seq_control_set,
+}
+
+elapsed_time :: proc {
+    sfccodeblock_step_elapsed_time_,
+    sfccodeblock_step_elapsed_time_set,
+}
+
+viewer_aspect :: proc {
+    sfccodeblock_viewer_aspect_,
+    sfccodeblock_viewer_aspect_set,
 }
 
 serialize :: proc {
@@ -616,6 +664,7 @@ serialize :: proc {
     ldcodeblock_serialize,
     fbdcodeblock_serialize,
     stcodeblock_serialize,
+    sfccodeblock_serialize
 }
 
 deserialize :: proc {
@@ -664,6 +713,13 @@ add :: proc {
     cmparameters_add_at_index,
     ilrows_add_,
     ilrows_add_at_index,
+    sfcelements_add_step,
+    sfcelements_add_transition,
+    sfcelements_add_sfcselectionection,
+    sfcelements_add_sfcsimultaneousultaneous,
+    sfcelements_add_sfcsubsequenceuence,
+    sfcelements_add_,
+    sfcelements_add_at_index,
 }
 
 by_name :: proc {
@@ -700,6 +756,7 @@ by_index :: proc {
     points_point_by_index,
     cmparameters_cmparameter_by_index,
     ilrows_ilrow,
+    sfcelements_element,
 }
 
 index :: proc {
@@ -736,6 +793,7 @@ count :: proc {
     points_count,
     cmparameters_count,
     ilrows_count,
+    sfcelements_count,
 }
 
 remove :: proc {
@@ -769,6 +827,7 @@ remove :: proc {
     cmparameters_remove_by_name,
     cmparameters_remove_by_index,
     ilrows_remove,
+    sfcelements_remove,
 }
 
 release :: proc {
@@ -808,4 +867,9 @@ release :: proc {
     sfcbranch_release,
     sfcsimultaneous_release,
     sfcbranches_release,
+    sfcselection_release,
+    sfcsubsequence_release,
+    isfcelement_release,
+    sfccodeblock_release,
+    sfcelements_release,
 }
