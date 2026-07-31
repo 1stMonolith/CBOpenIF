@@ -367,7 +367,7 @@ component_type_path_get :: proc(component: rawptr) -> (type_path: string, ok: bo
     hr := (^ComponentIF)(component)->TypePathGet(&bs)
     if com.failed(hr) do return
     
-    return "", true
+    return bstr.to_string(bs), true
 }
 
 component_access_level :: proc {

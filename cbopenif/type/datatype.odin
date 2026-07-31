@@ -6,7 +6,6 @@ import "../bstr"
 import "../variant"
 import "../factory"
 
-
 DataTypeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^DataTypeVTable,
@@ -192,7 +191,7 @@ datatype_scope_get :: proc(datatype: rawptr) -> (scope: Scope, ok: bool) {
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com.failed(hr) do return
 
-    return scope, true
+    return Scope(s), true
 }
 
 datatype_scope_set :: proc(datatype: rawptr, scope: Scope) -> (ok: bool) {
