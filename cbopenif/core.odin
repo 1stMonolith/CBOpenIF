@@ -633,6 +633,8 @@ elements :: proc {
 branches :: proc {
     sfcselection_branches_,
     sfcselection_branches_set,
+    sfcsimultaneous_branches_,
+    sfcsimultaneous_branches_set,
 }
 
 seq_control :: proc {
