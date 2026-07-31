@@ -1,4 +1,4 @@
-package cmconnection
+package connection
 
 import "../com"
 import "../controlbuilder"

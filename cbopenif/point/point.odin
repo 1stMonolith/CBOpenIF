@@ -1,4 +1,4 @@
-package graph
+package point
 
 import "../com"
 import "../controlbuilder"

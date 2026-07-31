@@ -1,4 +1,4 @@
-package autopoint
+package point
 
 import "../com"
 import "../controlbuilder"
