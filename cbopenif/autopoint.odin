@@ -3,12 +3,12 @@ package cbopenif
 AutoPoint  :: distinct rawptr
 
 AutoPointIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^AutoPointVTable,
 }
 
 AutoPointVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     AutoPosGet: proc "system" (this: ^AutoPointIF, AutoPos: ^i32) -> HResult,
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }

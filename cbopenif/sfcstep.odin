@@ -3,12 +3,12 @@ package cbopenif
 SFCStep :: distinct rawptr
 
 SFCStepIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^SFCStepVTable,
 }
 
 SFCStepVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:           proc "system" (this: ^SFCStepIF, Name: ^BStr) -> HResult,
     NamePut:           proc "system" (this: ^SFCStepIF, Name: BStr) -> HResult,
     InitialStepGet:    proc "system" (this: ^SFCStepIF, InitialStep: ^VariantBool) -> HResult,

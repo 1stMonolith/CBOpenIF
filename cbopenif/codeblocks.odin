@@ -3,12 +3,12 @@ package cbopenif
 CodeBlocks :: distinct rawptr
 
 CodeBlocksIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^CodeBlocksVTable,
 }
 
 CodeBlocksVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     Add:              proc "system" (this: ^CodeBlocksIF, ICodeBlock: ICodeBlock) -> HResult,
     AddBefore:        proc "system" (this: ^CodeBlocksIF, ICodeBlock: ICodeBlock, BeforeIndex: i32) -> HResult,
     AddSTCodeBlock:   proc "system" (this: ^CodeBlocksIF, Code: STCodeBlock) -> HResult,

@@ -3,12 +3,12 @@ package cbopenif
 GlobalVariable :: distinct rawptr
 
 GlobalVariableIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^GlobalVariableVTable,
 }
 
 GlobalVariableVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:                proc "system" (this: ^GlobalVariableIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^GlobalVariableIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^GlobalVariableIF, TypeName: ^BStr) -> HResult,

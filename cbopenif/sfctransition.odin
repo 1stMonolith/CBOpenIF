@@ -3,12 +3,12 @@ package cbopenif
 SFCTransition :: distinct rawptr
 
 SFCTransitionIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^SFCTransitionVTable,
 }
 
 SFCTransitionVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:   proc "system" (this: ^SFCTransitionIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^SFCTransitionIF, Name: BStr) -> HResult,
     DestGet:   proc "system" (this: ^SFCTransitionIF, Dest: ^BStr) -> HResult,

@@ -27,14 +27,14 @@ CBOpenIFErrorCodes :: enum u32 {
 }
 
 CBOpenIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^CBOpenVTable,
 }
 
 cbopenif: ^CBOpenIF
 
 CBOpenVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NewProject:                          proc "system" (this: ^CBOpenIF, name, directory_path, guid, template_name: BStr) -> HResult,
     OpenProject:                         proc "system" (this: ^CBOpenIF, file_path: BStr) -> HResult,
     CloseProject:                        proc "system" (this: ^CBOpenIF) -> HResult,

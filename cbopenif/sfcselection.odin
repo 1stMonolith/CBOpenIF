@@ -3,12 +3,12 @@ package cbopenif
 SFCSelection :: distinct rawptr
 
 SFCSelectionIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^SFCSelectionVTable,
 }
 
 SFCSelectionVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     SFCBranchesGet: proc "system" (this: ^SFCSelectionIF, SFCBranches: ^SFCBranches) -> HResult,
     Missing8:       proc "system" (this: ^SFCSelectionIF) -> HResult,
     SFCBranchesPut: proc "system" (this: ^SFCSelectionIF, SFCBranches: SFCBranches) -> HResult,

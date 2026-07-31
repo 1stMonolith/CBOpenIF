@@ -3,12 +3,12 @@ package cbopenif
 GraphPos  :: distinct rawptr
 
 GraphPosIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^GraphPosVTable,
 }
 
 GraphPosVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     XGet:        proc "system" (this: ^GraphPosIF, X: ^f64) -> HResult,
     XPut:        proc "system" (this: ^GraphPosIF, X: f64) -> HResult,
     YGet:        proc "system" (this: ^GraphPosIF, Y: ^f64) -> HResult,

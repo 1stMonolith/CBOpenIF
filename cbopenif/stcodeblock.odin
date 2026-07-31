@@ -3,12 +3,12 @@ package cbopenif
 STCodeBlock :: distinct rawptr
 
 STCodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^STCodeBlockVTable,
 }
 
 STCodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:   proc "system" (this: ^STCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^STCodeBlockIF, Name: BStr) -> HResult,
     STCodeGet: proc "system" (this: ^STCodeBlockIF, XMLStr: ^BStr) -> HResult,

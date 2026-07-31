@@ -3,12 +3,12 @@ package cbopenif
 ExternalVariable :: distinct rawptr
 
 ExternalVariableIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^ExternalVariableVTable,
 }
 
 ExternalVariableVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:                proc "system" (this: ^ExternalVariableIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^ExternalVariableIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^ExternalVariableIF, TypeName: ^BStr) -> HResult,

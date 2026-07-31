@@ -3,12 +3,12 @@ package cbopenif
 DataType :: distinct rawptr
 
 DataTypeIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^DataTypeVTable,
 }
 
 DataTypeVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:               proc "system" (this: ^DataTypeIF, Name: ^BStr) -> HResult,
     NamePut:               proc "system" (this: ^DataTypeIF, Name: BStr) -> HResult,
     ProtectedGet:          proc "system" (this: ^DataTypeIF, Protected: ^VariantBool) -> HResult,
@@ -124,7 +124,7 @@ datatype_protected_ :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    vb := bool_to_variantbool(protected)
+    vb: VariantBool
     hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
     if failed(hr) do return
 
@@ -157,7 +157,7 @@ datatype_hidden_ :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     if datatype == nil do return
     if !connected() do return
     
-    vb := bool_to_variantbool(hidden)
+    vb: VariantBool
     hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
     if failed(hr) do return
 
@@ -511,8 +511,6 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     if !ok do return
     defer components_release(components)
     
-    bstr_name := string_to_bstr(name)
-    defer bstr_free(bstr_name)
     index, ok = components_component_index(components, name)
     if !ok do return
     

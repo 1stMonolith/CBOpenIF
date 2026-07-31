@@ -3,12 +3,12 @@ package cbopenif
 Variables  :: distinct rawptr
 
 VariablesIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^VariablesVTable,
 }
 
 VariablesVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     Add:       proc "system" (this: ^VariablesIF, Variable: Variable) -> HResult,
     AddBefore: proc "system" (this: ^VariablesIF, Variable: Variable, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^VariablesIF, Name, TypeName: BStr, Variable: ^Variable) -> HResult,

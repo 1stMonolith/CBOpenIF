@@ -3,12 +3,12 @@ package cbopenif
 SFCCodeBlock :: distinct rawptr
 
 SFCCodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^SFCCodeBlockVTable,
 }
 
 SFCCodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     NameGet:            proc "system" (this: ^SFCCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:            proc "system" (this: ^SFCCodeBlockIF, Name: BStr) -> HResult,
     SeqControlGet:      proc "system" (this: ^SFCCodeBlockIF, SeqControl: ^VariantBool) -> HResult,

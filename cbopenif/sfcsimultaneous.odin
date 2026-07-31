@@ -3,12 +3,12 @@ package cbopenif
 SFCSimultaneous :: distinct rawptr
 
 SFCSimultaneousIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^SFCSimultaneousVTable,
 }
 
 SFCSimultaneousVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     SFCBranchesGet: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: ^SFCBranches) -> HResult,
     Missing8:       proc "system" (this: ^SFCSimultaneousIF) -> HResult,
     SFCBranchesPut: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: SFCBranches) -> HResult,

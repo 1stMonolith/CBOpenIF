@@ -3,12 +3,12 @@ package cbopenif
 GraphNodes :: distinct rawptr
 
 GraphNodesIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^GraphNodesVTable,
 }
 
 GraphNodesVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     Add:       proc "system" (this: ^GraphNodesIF, GraphNode: GraphNode) -> HResult,
     AddBefore: proc "system" (this: ^GraphNodesIF, GraphNode: GraphNode, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^GraphNodesIF, Name: BStr, X, Y: f64, GraphNode: ^GraphNode) -> HResult,

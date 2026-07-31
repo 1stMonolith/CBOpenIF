@@ -1,14 +1,14 @@
 package cbopenif
 
 FactoryIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^FactoryVTable,
 }
 
 factoryif: ^FactoryIF
 
 FactoryVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     DeserializeExternalVariable:        proc "system" (this: ^FactoryIF, XMLStr: ^BStr, ExternalVariable: ^ExternalVariable) -> HResult,
     DeserializeGlobalVariable:          proc "system" (this: ^FactoryIF, XMLStr: ^BStr, GlobalVariable: ^GlobalVariable) -> HResult,
     DeserializeVariable:                proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Variable: ^Variable) -> HResult,

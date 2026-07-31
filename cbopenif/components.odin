@@ -3,12 +3,12 @@ package cbopenif
 Components :: distinct rawptr
 
 ComponentsIF :: struct #raw_union {
-    #subtype iunknown: IUnknowIF,
+    #subtype iunknown: IUnknownIF,
     using vtable: ^ComponentsVTable,
 }
 
 ComponentsVTable :: struct {
-    using iunknown_vtable: IUnknowVTable,
+    using iunknown_vtable: IUnknownVTable,
     Add:       proc "system" (this: ^ComponentsIF, Component: Component) -> HResult,
     AddBefore: proc "system" (this: ^ComponentsIF, Component: Component, Index: i32) -> HResult,
     Add1:      proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^Component) -> HResult,
@@ -93,7 +93,7 @@ components_component_index :: proc(components: Components, name: string) -> (ind
     if components == nil do return
     
     bstr_name := string_to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^ComponentsIF)(components)->FindNr(bstr_name, &index)
     if failed(hr) do return
     
