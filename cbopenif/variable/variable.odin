@@ -1,14 +1,22 @@
 package variable
 
-Variable   :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) BStr        :: bstr.BStr
+@(private) GUID        :: com.GUID
+@(private) VariantBool :: variant.VariantBool
 
 VariableIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^VariableVTable,
 }
 
 VariableVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:                proc "system" (this: ^VariableIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^VariableIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^VariableIF, TypeName: ^BStr) -> HResult,
@@ -27,9 +35,9 @@ VariableVTable :: struct {
     AuthenticationLevelPut: proc "system" (this: ^VariableIF, AuthenticationLevel: BStr) -> HResult,
     BatchPropertyGet:       proc "system" (this: ^VariableIF, BatchProperty: ^BStr) -> HResult,
     BatchPropertyPut:       proc "system" (this: ^VariableIF, BatchProperty: BStr) -> HResult,
-    GraphNodesGet:          proc "system" (this: ^VariableIF, GraphNodes: ^GraphNodes) -> HResult,
+    GraphNodesGet:          proc "system" (this: ^VariableIF, GraphNodes: ^rawptr) -> HResult,
     Missing26:              proc "system" (this: ^VariableIF) -> HResult,
-    GraphNodesPut:          proc "system" (this: ^VariableIF, GraphNodes: GraphNodes) -> HResult,
+    GraphNodesPut:          proc "system" (this: ^VariableIF, GraphNodes: rawptr) -> HResult,
     TypeGuid:               proc "system" (this: ^VariableIF, TypeGuid: ^BStr) -> HResult,
     TypePath:               proc "system" (this: ^VariableIF, TypePath: ^BStr) -> HResult,
     Serialize:              proc "system" (this: ^VariableIF, XML: ^BStr) -> HResult,
@@ -39,60 +47,60 @@ VariableVTable :: struct {
     SafetyTypePut:          proc "system" (this: ^VariableIF, SafetyType: BStr) -> HResult,
 }
 
-variable_new :: proc(name: string, type: string, attribute := "", initialvalue := "", readpermission := "", writepermission := "", description := "") -> (variable: Variable, ok: bool) {
+variable_new :: proc(name: string, type: string, attribute := "", initialvalue := "", readpermission := "", writepermission := "", description := "") -> (variable: rawptr, ok: bool) {
     variable = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_type := string_to_bstr(type)
-    bstr_attribute := string_to_bstr(attribute)
-    bstr_initialvalue := string_to_bstr(initialvalue)
-    bstr_readpermission := string_to_bstr(readpermission)
-    bstr_writepermission := string_to_bstr(writepermission)
-    bstr_description := string_to_bstr(description)
+    bstr_name := bstr.from_string(name)
+    bstr_type := bstr.from_string(type)
+    bstr_attribute := bstr.from_string(attribute)
+    bstr_initialvalue := bstr.from_string(initialvalue)
+    bstr_readpermission := bstr.from_string(readpermission)
+    bstr_writepermission := bstr.from_string(writepermission)
+    bstr_description := bstr.from_string(description)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_type)
-        bstr_free(bstr_attribute)
-        bstr_free(bstr_initialvalue)
-        bstr_free(bstr_readpermission)
-        bstr_free(bstr_writepermission)
-        bstr_free(bstr_description)
+        bstr.free(bstr_name)
+        bstr.free(bstr_type)
+        bstr.free(bstr_attribute)
+        bstr.free(bstr_initialvalue)
+        bstr.free(bstr_readpermission)
+        bstr.free(bstr_writepermission)
+        bstr.free(bstr_description)
     }
-    hr := factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^Variable)&variable)
-    if failed(hr) do return
+    hr := factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&variable)
+    if com.failed(hr) do return
     
     return variable, true
 }
 
-variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
+variable_deserialize :: proc(variable: ^rawptr, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml)
-    defer bstr_free(bstr)
-    hr := factoryif->DeserializeVariable(&bstr, cast(^Variable)variable)
-    if failed(hr) do return
+    bs := bstr.from_string(xml)
+    defer bstr.free(bs)
+    hr := factoryif->DeserializeVariable(&bstr, cast(^rawptr)variable)
+    if com.failed(hr) do return
     
     return true
 }
 
-variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
+variable_serialize :: proc(variable: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 variable_name :: proc {
@@ -101,32 +109,32 @@ variable_name :: proc {
 }
 
 @(private)
-variable_name_ :: proc(variable: Variable) -> (name: string, ok: bool) {
+variable_name_ :: proc(variable: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_name_set :: proc(variable: Variable, name: string) -> (ok: bool) {
+variable_name_set :: proc(variable: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -137,32 +145,32 @@ variable_type_name :: proc {
 }
 
 @(private)
-variable_type_name_ :: proc(variable: Variable) -> (type_name: string, ok: bool) {
+variable_type_name_ :: proc(variable: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->TypeNameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->TypeNameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_type_name_set :: proc(variable: Variable, type_name: string) -> (ok: bool) {
+variable_type_name_set :: proc(variable: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(type_name)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->TypeNamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(type_name)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->TypeNamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -173,32 +181,32 @@ variable_attribute :: proc {
 }
 
 @(private)
-variable_attribute_ :: proc(variable: Variable) -> (attribute: string, ok: bool) {
+variable_attribute_ :: proc(variable: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AttributeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AttributeGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_attribute_set :: proc(variable: Variable, attribute: string) -> (ok: bool) {
+variable_attribute_set :: proc(variable: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(attribute)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AttributePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(attribute)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AttributePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -209,32 +217,32 @@ variable_initial_value :: proc {
 }
 
 @(private)
-variable_initial_value_ :: proc(variable: Variable) -> (inital_value: string, ok: bool) {
+variable_initial_value_ :: proc(variable: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->InitialValueGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->InitialValueGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_initial_value_set :: proc(variable: Variable, inital_value: string) -> (ok: bool) {
+variable_initial_value_set :: proc(variable: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(inital_value)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->InitialValuePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(inital_value)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->InitialValuePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -245,32 +253,32 @@ variable_description :: proc {
 }
 
 @(private)
-variable_description_ :: proc(variable: Variable) -> (description: string, ok: bool) {
+variable_description_ :: proc(variable: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->DescriptionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_description_set :: proc(variable: Variable, description: string) -> (ok: bool) {
+variable_description_set :: proc(variable: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->DescriptionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -281,32 +289,32 @@ variable_read_permission :: proc {
 }
 
 @(private)
-variable_read_permission_ :: proc(variable: Variable) -> (read_permission: string, ok: bool) {
+variable_read_permission_ :: proc(variable: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->ReadPermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->ReadPermissionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_read_permission_set :: proc(variable: Variable, read_permission: string) -> (ok: bool) {
+variable_read_permission_set :: proc(variable: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(read_permission)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->ReadPermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(read_permission)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->ReadPermissionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -317,32 +325,32 @@ variable_write_permission :: proc {
 }
 
 @(private)
-variable_write_permission_ :: proc(variable: Variable) -> (write_permission: string, ok: bool) {
+variable_write_permission_ :: proc(variable: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->WritePermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->WritePermissionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_write_permission_set :: proc(variable: Variable, write_permission: string) -> (ok: bool) {
+variable_write_permission_set :: proc(variable: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(write_permission)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->WritePermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(write_permission)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->WritePermissionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -353,32 +361,32 @@ variable_authentication_level :: proc {
 }
 
 @(private)
-variable_authentication_level_ :: proc(variable: Variable) -> (authentication_level: string, ok: bool) {
+variable_authentication_level_ :: proc(variable: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AuthenticationLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AuthenticationLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_authentication_level_set :: proc(variable: Variable, authentication_level: string) -> (ok: bool) {
+variable_authentication_level_set :: proc(variable: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(authentication_level)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AuthenticationLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(authentication_level)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AuthenticationLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -389,32 +397,32 @@ variable_batch_property :: proc {
 }
 
 @(private)
-variable_batch_property_ :: proc(variable: Variable) -> (batch_property: string, ok: bool) {
+variable_batch_property_ :: proc(variable: rawptr) -> (batch_property: string, ok: bool) {
     batch_property = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->BatchPropertyGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->BatchPropertyGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_batch_property_set :: proc(variable: Variable, batch_property: string) -> (ok: bool) {
+variable_batch_property_set :: proc(variable: rawptr, batch_property: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(batch_property)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->BatchPropertyPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(batch_property)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->BatchPropertyPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -425,60 +433,60 @@ variable_graph_nodes :: proc {
 }
 
 @(private)
-variable_graph_nodes_ :: proc(variable: Variable) -> (graph_nodes: GraphNodes, ok: bool) {
+variable_graph_nodes_ :: proc(variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
     graph_nodes = nil
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^VariableIF)(variable)->GraphNodesGet(&graph_nodes)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return graph_nodes, true
 }
 
 @(private)
-variable_graph_nodes_set :: proc(variable: Variable, graph_nodes: GraphNodes) -> (ok: bool) {
+variable_graph_nodes_set :: proc(variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^VariableIF)(variable)->GraphNodesPut(graph_nodes)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
 
-variable_type_guid :: proc(variable: Variable) -> (guid: string, ok: bool) {
+variable_type_guid :: proc(variable: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->TypeGuid(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->TypeGuid(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
-variable_type_path :: proc(variable: Variable) -> (path: string, ok: bool) {
+variable_type_path :: proc(variable: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->TypePath(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->TypePath(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 variable_access_level :: proc {
@@ -487,32 +495,32 @@ variable_access_level :: proc {
 }
 
 @(private)
-variable_access_level_ :: proc(variable: Variable) -> (access_level: string, ok: bool) {
+variable_access_level_ :: proc(variable: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AccessLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AccessLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_access_level_set :: proc(variable: Variable, access_level: string) -> (ok: bool) {
+variable_access_level_set :: proc(variable: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(access_level)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->AccessLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(access_level)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->AccessLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -523,32 +531,32 @@ variable_safety_type :: proc {
 }
 
 @(private)
-variable_safety_type_ :: proc(variable: Variable) -> (safety_type: string, ok: bool) {
+variable_safety_type_ :: proc(variable: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->SafetyTypeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->SafetyTypeGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-variable_safety_type_set :: proc(variable: Variable, safety_type: string) -> (ok: bool) {
+variable_safety_type_set :: proc(variable: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 
     if variable == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(safety_type)
-    defer bstr_free(bstr)
-    hr := (^VariableIF)(variable)->SafetyTypePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(safety_type)
+    defer bstr.free(bs)
+    hr := (^VariableIF)(variable)->SafetyTypePut(bs)
+    if com.failed(hr) do return
     
     return true
 }

@@ -1,48 +1,48 @@
 package project
 
 project_new :: proc(name, dir, guid, template: string) -> (ok: bool) {
-    if !connected() do return false
-    bstr_name     := string_to_bstr(name)
-    bstr_dir      := string_to_bstr(dir)
-    bstr_guid     := string_to_bstr(guid)
-    bstr_template := string_to_bstr(template)
+    if !controlbuilder.connected() do return false
+    bstr_name     := bstr.from_string(name)
+    bstr_dir      := bstr.from_string(dir)
+    bstr_guid     := bstr.from_string(guid)
+    bstr_template := bstr.from_string(template)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_dir)
-        bstr_free(bstr_guid)
-        bstr_free(bstr_template)
+        bstr.free(bstr_name)
+        bstr.free(bstr_dir)
+        bstr.free(bstr_guid)
+        bstr.free(bstr_template)
     }
     hr := cbopenif->NewProject(bstr_name, bstr_dir, bstr_guid, bstr_template)
-    if failed(hr) {
+    if com.failed(hr) {
         return false
     }
     return true
 }
 
 project_open :: proc(file_path: string) -> (ok: bool) {
-    if !connected() do return false
-    bstr_file_path     := string_to_bstr(file_path)
-    defer bstr_free(bstr_file_path)
+    if !controlbuilder.connected() do return false
+    bstr_file_path     := bstr.from_string(file_path)
+    defer bstr.free(bstr_file_path)
     hr := cbopenif->OpenProject(bstr_file_path)
-    if failed(hr) {
+    if com.failed(hr) {
         return false
     }
     return true
 }
 
 project_close :: proc() -> (ok: bool) {
-    if !connected() do return false
+    if !controlbuilder.connected() do return false
     hr := cbopenif->CloseProject()
-    if failed(hr) {
+    if com.failed(hr) {
         return false
     }
     return true
 }
 
 project_refresh :: proc() -> (ok: bool) {
-    if !connected() do return false
+    if !controlbuilder.connected() do return false
     hr := cbopenif->RefreshProject()
-    if failed(hr) {
+    if com.failed(hr) {
         return false
     }
     return true

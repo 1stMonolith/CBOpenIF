@@ -1,27 +1,29 @@
 package sfc
 
-SFCSimultaneous :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 SFCSimultaneousIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCSimultaneousVTable,
 }
 
 SFCSimultaneousVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
-    SFCBranchesGet: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: ^SFCBranches) -> HResult,
+    using iunknownvtable: com.IUnknownVTable,
+    SFCBranchesGet: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: ^rawptr) -> HResult,
     Missing8:       proc "system" (this: ^SFCSimultaneousIF) -> HResult,
-    SFCBranchesPut: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: SFCBranches) -> HResult,
+    SFCBranchesPut: proc "system" (this: ^SFCSimultaneousIF, SFCBranches: rawptr) -> HResult,
 }
 
-sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: SFCSimultaneous, ok: bool) {
+sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: rawptr, ok: bool) {
     sfcsimultaneous = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    hr := factoryif->NewSFCSimultaneous(nr_of_branches, cast(^SFCSimultaneous)&sfcsimultaneous)
-    if failed(hr) do return
+    hr := factoryif->NewSFCSimultaneous(nr_of_branches, cast(^rawptr)&sfcsimultaneous)
+    if com.failed(hr) do return
 
     return sfcsimultaneous, true
 }
@@ -32,33 +34,33 @@ sfcsimultaneous_branches :: proc {
 }
 
 @(private)
-sfcsimultaneous_branches_ :: proc(sfcsimultaneous: SFCSimultaneous) -> (branches: SFCBranches, ok: bool) {
+sfcsimultaneous_branches_ :: proc(sfcsimultaneous: rawptr) -> (branches: rawptr, ok: bool) {
     branches = nil
     ok = false
 
     if sfcsimultaneous == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^SFCSimultaneousIF)(sfcsimultaneous)->SFCBranchesGet(&branches)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return branches, true
 }
 
 @(private)
-sfcsimultaneous_branches_set :: proc(sfcsimultaneous: SFCSimultaneous, branches: SFCBranches) -> (ok: bool) {
+sfcsimultaneous_branches_set :: proc(sfcsimultaneous: rawptr, branches: rawptr) -> (ok: bool) {
     ok = false
 
     if sfcsimultaneous == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^SFCSimultaneousIF)(sfcsimultaneous)->SFCBranchesPut(branches)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
 
-sfcsimultaneous_release :: proc(sfcsimultaneous: SFCSimultaneous) {
+sfcsimultaneous_release :: proc(sfcsimultaneous: rawptr) {
     if sfcsimultaneous != nil {
         (^SFCSimultaneousIF)(sfcsimultaneous)->Release()
     }

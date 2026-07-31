@@ -1,14 +1,22 @@
 package component
 
-Component  :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) BStr        :: bstr.BStr
+@(private) GUID        :: com.GUID
+@(private) VariantBool :: variant.VariantBool
 
 ComponentIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ComponentVTable,
 }
 
 ComponentVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknown_vtable: com.IUnknownVTable,
     NameGet:                proc "system" (this: ^ComponentIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^ComponentIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^ComponentIF, TypeName: ^BStr) -> HResult,
@@ -35,26 +43,26 @@ ComponentVTable :: struct {
     ISPValuePut:            proc "system" (this: ^ComponentIF, ISPValue: BStr) -> HResult,
 }
 
-component_new :: proc(name: string, type: string, attribute := "", initialvalue := "", description := "") -> (component: Component, ok: bool) {
+component_new :: proc(name: string, type: string, attribute := "", initialvalue := "", description := "") -> (component: rawptr, ok: bool) {
     component = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_type := string_to_bstr(type)
-    bstr_attribute := string_to_bstr(attribute)
-    bstr_initialvalue := string_to_bstr(initialvalue)
-    bstr_description := string_to_bstr(description)
+    bstr_name := bstr.from_string(name)
+    bstr_type := bstr.from_string(type)
+    bstr_attribute := bstr.from_string(attribute)
+    bstr_initialvalue := bstr.from_string(initialvalue)
+    bstr_description := bstr.from_string(description)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_type)
-        bstr_free(bstr_attribute)
-        bstr_free(bstr_initialvalue)
-        bstr_free(bstr_description)
+        bstr.free(bstr_name)
+        bstr.free(bstr_type)
+        bstr.free(bstr_attribute)
+        bstr.free(bstr_initialvalue)
+        bstr.free(bstr_description)
     }
-    hr := factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^Component)&component)
-    if failed(hr) do return
+    hr := factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^rawptr)&component)
+    if com.failed(hr) do return
     
     return component, true
 }
@@ -65,32 +73,32 @@ component_name :: proc {
 }
 
 @(private)
-component_name_ :: proc(component: Component) -> (name: string, ok: bool) {
+component_name_ :: proc(component: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->NameGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
+component_name_set :: proc(component: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -101,32 +109,32 @@ component_type_name :: proc {
 }
 
 @(private)
-component_type_name_ :: proc(component: Component) -> (type_name: string, ok: bool) {
+component_type_name_ :: proc(component: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->TypeNameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->TypeNameGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_type_name_set :: proc(component: Component, type_name: string) -> (ok: bool) {
+component_type_name_set :: proc(component: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(type_name)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->TypeNamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(type_name)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->TypeNamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -137,32 +145,32 @@ component_attribute :: proc {
 }
 
 @(private)
-component_attribute_ :: proc(component: Component) -> (attribute: string, ok: bool) {
+component_attribute_ :: proc(component: rawptr) -> (attribute: string, ok: bool) {
     attribute = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AttributeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AttributeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_attribute_set :: proc(component: Component, attribute: string) -> (ok: bool) {
+component_attribute_set :: proc(component: rawptr, attribute: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(attribute)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AttributePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(attribute)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AttributePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -173,32 +181,32 @@ component_initial_value :: proc {
 }
 
 @(private)
-component_initial_value_ :: proc(component: Component) -> (inital_value: string, ok: bool) {
+component_initial_value_ :: proc(component: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->InitialValueGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->InitialValueGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_initial_value_set :: proc(component: Component, inital_value: string) -> (ok: bool) {
+component_initial_value_set :: proc(component: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(inital_value)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->InitialValuePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(inital_value)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->InitialValuePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -209,32 +217,32 @@ component_read_permission :: proc {
 }
 
 @(private)
-component_read_permission_ :: proc(component: Component) -> (read_permission: string, ok: bool) {
+component_read_permission_ :: proc(component: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->ReadPermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->ReadPermissionGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_read_permission_set :: proc(component: Component, read_permission: string) -> (ok: bool) {
+component_read_permission_set :: proc(component: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(read_permission)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->ReadPermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(read_permission)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->ReadPermissionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -245,32 +253,32 @@ component_write_permission :: proc {
 }
 
 @(private)
-component_write_permission_ :: proc(component: Component) -> (write_permission: string, ok: bool) {
+component_write_permission_ :: proc(component: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->WritePermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->WritePermissionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_write_permission_set :: proc(component: Component, write_permission: string) -> (ok: bool) {
+component_write_permission_set :: proc(component: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(write_permission)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->WritePermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(write_permission)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->WritePermissionPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -281,32 +289,32 @@ component_authentication_level :: proc {
 }
 
 @(private)
-component_authentication_level_ :: proc(component: Component) -> (authentication_level: string, ok: bool) {
+component_authentication_level_ :: proc(component: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AuthenticationLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AuthenticationLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_authentication_level_set :: proc(component: Component, authentication_level: string) -> (ok: bool) {
+component_authentication_level_set :: proc(component: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(authentication_level)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AuthenticationLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(authentication_level)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AuthenticationLevelPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -317,62 +325,62 @@ component_description :: proc {
 }
 
 @(private)
-component_description_ :: proc(component: Component) -> (description: string, ok: bool) {
+component_description_ :: proc(component: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->DescriptionGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_description_set :: proc(component: Component, description: string) -> (ok: bool) {
+component_description_set :: proc(component: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->DescriptionPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-component_type_guid :: proc(component: Component) -> (type_guid: string, ok: bool) {
+component_type_guid :: proc(component: rawptr) -> (type_guid: string, ok: bool) {
     type_guid = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->TypeGuidGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->TypeGuidGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
-component_type_path :: proc(component: Component) -> (type_path: string, ok: bool) {
+component_type_path :: proc(component: rawptr) -> (type_path: string, ok: bool) {
     type_path = ""
     ok = false
     
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->TypePathGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->TypePathGet(&bs)
+    if com.failed(hr) do return
     
     return "", true
 }
@@ -383,32 +391,32 @@ component_access_level :: proc {
 }
 
 @(private)
-component_access_level_ :: proc(component: Component) -> (access_level: string, ok: bool) {
+component_access_level_ :: proc(component: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AccessLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AccessLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_access_level_set :: proc(component: Component, access_level: string) -> (ok: bool) {
+component_access_level_set :: proc(component: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(access_level)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->AccessLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(access_level)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->AccessLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -419,32 +427,32 @@ component_safety_type :: proc {
 }
 
 @(private)
-component_safety_type_ :: proc(component: Component) -> (safety_type: string, ok: bool) {
+component_safety_type_ :: proc(component: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->SafetyTypeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->SafetyTypeGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_safety_type_set :: proc(component: Component, safety_type: string) -> (ok: bool) {
+component_safety_type_set :: proc(component: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(safety_type)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->SafetyTypePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(safety_type)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->SafetyTypePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -455,37 +463,37 @@ component_isp_value :: proc {
 }
 
 @(private)
-component_isp_value_ :: proc(component: Component) -> (isp_value: string, ok: bool) {
+component_isp_value_ :: proc(component: rawptr) -> (isp_value: string, ok: bool) {
     isp_value = ""
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->ISPValueGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->ISPValueGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok: bool) {
+component_isp_value_set :: proc(component: rawptr, isp_value: string) -> (ok: bool) {
     ok = false
 
     if component == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(isp_value)
-    defer bstr_free(bstr)
-    hr := (^ComponentIF)(component)->ISPValuePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(isp_value)
+    defer bstr.free(bs)
+    hr := (^ComponentIF)(component)->ISPValuePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-component_release :: proc(component: Component) {
+component_release :: proc(component: rawptr) {
     if component != nil {
         (^ComponentIF)(component)->Release()
     }

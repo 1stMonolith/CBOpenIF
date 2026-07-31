@@ -1,14 +1,16 @@
 package codeblock
 
-FBDCodeBlock :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 FBDCodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^FBDCodeBlockVTable,
 }
 
 FBDCodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:   proc "system" (this: ^FBDCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^FBDCodeBlockIF, Name: BStr) -> HResult,
     STCodeGet: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,
@@ -19,37 +21,37 @@ FBDCodeBlockVTable :: struct {
     Serialize: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
+fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: rawptr, ok: bool) {
     fbdcodeblock = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    bstr_stcode := string_to_bstr(stcode)
+    bstr_name := bstr.from_string(name)
+    bstr_stcode := bstr.from_string(stcode)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_stcode)
+        bstr.free(bstr_name)
+        bstr.free(bstr_stcode)
     }
-    hr := factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^FBDCodeBlock)&fbdcodeblock)
-    if failed(hr) do return
+    hr := factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&fbdcodeblock)
+    if com.failed(hr) do return
 
     return fbdcodeblock, true
 }
 
-fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: bool) {
+fbdcodeblock_serialize :: proc(fbdcodeblock: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if fbdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FBDCodeBlockIF)(fbdcodeblock)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 fbdcodeblock_name :: proc {
@@ -58,32 +60,32 @@ fbdcodeblock_name :: proc {
 }
 
 @(private)
-fbdcodeblock_name_ :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: bool) {
+fbdcodeblock_name_ :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if fbdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: bool) {
+fbdcodeblock_name_set :: proc(fbdcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
     if fbdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -94,37 +96,37 @@ fbdcodeblock_stcode :: proc {
 }
 
 @(private)
-fbdcodeblock_stcode_ :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, ok: bool) {
+fbdcodeblock_stcode_ :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if fbdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
+fbdcodeblock_stcode_set :: proc(fbdcodeblock: rawptr, stcode: string) -> (ok: bool) {
     ok = false
     
     if fbdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-fbdcodeblock_release :: proc(fbdcodeblock: FBDCodeBlock) {
+fbdcodeblock_release :: proc(fbdcodeblock: rawptr) {
     if fbdcodeblock != nil {
         (^FBDCodeBlockIF)(fbdcodeblock)->Release()
     }

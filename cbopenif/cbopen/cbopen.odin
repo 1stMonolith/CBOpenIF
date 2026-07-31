@@ -13,15 +13,15 @@ import "../variant"
 @(private) Variant     :: variant.Variant
 @(private) VariantBool :: variant.VariantBool
 
-import "../type"
-@(private) SignalType              :: type.SignalType
-@(private) CodeBlockType           :: type.CodeBlockType
-@(private) VariableType            :: type.VariableType
-@(private) ParameterType           :: type.ParameterType
-@(private) FolderType              :: type.FolderType
-@(private) HardwareFileType        :: type.HardwareFileType
-@(private) ExecutionInstanceType   :: type.ExecutionInstanceType
-@(private) HardwareLibraryFileType :: type.HardwareLibraryFileType
+import "../enumtypes"
+@(private) SignalType              :: enumtypes.SignalType
+@(private) CodeBlockType           :: enumtypes.CodeBlockType
+@(private) VariableType            :: enumtypes.VariableType
+@(private) ParameterType           :: enumtypes.ParameterType
+@(private) FolderType              :: enumtypes.FolderType
+@(private) HardwareFileType        :: enumtypes.HardwareFileType
+@(private) ExecutionInstanceType   :: enumtypes.ExecutionInstanceType
+@(private) HardwareLibraryFileType :: enumtypes.HardwareLibraryFileType
 
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,
@@ -50,14 +50,14 @@ CBOpenIFErrorCodes :: enum u32 {
 }
 
 CBOpenIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^CBOpenVTable,
 }
 
 cbopenif: ^CBOpenIF
 
 CBOpenVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NewProject:                          proc "system" (this: ^CBOpenIF, name, directory_path, guid, template_name: BStr) -> HResult,
     OpenProject:                         proc "system" (this: ^CBOpenIF, file_path: BStr) -> HResult,
     CloseProject:                        proc "system" (this: ^CBOpenIF) -> HResult,

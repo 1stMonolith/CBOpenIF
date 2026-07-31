@@ -1,14 +1,22 @@
 package signal
 
-Signal :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) BStr        :: bstr.BStr
+@(private) GUID        :: com.GUID
+@(private) VariantBool :: variant.VariantBool
 
 SignalIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SignalVTable,
 }
 
 SignalVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:             proc "system" (this: ^SignalIF, Name: ^BStr) -> HResult,
     NamePut:             proc "system" (this: ^SignalIF, Name: BStr) -> HResult,
     PathGet:             proc "system" (this: ^SignalIF, Path: ^BStr) -> HResult,
@@ -22,57 +30,57 @@ SignalVTable :: struct {
     Serialize:           proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
 }
 
-signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
+signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: rawptr, ok: bool) {
     signal = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_path := string_to_bstr(path)
-    bstr_direction := string_to_bstr(direction)
+    bstr_name := bstr.from_string(name)
+    bstr_path := bstr.from_string(path)
+    bstr_direction := bstr.from_string(direction)
 
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
     variant_acknowledge_group := string_to_variant(acknowledge_group)
     
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_path)
-        bstr_free(bstr_direction)
+        bstr.free(bstr_name)
+        bstr.free(bstr_path)
+        bstr.free(bstr_direction)
         variant_free(&variant_acknowledge_group)
     }
-    hr := factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^Signal)&signal)
-    if failed(hr) do return
+    hr := factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^rawptr)&signal)
+    if com.failed(hr) do return
     
     return signal, true
 }
 
-signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
+signal_deserialize :: proc(signal: ^rawptr, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml)
-    defer bstr_free(bstr)
-    hr := factoryif->DeserializeSignal(&bstr, cast(^Signal)signal)
-    if failed(hr) do return
+    bs := bstr.from_string(xml)
+    defer bstr.free(bs)
+    hr := factoryif->DeserializeSignal(&bstr, cast(^rawptr)signal)
+    if com.failed(hr) do return
     
     return true
 }
 
-signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
+signal_serialize :: proc(signal: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 signal_name :: proc {
@@ -81,32 +89,32 @@ signal_name :: proc {
 }
 
 @(private)
-signal_name_ :: proc(signal: Signal) -> (name: string, ok: bool) {
+signal_name_ :: proc(signal: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
+signal_name_set :: proc(signal: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -117,32 +125,32 @@ signal_description :: proc {
 }
 
 @(private)
-signal_description_ :: proc(signal: Signal) -> (description: string, ok: bool) {
+signal_description_ :: proc(signal: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->DescriptionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
+signal_description_set :: proc(signal: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->DescriptionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -153,37 +161,37 @@ signal_path :: proc {
 }
 
 @(private)
-signal_path_ :: proc(signal: Signal) -> (path: string, ok: bool) {
+signal_path_ :: proc(signal: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->PathGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->PathGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
+signal_path_set :: proc(signal: rawptr, path: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(path)
-    defer bstr_free(bstr)
-    hr := (^SignalIF)(signal)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(path)
+    defer bstr.free(bs)
+    hr := (^SignalIF)(signal)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
 
-signal_release :: proc(signal: Signal) {
+signal_release :: proc(signal: rawptr) {
     if signal != nil {
         (^SignalIF)(signal)->Release()
     }

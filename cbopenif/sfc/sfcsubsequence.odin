@@ -1,31 +1,33 @@
 package sfc
 
-SFCSubSequence :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 SFCSubSequenceIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCSubSequenceVTable,
 }
 
 SFCSubSequenceVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:     proc "system" (this: ^SFCSubSequenceIF, Name: ^BStr) -> HResult,
     NamePut:     proc "system" (this: ^SFCSubSequenceIF, Name: BStr) -> HResult,
-    ElementsGet: proc "system" (this: ^SFCSubSequenceIF, SFCElements: ^SFCElements) -> HResult,
+    ElementsGet: proc "system" (this: ^SFCSubSequenceIF, SFCElements: ^rawptr) -> HResult,
     Missing10:   proc "system" (this: ^SFCSubSequenceIF) -> HResult,
-    ElementsPut: proc "system" (this: ^SFCSubSequenceIF, SFCElements: SFCElements) -> HResult,
+    ElementsPut: proc "system" (this: ^SFCSubSequenceIF, SFCElements: rawptr) -> HResult,
 }
 
-sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok: bool) {
+sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: rawptr, ok: bool) {
     sfcsubsequence = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    defer bstr_free(bstr_name)
-    hr := factoryif->NewSFCSubSequence(bstr_name, cast(^SFCSubSequence)&sfcsubsequence)
-    if failed(hr) do return
+    bstr_name := bstr.from_string(name)
+    defer bstr.free(bstr_name)
+    hr := factoryif->NewSFCSubSequence(bstr_name, cast(^rawptr)&sfcsubsequence)
+    if com.failed(hr) do return
 
     return sfcsubsequence, true
 }
@@ -36,32 +38,32 @@ sfcsubsequence_name :: proc {
 }
 
 @(private)
-sfcsubsequence_name_ :: proc(sfcsubsequence: SFCSubSequence) -> (name: string, ok: bool) {
+sfcsubsequence_name_ :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if sfcsubsequence == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCSubSequenceIF)(sfcsubsequence)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCSubSequenceIF)(sfcsubsequence)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
+sfcsubsequence_name_set :: proc(sfcsubsequence: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if sfcsubsequence == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^SFCSubSequenceIF)(sfcsubsequence)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^SFCSubSequenceIF)(sfcsubsequence)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -72,33 +74,33 @@ sfcsubsequence_elements :: proc {
 }
 
 @(private)
-sfcsubsequence_elements_ :: proc(sfcsubsequence: SFCSubSequence) -> (sfcelements: SFCElements, ok: bool) {
+sfcsubsequence_elements_ :: proc(sfcsubsequence: rawptr) -> (sfcelements: rawptr, ok: bool) {
     sfcelements = nil
     ok = false
 
     if sfcsubsequence == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsGet(&sfcelements)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return sfcelements, true
 }
 
 @(private)
-sfcsubsequence_elements_set :: proc(sfcsubsequence: SFCSubSequence, sfcelements: SFCElements) -> (ok: bool) {
+sfcsubsequence_elements_set :: proc(sfcsubsequence: rawptr, sfcelements: rawptr) -> (ok: bool) {
     ok = false
 
     if sfcsubsequence == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsPut(sfcelements)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
 
-sfcsubsequence_release :: proc(sfcsubsequence: SFCSubSequence) {
+sfcsubsequence_release :: proc(sfcsubsequence: rawptr) {
     if sfcsubsequence != nil {
         (^SFCSubSequenceIF)(sfcsubsequence)->Release()
     }

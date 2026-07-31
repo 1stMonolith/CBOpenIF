@@ -1,14 +1,16 @@
 package il
 
-ILRow :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 ILRowIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ILRowVTable,
 }
 
 ILRowVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     LabelGet:        proc "system" (this: ^ILRowIF, Label: ^BStr) -> HResult,
     LabelPut:        proc "system" (this: ^ILRowIF, Label: BStr) -> HResult,
     InstructionGet:  proc "system" (this: ^ILRowIF, Instruction: ^BStr) -> HResult,
@@ -28,38 +30,38 @@ ilrow_new :: proc {
     ilrow_new_comment
 }
 
-ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: ILRow, ok: bool) {
+ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: rawptr, ok: bool) {
     ilrow = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    bstr_instruction := string_to_bstr(instruction)
-    bstr_operand := string_to_bstr(operand)
-    bstr_description := string_to_bstr(description)
+    bstr_name := bstr.from_string(name)
+    bstr_instruction := bstr.from_string(instruction)
+    bstr_operand := bstr.from_string(operand)
+    bstr_description := bstr.from_string(description)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_instruction)
-        bstr_free(bstr_operand)
-        bstr_free(bstr_description)
+        bstr.free(bstr_name)
+        bstr.free(bstr_instruction)
+        bstr.free(bstr_operand)
+        bstr.free(bstr_description)
     }
-    hr := factoryif->NewILRow(bstr_name, bstr_instruction, bstr_operand, bstr_description, cast(^ILRow)&ilrow)
-    if failed(hr) do return
+    hr := factoryif->NewILRow(bstr_name, bstr_instruction, bstr_operand, bstr_description, cast(^rawptr)&ilrow)
+    if com.failed(hr) do return
 
     return ilrow, true
 }
 
-ilrow_new_comment :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
+ilrow_new_comment :: proc(comment: string) -> (ilrow: rawptr, ok: bool) {
     ilrow = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_comment := string_to_bstr(comment)
-    bstr_free(bstr_comment)
-    hr := factoryif->NewILComment(bstr_comment, cast(^ILRow)&ilrow)
-    if failed(hr) do return
+    bstr_comment := bstr.from_string(comment)
+    bstr.free(bstr_comment)
+    hr := factoryif->NewILComment(bstr_comment, cast(^rawptr)&ilrow)
+    if com.failed(hr) do return
 
     return ilrow, true
 }
@@ -70,32 +72,32 @@ ilrow_name :: proc {
 }
 
 @(private)
-ilrow_name_ :: proc(ilrow: ILRow) -> (name: string, ok: bool) {
+ilrow_name_ :: proc(ilrow: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->LabelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->LabelGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-ilrow_name_set :: proc(ilrow: ILRow, name: string) -> (ok: bool) {
+ilrow_name_set :: proc(ilrow: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->LabelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->LabelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -106,32 +108,32 @@ ilrow_description :: proc {
 }
 
 @(private)
-ilrow_description_ :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
+ilrow_description_ :: proc(ilrow: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->DescriptionGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
+ilrow_description_set :: proc(ilrow: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->DescriptionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -142,32 +144,32 @@ ilrow_row_comment :: proc {
 }
 
 @(private)
-ilrow_row_comment_ :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
+ilrow_row_comment_ :: proc(ilrow: rawptr) -> (row_comment: string, ok: bool) {
     row_comment = ""
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->RowCommentGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->RowCommentGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
+ilrow_row_comment_set :: proc(ilrow: rawptr, row_comment: string) -> (ok: bool) {
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(row_comment)
-    defer bstr_free(bstr)
-    hr := (^ILRowIF)(ilrow)->RowCommentPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(row_comment)
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->RowCommentPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -177,34 +179,34 @@ ilrow_is_row_comment :: proc {
     ilrow_is_row_comment_set,
 }
 
-ilrow_is_row_comment_ :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: bool) {
+ilrow_is_row_comment_ :: proc(ilrow: rawptr) -> (is_row_comment: bool, ok: bool) {
     is_row_comment = false
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^ILRowIF)(ilrow)->IsRowCommentGet(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: bool) {
+ilrow_is_row_comment_set :: proc(ilrow: rawptr, is_row_comment: bool) -> (ok: bool) {
     ok = false
 
     if ilrow == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb := bool_to_variantbool(is_row_comment)
     hr := (^ILRowIF)(ilrow)->IsRowCommentPut(vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
 
-ilrow_release :: proc(ilrow: ILRow) {
+ilrow_release :: proc(ilrow: rawptr) {
     if ilrow != nil {
         (^ILRowIF)(ilrow)->Release()
     }

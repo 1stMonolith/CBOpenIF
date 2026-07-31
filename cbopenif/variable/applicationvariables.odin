@@ -1,68 +1,70 @@
 package variable
 
-ApplicationVariables :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 ApplicationVariablesIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ApplicationVariablesVTable,
 }
 
 ApplicationVariablesVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
-    GlobalVariablesGet: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: ^GlobalVariables) -> HResult,
+    using iunknownvtable: com.IUnknownVTable,
+    GlobalVariablesGet: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: ^rawptr) -> HResult,
     Missing8:           proc "system" (this: ^ApplicationVariablesIF) -> HResult,
-    GlobalVariablesPut: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: GlobalVariables) -> HResult,
-    VariablesGet:       proc "system" (this: ^ApplicationVariablesIF, Variables: ^Variables) -> HResult,
+    GlobalVariablesPut: proc "system" (this: ^ApplicationVariablesIF, GlobalVariables: rawptr) -> HResult,
+    VariablesGet:       proc "system" (this: ^ApplicationVariablesIF, Variables: ^rawptr) -> HResult,
     Missing11:          proc "system" (this: ^ApplicationVariablesIF) -> HResult,
-    VariablesPut:       proc "system" (this: ^ApplicationVariablesIF, Variables: Variables) -> HResult,
+    VariablesPut:       proc "system" (this: ^ApplicationVariablesIF, Variables: rawptr) -> HResult,
     DescriptionGet:     proc "system" (this: ^ApplicationVariablesIF, Description: ^BStr) -> HResult,
     DescriptionPut:     proc "system" (this: ^ApplicationVariablesIF, Description: BStr) -> HResult,
     Serialize:          proc "system" (this: ^ApplicationVariablesIF, XMLStr: ^BStr) -> HResult,
-    SignalsGet:         proc "system" (this: ^ApplicationVariablesIF, Signals: ^Signals) -> HResult,
+    SignalsGet:         proc "system" (this: ^ApplicationVariablesIF, Signals: ^rawptr) -> HResult,
     Missing17:          proc "system" (this: ^ApplicationVariablesIF) -> HResult,
-    SignalsPut:         proc "system" (this: ^ApplicationVariablesIF, Signals: Signals) -> HResult,
+    SignalsPut:         proc "system" (this: ^ApplicationVariablesIF, Signals: rawptr) -> HResult,
 }
 
-applicationvariables_new :: proc(description := "") -> (application_variables: ApplicationVariables, ok: bool) {
+applicationvariables_new :: proc(description := "") -> (application_variables: rawptr, ok: bool) {
     application_variables = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_description := string_to_bstr(description)
-    bstr_free(bstr_description)
-    hr := factoryif->NewApplicationVariables(bstr_description, cast(^ApplicationVariables)&application_variables)
-    if failed(hr) do return
+    bstr_description := bstr.from_string(description)
+    bstr.free(bstr_description)
+    hr := factoryif->NewApplicationVariables(bstr_description, cast(^rawptr)&application_variables)
+    if com.failed(hr) do return
 
     return application_variables, true
 }
 
-applicationvariables_deserialize :: proc(application_variables: ^ApplicationVariables, xml: string) -> (ok: bool) {
+applicationvariables_deserialize :: proc(application_variables: ^rawptr, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml)
-    defer bstr_free(bstr)
-    hr := factoryif->DeserializeApplicationVariables(&bstr, cast(^ApplicationVariables)application_variables)
-    if failed(hr) do return
+    bs := bstr.from_string(xml)
+    defer bstr.free(bs)
+    hr := factoryif->DeserializeApplicationVariables(&bstr, cast(^rawptr)application_variables)
+    if com.failed(hr) do return
     
     return true
 }
 
-applicationvariables_serialize :: proc(application_variables: ApplicationVariables) -> (xml: string, ok: bool) {
+applicationvariables_serialize :: proc(application_variables: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if application_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 applicationvariables_description :: proc {
@@ -71,31 +73,31 @@ applicationvariables_description :: proc {
 }
 
 @(private)
-applicationvariables_description_ :: proc(application_variables: ApplicationVariables) -> (description: string, ok: bool) {
+applicationvariables_description_ :: proc(application_variables: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if application_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-applicationvariables_description_set :: proc(application_variables: ApplicationVariables, description: string) -> (ok: bool) {
+applicationvariables_description_set :: proc(application_variables: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if application_variables == nil do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -106,29 +108,29 @@ applicationvariables_globals :: proc {
 }
 
 @(private)
-applicationvariables_globals_ :: proc(application_variables: ApplicationVariables) -> (global_variables: GlobalVariables, ok: bool) {
+applicationvariables_globals_ :: proc(application_variables: rawptr) -> (global_variables: rawptr, ok: bool) {
     global_variables = nil
     ok = false
 
     if application_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesGet(&global_variables)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return global_variables, true
 }
 
 @(private)
-applicationvariables_globals_set :: proc(application_variables: ApplicationVariables, global_variables: GlobalVariables) -> (ok: bool) {
+applicationvariables_globals_set :: proc(application_variables: rawptr, global_variables: rawptr) -> (ok: bool) {
     ok = false
 
     if application_variables == nil do return
     if global_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesPut(global_variables)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
@@ -139,29 +141,29 @@ applicationvariables_variables :: proc {
 }
 
 @(private)
-applicationvariables_variables_ :: proc(application_variables: ApplicationVariables) -> (variables: Variables, ok: bool) {
+applicationvariables_variables_ :: proc(application_variables: rawptr) -> (variables: rawptr, ok: bool) {
     variables = nil
     ok = false
 
     if application_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesGet(&variables)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variables, true
 }
 
 @(private)
-applicationvariables_variables_set :: proc(application_variables: ApplicationVariables, variables: Variables) -> (ok: bool) {
+applicationvariables_variables_set :: proc(application_variables: rawptr, variables: rawptr) -> (ok: bool) {
     ok = false
 
     if application_variables == nil do return
     if variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesPut(variables)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
@@ -172,29 +174,29 @@ applicationvariables_signals :: proc {
 }
 
 @(private)
-applicationvariables_signals_ :: proc(application_variables: ApplicationVariables) -> (signals: Signals, ok: bool) {
+applicationvariables_signals_ :: proc(application_variables: rawptr) -> (signals: rawptr, ok: bool) {
     signals = nil
     ok = false
 
     if application_variables == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsGet(&signals)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return signals, true
 }
 
 @(private)
-applicationvariables_signals_set :: proc(application_variables: ApplicationVariables, signals: Signals) -> (ok: bool) {
+applicationvariables_signals_set :: proc(application_variables: rawptr, signals: rawptr) -> (ok: bool) {
     ok = false
 
     if application_variables == nil do return
     if signals == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsPut(signals)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
@@ -207,10 +209,10 @@ applicationvariables_globals_add :: proc {
 }
 
 @(private)
-applicationvariables_globals_add_ :: proc(application_variables: ApplicationVariables, global_variable: GlobalVariable) -> (ok: bool) {
+applicationvariables_globals_add_ :: proc(application_variables: rawptr, global_variable: rawptr) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if global_variable == nil do return
 
@@ -225,10 +227,10 @@ applicationvariables_globals_add_ :: proc(application_variables: ApplicationVari
 }
 
 @(private)
-applicationvariables_globals_add_at_index :: proc(application_variables: ApplicationVariables, global_variable: GlobalVariable, index: i32) -> (ok: bool) {
+applicationvariables_globals_add_at_index :: proc(application_variables: rawptr, global_variable: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if global_variable == nil do return
 
@@ -248,10 +250,10 @@ applicationvariables_variables_add :: proc {
 }
 
 @(private)
-applicationvariables_variables_add_ :: proc(application_variables: ApplicationVariables, variable: Variable) -> (ok: bool) {
+applicationvariables_variables_add_ :: proc(application_variables: rawptr, variable: rawptr) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if variable == nil do return
 
@@ -266,10 +268,10 @@ applicationvariables_variables_add_ :: proc(application_variables: ApplicationVa
 }
 
 @(private)
-applicationvariables_variables_add_at_index :: proc(application_variables: ApplicationVariables, variable: Variable, index: i32) -> (ok: bool) {
+applicationvariables_variables_add_at_index :: proc(application_variables: rawptr, variable: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if variable == nil do return
 
@@ -289,10 +291,10 @@ applicationvariables_signals_add :: proc {
 }
 
 @(private)
-applicationvariables_signals_add_ :: proc(application_variables: ApplicationVariables, signal: Signal) -> (ok: bool) {
+applicationvariables_signals_add_ :: proc(application_variables: rawptr, signal: rawptr) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if signal == nil do return
 
@@ -307,10 +309,10 @@ applicationvariables_signals_add_ :: proc(application_variables: ApplicationVari
 }
 
 @(private)
-applicationvariables_signals_add_at_index :: proc(application_variables: ApplicationVariables, signal: Signal, index: i32) -> (ok: bool) {
+applicationvariables_signals_add_at_index :: proc(application_variables: rawptr, signal: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     if signal == nil do return
 
@@ -332,11 +334,11 @@ applicationvariables_global :: proc {
 }
 
 @(private)
-applicationvariables_global_by_name :: proc(application_variables: ApplicationVariables, name: string, _: _As_GlobalVariable) -> (global_variable: GlobalVariable, ok: bool) {
+applicationvariables_global_by_name :: proc(application_variables: rawptr, name: string, _: _As_GlobalVariable) -> (global_variable: rawptr, ok: bool) {
     global_variable = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
 
     global_variables: GlobalVariables
@@ -350,11 +352,11 @@ applicationvariables_global_by_name :: proc(application_variables: ApplicationVa
 }
 
 @(private)
-applicationvariables_global_by_index :: proc(application_variables: ApplicationVariables, index: i32, _: _As_GlobalVariable) -> (global_variable: GlobalVariable, ok: bool) {
+applicationvariables_global_by_index :: proc(application_variables: rawptr, index: i32, _: _As_GlobalVariable) -> (global_variable: rawptr, ok: bool) {
     global_variable = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     global_variables: GlobalVariables
@@ -373,11 +375,11 @@ applicationvariables_variable :: proc {
 }
 
 @(private)
-applicationvariables_variable_by_name :: proc(application_variables: ApplicationVariables, name: string, _: _As_Variable) -> (variable: Variable, ok: bool) {
+applicationvariables_variable_by_name :: proc(application_variables: rawptr, name: string, _: _As_Variable) -> (variable: rawptr, ok: bool) {
     variable = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
 
     variables: Variables
@@ -391,11 +393,11 @@ applicationvariables_variable_by_name :: proc(application_variables: Application
 }
 
 @(private)
-applicationvariables_variable_by_index :: proc(application_variables: ApplicationVariables, index: i32, _: _As_Variable) -> (variable: Variable, ok: bool) {
+applicationvariables_variable_by_index :: proc(application_variables: rawptr, index: i32, _: _As_Variable) -> (variable: rawptr, ok: bool) {
     variable = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     variables: Variables
@@ -414,11 +416,11 @@ applicationvariables_signal :: proc {
 }
 
 @(private)
-applicationvariables_signal_by_name :: proc(application_variables: ApplicationVariables, name: string, _: _As_Signal) -> (signal: Signal, ok: bool) {
+applicationvariables_signal_by_name :: proc(application_variables: rawptr, name: string, _: _As_Signal) -> (signal: rawptr, ok: bool) {
     signal = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
 
     signals: Signals
@@ -432,11 +434,11 @@ applicationvariables_signal_by_name :: proc(application_variables: ApplicationVa
 }
 
 @(private)
-applicationvariables_signal_by_index :: proc(application_variables: ApplicationVariables, index: i32, _: _As_Signal) -> (signal: Signal, ok: bool) {
+applicationvariables_signal_by_index :: proc(application_variables: rawptr, index: i32, _: _As_Signal) -> (signal: rawptr, ok: bool) {
     signal = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     signals: Signals
@@ -457,11 +459,11 @@ applicationvariables_index :: proc {
     applicationvariables_signal_index,
 }
 
-applicationvariables_global_index :: proc(application_variables: ApplicationVariables, name: string, _: _As_GlobalVariable) -> (index: i32, ok: bool) {
+applicationvariables_global_index :: proc(application_variables: rawptr, name: string, _: _As_GlobalVariable) -> (index: i32, ok: bool) {
     index = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     global_variables: GlobalVariables
@@ -474,11 +476,11 @@ applicationvariables_global_index :: proc(application_variables: ApplicationVari
     return index, true
 }
 
-applicationvariables_variable_index :: proc(application_variables: ApplicationVariables, name: string, _: _As_Variable) -> (index: i32, ok: bool) {
+applicationvariables_variable_index :: proc(application_variables: rawptr, name: string, _: _As_Variable) -> (index: i32, ok: bool) {
     index = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     variables: Variables
@@ -491,11 +493,11 @@ applicationvariables_variable_index :: proc(application_variables: ApplicationVa
     return index, true
 }
 
-applicationvariables_signal_index :: proc(application_variables: ApplicationVariables, name: string, _: _As_Signal) -> (index: i32, ok: bool) {
+applicationvariables_signal_index :: proc(application_variables: rawptr, name: string, _: _As_Signal) -> (index: i32, ok: bool) {
     index = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     signals: Signals
@@ -516,11 +518,11 @@ applicationvariables_cound :: proc {
     applicationvariables_signal_count,
 }
 
-applicationvariables_global_count :: proc(application_variables: ApplicationVariables, _: _As_GlobalVariable) -> (count: i32, ok: bool) {
+applicationvariables_global_count :: proc(application_variables: rawptr, _: _As_GlobalVariable) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     global_variables: GlobalVariables
@@ -533,11 +535,11 @@ applicationvariables_global_count :: proc(application_variables: ApplicationVari
     return count, true
 }
 
-applicationvariables_variable_count :: proc(application_variables: ApplicationVariables, _: _As_Variable) -> (count: i32, ok: bool) {
+applicationvariables_variable_count :: proc(application_variables: rawptr, _: _As_Variable) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     variables: Variables
@@ -550,11 +552,11 @@ applicationvariables_variable_count :: proc(application_variables: ApplicationVa
     return count, true
 }
 
-applicationvariables_signal_count :: proc(application_variables: ApplicationVariables, _: _As_Signal) -> (count: i32, ok: bool) {
+applicationvariables_signal_count :: proc(application_variables: rawptr, _: _As_Signal) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     signals: Signals
@@ -583,19 +585,19 @@ applicationvariables_global_remove :: proc {
     applicationvariables_global_remove_by_name,
     applicationvariables_global_remove_by_index,
 }
-applicationvariables_global_remove_by_name_ :: proc(application_variables: ApplicationVariables, name: string, _: _As_GlobalVariable) -> (ok: bool) {
+applicationvariables_global_remove_by_name_ :: proc(application_variables: rawptr, name: string, _: _As_GlobalVariable) -> (ok: bool) {
     return applicationvariables_global_remove_by_name(application_variables, name)
 }
 
-applicationvariables_global_remove_by_index_ :: proc(application_variables: ApplicationVariables, index: i32, _: _As_GlobalVariable) -> (ok: bool) {
+applicationvariables_global_remove_by_index_ :: proc(application_variables: rawptr, index: i32, _: _As_GlobalVariable) -> (ok: bool) {
     return applicationvariables_global_remove_by_index(application_variables, index)
 }
 
 @(private)
-applicationvariables_global_remove_by_name :: proc(application_variables: ApplicationVariables, name: string) -> (ok: bool) {
+applicationvariables_global_remove_by_name :: proc(application_variables: rawptr, name: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     global_variables: GlobalVariables
@@ -613,10 +615,10 @@ applicationvariables_global_remove_by_name :: proc(application_variables: Applic
 }
 
 @(private)
-applicationvariables_global_remove_by_index :: proc(application_variables: ApplicationVariables, index: i32) -> (ok: bool) {
+applicationvariables_global_remove_by_index :: proc(application_variables: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     global_variables: GlobalVariables
@@ -634,19 +636,19 @@ applicationvariables_variable_remove :: proc {
     applicationvariables_variable_remove_by_index,
 }
 
-applicationvariables_variable_remove_by_name_ :: proc(application_variables: ApplicationVariables, name: string, _: _As_Variable) -> (ok: bool) {
+applicationvariables_variable_remove_by_name_ :: proc(application_variables: rawptr, name: string, _: _As_Variable) -> (ok: bool) {
     return applicationvariables_variable_remove_by_name(application_variables, name)
 }
 
-applicationvariables_variable_remove_by_index_ :: proc(application_variables: ApplicationVariables, index: i32, _: _As_Variable) -> (ok: bool) {
+applicationvariables_variable_remove_by_index_ :: proc(application_variables: rawptr, index: i32, _: _As_Variable) -> (ok: bool) {
     return applicationvariables_variable_remove_by_index(application_variables, index)
 }
 
 @(private)
-applicationvariables_variable_remove_by_name :: proc(application_variables: ApplicationVariables, name: string) -> (ok: bool) {
+applicationvariables_variable_remove_by_name :: proc(application_variables: rawptr, name: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     variables: Variables
@@ -664,10 +666,10 @@ applicationvariables_variable_remove_by_name :: proc(application_variables: Appl
 }
 
 @(private)
-applicationvariables_variable_remove_by_index :: proc(application_variables: ApplicationVariables, index: i32) -> (ok: bool) {
+applicationvariables_variable_remove_by_index :: proc(application_variables: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     variables: Variables
@@ -685,19 +687,19 @@ applicationvariables_signal_remove :: proc {
     applicationvariables_signal_remove_by_index,
 }
 
-applicationvariables_signal_remove_by_name_ :: proc(application_variables: ApplicationVariables, name: string, _: _As_Signal) -> (ok: bool) {
+applicationvariables_signal_remove_by_name_ :: proc(application_variables: rawptr, name: string, _: _As_Signal) -> (ok: bool) {
     return applicationvariables_signal_remove_by_name(application_variables, name)
 }
 
-applicationvariables_signal_remove_by_index_ :: proc(application_variables: ApplicationVariables, index: i32, _: _As_Signal) -> (ok: bool) {
+applicationvariables_signal_remove_by_index_ :: proc(application_variables: rawptr, index: i32, _: _As_Signal) -> (ok: bool) {
     return applicationvariables_signal_remove_by_index(application_variables, index)
 }
 
 @(private)
-applicationvariables_signal_remove_by_name :: proc(application_variables: ApplicationVariables, name: string) -> (ok: bool) {
+applicationvariables_signal_remove_by_name :: proc(application_variables: rawptr, name: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     signals: Signals
@@ -715,10 +717,10 @@ applicationvariables_signal_remove_by_name :: proc(application_variables: Applic
 }
 
 @(private)
-applicationvariables_signal_remove_by_index :: proc(application_variables: ApplicationVariables, index: i32) -> (ok: bool) {
+applicationvariables_signal_remove_by_index :: proc(application_variables: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if application_variables == nil do return
     
     signals: Signals
@@ -731,7 +733,7 @@ applicationvariables_signal_remove_by_index :: proc(application_variables: Appli
     return true
 }
 
-applicationvariables_release :: proc(application_variables: ApplicationVariables) {
+applicationvariables_release :: proc(application_variables: rawptr) {
     if application_variables != nil {
         (^ApplicationVariablesIF)(application_variables)->Release()
     }

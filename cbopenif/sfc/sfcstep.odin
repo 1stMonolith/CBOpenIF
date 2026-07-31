@@ -1,14 +1,16 @@
 package sfc
 
-SFCStep :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 SFCStepIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCStepVTable,
 }
 
 SFCStepVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:           proc "system" (this: ^SFCStepIF, Name: ^BStr) -> HResult,
     NamePut:           proc "system" (this: ^SFCStepIF, Name: BStr) -> HResult,
     InitialStepGet:    proc "system" (this: ^SFCStepIF, InitialStep: ^VariantBool) -> HResult,
@@ -21,24 +23,24 @@ SFCStepVTable :: struct {
     NActionSTCodePut:  proc "system" (this: ^SFCStepIF, NActionSTCode: BStr) -> HResult,
 }
 
-sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_action_stcode := "", p0_action_stcode := "") -> (sfcstep: SFCStep, ok: bool) {
+sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_action_stcode := "", p0_action_stcode := "") -> (sfcstep: rawptr, ok: bool) {
     sfcstep = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    bstr_p1 := string_to_bstr(p1_action_stcode)
-    bstr_n  := string_to_bstr(n_action_stcode)
-    bstr_p0 := string_to_bstr(p0_action_stcode)
+    bstr_name := bstr.from_string(name)
+    bstr_p1 := bstr.from_string(p1_action_stcode)
+    bstr_n  := bstr.from_string(n_action_stcode)
+    bstr_p0 := bstr.from_string(p0_action_stcode)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_p1)
-        bstr_free(bstr_n)
-        bstr_free(bstr_p0)
+        bstr.free(bstr_name)
+        bstr.free(bstr_p1)
+        bstr.free(bstr_n)
+        bstr.free(bstr_p0)
     }
-    hr := factoryif->NewSFCStep1(bstr_name, bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^SFCStep)&sfcstep)
-    if failed(hr) do return
+    hr := factoryif->NewSFCStep1(bstr_name, bool_to_variantbool(initial_step), bstr_p1, bstr_n, bstr_p0, cast(^rawptr)&sfcstep)
+    if com.failed(hr) do return
 
     return sfcstep, true
 }
@@ -49,32 +51,32 @@ sfcstep_name :: proc {
 }
 
 @(private)
-sfcstep_name_ :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
+sfcstep_name_ :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcstep_name_set :: proc(sfcstep: SFCStep, name: string) -> (ok: bool) {
+sfcstep_name_set :: proc(sfcstep: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -85,29 +87,29 @@ sfcstep_initial_step :: proc {
 }
 
 @(private)
-sfcstep_initial_step_ :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: bool) {
+sfcstep_initial_step_ :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool) {
     initial_step = false
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     vb: VariantBool
     hr := (^SFCStepIF)(sfcstep)->InitialStepGet(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
 @(private)
-sfcstep_initial_step_set :: proc(sfcstep: SFCStep, initial_step: bool) -> (ok: bool) {
+sfcstep_initial_step_set :: proc(sfcstep: rawptr, initial_step: bool) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
     hr := (^SFCStepIF)(sfcstep)->InitialStepPut(bool_to_variantbool(initial_step))
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
@@ -118,32 +120,32 @@ sfcstep_p1_action_stcode :: proc {
 }
 
 @(private)
-sfcstep_p1_action_stcode_ :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
+sfcstep_p1_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->P1ActionSTCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->P1ActionSTCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcstep_p1_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
+sfcstep_p1_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->P1ActionSTCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->P1ActionSTCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -154,32 +156,32 @@ sfcstep_p0_action_stcode :: proc {
 }
 
 @(private)
-sfcstep_p0_action_stcode_ :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
+sfcstep_p0_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->P0ActionSTCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->P0ActionSTCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcstep_p0_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
+sfcstep_p0_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->P0ActionSTCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->P0ActionSTCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -190,37 +192,37 @@ sfcstep_n_action_stcode :: proc {
 }
 
 @(private)
-sfcstep_n_action_stcode_ :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
+sfcstep_n_action_stcode_ :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->NActionSTCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->NActionSTCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcstep_n_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
+sfcstep_n_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^SFCStepIF)(sfcstep)->NActionSTCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^SFCStepIF)(sfcstep)->NActionSTCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-sfcstep_release :: proc(sfcstep: SFCStep) {
+sfcstep_release :: proc(sfcstep: rawptr) {
     if sfcstep != nil {
         (^SFCStepIF)(sfcstep)->Release()
     }

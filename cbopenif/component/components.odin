@@ -1,29 +1,23 @@
 package component
 
 import "../com"
-@(private) HResult        :: com.HResult
-@(private) IUnknownIF     :: com.IUnknownIF
-@(private) IUnknownVTable :: com.IUnknownVTable
-
+import "../controlbuilder"
 import "../bstr"
-@(private) BStr           :: bstr.BStr
-
-Components :: distinct rawptr
 
 ComponentsIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ComponentsVTable,
 }
 
 ComponentsVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
-    Add:       proc "system" (this: ^ComponentsIF, Component: Component) -> HResult,
-    AddBefore: proc "system" (this: ^ComponentsIF, Component: Component, Index: i32) -> HResult,
-    Add1:      proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^Component) -> HResult,
-    Add2:      proc "system" (this: ^ComponentsIF, Name, TypeName, Attribute, InitialValue, Description: BStr, Component: ^Component) -> HResult,
-    Find:      proc "system" (this: ^ComponentsIF, Name: BStr, Component: ^Component) -> HResult,
+    using iunknown_vtable: com.IUnknownVTable,
+    Add:       proc "system" (this: ^ComponentsIF, Component: rawptr) -> HResult,
+    AddBefore: proc "system" (this: ^ComponentsIF, Component: rawptr, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^ComponentsIF, Name, TypeName: BStr, Component: ^rawptr) -> HResult,
+    Add2:      proc "system" (this: ^ComponentsIF, Name, TypeName, Attribute, InitialValue, Description: BStr, Component: ^rawptr) -> HResult,
+    Find:      proc "system" (this: ^ComponentsIF, Name: BStr, Component: ^rawptr) -> HResult,
     FindNr:    proc "system" (this: ^ComponentsIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:      proc "system" (this: ^ComponentsIF, Index: i32, Component: ^Component) -> HResult,
+    Item:      proc "system" (this: ^ComponentsIF, Index: i32, Component: ^rawptr) -> HResult,
     Count:     proc "system" (this: ^ComponentsIF, Count: ^i32) -> HResult,
     Remove:    proc "system" (this: ^ComponentsIF, Index: i32) -> HResult,
 }
@@ -34,28 +28,28 @@ components_add :: proc {
 }
 
 @(private)
-components_add_ :: proc(components: Components, component: Component) -> (ok: bool) {
+components_add_ :: proc(components: rawptr, component: rawptr) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     if component == nil do return
 
     hr := (^ComponentsIF)(components)->Add(component)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
 
-components_add_at_index :: proc(components: Components, component: Component, index: i32) -> (ok: bool) {
+components_add_at_index :: proc(components: rawptr, component: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     if component == nil do return
     
     hr := (^ComponentsIF)(components)->AddBefore(component, index)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return true
 }
@@ -65,58 +59,58 @@ components_component :: proc {
     components_component_by_index,
 }
 
-components_component_by_name :: proc(components: Components, name: string) -> (component: Component, ok: bool) {
+components_component_by_name :: proc(components: rawptr, name: string) -> (component: rawptr, ok: bool) {
     component = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_free(bstr_name)
+    bstr_name := bstr.from_string(name)
+    bstr.free(bstr_name)
     hr := (^ComponentsIF)(components)->Find(bstr_name, &component)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return component, true
 }
 
-components_component_by_index :: proc(components: Components, index: i32) -> (component: Component, ok: bool) {
+components_component_by_index :: proc(components: rawptr, index: i32) -> (component: rawptr, ok: bool) {
     component = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     
     hr := (^ComponentsIF)(components)->Item(index, &component)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return component, true
 }
 
-components_component_index :: proc(components: Components, name: string) -> (index: i32, ok: bool) {
+components_component_index :: proc(components: rawptr, name: string) -> (index: i32, ok: bool) {
     index = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     
-    bstr_name := string_to_bstr(name)
-    defer bstr_free(bstr_name)
+    bstr_name := bstr.from_string(name)
+    defer bstr.free(bstr_name)
     hr := (^ComponentsIF)(components)->FindNr(bstr_name, &index)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return index, true
 }
 
-components_count :: proc(components: Components) -> (count: i32, ok: bool) {
+components_count :: proc(components: rawptr) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     
     hr := (^ComponentsIF)(components)->Count(&count)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return count, true
 }
@@ -126,34 +120,34 @@ components_remove :: proc {
     components_remove_by_index
 }
 
-components_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {
+components_remove_by_name :: proc(components: rawptr, name: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
 
     index: i32
     index, ok = components_component_index(components, name)
     
     hr := (^ComponentsIF)(components)->Remove(index)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
 
-components_remove_by_index :: proc(components: Components, index: i32) -> (ok: bool) {
+components_remove_by_index :: proc(components: rawptr, index: i32) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     if components == nil do return
     
     hr := (^ComponentsIF)(components)->Remove(index)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
 
-components_release :: proc(components: Components) {
+components_release :: proc(components: rawptr) {
     if components != nil {
         (^ComponentsIF)(components)->Release()
     }

@@ -1,14 +1,16 @@
 package codeblock
 
-FDCodeBlock :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 FDCodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^FDCodeBlockVTable,
 }
 
 FDCodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:    proc "system" (this: ^FDCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:    proc "system" (this: ^FDCodeBlockIF, Name: BStr) -> HResult,
     Missing9:   proc "system" (this: ^FDCodeBlockIF) -> HResult,
@@ -19,19 +21,19 @@ FDCodeBlockVTable :: struct {
     Serialize:  proc "system" (this: ^FDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
+fdcodeblock_serialize :: proc(fdcodeblock: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if fdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FDCodeBlockIF)(fdcodeblock)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 fdcodeblock_name :: proc {
@@ -40,32 +42,32 @@ fdcodeblock_name :: proc {
 }
 
 @(private)
-fdcodeblock_name_ :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
+fdcodeblock_name_ :: proc(fdcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if fdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FDCodeBlockIF)(fdcodeblock)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
+fdcodeblock_name_set :: proc(fdcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
     if fdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^FDCodeBlockIF)(fdcodeblock)->NamePut(bstr)
-    if failed(hr) do return
+    bs :=bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -76,37 +78,37 @@ fdcodeblock_xml_string :: proc {
 }
 
 @(private)
-fdcodeblock_xml_string_ :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
+fdcodeblock_xml_string_ :: proc(fdcodeblock: rawptr) -> (xml_string: string, ok: bool) {
     xml_string = ""
     ok = false
 
     if fdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
+fdcodeblock_xml_string_set :: proc(fdcodeblock: rawptr, xml_string: string) -> (ok: bool) {
     ok = false
     
     if fdcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml_string)
-    defer bstr_free(bstr)
-    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLPut(bstr)
-    if failed(hr) do return
+    bs :=bstr.from_string(xml_string)
+    defer bstr.free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-fdcodeblock_release :: proc(fdcodeblock: FDCodeBlock) {
+fdcodeblock_release :: proc(fdcodeblock: rawptr) {
     if fdcodeblock != nil {
         (^FDCodeBlockIF)(fdcodeblock)->Release()
     }

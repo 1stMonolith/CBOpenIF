@@ -10,12 +10,12 @@ foreign import oleaut32 "system:oleaut32.lib"
 @(default_calling_convention="system")
 foreign oleaut32 {
     SysAllocStringLen :: proc(psz: [^]u16, len: u32) -> BStr ---
-    SysFreeString     :: proc(bstr: BStr) ---
-    SysStringLen      :: proc(bstr: BStr) -> u32 ---
+    SysFreeString     :: proc(bs: BStr) ---
+    SysStringLen      :: proc(bs: BStr) -> u32 ---
 }
 
-from_string :: proc(s: string) -> (bstr: BStr) {
-    bstr = nil
+from_string :: proc(s: string) -> (bs: BStr) {
+    bs = nil
     
     if len(s) == 0 do return
 
@@ -24,21 +24,21 @@ from_string :: proc(s: string) -> (bstr: BStr) {
     wide := windows.utf8_to_utf16(s, context.temp_allocator)
     if wide == nil do return
 
-    bstr = SysAllocStringLen(raw_data(wide), u32(len(wide)))
+    bs = SysAllocStringLen(raw_data(wide), u32(len(wide)))
     
     return
 }
 
-to_string :: proc(bstr: BStr, allocator := context.allocator) -> (s: string) {
+to_string :: proc(bs: BStr, allocator := context.allocator) -> (s: string) {
     s = ""
 
-    if bstr == nil do return
+    if bs == nil do return
 
-    character_count := SysStringLen(bstr)
+    character_count := SysStringLen(bs)
     if character_count == 0 do return
 
     // bstr is a pointer to the first UTF-16 character
-    wide := windows.wstring(bstr)
+    wide := windows.wstring(bs)
 
     err: runtime.Allocator_Error
     s, err = windows.wstring_to_utf8(wide, int(character_count), allocator)
@@ -47,6 +47,6 @@ to_string :: proc(bstr: BStr, allocator := context.allocator) -> (s: string) {
     return s
 }
 
-free :: proc(bstr: BStr) {
-    SysFreeString(bstr)
+free :: proc(bs: BStr) {
+    SysFreeString(bs)
 }

@@ -1,14 +1,16 @@
 package parameter
 
-CMParameter :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 CMParameterIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^CMParameterVTable,
 }
 
 CMParameterVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:                proc "system" (this: ^CMParameterIF, Name: ^BStr) -> HResult,
     NamePut:                proc "system" (this: ^CMParameterIF, Name: BStr) -> HResult,
     TypeNameGet:            proc "system" (this: ^CMParameterIF, TypeName: ^BStr) -> HResult,
@@ -25,9 +27,9 @@ CMParameterVTable :: struct {
     AuthenticationLevelPut: proc "system" (this: ^CMParameterIF, AuthenticationLevel: BStr) -> HResult,
     BatchPropertyGet:       proc "system" (this: ^CMParameterIF, BatchProperty: ^BStr) -> HResult,
     BatchPropertyPut:       proc "system" (this: ^CMParameterIF, BatchProperty: BStr) -> HResult,
-    AutoPointGet:           proc "system" (this: ^CMParameterIF, AutoPoint: ^AutoPoint) -> HResult,
+    AutoPointGet:           proc "system" (this: ^CMParameterIF, AutoPoint: ^rawptr) -> HResult,
     Missing24:              proc "system" (this: ^CMParameterIF) -> HResult,
-    AutoPointPut:           proc "system" (this: ^CMParameterIF, AutoPoint: AutoPoint) -> HResult,
+    AutoPointPut:           proc "system" (this: ^CMParameterIF, AutoPoint: rawptr) -> HResult,
     GraphNodesGet:          proc "system" (this: ^CMParameterIF, GraphNodes: ^GraphNodes) -> HResult,
     Missing27:              proc "system" (this: ^CMParameterIF) -> HResult,
     GraphNodesPut:          proc "system" (this: ^CMParameterIF, GraphNodes: GraphNodes) -> HResult,
@@ -44,27 +46,27 @@ CMParameterVTable :: struct {
     FDPortPut:              proc "system" (this: ^CMParameterIF, FDPort: BStr) -> HResult,
 }
 
-cmparameter_new :: proc(name: string, type_name: string, attribute := "", initial_value := "", read_permission := "", write_permission := "", description := "", autopoint : AutoPoint = nil) -> (cmparameter: CMParameter, ok: bool) {
+cmparameter_new :: proc(name: string, type_name: string, attribute := "", initial_value := "", read_permission := "", write_permission := "", description := "", autopoint : AutoPoint = nil) -> (cmparameter: rawptr, ok: bool) {
     cmparameter = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_type_name := string_to_bstr(type_name)
-    bstr_attribute := string_to_bstr(attribute)
-    bstr_initial_value := string_to_bstr(initial_value)
-    bstr_read_permission := string_to_bstr(read_permission)
-    bstr_write_permission := string_to_bstr(write_permission)
-    bstr_description := string_to_bstr(description)
+    bstr_name := bstr.from_string(name)
+    bstr_type_name := bstr.from_string(type_name)
+    bstr_attribute := bstr.from_string(attribute)
+    bstr_initial_value := bstr.from_string(initial_value)
+    bstr_read_permission := bstr.from_string(read_permission)
+    bstr_write_permission := bstr.from_string(write_permission)
+    bstr_description := bstr.from_string(description)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_type_name)
-        bstr_free(bstr_attribute)
-        bstr_free(bstr_initial_value)
-        bstr_free(bstr_read_permission)
-        bstr_free(bstr_write_permission)
-        bstr_free(bstr_description)
+        bstr.free(bstr_name)
+        bstr.free(bstr_type_name)
+        bstr.free(bstr_attribute)
+        bstr.free(bstr_initial_value)
+        bstr.free(bstr_read_permission)
+        bstr.free(bstr_write_permission)
+        bstr.free(bstr_description)
     }
 
     ap: AutoPoint
@@ -73,38 +75,38 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
         if !ok do return
     }
 
-    hr := factoryif->NewCMParameter1(bstr_name, bstr_type_name, bstr_attribute, bstr_initial_value, bstr_read_permission, bstr_write_permission, bstr_description, ap, cast(^CMParameter)&cmparameter)
-    if failed(hr) do return
+    hr := factoryif->NewCMParameter1(bstr_name, bstr_type_name, bstr_attribute, bstr_initial_value, bstr_read_permission, bstr_write_permission, bstr_description, ap, cast(^rawptr)&cmparameter)
+    if com.failed(hr) do return
     
     return cmparameter, true
 }
 
-cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: bool) {
+cmparameter_deserialize :: proc(cmparameter: ^rawptr, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml)
-    defer bstr_free(bstr)
-    hr := factoryif->DeserializeCMParameter(&bstr, cast(^CMParameter)cmparameter)
-    if failed(hr) do return
+    bs := bstr.from_string(xml)
+    defer bstr.free(bs)
+    hr := factoryif->DeserializeCMParameter(&bstr, cast(^rawptr)cmparameter)
+    if com.failed(hr) do return
     
     return true
 }
 
-cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: bool) {
+cmparameter_serialize :: proc(cmparameter: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 cmparameter_name :: proc {
@@ -113,32 +115,32 @@ cmparameter_name :: proc {
 }
 
 @(private)
-cmparameter_name_ :: proc(cmparameter: CMParameter) -> (name: string, ok: bool) {
+cmparameter_name_ :: proc(cmparameter: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: bool) {
+cmparameter_name_set :: proc(cmparameter: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -149,32 +151,32 @@ cmparameter_type_name :: proc {
 }
 
 @(private)
-cmparameter_type_name_ :: proc(cmparameter: CMParameter) -> (type_name: string, ok: bool) {
+cmparameter_type_name_ :: proc(cmparameter: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->TypeNameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->TypeNameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -> (ok: bool) {
+cmparameter_type_name_set :: proc(cmparameter: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(type_name)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->TypeNamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(type_name)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->TypeNamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -185,32 +187,32 @@ cmparameter_initial_value :: proc {
 }
 
 @(private)
-cmparameter_initial_value_ :: proc(cmparameter: CMParameter) -> (inital_value: string, ok: bool) {
+cmparameter_initial_value_ :: proc(cmparameter: rawptr) -> (inital_value: string, ok: bool) {
     inital_value = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->InitialValueGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->InitialValueGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: string) -> (ok: bool) {
+cmparameter_initial_value_set :: proc(cmparameter: rawptr, inital_value: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(inital_value)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->InitialValuePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(inital_value)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->InitialValuePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -221,32 +223,32 @@ cmparameter_description :: proc {
 }
 
 @(private)
-cmparameter_description_ :: proc(cmparameter: CMParameter) -> (description: string, ok: bool) {
+cmparameter_description_ :: proc(cmparameter: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->DescriptionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_description_set :: proc(cmparameter: CMParameter, description: string) -> (ok: bool) {
+cmparameter_description_set :: proc(cmparameter: rawptr, description: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(description)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->DescriptionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(description)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->DescriptionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -257,32 +259,32 @@ cmparameter_read_permission :: proc {
 }
 
 @(private)
-cmparameter_read_permission_ :: proc(cmparameter: CMParameter) -> (read_permission: string, ok: bool) {
+cmparameter_read_permission_ :: proc(cmparameter: rawptr) -> (read_permission: string, ok: bool) {
     read_permission = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->ReadPermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->ReadPermissionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permission: string) -> (ok: bool) {
+cmparameter_read_permission_set :: proc(cmparameter: rawptr, read_permission: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(read_permission)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->ReadPermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(read_permission)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->ReadPermissionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -293,32 +295,32 @@ cmparameter_write_permission :: proc {
 }
 
 @(private)
-cmparameter_write_permission_ :: proc(cmparameter: CMParameter) -> (write_permission: string, ok: bool) {
+cmparameter_write_permission_ :: proc(cmparameter: rawptr) -> (write_permission: string, ok: bool) {
     write_permission = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->WritePermissionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->WritePermissionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permission: string) -> (ok: bool) {
+cmparameter_write_permission_set :: proc(cmparameter: rawptr, write_permission: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(write_permission)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->WritePermissionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(write_permission)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->WritePermissionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -329,32 +331,32 @@ cmparameter_authentication_level :: proc {
 }
 
 @(private)
-cmparameter_authentication_level_ :: proc(cmparameter: CMParameter) -> (authentication_level: string, ok: bool) {
+cmparameter_authentication_level_ :: proc(cmparameter: rawptr) -> (authentication_level: string, ok: bool) {
     authentication_level = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentication_level: string) -> (ok: bool) {
+cmparameter_authentication_level_set :: proc(cmparameter: rawptr, authentication_level: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(authentication_level)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(authentication_level)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -365,32 +367,32 @@ cmparameter_batch_property :: proc {
 }
 
 @(private)
-cmparameter_batch_property_ :: proc(cmparameter: CMParameter) -> (batch_property: string, ok: bool) {
+cmparameter_batch_property_ :: proc(cmparameter: rawptr) -> (batch_property: string, ok: bool) {
     batch_property = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property: string) -> (ok: bool) {
+cmparameter_batch_property_set :: proc(cmparameter: rawptr, batch_property: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(batch_property)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(batch_property)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -401,28 +403,28 @@ cmparameter_auto_point :: proc {
 }
 
 @(private)
-cmparameter_auto_point_ :: proc(cmparameter: CMParameter) -> (auto_point: AutoPoint, ok: bool) {
+cmparameter_auto_point_ :: proc(cmparameter: rawptr) -> (auto_point: AutoPoint, ok: bool) {
     auto_point = nil
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->AutoPointGet(&auto_point)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return auto_point, true
 }
 
 @(private)
-cmparameter_auto_point_set :: proc(cmparameter: CMParameter, auto_point: AutoPoint) -> (ok: bool) {
+cmparameter_auto_point_set :: proc(cmparameter: rawptr, auto_point: rawptr) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->AutoPointPut(auto_point)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
@@ -433,60 +435,60 @@ cmparameter_graph_nodes :: proc {
 }
 
 @(private)
-cmparameter_graph_nodes_ :: proc(cmparameter: CMParameter) -> (graph_nodes: GraphNodes, ok: bool) {
+cmparameter_graph_nodes_ :: proc(cmparameter: rawptr) -> (graph_nodes: rawptr, ok: bool) {
     graph_nodes = nil
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->GraphNodesGet(&graph_nodes)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return graph_nodes, true
 }
 
 @(private)
-cmparameter_graph_nodes_set :: proc(cmparameter: CMParameter, graph_nodes: GraphNodes) -> (ok: bool) {
+cmparameter_graph_nodes_set :: proc(cmparameter: rawptr, graph_nodes: rawptr) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->GraphNodesPut(graph_nodes)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
 
-cmparameter_type_guid :: proc(cmparameter: CMParameter) -> (guid: string, ok: bool) {
+cmparameter_type_guid :: proc(cmparameter: rawptr) -> (guid: string, ok: bool) {
     guid = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->TypeGuid(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->TypeGuid(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
-cmparameter_type_path :: proc(cmparameter: CMParameter) -> (path: string, ok: bool) {
+cmparameter_type_path :: proc(cmparameter: rawptr) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->TypePath(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->TypePath(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 cmparameter_access_level :: proc {
@@ -495,32 +497,32 @@ cmparameter_access_level :: proc {
 }
 
 @(private)
-cmparameter_access_level_ :: proc(cmparameter: CMParameter) -> (access_level: string, ok: bool) {
+cmparameter_access_level_ :: proc(cmparameter: rawptr) -> (access_level: string, ok: bool) {
     access_level = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AccessLevelGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AccessLevelGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: string) -> (ok: bool) {
+cmparameter_access_level_set :: proc(cmparameter: rawptr, access_level: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(access_level)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->AccessLevelPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(access_level)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->AccessLevelPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -531,32 +533,32 @@ cmparameter_safety_type :: proc {
 }
 
 @(private)
-cmparameter_safety_type_ :: proc(cmparameter: CMParameter) -> (safety_type: string, ok: bool) {
+cmparameter_safety_type_ :: proc(cmparameter: rawptr) -> (safety_type: string, ok: bool) {
     safety_type = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->SafetyTypeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->SafetyTypeGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: string) -> (ok: bool) {
+cmparameter_safety_type_set :: proc(cmparameter: rawptr, safety_type: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(safety_type)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->SafetyTypePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(safety_type)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->SafetyTypePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -567,32 +569,32 @@ cmparameter_direction :: proc {
 }
 
 @(private)
-cmparameter_direction_ :: proc(cmparameter: CMParameter) -> (direction: string, ok: bool) {
+cmparameter_direction_ :: proc(cmparameter: rawptr) -> (direction: string, ok: bool) {
     direction = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->DirectionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->DirectionGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -> (ok: bool) {
+cmparameter_direction_set :: proc(cmparameter: rawptr, direction: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(direction)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->DirectionPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(direction)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->DirectionPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -603,37 +605,37 @@ cmparameter_fdport :: proc {
 }
 
 @(private)
-cmparameter_fdport_ :: proc(cmparameter: CMParameter) -> (fdport: string, ok: bool) {
+cmparameter_fdport_ :: proc(cmparameter: rawptr) -> (fdport: string, ok: bool) {
     fdport = ""
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->FDPortGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->FDPortGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-cmparameter_fdport_set :: proc(cmparameter: CMParameter, fdport: string) -> (ok: bool) {
+cmparameter_fdport_set :: proc(cmparameter: rawptr, fdport: string) -> (ok: bool) {
     ok = false
 
     if cmparameter == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(fdport)
-    defer bstr_free(bstr)
-    hr := (^CMParameterIF)(cmparameter)->FDPortPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(fdport)
+    defer bstr.free(bs)
+    hr := (^CMParameterIF)(cmparameter)->FDPortPut(bs)
+    if com.failed(hr) do return
     
     return true
 }
 
-cmparameter_release :: proc(cmparameter: CMParameter) {
+cmparameter_release :: proc(cmparameter: rawptr) {
     if cmparameter != nil {
         (^CMParameterIF)(cmparameter)->Release()
     }

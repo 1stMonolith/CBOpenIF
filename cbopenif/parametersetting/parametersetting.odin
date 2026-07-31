@@ -1,14 +1,22 @@
 package parametersetting
 
-ParameterSetting  :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) BStr        :: bstr.BStr
+@(private) GUID        :: com.GUID
+@(private) VariantBool :: variant.VariantBool
 
 ParameterSettingIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ParameterSettingVTable,
 }
 
 ParameterSettingVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:           proc "system" (this: ^ParameterSettingIF, Name: ^BStr) -> HResult,
     NamePut:           proc "system" (this: ^ParameterSettingIF, Name: BStr) -> HResult,
     ParameterValueGet: proc "system" (this: ^ParameterSettingIF, ParameterValue: ^BStr) -> HResult,
@@ -16,20 +24,20 @@ ParameterSettingVTable :: struct {
     DescriptionGet:    proc "system" (this: ^ParameterSettingIF, Description: ^BStr) -> HResult,
 }
 
-parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting: ParameterSetting, ok: bool) {
+parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting: rawptr, ok: bool) {
     parameter_setting = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    bstr_value := string_to_bstr(value)
+    bstr_name := bstr.from_string(name)
+    bstr_value := bstr.from_string(value)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_value)
+        bstr.free(bstr_name)
+        bstr.free(bstr_value)
     }
-    hr := factoryif->NewParameterSetting(bstr_name, bstr_value, cast(^ParameterSetting)&parameter_setting)
-    if failed(hr) do return
+    hr := factoryif->NewParameterSetting(bstr_name, bstr_value, cast(^rawptr)&parameter_setting)
+    if com.failed(hr) do return
     
     return parameter_setting, true
 }
@@ -40,32 +48,32 @@ parameter_setting_name :: proc {
 }
 
 @(private)
-parameter_setting_name_ :: proc(parameter_setting: ParameterSetting) -> (name: string, ok: bool) {
+parameter_setting_name_ :: proc(parameter_setting: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if parameter_setting == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ParameterSettingIF)(parameter_setting)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ParameterSettingIF)(parameter_setting)->NameGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-parameter_setting_name_set :: proc(parameter_setting: ParameterSetting, name: string) -> (ok: bool) {
+parameter_setting_name_set :: proc(parameter_setting: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if parameter_setting == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^ParameterSettingIF)(parameter_setting)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^ParameterSettingIF)(parameter_setting)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -76,47 +84,47 @@ parameter_setting_parameter_value :: proc {
 }
 
 @(private)
-parameter_setting_parameter_value_ :: proc(parameter_setting: ParameterSetting) -> (type_name: string, ok: bool) {
+parameter_setting_parameter_value_ :: proc(parameter_setting: rawptr) -> (type_name: string, ok: bool) {
     type_name = ""
     ok = false
 
     if parameter_setting == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ParameterSettingIF)(parameter_setting)->ParameterValueGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ParameterSettingIF)(parameter_setting)->ParameterValueGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-parameter_setting_parameter_value_set :: proc(parameter_setting: ParameterSetting, type_name: string) -> (ok: bool) {
+parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_name: string) -> (ok: bool) {
     ok = false
 
     if parameter_setting == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(type_name)
-    defer bstr_free(bstr)
-    hr := (^ParameterSettingIF)(parameter_setting)->ParameterValuePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(type_name)
+    defer bstr.free(bs)
+    hr := (^ParameterSettingIF)(parameter_setting)->ParameterValuePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
 
-parameter_setting_description_ :: proc(parameter_setting: ParameterSetting) -> (description: string, ok: bool) {
+parameter_setting_description_ :: proc(parameter_setting: rawptr) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
     if parameter_setting == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^ParameterSettingIF)(parameter_setting)->DescriptionGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ParameterSettingIF)(parameter_setting)->DescriptionGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }

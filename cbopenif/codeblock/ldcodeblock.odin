@@ -1,14 +1,16 @@
 package codeblock
 
-LDCodeBlock :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 LDCodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^LDCodeBlockVTable,
 }
 
 LDCodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:   proc "system" (this: ^LDCodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^LDCodeBlockIF, Name: BStr) -> HResult,
     STCodeGet: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,
@@ -19,37 +21,37 @@ LDCodeBlockVTable :: struct {
     Serialize: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
+ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: rawptr, ok: bool) {
     ldcodeblock = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    bstr_stcode := string_to_bstr(stcode)
+    bstr_name := bstr.from_string(name)
+    bstr_stcode := bstr.from_string(stcode)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_stcode)
+        bstr.free(bstr_name)
+        bstr.free(bstr_stcode)
     }
-    hr := factoryif->NewLDCodeBlock1(bstr_name, &bstr_stcode, cast(^LDCodeBlock)&ldcodeblock)
-    if failed(hr) do return
+    hr := factoryif->NewLDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&ldcodeblock)
+    if com.failed(hr) do return
 
     return ldcodeblock, true
 }
 
-ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: bool) {
+ldcodeblock_serialize :: proc(ldcodeblock: rawptr) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
     if ldcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^LDCodeBlockIF)(ldcodeblock)->Serialize(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->Serialize(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 ldcodeblock_name :: proc {
@@ -58,32 +60,32 @@ ldcodeblock_name :: proc {
 }
 
 @(private)
-ldcodeblock_name_ :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: bool) {
+ldcodeblock_name_ :: proc(ldcodeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if ldcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^LDCodeBlockIF)(ldcodeblock)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: bool) {
+ldcodeblock_name_set :: proc(ldcodeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
     
     if ldcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^LDCodeBlockIF)(ldcodeblock)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -94,37 +96,37 @@ ldcodeblock_stcode :: proc {
 }
 
 @(private)
-ldcodeblock_stcode_ :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok: bool) {
+ldcodeblock_stcode_ :: proc(ldcodeblock: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if ldcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-ldcodeblock_stcode_set :: proc(ldcodeblock: LDCodeBlock, stcode: string) -> (ok: bool) {
+ldcodeblock_stcode_set :: proc(ldcodeblock: rawptr, stcode: string) -> (ok: bool) {
     ok = false
     
     if ldcodeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-ldcodeblock_release :: proc(ldcodeblock: LDCodeBlock) {
+ldcodeblock_release :: proc(ldcodeblock: rawptr) {
     if ldcodeblock != nil {
         (^LDCodeBlockIF)(ldcodeblock)->Release()
     }

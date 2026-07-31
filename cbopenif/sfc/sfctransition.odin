@@ -1,14 +1,16 @@
 package sfc
 
-SFCTransition :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 SFCTransitionIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCTransitionVTable,
 }
 
 SFCTransitionVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:   proc "system" (this: ^SFCTransitionIF, Name: ^BStr) -> HResult,
     NamePut:   proc "system" (this: ^SFCTransitionIF, Name: BStr) -> HResult,
     DestGet:   proc "system" (this: ^SFCTransitionIF, Dest: ^BStr) -> HResult,
@@ -17,22 +19,22 @@ SFCTransitionVTable :: struct {
     STCodePut: proc "system" (this: ^SFCTransitionIF, STCode: BStr) -> HResult,
 }
 
-sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: SFCTransition, ok: bool) {
+sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: rawptr, ok: bool) {
     sfctransition = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr_name := string_to_bstr(name)
-    bstr_stcode := string_to_bstr(stcode)
-    bstr_dest := string_to_bstr(dest)
+    bstr_name := bstr.from_string(name)
+    bstr_stcode := bstr.from_string(stcode)
+    bstr_dest := bstr.from_string(dest)
     defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_stcode)
-        bstr_free(bstr_dest)
+        bstr.free(bstr_name)
+        bstr.free(bstr_stcode)
+        bstr.free(bstr_dest)
     }
-    hr := factoryif->NewSFCTransition1(bstr_name, bstr_stcode, bstr_dest, cast(^SFCTransition)&sfctransition)
-    if failed(hr) do return
+    hr := factoryif->NewSFCTransition1(bstr_name, bstr_stcode, bstr_dest, cast(^rawptr)&sfctransition)
+    if com.failed(hr) do return
 
     return sfctransition, true
 }
@@ -43,32 +45,32 @@ sfctransition_name :: proc {
 }
 
 @(private)
-sfctransition_name_ :: proc(sfctransition: SFCTransition) -> (name: string, ok: bool) {
+sfctransition_name_ :: proc(sfctransition: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (ok: bool) {
+sfctransition_name_set :: proc(sfctransition: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->NamePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -79,32 +81,32 @@ sfctransition_dest :: proc {
 }
 
 @(private)
-sfctransition_dest_ :: proc(sfctransition: SFCTransition) -> (dest: string, ok: bool) {
+sfctransition_dest_ :: proc(sfctransition: rawptr) -> (dest: string, ok: bool) {
     dest = ""
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->DestGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->DestGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (ok: bool) {
+sfctransition_dest_set :: proc(sfctransition: rawptr, dest: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(dest)
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->DestPut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(dest)
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->DestPut(bs)
+    if com.failed(hr) do return
 
     return true
 }
@@ -115,37 +117,37 @@ sfcstcode :: proc {
 }
 
 @(private)
-sfcstcode_ :: proc(sfctransition: SFCTransition) -> (stcode: string, ok: bool) {
+sfcstcode_ :: proc(sfctransition: rawptr) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->STCodeGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->STCodeGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-sfcstcode_set :: proc(sfctransition: SFCTransition, stcode: string) -> (ok: bool) {
+sfcstcode_set :: proc(sfctransition: rawptr, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
 
-    bstr := string_to_bstr(stcode)
-    defer bstr_free(bstr)
-    hr := (^SFCTransitionIF)(sfctransition)->STCodePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(stcode)
+    defer bstr.free(bs)
+    hr := (^SFCTransitionIF)(sfctransition)->STCodePut(bs)
+    if com.failed(hr) do return
 
     return true
 }
 
-sfctransition_release :: proc(sfctransition: SFCTransition) {
+sfctransition_release :: proc(sfctransition: rawptr) {
     if sfctransition != nil {
         (^SFCTransitionIF)(sfctransition)->Release()
     }

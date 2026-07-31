@@ -1,14 +1,16 @@
 package graph
 
-GraphNode  :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
 
 GraphNodeIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^GraphNodeVTable,
 }
 
 GraphNodeVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet: proc "system" (this: ^GraphNodeIF, Name: ^BStr) -> HResult,
     NamePut: proc "system" (this: ^GraphNodeIF, Name: BStr) -> HResult,
     XGet:    proc "system" (this: ^GraphNodeIF, X: ^f64) -> HResult,
@@ -17,16 +19,16 @@ GraphNodeVTable :: struct {
     YPut:    proc "system" (this: ^GraphNodeIF, Y: f64) -> HResult,
 }
 
-graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok: bool) {
+graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: rawptr, ok: bool) {
     graphnode = nil
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr_name := string_to_bstr(name)
-    defer bstr_free(bstr_name)
-    hr := factoryif->NewGraphNode(bstr_name, x, y, cast(^GraphNode)&graphnode)
-    if failed(hr) do return
+    bstr_name := bstr.from_string(name)
+    defer bstr.free(bstr_name)
+    hr := factoryif->NewGraphNode(bstr_name, x, y, cast(^rawptr)&graphnode)
+    if com.failed(hr) do return
     
     return graphnode, true
 }
@@ -37,32 +39,32 @@ graphnode_name :: proc {
 }
 
 @(private)
-graphnode_name_ :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
+graphnode_name_ :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^GraphNodeIF)(graphnode)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^GraphNodeIF)(graphnode)->NameGet(&bs)
+    if com.failed(hr) do return
     
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
+graphnode_name_set :: proc(graphnode: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^GraphNodeIF)(graphnode)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^GraphNodeIF)(graphnode)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
@@ -73,28 +75,28 @@ graphnode_x :: proc {
 }
 
 @(private)
-graphnode_x_ :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
+graphnode_x_ :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XGet(&x)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return x, true
 }
 
 @(private)
-graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
+graphnode_x_set :: proc(graphnode: rawptr, x: f64) -> (ok: bool) {
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XPut(x)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
@@ -105,33 +107,33 @@ graphnode_y :: proc {
 }
 
 @(private)
-graphnode_y_ :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
+graphnode_y_ :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YGet(&y)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return y, true
 }
 
 @(private)
-graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
+graphnode_y_set :: proc(graphnode: rawptr, y: f64) -> (ok: bool) {
     ok = false
 
     if graphnode == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YPut(y)
-    if failed(hr) do return
+    if com.failed(hr) do return
     
     return true
 }
 
-graphnode_release :: proc(graphnode: GraphNode) {
+graphnode_release :: proc(graphnode: rawptr) {
     if graphnode != nil {
         (^GraphNodeIF)(graphnode)->Release()
     }

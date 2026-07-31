@@ -1,14 +1,22 @@
 package codeblock
 
-CodeBlock :: distinct rawptr
+import "../com"
+import "../controlbuilder"
+import "../bstr"
+import "../variant"
+
+@(private) HResult     :: com.HResult
+@(private) BStr        :: bstr.BStr
+@(private) GUID        :: com.GUID
+@(private) VariantBool :: variant.VariantBool
 
 CodeBlockIF :: struct #raw_union {
-    #subtype iunknown: IUnknownIF,
+    #subtype iunknownif: com.IUnknownIF,
     using vtable: ^CodeBlockVTable,
 }
 
 CodeBlockVTable :: struct {
-    using iunknown_vtable: IUnknownVTable,
+    using iunknownvtable: com.IUnknownVTable,
     NameGet:        proc "system" (this: ^CodeBlockIF, Name: ^BStr) -> HResult,
     NamePut:        proc "system" (this: ^CodeBlockIF, Name: BStr) -> HResult,
     IsSTCodeBlock:  proc "system" (this: ^CodeBlockIF, IsSTCodeBlock: ^VariantBool) -> HResult,
@@ -19,15 +27,15 @@ CodeBlockVTable :: struct {
     IsFDCodeBlock:  proc "system" (this: ^CodeBlockIF, IsFDCodeBlock: ^VariantBool) -> HResult,
 }
 
-codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) {
+codeblock_deserialize :: proc(codeblock: ^rawptr, xml: string) -> (ok: bool) {
     ok = false
 
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(xml)
-    defer bstr_free(bstr)
-    hr := factoryif->DeserializeCodeBlock(&bstr, cast(^CodeBlock)codeblock)
-    if failed(hr) do return
+    bs := bstr.from_string(xml)
+    defer bstr.free(bs)
+    hr := factoryif->DeserializeCodeBlock(&bstr, cast(^rawptr)codeblock)
+    if com.failed(hr) do return
     
     return true
 }
@@ -38,127 +46,127 @@ codeblock_name :: proc {
 }
 
 @(private)
-codeblock_name_ :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
+codeblock_name_ :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr: BStr
-    defer bstr_free(bstr)
-    hr := (^CodeBlockIF)(codeblock)->NameGet(&bstr)
-    if failed(hr) do return
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^CodeBlockIF)(codeblock)->NameGet(&bs)
+    if com.failed(hr) do return
 
-    return bstr_to_string(bstr), true
+    return bstr.to_string(bs), true
 }
 
 @(private)
-codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
+codeblock_name_set :: proc(codeblock: rawptr, name: string) -> (ok: bool) {
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
-    bstr := string_to_bstr(name)
-    defer bstr_free(bstr)
-    hr := (^CodeBlockIF)(codeblock)->NamePut(bstr)
-    if failed(hr) do return
+    bs := bstr.from_string(name)
+    defer bstr.free(bs)
+    hr := (^CodeBlockIF)(codeblock)->NamePut(bs)
+    if com.failed(hr) do return
     
     return true
 }
 
-codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
+codeblock_is_st :: proc(codeblock: rawptr) -> (is_st: bool, ok: bool) {
     is_st = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsSTCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
+codeblock_is_sfc :: proc(codeblock: rawptr) -> (is_sfc: bool, ok: bool) {
     is_sfc = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsSFCCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
+codeblock_is_il :: proc(codeblock: rawptr) -> (is_il: bool, ok: bool) {
     is_il = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsILCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
+codeblock_is_fbd :: proc(codeblock: rawptr) -> (is_fbd: bool, ok: bool) {
     is_fbd = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsFBDCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
+codeblock_is_ld :: proc(codeblock: rawptr) -> (is_ld: bool, ok: bool) {
     is_ld = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsLDCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
+codeblock_is_fd :: proc(codeblock: rawptr) -> (is_fd: bool, ok: bool) {
     is_fd = false
     ok = false
 
     if codeblock == nil do return
-    if !connected() do return
+    if !controlbuilder.connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsFDCodeBlock(&vb)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return variantbool_to_bool(vb), true
 }
 
-codeblock_release :: proc(codeblock: CodeBlock) {
+codeblock_release :: proc(codeblock: rawptr) {
     if codeblock != nil {
         (^CodeBlockIF)(codeblock)->Release()
     }
 }
 
-codeblock_as_st :: proc(codeblock: CodeBlock) -> (stcodeblock: STCodeBlock, ok: bool) {
+codeblock_as_st :: proc(codeblock: rawptr) -> (stcodeblock: rawptr, ok: bool) {
     stcodeblock = nil
     ok = false
 
@@ -172,7 +180,7 @@ codeblock_as_st :: proc(codeblock: CodeBlock) -> (stcodeblock: STCodeBlock, ok: 
     }
 
     hr := (^IUnknownIF)(codeblock)->QueryInterface(&IID, cast(^rawptr)&stcodeblock)
-    if failed(hr) do return
+    if com.failed(hr) do return
 
     return stcodeblock, true
 }
