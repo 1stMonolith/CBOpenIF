@@ -11,6 +11,17 @@ import "../factory"
  @(private) GUID        :: com.GUID
  @(private) VariantBool :: variant.VariantBool
 
+CodeBlockType :: enum i32 {
+    ST  = 0,
+    SFC = 1,
+    FBD = 2,
+    LD  = 3,
+    IL  = 4,
+    FD  = 5,
+}
+
+CodeBlock :: distinct rawptr
+
 CodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^CodeBlockVTable,
@@ -28,7 +39,7 @@ CodeBlockVTable :: struct {
     IsFDCodeBlock:  proc "system" (this: ^CodeBlockIF, IsFDCodeBlock: ^VariantBool) -> HResult,
 }
 
-codeblock_deserialize :: proc(codeblock: ^rawptr, xml: string) -> (ok: bool) {
+codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -46,7 +57,7 @@ codeblock_name :: proc {
     codeblock_name_set,
 }
 
-codeblock_name_get :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
+codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -61,7 +72,7 @@ codeblock_name_get :: proc(codeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-codeblock_name_set :: proc(codeblock: rawptr, name: string) -> (ok: bool) {
+codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
     ok = false
 
     if codeblock == nil do return
@@ -75,7 +86,7 @@ codeblock_name_set :: proc(codeblock: rawptr, name: string) -> (ok: bool) {
     return true
 }
 
-codeblock_is_st :: proc(codeblock: rawptr) -> (is_st: bool, ok: bool) {
+codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
     is_st = false
     ok = false
 
@@ -89,7 +100,7 @@ codeblock_is_st :: proc(codeblock: rawptr) -> (is_st: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_is_sfc :: proc(codeblock: rawptr) -> (is_sfc: bool, ok: bool) {
+codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
     is_sfc = false
     ok = false
 
@@ -103,7 +114,7 @@ codeblock_is_sfc :: proc(codeblock: rawptr) -> (is_sfc: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_is_il :: proc(codeblock: rawptr) -> (is_il: bool, ok: bool) {
+codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
     is_il = false
     ok = false
 
@@ -117,7 +128,7 @@ codeblock_is_il :: proc(codeblock: rawptr) -> (is_il: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_is_fbd :: proc(codeblock: rawptr) -> (is_fbd: bool, ok: bool) {
+codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
     is_fbd = false
     ok = false
 
@@ -131,7 +142,7 @@ codeblock_is_fbd :: proc(codeblock: rawptr) -> (is_fbd: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_is_ld :: proc(codeblock: rawptr) -> (is_ld: bool, ok: bool) {
+codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
     is_ld = false
     ok = false
 
@@ -145,7 +156,7 @@ codeblock_is_ld :: proc(codeblock: rawptr) -> (is_ld: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_is_fd :: proc(codeblock: rawptr) -> (is_fd: bool, ok: bool) {
+codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
     is_fd = false
     ok = false
 
@@ -159,13 +170,13 @@ codeblock_is_fd :: proc(codeblock: rawptr) -> (is_fd: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-codeblock_release :: proc(codeblock: rawptr) {
+codeblock_release :: proc(codeblock: CodeBlock) {
     if codeblock != nil {
         (^CodeBlockIF)(codeblock)->Release()
     }
 }
 
-codeblock_as_st :: proc(codeblock: rawptr) -> (stcodeblock: rawptr, ok: bool) {
+codeblock_as_st :: proc(codeblock: CodeBlock) -> (stcodeblock: STCodeBlock, ok: bool) {
     stcodeblock = nil
     ok = false
 

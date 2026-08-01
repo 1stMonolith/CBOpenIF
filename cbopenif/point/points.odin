@@ -3,6 +3,8 @@ package point
 import "../com"
 import "../controlbuilder"
 
+Points :: distinct rawptr
+
 PointsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^PointsVTable,
@@ -23,7 +25,7 @@ points_add :: proc {
     points_add_at_index,
 }
 
-points_add_ :: proc(points: rawptr, point: rawptr) -> (ok: bool) {
+points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -36,7 +38,7 @@ points_add_ :: proc(points: rawptr, point: rawptr) -> (ok: bool) {
     return true
 }
 
-points_add_at_index :: proc(points: rawptr, point: rawptr, index: i32) -> (ok: bool) {
+points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -49,20 +51,20 @@ points_add_at_index :: proc(points: rawptr, point: rawptr, index: i32) -> (ok: b
     return true
 }
 
-points_point_by_index :: proc(points: rawptr, index: i32) -> (point: rawptr, ok: bool) {
+points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: bool) {
     point = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return
     
-    hr := (^PointsIF)(points)->Item(index, &point)
+    hr := (^PointsIF)(points)->Item(index, cast(^rawptr)&point)
     if com.failed(hr) do return
     
     return point, true
 }
 
-points_count :: proc(points: rawptr) -> (count: i32, ok: bool) {
+points_count :: proc(points: Points) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
@@ -75,7 +77,7 @@ points_count :: proc(points: rawptr) -> (count: i32, ok: bool) {
     return count, true
 }
 
-points_remove_by_index :: proc(points: rawptr, index: i32) -> (ok: bool) {
+points_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -87,7 +89,7 @@ points_remove_by_index :: proc(points: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-points_release :: proc(points: rawptr) {
+points_release :: proc(points: Points) {
     if points != nil {
         (^PointsIF)(points)->Release()
     }

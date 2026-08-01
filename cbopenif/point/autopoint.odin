@@ -8,6 +8,8 @@ import "../type"
 @(private) HResult :: com.HResult
 @(private) AutoPosType :: type.AutoPosType
 
+AutoPoint :: distinct rawptr
+
 AutoPointIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^AutoPointVTable,
@@ -19,7 +21,7 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
-autopoint_new :: proc(autopos: AutoPosType) -> (autopoint: rawptr, ok: bool) {
+autopoint_new :: proc(autopos: AutoPosType) -> (autopoint: AutoPoint, ok: bool) {
     autopoint = {}
     ok = false
 
@@ -36,25 +38,23 @@ autopoint_autopos :: proc {
     autopoint_autopos_set,
 }
 
-autopoint_autopos_get :: proc(autopoint: rawptr) -> (autopos: AutoPosType, ok: bool) {
+autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: AutoPosType, ok: bool) {
     autopos = {}
     ok = false
 
     if autopoint == nil do return
     if !controlbuilder.connected() do return
     
-    i32_ap: i32
-    hr := (^AutoPointIF)(autopoint)->AutoPosGet(&i32_ap)
+    apt: i32
+    hr := (^AutoPointIF)(autopoint)->AutoPosGet(&apt)
     if com.failed(hr) do return
 
-    ap: AutoPosType
-    ap, ok = AutoPosType(i32_ap)
     if !ok do return
     
-    return ap, true
+    return AutoPosType(apt), true
 }
 
-autopoint_autopos_set :: proc(autopoint: rawptr, autopos: AutoPos) -> (ok: bool) {
+autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: AutoPosType) -> (ok: bool) {
     ok = false
 
     if autopoint == nil do return
@@ -66,7 +66,7 @@ autopoint_autopos_set :: proc(autopoint: rawptr, autopos: AutoPos) -> (ok: bool)
     return true
 }
 
-autopoint_release :: proc(autopoint: rawptr) {
+autopoint_release :: proc(autopoint: AutoPoint) {
     if autopoint != nil {
         (^AutoPointIF)(autopoint)->Release()
     }

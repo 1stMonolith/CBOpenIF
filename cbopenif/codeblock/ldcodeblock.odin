@@ -5,6 +5,8 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 
+LDCodeBlock :: distinct rawptr
+
 LDCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^LDCodeBlockVTable,
@@ -22,7 +24,7 @@ LDCodeBlockVTable :: struct {
     Serialize: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: rawptr, ok: bool) {
+ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
     ldcodeblock = nil
     ok = false
 
@@ -40,7 +42,7 @@ ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: rawptr, ok: bool)
     return ldcodeblock, true
 }
 
-ldcodeblock_serialize :: proc(ldcodeblock: rawptr) -> (xml: string, ok: bool) {
+ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -60,7 +62,7 @@ ldcodeblock_name :: proc {
     ldcodeblock_name_set,
 }
 
-ldcodeblock_name_get :: proc(ldcodeblock: rawptr) -> (name: string, ok: bool) {
+ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -75,7 +77,7 @@ ldcodeblock_name_get :: proc(ldcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-ldcodeblock_name_set :: proc(ldcodeblock: rawptr, name: string) -> (ok: bool) {
+ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: bool) {
     ok = false
     
     if ldcodeblock == nil do return
@@ -94,7 +96,7 @@ ldcodeblock_stcode :: proc {
     ldcodeblock_stcode_set,
 }
 
-ldcodeblock_stcode_get :: proc(ldcodeblock: rawptr) -> (stcode: string, ok: bool) {
+ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -109,7 +111,7 @@ ldcodeblock_stcode_get :: proc(ldcodeblock: rawptr) -> (stcode: string, ok: bool
     return bstr.to_string(bs), true
 }
 
-ldcodeblock_stcode_set :: proc(ldcodeblock: rawptr, stcode: string) -> (ok: bool) {
+ldcodeblock_stcode_set :: proc(ldcodeblock: LDCodeBlock, stcode: string) -> (ok: bool) {
     ok = false
     
     if ldcodeblock == nil do return
@@ -123,7 +125,7 @@ ldcodeblock_stcode_set :: proc(ldcodeblock: rawptr, stcode: string) -> (ok: bool
     return true
 }
 
-ldcodeblock_release :: proc(ldcodeblock: rawptr) {
+ldcodeblock_release :: proc(ldcodeblock: LDCodeBlock) {
     if ldcodeblock != nil {
         (^LDCodeBlockIF)(ldcodeblock)->Release()
     }

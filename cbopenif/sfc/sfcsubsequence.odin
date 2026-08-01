@@ -5,6 +5,8 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 
+SFCSubSequence :: distinct rawptr
+
 SFCSubSequenceIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCSubSequenceVTable,
@@ -19,7 +21,7 @@ SFCSubSequenceVTable :: struct {
     ElementsPut: proc "system" (this: ^SFCSubSequenceIF, SFCElements: rawptr) -> HResult,
 }
 
-sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: rawptr, ok: bool) {
+sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok: bool) {
     sfcsubsequence = nil
     ok = false
 
@@ -38,7 +40,7 @@ sfcsubsequence_name :: proc {
     sfcsubsequence_name_set,
 }
 
-sfcsubsequence_name_get :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bool) {
+sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -53,7 +55,7 @@ sfcsubsequence_name_get :: proc(sfcsubsequence: rawptr) -> (name: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-sfcsubsequence_name_set :: proc(sfcsubsequence: rawptr, name: string) -> (ok: bool) {
+sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
     ok = false
 
     if sfcsubsequence == nil do return
@@ -72,20 +74,20 @@ sfcsubsequence_elements :: proc {
     sfcsubsequence_elements_set,
 }
 
-sfcsubsequence_elements_get :: proc(sfcsubsequence: rawptr) -> (sfcelements: rawptr, ok: bool) {
+sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfcelements: SFCElements, ok: bool) {
     sfcelements = nil
     ok = false
 
     if sfcsubsequence == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsGet(&sfcelements)
+    hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsGet(cast(^rawptr)&sfcelements)
     if com.failed(hr) do return
 
     return sfcelements, true
 }
 
-sfcsubsequence_elements_set :: proc(sfcsubsequence: rawptr, sfcelements: rawptr) -> (ok: bool) {
+sfcsubsequence_elements_set :: proc(sfcsubsequence: SFCSubSequence, sfcelements: SFCElements) -> (ok: bool) {
     ok = false
 
     if sfcsubsequence == nil do return
@@ -97,7 +99,7 @@ sfcsubsequence_elements_set :: proc(sfcsubsequence: rawptr, sfcelements: rawptr)
     return true
 }
 
-sfcsubsequence_release :: proc(sfcsubsequence: rawptr) {
+sfcsubsequence_release :: proc(sfcsubsequence: SFCSubSequence) {
     if sfcsubsequence != nil {
         (^SFCSubSequenceIF)(sfcsubsequence)->Release()
     }

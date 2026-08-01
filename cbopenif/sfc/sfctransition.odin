@@ -5,6 +5,8 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 
+SFCTransition :: distinct rawptr
+
 SFCTransitionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCTransitionVTable,
@@ -20,7 +22,7 @@ SFCTransitionVTable :: struct {
     STCodePut: proc "system" (this: ^SFCTransitionIF, STCode: BStr) -> HResult,
 }
 
-sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: rawptr, ok: bool) {
+sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: SFCTransition, ok: bool) {
     sfctransition = nil
     ok = false
 
@@ -45,7 +47,7 @@ sfctransition_name :: proc {
     sfctransition_name_set,
 }
 
-sfctransition_name_get :: proc(sfctransition: rawptr) -> (name: string, ok: bool) {
+sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -60,7 +62,7 @@ sfctransition_name_get :: proc(sfctransition: rawptr) -> (name: string, ok: bool
     return bstr.to_string(bs), true
 }
 
-sfctransition_name_set :: proc(sfctransition: rawptr, name: string) -> (ok: bool) {
+sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
@@ -79,7 +81,7 @@ sfctransition_dest :: proc {
     sfctransition_dest_set,
 }
 
-sfctransition_dest_get :: proc(sfctransition: rawptr) -> (dest: string, ok: bool) {
+sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, ok: bool) {
     dest = ""
     ok = false
 
@@ -94,7 +96,7 @@ sfctransition_dest_get :: proc(sfctransition: rawptr) -> (dest: string, ok: bool
     return bstr.to_string(bs), true
 }
 
-sfctransition_dest_set :: proc(sfctransition: rawptr, dest: string) -> (ok: bool) {
+sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
@@ -113,7 +115,7 @@ sfctransition_stcode :: proc {
     sfctransition_stcode_set,
 }
 
-sfctransition_stcode_get :: proc(sfctransition: rawptr) -> (stcode: string, ok: bool) {
+sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -128,7 +130,7 @@ sfctransition_stcode_get :: proc(sfctransition: rawptr) -> (stcode: string, ok: 
     return bstr.to_string(bs), true
 }
 
-sfctransition_stcode_set :: proc(sfctransition: rawptr, stcode: string) -> (ok: bool) {
+sfctransition_stcode_set :: proc(sfctransition: SFCTransition, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfctransition == nil do return
@@ -142,7 +144,7 @@ sfctransition_stcode_set :: proc(sfctransition: rawptr, stcode: string) -> (ok: 
     return true
 }
 
-sfctransition_release :: proc(sfctransition: rawptr) {
+sfctransition_release :: proc(sfctransition: SFCTransition) {
     if sfctransition != nil {
         (^SFCTransitionIF)(sfctransition)->Release()
     }

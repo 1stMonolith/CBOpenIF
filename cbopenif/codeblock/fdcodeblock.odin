@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 
+FDCodeBlock :: distinct rawptr
+
 FDCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^FDCodeBlockVTable,
@@ -21,7 +23,7 @@ FDCodeBlockVTable :: struct {
     Serialize:  proc "system" (this: ^FDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-fdcodeblock_serialize :: proc(fdcodeblock: rawptr) -> (xml: string, ok: bool) {
+fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -41,7 +43,7 @@ fdcodeblock_name :: proc {
     fdcodeblock_name_set,
 }
 
-fdcodeblock_name_get :: proc(fdcodeblock: rawptr) -> (name: string, ok: bool) {
+fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -56,7 +58,7 @@ fdcodeblock_name_get :: proc(fdcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-fdcodeblock_name_set :: proc(fdcodeblock: rawptr, name: string) -> (ok: bool) {
+fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
     ok = false
     
     if fdcodeblock == nil do return
@@ -75,7 +77,7 @@ fdcodeblock_xml_string :: proc {
     fdcodeblock_xml_string_set,
 }
 
-fdcodeblock_xml_string_get :: proc(fdcodeblock: rawptr) -> (xml_string: string, ok: bool) {
+fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
     xml_string = ""
     ok = false
 
@@ -90,7 +92,7 @@ fdcodeblock_xml_string_get :: proc(fdcodeblock: rawptr) -> (xml_string: string, 
     return bstr.to_string(bs), true
 }
 
-fdcodeblock_xml_string_set :: proc(fdcodeblock: rawptr, xml_string: string) -> (ok: bool) {
+fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
     ok = false
     
     if fdcodeblock == nil do return
@@ -104,7 +106,7 @@ fdcodeblock_xml_string_set :: proc(fdcodeblock: rawptr, xml_string: string) -> (
     return true
 }
 
-fdcodeblock_release :: proc(fdcodeblock: rawptr) {
+fdcodeblock_release :: proc(fdcodeblock: FDCodeBlock) {
     if fdcodeblock != nil {
         (^FDCodeBlockIF)(fdcodeblock)->Release()
     }

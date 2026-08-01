@@ -5,6 +5,9 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 import "../variant"
+import "../sfc"
+
+SFCCodeBlock :: distinct rawptr
 
 SFCCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -30,7 +33,7 @@ SFCCodeBlockVTable :: struct {
     Serialize:          proc "system" (this: ^SFCCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time := false) -> (sfccodeblock: rawptr, ok: bool) {
+sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time := false) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
     sfccodeblock = nil
     ok = false
 
@@ -54,7 +57,7 @@ sfccodeblock_name :: proc {
     sfccodeblock_name_set,
 }
 
-sfccodeblock_name_get :: proc(sfccodeblock: rawptr) -> (name: string, ok: bool) {
+sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -69,7 +72,7 @@ sfccodeblock_name_get :: proc(sfccodeblock: rawptr) -> (name: string, ok: bool) 
     return bstr.to_string(bs), true
 }
 
-sfccodeblock_name_set :: proc(sfccodeblock: rawptr, name: string) -> (ok: bool) {
+sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
     ok = false
 
     if sfccodeblock == nil do return
@@ -88,7 +91,7 @@ sfccodeblock_seq_control :: proc {
     sfccodeblock_seq_control_set,
 }
 
-sfccodeblock_seq_control_get :: proc(sfccodeblock: rawptr) -> (seq_control: bool, ok: bool) {
+sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control: bool, ok: bool) {
     seq_control = false
     ok = false
 
@@ -102,7 +105,7 @@ sfccodeblock_seq_control_get :: proc(sfccodeblock: rawptr) -> (seq_control: bool
     return variant.variantbool_to_bool(vb), true
 }
 
-sfccodeblock_seq_control_set :: proc(sfccodeblock: rawptr, seq_control: bool) -> (ok: bool) {
+sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
     ok = false
 
     if sfccodeblock == nil do return
@@ -119,7 +122,7 @@ sfccodeblock_step_elapsed_time :: proc {
     sfccodeblock_step_elapsed_time_set,
 }
 
-sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: rawptr) -> (step_elapsed_time: bool, ok: bool) {
+sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_elapsed_time: bool, ok: bool) {
     step_elapsed_time = false
     ok = false
 
@@ -133,7 +136,7 @@ sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: rawptr) -> (step_elapse
     return variant.variantbool_to_bool(vb), true
 }
 
-sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: rawptr, step_elapsed_time: bool) -> (ok: bool) {
+sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
     ok = false
 
     if sfccodeblock == nil do return
@@ -150,7 +153,7 @@ sfccodeblock_viewer_aspect :: proc {
     sfccodeblock_viewer_aspect_set,
 }
 
-sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: rawptr) -> (viewer_aspect: bool, ok: bool) {
+sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_aspect: bool, ok: bool) {
     viewer_aspect = false
     ok = false
 
@@ -164,7 +167,7 @@ sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: rawptr) -> (viewer_aspect: 
     return variant.variantbool_to_bool(vb), true
 }
 
-sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: rawptr, viewer_aspect: bool) -> (ok: bool) {
+sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
     ok = false
 
     if sfccodeblock == nil do return
@@ -181,32 +184,32 @@ sfccodeblock_elements :: proc {
     sfccodeblock_elements_set,
 }
 
-sfccodeblock_elements_get :: proc(sfccodeblock: rawptr) -> (elements: rawptr, ok: bool) {
-    elements = nil
+sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: sfc.SFCElements, ok: bool) {
+    sfcelements = nil
     ok = false
 
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsGet(&elements)
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsGet(cast(^rawptr)&sfcelements)
     if com.failed(hr) do return
 
-    return elements, true
+    return sfcelements, true
 }
 
-sfccodeblock_elements_set :: proc(sfccodeblock: rawptr, elements: rawptr) -> (ok: bool) {
+sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: sfc.SFCElements) -> (ok: bool) {
     ok = false
 
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsPut(elements)
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsPut(sfcelements)
     if com.failed(hr) do return
 
     return true
 }
 
-sfccodeblock_serialize :: proc(sfccodeblock: rawptr) -> (xml: string, ok: bool) {
+sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -221,7 +224,7 @@ sfccodeblock_serialize :: proc(sfccodeblock: rawptr) -> (xml: string, ok: bool) 
     return bstr.to_string(bs), true
 }
 
-sfccodeblock_release :: proc(sfccodeblock: rawptr) {
+sfccodeblock_release :: proc(sfccodeblock: SFCCodeBlock) {
     if sfccodeblock != nil {
         (^SFCCodeBlockIF)(sfccodeblock)->Release()
     }

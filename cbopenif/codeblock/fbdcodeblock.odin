@@ -5,6 +5,8 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 
+FBDCodeBlock :: distinct rawptr
+
 FBDCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^FBDCodeBlockVTable,
@@ -22,7 +24,7 @@ FBDCodeBlockVTable :: struct {
     Serialize: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: rawptr, ok: bool) {
+fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
     fbdcodeblock = nil
     ok = false
 
@@ -40,7 +42,7 @@ fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: rawptr, ok: boo
     return fbdcodeblock, true
 }
 
-fbdcodeblock_serialize :: proc(fbdcodeblock: rawptr) -> (xml: string, ok: bool) {
+fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -60,7 +62,7 @@ fbdcodeblock_name :: proc {
     fbdcodeblock_name_set,
 }
 
-fbdcodeblock_name_get :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) {
+fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -76,7 +78,7 @@ fbdcodeblock_name_get :: proc(fbdcodeblock: rawptr) -> (name: string, ok: bool) 
 }
 
 
-fbdcodeblock_name_set :: proc(fbdcodeblock: rawptr, name: string) -> (ok: bool) {
+fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: bool) {
     ok = false
     
     if fbdcodeblock == nil do return
@@ -95,7 +97,7 @@ fbdcodeblock_stcode :: proc {
     fbdcodeblock_stcode_set,
 }
 
-fbdcodeblock_stcode_get :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bool) {
+fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -110,7 +112,7 @@ fbdcodeblock_stcode_get :: proc(fbdcodeblock: rawptr) -> (stcode: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-fbdcodeblock_stcode_set :: proc(fbdcodeblock: rawptr, stcode: string) -> (ok: bool) {
+fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
     ok = false
     
     if fbdcodeblock == nil do return
@@ -124,7 +126,7 @@ fbdcodeblock_stcode_set :: proc(fbdcodeblock: rawptr, stcode: string) -> (ok: bo
     return true
 }
 
-fbdcodeblock_release :: proc(fbdcodeblock: rawptr) {
+fbdcodeblock_release :: proc(fbdcodeblock: FBDCodeBlock) {
     if fbdcodeblock != nil {
         (^FBDCodeBlockIF)(fbdcodeblock)->Release()
     }

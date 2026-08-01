@@ -3,23 +3,7 @@ package sfc
 import "../com"
 import "../controlbuilder"
 import "../variant"
-
-SFCElementType :: enum i32 {
-    Step         = 0,
-    Transition   = 1,
-    SubSequence  = 2,
-    Selection    = 3,
-    Simultaneous = 4,
-}
-
-SFCPriority :: enum i32 {
-    Default = 0,
-    Lowest  = 1,
-    Low     = 2,
-    Medium  = 3,
-    High    = 4,
-    Highest = 5,
-}
+import "../type"
 
 SFCElement :: distinct rawptr
 
@@ -37,7 +21,7 @@ SFCElementVTable :: struct {
     IsSFCSimultaneousGet: proc "system" (this: ^SFCElementIF, IsSFCSimultaneous: ^VariantBool) -> HResult,
 }
 
-sfcelement_is_step :: proc(sfcelement: rawptr) -> (is_step: bool, ok: bool) {
+sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) {
     is_step = false
     ok = false
 
@@ -51,7 +35,7 @@ sfcelement_is_step :: proc(sfcelement: rawptr) -> (is_step: bool, ok: bool) {
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcelement_is_transition :: proc(sfcelement: rawptr) -> (is_transition: bool, ok: bool) {
+sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool, ok: bool) {
     is_transition = false
     ok = false
 
@@ -65,7 +49,7 @@ sfcelement_is_transition :: proc(sfcelement: rawptr) -> (is_transition: bool, ok
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcelement_is_subsequence :: proc(sfcelement: rawptr) -> (is_subsequence: bool, ok: bool) {
+sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bool, ok: bool) {
     is_subsequence = false
     ok = false
 
@@ -79,7 +63,7 @@ sfcelement_is_subsequence :: proc(sfcelement: rawptr) -> (is_subsequence: bool, 
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcelement_is_selection :: proc(sfcelement: rawptr) -> (is_selection: bool, ok: bool) {
+sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, ok: bool) {
     is_selection = false
     ok = false
 
@@ -93,7 +77,7 @@ sfcelement_is_selection :: proc(sfcelement: rawptr) -> (is_selection: bool, ok: 
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcelement_is_simultaneous :: proc(sfcelement: rawptr) -> (is_simultaneous: bool, ok: bool) {
+sfcelement_is_simultaneous :: proc(sfcelement: SFCElement) -> (is_simultaneous: bool, ok: bool) {
     is_simultaneous = false
     ok = false
 
@@ -107,7 +91,7 @@ sfcelement_is_simultaneous :: proc(sfcelement: rawptr) -> (is_simultaneous: bool
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcelement_release :: proc(sfcelement: rawptr) {
+sfcelement_release :: proc(sfcelement: SFCElement) {
     if sfcelement != nil {
         (^SFCElementIF)(sfcelement)->Release()
     }

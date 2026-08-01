@@ -6,6 +6,8 @@ import "../bstr"
 import "../factory"
 import "../variant"
 
+SFCStep :: distinct rawptr
+
 SFCStepIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCStepVTable,
@@ -25,7 +27,7 @@ SFCStepVTable :: struct {
     NActionSTCodePut:  proc "system" (this: ^SFCStepIF, NActionSTCode: BStr) -> HResult,
 }
 
-sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_action_stcode := "", p0_action_stcode := "") -> (sfcstep: rawptr, ok: bool) {
+sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_action_stcode := "", p0_action_stcode := "") -> (sfcstep: SFCStep, ok: bool) {
     sfcstep = nil
     ok = false
 
@@ -52,7 +54,7 @@ sfcstep_name :: proc {
     sfcstep_name_set,
 }
 
-sfcstep_name_get :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
+sfcstep_name_get :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -67,7 +69,7 @@ sfcstep_name_get :: proc(sfcstep: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-sfcstep_name_set :: proc(sfcstep: rawptr, name: string) -> (ok: bool) {
+sfcstep_name_set :: proc(sfcstep: SFCStep, name: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
@@ -86,7 +88,7 @@ sfcstep_initial_step :: proc {
     sfcstep_initial_step_set,
 }
 
-sfcstep_initial_step_get :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bool) {
+sfcstep_initial_step_get :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: bool) {
     initial_step = false
     ok = false
 
@@ -100,7 +102,7 @@ sfcstep_initial_step_get :: proc(sfcstep: rawptr) -> (initial_step: bool, ok: bo
     return variant.variantbool_to_bool(vb), true
 }
 
-sfcstep_initial_step_set :: proc(sfcstep: rawptr, initial_step: bool) -> (ok: bool) {
+sfcstep_initial_step_set :: proc(sfcstep: SFCStep, initial_step: bool) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
@@ -117,7 +119,7 @@ sfcstep_p1_action_stcode :: proc {
     sfcstep_p1_action_stcode_set,
 }
 
-sfcstep_p1_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_p1_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -132,7 +134,7 @@ sfcstep_p1_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-sfcstep_p1_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
+sfcstep_p1_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
@@ -151,7 +153,7 @@ sfcstep_p0_action_stcode :: proc {
     sfcstep_p0_action_stcode_set,
 }
 
-sfcstep_p0_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_p0_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -166,7 +168,7 @@ sfcstep_p0_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bo
     return bstr.to_string(bs), true
 }
 
-sfcstep_p0_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
+sfcstep_p0_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
@@ -185,7 +187,7 @@ sfcstep_n_action_stcode :: proc {
     sfcstep_n_action_stcode_set,
 }
 
-sfcstep_n_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: bool) {
+sfcstep_n_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     stcode = ""
     ok = false
 
@@ -200,7 +202,7 @@ sfcstep_n_action_stcode_get :: proc(sfcstep: rawptr) -> (stcode: string, ok: boo
     return bstr.to_string(bs), true
 }
 
-sfcstep_n_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: bool) {
+sfcstep_n_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     ok = false
 
     if sfcstep == nil do return
@@ -214,7 +216,7 @@ sfcstep_n_action_stcode_set :: proc(sfcstep: rawptr, stcode: string) -> (ok: boo
     return true
 }
 
-sfcstep_release :: proc(sfcstep: rawptr) {
+sfcstep_release :: proc(sfcstep: SFCStep) {
     if sfcstep != nil {
         (^SFCStepIF)(sfcstep)->Release()
     }

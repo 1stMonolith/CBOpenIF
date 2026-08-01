@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../bstr"
 
+Signals :: distinct rawptr
+
 SignalsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SignalsVTable,
@@ -26,7 +28,7 @@ signals_add :: proc {
     signals_add_at_index,
 }
 
-signals_add_ :: proc(signals: rawptr, signal: rawptr) -> (ok: bool) {
+signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -39,7 +41,7 @@ signals_add_ :: proc(signals: rawptr, signal: rawptr) -> (ok: bool) {
     return true
 }
 
-signals_add_at_index :: proc(signals: rawptr, signal: rawptr, index: i32) -> (ok: bool) {
+signals_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -57,7 +59,7 @@ signals_signal :: proc {
     signals_signal_by_index,
 }
 
-signals_signal_by_name :: proc(signals: rawptr, name: string) -> (signal: rawptr, ok: bool) {
+signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signal, ok: bool) {
     signal = nil
     ok = false
 
@@ -66,26 +68,26 @@ signals_signal_by_name :: proc(signals: rawptr, name: string) -> (signal: rawptr
     
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := (^SignalsIF)(signals)->Find(bstr_name, &signal)
+    hr := (^SignalsIF)(signals)->Find(bstr_name, cast(^rawptr)&signal)
     if com.failed(hr) do return
     
     return signal, true
 }
 
-signals_signal_by_index :: proc(signals: rawptr, index: i32) -> (signal: rawptr, ok: bool) {
+signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
     signal = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
     
-    hr := (^SignalsIF)(signals)->Item(index, &signal)
+    hr := (^SignalsIF)(signals)->Item(index, cast(^rawptr)&signal)
     if com.failed(hr) do return
     
     return signal, true
 }
 
-signals_signal_index :: proc(signals: rawptr, name: string) -> (index: i32, ok: bool) {
+signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok: bool) {
     index = 0
     ok = false
 
@@ -100,7 +102,7 @@ signals_signal_index :: proc(signals: rawptr, name: string) -> (index: i32, ok: 
     return index, true
 }
 
-signals_count :: proc(signals: rawptr) -> (count: i32, ok: bool) {
+signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
@@ -118,7 +120,7 @@ signals_remove :: proc {
     signals_remove_by_index,
 }
 
-signals_remove_by_name :: proc(signals: rawptr, name: string) -> (ok: bool) {
+signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -133,7 +135,7 @@ signals_remove_by_name :: proc(signals: rawptr, name: string) -> (ok: bool) {
     return true
 }
 
-signals_remove_by_index :: proc(signals: rawptr, index: i32) -> (ok: bool) {
+signals_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -145,7 +147,7 @@ signals_remove_by_index :: proc(signals: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-signals_release :: proc(signals: rawptr) {
+signals_release :: proc(signals: Signals) {
     if signals != nil {
         (^SignalsIF)(signals)->Release()
     }

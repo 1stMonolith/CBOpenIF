@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../factory"
 
+Point :: distinct rawptr
+
 PointIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^PointVTable,
@@ -17,7 +19,7 @@ PointVTable :: struct {
     YPut:    proc "system" (this: ^PointIF, Y: f64) -> HResult,
 }
 
-point_new :: proc(x, y: f64) -> (point: rawptr, ok: bool) {
+point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
     point = nil
     ok = false
 
@@ -34,7 +36,7 @@ point_x :: proc {
     point_x_set,
 }
 
-point_x_get :: proc(point: rawptr) -> (x: f64, ok: bool) {
+point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
     x = 0
     ok = false
 
@@ -47,7 +49,7 @@ point_x_get :: proc(point: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-point_x_set :: proc(point: rawptr, x: f64) -> (ok: bool) {
+point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
     ok = false
 
     if point == nil do return
@@ -64,7 +66,7 @@ point_y :: proc {
     point_y_set,
 }
 
-point_y_get :: proc(point: rawptr) -> (y: f64, ok: bool) {
+point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
     y = 0
     ok = false
 
@@ -77,7 +79,7 @@ point_y_get :: proc(point: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-point_y_set :: proc(point: rawptr, y: f64) -> (ok: bool) {
+point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
     ok = false
 
     if point == nil do return
@@ -89,7 +91,7 @@ point_y_set :: proc(point: rawptr, y: f64) -> (ok: bool) {
     return true
 }
 
-point_release :: proc(point: rawptr) {
+point_release :: proc(point: Point) {
     if point != nil {
         (^PointIF)(point)->Release()
     }

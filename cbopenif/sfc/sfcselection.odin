@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../factory"
 
+SFCSelection :: distinct rawptr
+
 SFCSelectionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCSelectionVTable,
@@ -16,7 +18,7 @@ SFCSelectionVTable :: struct {
     SFCBranchesPut: proc "system" (this: ^SFCSelectionIF, SFCBranches: rawptr) -> HResult,
 }
 
-sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: rawptr, ok: bool) {
+sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: SFCSelection, ok: bool) {
     sfcselection = nil
     ok = false
 
@@ -33,32 +35,32 @@ sfcselection_branches :: proc {
     sfcselection_branches_set,
 }
 
-sfcselection_branches_get :: proc(sfcselection: rawptr) -> (branches: rawptr, ok: bool) {
-    branches = nil
+sfcselection_branches_get :: proc(sfcselection: SFCSelection) -> (sfcbranches: SFCBranches, ok: bool) {
+    sfcbranches = nil
     ok = false
 
     if sfcselection == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesGet(&branches)
+    hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesGet(cast(^rawptr)&sfcbranches)
     if com.failed(hr) do return
 
-    return branches, true
+    return sfcbranches, true
 }
 
-sfcselection_branches_set :: proc(sfcselection: rawptr, branches: rawptr) -> (ok: bool) {
+sfcselection_branches_set :: proc(sfcselection: SFCSelection, sfcbranches: SFCBranches) -> (ok: bool) {
     ok = false
 
     if sfcselection == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesPut(branches)
+    hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesPut(sfcbranches)
     if com.failed(hr) do return
 
     return true
 }
 
-sfcselection_release :: proc(sfcselection: rawptr) {
+sfcselection_release :: proc(sfcselection: SFCSelection) {
     if sfcselection != nil {
         (^SFCSelectionIF)(sfcselection)->Release()
     }

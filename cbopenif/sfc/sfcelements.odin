@@ -2,7 +2,8 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+
+SFCElements :: distinct rawptr
 
 SFCElementsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -30,7 +31,17 @@ SFCElementsVTable :: struct {
     Remove:           proc "system" (this: ^SFCElementsIF, Index: i32) -> HResult,
 }
 
-sfcelements_add_sfcstep :: proc(sfcelements: rawptr, sfcstep: rawptr) -> (ok: bool) {
+sfcelements_add :: proc {
+    sfcelements_add_sfcstep,
+    sfcelements_add_sfctransition,
+    sfcelements_add_sfcselection,
+    sfcelements_add_sfcsimultaneous,
+    sfcelements_add_sfcsubsequence,
+    sfcelements_add_,
+    sfcelements_add_at_index,
+}
+
+sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -43,7 +54,7 @@ sfcelements_add_sfcstep :: proc(sfcelements: rawptr, sfcstep: rawptr) -> (ok: bo
     return true
 }
 
-sfcelements_add_sfctransition :: proc(sfcelements: rawptr, sfctransition: rawptr) -> (ok: bool) {
+sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -56,7 +67,7 @@ sfcelements_add_sfctransition :: proc(sfcelements: rawptr, sfctransition: rawptr
     return true
 }
 
-sfcelements_add_sfcselection :: proc(sfcelements: rawptr, sfcselection: rawptr) -> (ok: bool) {
+sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -69,7 +80,7 @@ sfcelements_add_sfcselection :: proc(sfcelements: rawptr, sfcselection: rawptr) 
     return true
 }
 
-sfcelements_add_sfcsimultaneous :: proc(sfcelements: rawptr, sfcsimultaneous: rawptr) -> (ok: bool) {
+sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -82,7 +93,7 @@ sfcelements_add_sfcsimultaneous :: proc(sfcelements: rawptr, sfcsimultaneous: ra
     return true
 }
 
-sfcelements_add_sfcsubsequence :: proc(sfcelements: rawptr, sfcsubsequence: rawptr) -> (ok: bool) {
+sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -95,33 +106,28 @@ sfcelements_add_sfcsubsequence :: proc(sfcelements: rawptr, sfcsubsequence: rawp
     return true
 }
 
-sfcelements_add :: proc {
-    sfcelements_add_,
-    sfcelements_add_at_index,
-}
-
-sfcelements_add_ :: proc(sfcelements: rawptr, isfcelement: rawptr) -> (ok: bool) {
+sfcelements_add_ :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
-    if isfcelement == nil do return
+    if sfcelement == nil do return
 
-    hr := (^SFCElementsIF)(sfcelements)->Add(isfcelement)
+    hr := (^SFCElementsIF)(sfcelements)->Add(sfcelement)
     if com.failed(hr) do return
 
     return true
 }
 
 
-sfcelements_add_at_index :: proc(sfcelements: rawptr, isfcelement: rawptr, index: i32) -> (ok: bool) {
+sfcelements_add_at_index :: proc(sfcelements: SFCElements, sfcelement: SFCElement, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
-    if isfcelement == nil do return
+    if sfcelement == nil do return
 
-    hr := (^SFCElementsIF)(sfcelements)->AddBefore(isfcelement, index)
+    hr := (^SFCElementsIF)(sfcelements)->AddBefore(sfcelement, index)
     if com.failed(hr) do return
 
     return true
@@ -131,20 +137,20 @@ sfcelement_sfelement :: proc {
     sfcelements_sfcelement_by_index,
 }
 
-sfcelements_sfcelement_by_index :: proc(sfcelements: rawptr, index: i32) -> (isfcelement: rawptr, ok: bool) {
-    isfcelement = nil
+sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) -> (sfcelement: SFCElement, ok: bool) {
+    sfcelement = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
 
-    hr := (^SFCElementsIF)(sfcelements)->Item(index, &isfcelement)
+    hr := (^SFCElementsIF)(sfcelements)->Item(index, cast(^rawptr)&sfcelement)
     if com.failed(hr) do return
 
-    return isfcelement, true
+    return sfcelement, true
 }
 
-sfcelements_count :: proc(sfcelements: rawptr) -> (count: i32, ok: bool) {
+sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
@@ -157,7 +163,7 @@ sfcelements_count :: proc(sfcelements: rawptr) -> (count: i32, ok: bool) {
     return count, true
 }
 
-sfcelements_remove :: proc(sfcelements: rawptr, index: i32) -> (ok: bool) {
+sfcelements_remove :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -169,7 +175,7 @@ sfcelements_remove :: proc(sfcelements: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-sfcelements_release :: proc(sfcelements: rawptr) {
+sfcelements_release :: proc(sfcelements: SFCElements) {
     if sfcelements != nil {
         (^SFCElementsIF)(sfcelements)->Release()
     }

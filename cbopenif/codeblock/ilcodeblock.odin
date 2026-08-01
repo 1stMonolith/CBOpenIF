@@ -5,6 +5,8 @@ import "../controlbuilder"
 import "../bstr"
 import "../factory"
 
+ILCodeBlock :: distinct rawptr
+
 ILCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ILCodeBlockVTable,
@@ -23,7 +25,7 @@ ILCodeBlockVTable :: struct {
     Serialize: proc "system" (this: ^ILCodeBlockIF, XMLStr: ^BStr) -> HResult,
 }
 
-ilcodeblock_new :: proc(name: string) -> (ilcodeblock: rawptr, ok: bool) {
+ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
     ilcodeblock = nil
     ok = false
 
@@ -37,7 +39,7 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: rawptr, ok: bool) {
     return ilcodeblock, true
 }
 
-ilcodeblock_serialize :: proc(ilcodeblock: rawptr) -> (xml: string, ok: bool) {
+ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -57,7 +59,7 @@ ilcodeblock_name :: proc {
     ilcodeblock_name_set,
 }
 
-ilcodeblock_name_get :: proc(ilcodeblock: rawptr) -> (name: string, ok: bool) {
+ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -72,7 +74,7 @@ ilcodeblock_name_get :: proc(ilcodeblock: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-ilcodeblock_name_set :: proc(ilcodeblock: rawptr, name: string) -> (ok: bool) {
+ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
     ok = false
     
     if ilcodeblock == nil do return
@@ -91,7 +93,7 @@ ilcodeblock_stcode :: proc {
     ilcodeblock_stcode_set,
 }
 
-ilcodeblock_stcode_get :: proc(ilcodeblock: rawptr) -> (ilrows: rawptr, ok: bool) {
+ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok: bool) {
     ilrows = nil
     ok = false
 
@@ -104,7 +106,7 @@ ilcodeblock_stcode_get :: proc(ilcodeblock: rawptr) -> (ilrows: rawptr, ok: bool
     return ilrows, true
 }
 
-ilcodeblock_stcode_set :: proc(ilcodeblock: rawptr, ilrows: rawptr) -> (ok: bool) {
+ilcodeblock_stcode_set :: proc(ilcodeblock: ILCodeBlock, ilrows: rawptr) -> (ok: bool) {
     ok = false
     
     if ilcodeblock == nil do return
@@ -116,7 +118,7 @@ ilcodeblock_stcode_set :: proc(ilcodeblock: rawptr, ilrows: rawptr) -> (ok: bool
     return true
 }
 
-ilcodeblock_release :: proc(ilcodeblock: rawptr) {
+ilcodeblock_release :: proc(ilcodeblock: ILCodeBlock) {
     if ilcodeblock != nil {
         (^ILCodeBlockIF)(ilcodeblock)->Release()
     }

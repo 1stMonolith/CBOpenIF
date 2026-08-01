@@ -16,23 +16,10 @@ VariableType :: enum i32 {
     CommunicationVariable = 3,
 }
 
-SignalType :: enum {
-    Siganl = 0
-}
-
 ParameterType :: enum i32 {
     Parameter     = 0,
     Extensible    = 1,
     ControlModule = 2,
-}
-
-CodeBlockType :: enum i32 {
-    ST  = 0,
-    SFC = 1,
-    FBD = 2,
-    LD  = 3,
-    IL  = 4,
-    FD  = 5,
 }
 
 HardwareFileType :: enum i32 {
@@ -120,13 +107,4 @@ AutoPosType :: enum i32 {
     Bottom = 1,
     Left   = 2,
     Right  = 3,
-}
-
-SFCPriorityType :: enum i32 {
-    Default = 0,
-    Lowest  = 1,
-    Low     = 2,
-    Medium  = 3,
-    High    = 4,
-    Highest = 5
 }

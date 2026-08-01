@@ -3,6 +3,8 @@ package sfc
 import "../com"
 import "../controlbuilder"
 
+SFCBranches :: distinct rawptr
+
 SFCBranchesIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^SFCBranchesVTable,
@@ -25,27 +27,27 @@ sfcbranches_add :: proc {
     sfcbranches_add_at_index,
 }
 
-sfcbranches_add_ :: proc(sfcbranches: rawptr, branch: rawptr) -> (ok: bool) {
+sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
-    if branch == nil do return
+    if sfcbranch == nil do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->Add(branch)
+    hr := (^SFCBranchesIF)(sfcbranches)->Add(sfcbranch)
     if com.failed(hr) do return
 
     return true
 }
 
-sfcbranches_add_at_index :: proc(sfcbranches: rawptr, branch: rawptr, index: i32) -> (ok: bool) {
+sfcbranches_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
-    if branch == nil do return
+    if sfcbranch == nil do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->AddBefore(branch, index)
+    hr := (^SFCBranchesIF)(sfcbranches)->AddBefore(sfcbranch, index)
     if com.failed(hr) do return
 
     return true
@@ -57,61 +59,63 @@ sfcbranches_add_branch :: proc {
     // sfcbranches_add_branch_after,   TODO!
 }
 
-sfcbranches_add_branch_ :: proc(sfcbranches: rawptr) -> (branch: rawptr, ok: bool) {
-    branch = nil
+sfcbranches_add_branch_ :: proc(sfcbranches: SFCBranches) -> (sfcbranch: SFCBranch, ok: bool) {
+    sfcbranch = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->AddBranch(&branch)
+    hr := (^SFCBranchesIF)(sfcbranches)->AddBranch(cast(^rawptr)&sfcbranch)
     if com.failed(hr) do return
 
-    return branch, true
+    return sfcbranch, true
 }
 
-sfcbranches_add_branch_before :: proc(sfcbranches: rawptr, index: ^i32) -> (branch: rawptr, ok: bool) {
-    branch = nil
-    ok = false
-
-    if !controlbuilder.connected() do return
-    if sfcbranches == nil do return
-    if index == nil do return
-
-    hr := (^SFCBranchesIF)(sfcbranches)->AddBranchBefore(index, &branch)
-    if com.failed(hr) do return
-
-    return branch, true
-}
-
-sfcbranches_add_branch_after :: proc(sfcbranches: rawptr, index: ^i32) -> (branch: rawptr, ok: bool) {
-    branch = nil
+sfcbranches_add_branch_before :: proc(sfcbranches: SFCBranches, index: ^i32) -> (sfcbranch: SFCBranch, ok: bool) {
+    sfcbranch = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
     if index == nil do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->AddBranchAfter(index, &branch)
+    hr := (^SFCBranchesIF)(sfcbranches)->AddBranchBefore(index, cast(^rawptr)&sfcbranch)
     if com.failed(hr) do return
 
-    return branch, true
+    return sfcbranch, true
 }
 
-sfcbranches_branch :: proc(sfcbranches: rawptr, index: i32) -> (branch: rawptr, ok: bool) {
-    branch = nil
+/* TODO
+sfcbranches_add_branch_after :: proc(sfcbranches: SFCBranches, index: ^i32) -> (sfcbranch: SFCBranch, ok: bool) {
+    sfcbranch = nil
+    ok = false
+
+    if !controlbuilder.connected() do return
+    if sfcbranches == nil do return
+    if index == nil do return
+
+    hr := (^SFCBranchesIF)(sfcbranches)->AddBranchAfter(index, cast(^rawptr)&sfcbranch)
+    if com.failed(hr) do return
+
+    return sfcbranch, true
+}
+*/
+
+sfcbranches_branch :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
+    sfcbranch = nil
     ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->Item(index, &branch)
+    hr := (^SFCBranchesIF)(sfcbranches)->Item(index, cast(^rawptr)&sfcbranch)
     if com.failed(hr) do return
 
-    return branch, true
+    return sfcbranch, true
 }
 
-sfcbranches_count :: proc(sfcbranches: rawptr) -> (count: i32, ok: bool) {
+sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
     count = 0
     ok = false
 
@@ -124,7 +128,7 @@ sfcbranches_count :: proc(sfcbranches: rawptr) -> (count: i32, ok: bool) {
     return count, true
 }
 
-sfcbranches_remove :: proc(sfcbranches: rawptr, index: i32) -> (ok: bool) {
+sfcbranches_remove :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -136,7 +140,7 @@ sfcbranches_remove :: proc(sfcbranches: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-sfcbranches_release :: proc(sfcbranches: rawptr) {
+sfcbranches_release :: proc(sfcbranches: SFCBranches) {
     if sfcbranches != nil {
         (^SFCBranchesIF)(sfcbranches)->Release()
     }

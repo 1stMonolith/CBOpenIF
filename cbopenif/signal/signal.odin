@@ -6,11 +6,19 @@ import "../bstr"
 import "../variant"
 import "../factory"
 
- HResult     :: com.HResult
- BStr        :: bstr.BStr
- GUID        :: com.GUID
- Variant     :: variant.Variant
- VariantBool :: variant.VariantBool
+import "core:fmt"
+
+HResult     :: com.HResult
+BStr        :: bstr.BStr
+GUID        :: com.GUID
+Variant     :: variant.Variant
+VariantBool :: variant.VariantBool
+
+SignalType :: enum {
+    Siganl = 0
+}
+
+Signal :: distinct rawptr
 
 SignalIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -32,7 +40,7 @@ SignalVTable :: struct {
     Serialize:           proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
 }
 
-signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: rawptr, ok: bool) {
+signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
     signal = nil
     ok = false
 
@@ -42,22 +50,28 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     bstr_path := bstr.from_string(path)
     bstr_direction := bstr.from_string(direction)
 
+    fmt.println("here")
+
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    variant_acknowledge_group := variant.string_to_variant(acknowledge_group)
+    ag_variant := variant.string_to_variant(acknowledge_group)
+
+    fmt.println("now here", ag_variant)
     
     defer {
         bstr.free(bstr_name)
         bstr.free(bstr_path)
         bstr.free(bstr_direction)
-        variant.free(&variant_acknowledge_group)
+        variant.free(&ag_variant)
     }
-    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, variant_acknowledge_group, cast(^rawptr)&signal)
+    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, ag_variant, cast(^rawptr)&signal)
     if com.failed(hr) do return
+
+    fmt.println("hey yo")
     
     return signal, true
 }
 
-signal_deserialize :: proc(signal: ^rawptr, xml: string) -> (ok: bool) {
+signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
     ok = false
 
     if !controlbuilder.connected() do return
@@ -70,7 +84,7 @@ signal_deserialize :: proc(signal: ^rawptr, xml: string) -> (ok: bool) {
     return true
 }
 
-signal_serialize :: proc(signal: rawptr) -> (xml: string, ok: bool) {
+signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
     xml = ""
     ok = false
 
@@ -90,7 +104,7 @@ signal_name :: proc {
     signal_name_set,
 }
 
-signal_name_get :: proc(signal: rawptr) -> (name: string, ok: bool) {
+signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
     name = ""
     ok = false
 
@@ -105,7 +119,7 @@ signal_name_get :: proc(signal: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-signal_name_set :: proc(signal: rawptr, name: string) -> (ok: bool) {
+signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
@@ -124,7 +138,7 @@ signal_description :: proc {
     signal_description_set,
 }
 
-signal_description_get :: proc(signal: rawptr) -> (description: string, ok: bool) {
+signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
     description = ""
     ok = false
 
@@ -139,7 +153,7 @@ signal_description_get :: proc(signal: rawptr) -> (description: string, ok: bool
     return bstr.to_string(bs), true
 }
 
-signal_description_set :: proc(signal: rawptr, description: string) -> (ok: bool) {
+signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
@@ -158,7 +172,7 @@ signal_path :: proc {
     signal_path_set,
 }
 
-signal_path_get :: proc(signal: rawptr) -> (path: string, ok: bool) {
+signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
     path = ""
     ok = false
 
@@ -173,7 +187,7 @@ signal_path_get :: proc(signal: rawptr) -> (path: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-signal_path_set :: proc(signal: rawptr, path: string) -> (ok: bool) {
+signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     ok = false
 
     if signal == nil do return
@@ -187,7 +201,7 @@ signal_path_set :: proc(signal: rawptr, path: string) -> (ok: bool) {
     return true
 }
 
-signal_release :: proc(signal: rawptr) {
+signal_release :: proc(signal: Signal) {
     if signal != nil {
         (^SignalIF)(signal)->Release()
     }
