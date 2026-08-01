@@ -48,7 +48,7 @@ VariableVTable :: struct {
     SafetyTypePut:          proc "system" (this: ^VariableIF, SafetyType: BStr) -> HResult,
 }
 
-variable_new :: proc(name: string, type: string, attribute := "", initialvalue := "", readpermission := "", writepermission := "", description := "") -> (variable: rawptr, ok: bool) {
+variable_new :: proc(name: string, type: string, attribute := "", initial_value := "", readpermission := "", writepermission := "", description := "") -> (variable: rawptr, ok: bool) {
     variable = nil
     ok = false
 
@@ -57,7 +57,7 @@ variable_new :: proc(name: string, type: string, attribute := "", initialvalue :
     bstr_name := bstr.from_string(name)
     bstr_type := bstr.from_string(type)
     bstr_attribute := bstr.from_string(attribute)
-    bstr_initialvalue := bstr.from_string(initialvalue)
+    bstr_initial_value := bstr.from_string(initial_value)
     bstr_readpermission := bstr.from_string(readpermission)
     bstr_writepermission := bstr.from_string(writepermission)
     bstr_description := bstr.from_string(description)
@@ -65,12 +65,12 @@ variable_new :: proc(name: string, type: string, attribute := "", initialvalue :
         bstr.free(bstr_name)
         bstr.free(bstr_type)
         bstr.free(bstr_attribute)
-        bstr.free(bstr_initialvalue)
+        bstr.free(bstr_initial_value)
         bstr.free(bstr_readpermission)
         bstr.free(bstr_writepermission)
         bstr.free(bstr_description)
     }
-    hr := factory.factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&variable)
+    hr := factory.factoryif->NewVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&variable)
     if com.failed(hr) do return
     
     return variable, true

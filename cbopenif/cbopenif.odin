@@ -1,8 +1,8 @@
 package cbopenif
 
 import "controlbuilder"
-import "type"
 import "component"
+import "type"
 
 // properties procedures
 

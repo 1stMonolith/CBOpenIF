@@ -46,7 +46,7 @@ ComponentVTable :: struct {
     ISPValuePut:            proc "system" (this: ^ComponentIF, ISPValue: BStr) -> HResult,
 }
 
-component_new :: proc(name: string, type: string, attribute := "", initialvalue := "", description := "") -> (component: Component, ok: bool) {
+component_new :: proc(name: string, type: string, attribute := "", initial_value := "", description := "") -> (component: Component, ok: bool) {
     component = nil
     ok = false
 
@@ -55,16 +55,16 @@ component_new :: proc(name: string, type: string, attribute := "", initialvalue 
     bstr_name := bstr.from_string(name)
     bstr_type := bstr.from_string(type)
     bstr_attribute := bstr.from_string(attribute)
-    bstr_initialvalue := bstr.from_string(initialvalue)
+    bstr_initial_value := bstr.from_string(initial_value)
     bstr_description := bstr.from_string(description)
     defer {
         bstr.free(bstr_name)
         bstr.free(bstr_type)
         bstr.free(bstr_attribute)
-        bstr.free(bstr_initialvalue)
+        bstr.free(bstr_initial_value)
         bstr.free(bstr_description)
     }
-    hr := factory.factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initialvalue, bstr_description, cast(^rawptr)&component)
+    hr := factory.factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initial_value, bstr_description, cast(^rawptr)&component)
     if com.failed(hr) do return
     
     return component, true
