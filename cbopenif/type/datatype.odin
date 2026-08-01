@@ -36,7 +36,7 @@ DataTypeVTable :: struct {
     Serialize:             proc "system" (this: ^DataTypeIF, XMLStr: ^BStr) -> HResult,
 }
 
-datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := Scope.Public) -> (datatype: DataType, ok: bool) {
+datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := ScopeType.Public) -> (datatype: DataType, ok: bool) {
     datatype = nil
     ok = false
 
@@ -183,7 +183,7 @@ datatype_scope :: proc {
     datatype_scope_set,
 }
 
-datatype_scope_get :: proc(datatype: DataType) -> (scope: Scope, ok: bool) {
+datatype_scope_get :: proc(datatype: DataType) -> (scope: ScopeType, ok: bool) {
     scope = {}
     ok = false
 
@@ -194,10 +194,10 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: Scope, ok: bool) {
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com.failed(hr) do return
 
-    return Scope(s), true
+    return ScopeType(s), true
 }
 
-datatype_scope_set :: proc(datatype: DataType, scope: Scope) -> (ok: bool) {
+datatype_scope_set :: proc(datatype: DataType, scope: ScopeType) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return

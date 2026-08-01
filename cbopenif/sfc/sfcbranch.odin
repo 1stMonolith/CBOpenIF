@@ -2,9 +2,9 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../enumtypes"
+import "../type"
 
- SFCPriorityValue :: enumtypes.SFCPriorityValue
+ SFCPriorityType :: type.SFCPriorityType
 
 SFCBranchIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -13,8 +13,8 @@ SFCBranchIF :: struct #raw_union {
 
 SFCBranchVTable :: struct {
     using iunknownvtable: com.IUnknownVTable,
-    PriorityGet: proc "system" (this: ^SFCBranchIF, SFCPriority: ^SFCPriorityValue) -> HResult,
-    PriorityPut: proc "system" (this: ^SFCBranchIF, SFCPriority: SFCPriorityValue) -> HResult,
+    PriorityGet: proc "system" (this: ^SFCBranchIF, SFCPriority: ^SFCPriorityType) -> HResult,
+    PriorityPut: proc "system" (this: ^SFCBranchIF, SFCPriority: SFCPriorityType) -> HResult,
     ElementsGet: proc "system" (this: ^SFCBranchIF, SFCElements: ^rawptr) -> HResult,
     Missing10:   proc "system" (this: ^SFCBranchIF) -> HResult,
     ElementsPut: proc "system" (this: ^SFCBranchIF, SFCElements: rawptr) -> HResult,
@@ -25,7 +25,7 @@ sfcbranch_priority :: proc {
     sfcbranch_priority_set,
 }
 
-sfcbranch_priority_get :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityValue, ok: bool) {
+sfcbranch_priority_get :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityType, ok: bool) {
     priority = .Default
     ok = false
 
@@ -38,7 +38,7 @@ sfcbranch_priority_get :: proc(sfcbranch: rawptr) -> (priority: SFCPriorityValue
     return priority, true
 }
 
-sfcbranch_priority_set :: proc(sfcbranch: rawptr, priority: SFCPriorityValue) -> (ok: bool) {
+sfcbranch_priority_set :: proc(sfcbranch: rawptr, priority: SFCPriorityType) -> (ok: bool) {
     ok = false
 
     if sfcbranch == nil do return

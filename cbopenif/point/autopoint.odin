@@ -3,10 +3,10 @@ package point
 import "../com"
 import "../controlbuilder"
 import "../factory"
-import "../enumtypes"
+import "../type"
 
 @(private) HResult :: com.HResult
-@(private) AutoPos :: enumtypes.AutoPos
+@(private) AutoPosType :: type.AutoPosType
 
 AutoPointIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -19,7 +19,7 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
-autopoint_new :: proc(autopos: AutoPos) -> (autopoint: rawptr, ok: bool) {
+autopoint_new :: proc(autopos: AutoPosType) -> (autopoint: rawptr, ok: bool) {
     autopoint = {}
     ok = false
 
@@ -36,7 +36,7 @@ autopoint_autopos :: proc {
     autopoint_autopos_set,
 }
 
-autopoint_autopos_get :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool) {
+autopoint_autopos_get :: proc(autopoint: rawptr) -> (autopos: AutoPosType, ok: bool) {
     autopos = {}
     ok = false
 
@@ -47,8 +47,8 @@ autopoint_autopos_get :: proc(autopoint: rawptr) -> (autopos: AutoPos, ok: bool)
     hr := (^AutoPointIF)(autopoint)->AutoPosGet(&i32_ap)
     if com.failed(hr) do return
 
-    ap: AutoPos
-    ap, ok = enumtypes.i32_to_autopos(i32_ap)
+    ap: AutoPosType
+    ap, ok = AutoPosType(i32_ap)
     if !ok do return
     
     return ap, true

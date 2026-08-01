@@ -5,14 +5,14 @@ import "../controlbuilder"
 import "../bstr"
 import "../variant"
 import "../factory"
-import "../enumtypes"
+import "../type"
 
 @(private) HResult     :: com.HResult
 @(private) BStr        :: bstr.BStr
 @(private) GUID        :: com.GUID
 @(private) VariantBool :: variant.VariantBool
-@(private) Direction   :: enumtypes.DirectionType
-@(private) AutoPos     :: enumtypes.AutoPos
+@(private) Direction   :: type.DirectionType
+@(private) AutoPos     :: type.AutoPos
 
 ParameterIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
