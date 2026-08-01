@@ -1,9 +1,8 @@
 package main
 
 import "core:fmt"
+
 import cb "../cbopenif"
-import "../cbopenif/type"
-import "../cbopenif/component"
 
 // odin run main.odin -file -target:windows_i386
 
@@ -13,32 +12,29 @@ main :: proc() {
     component_count: i32
     ok: bool
     dt: cb.DataType
-    dt_components: cb.Components
     dt_component: cb.Component
 
     cb.connect()
 
-    dt, ok = type.datatype_new(name = "SomeName", description = "SomeDescption")
+    dt, ok = cb.datatype_new(name = "SomeName", description = "SomeDescption")
 
     xml, ok = cb.serialize(dt)
     fmt.println("", xml)
 
-    dt_components, ok = type.datatype_components_get(dt)
-
-    component_count, ok = cb.count(dt_components)
+    component_count, ok = cb.component_count(dt)
     fmt.println("datatype component count: ", component_count)
 
     dt_component, ok = cb.component_new(name = "TestComponent1", type = "bool", description="Great Description")
-    ok = cb.add(dt_components, dt_component)
+    ok = cb.component_add(dt, dt_component)
     
     dt_component, ok = cb.component_new(name = "TestComponent2", type = "real", description="Greater Description")
-    ok = cb.add(dt_components, dt_component)
+    ok = cb.component_add(dt, dt_component)
 
-    component_count, ok = cb.count(dt_components)
+    component_count, ok = cb.component_count(dt)
     fmt.println("datatype component count: ", component_count)
 
     for i in 0..< component_count {
-        dt_component, ok = cb.by_index(dt_components, i+1)
+        dt_component, ok = cb.component_by_index(dt, i+1)
 
         component_name, ok = cb.name(dt_component)
         component_type_name, ok = cb.type_name(dt_component)

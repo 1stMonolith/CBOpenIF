@@ -120,7 +120,7 @@ components_count :: proc(components: Components) -> (count: i32, ok: bool) {
 
 components_remove :: proc {
     components_remove_by_name,
-    components_remove_by_index
+    components_remove_by_index,
 }
 
 components_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {

@@ -5,7 +5,7 @@ import "../controlbuilder"
 import "../bstr"
 import "../variant"
 import "../factory"
-import "../component"
+import c "../component"
 
 DataType :: distinct rawptr
 
@@ -316,7 +316,7 @@ datatype_components :: proc {
     datatype_components_set,
 }
 
-datatype_components_get :: proc(datatype: DataType) -> (components: component.Components, ok: bool) {
+datatype_components_get :: proc(datatype: DataType) -> (components: c.Components, ok: bool) {
     components = nil
     ok = false
 
@@ -327,10 +327,10 @@ datatype_components_get :: proc(datatype: DataType) -> (components: component.Co
     hr := (^DataTypeIF)(datatype)->ComponentsGet(&p)
     if com.failed(hr) do return
 
-    return component.Components(p), true
+    return c.Components(p), true
 }
 
-datatype_components_set :: proc(datatype: DataType, components: component.Components) -> (ok: bool) {
+datatype_components_set :: proc(datatype: DataType, components: c.Components) -> (ok: bool) {
     ok = false
 
     if datatype == nil do return
@@ -346,4 +346,163 @@ datatype_release :: proc(datatype: DataType) {
     if datatype != nil {
         (^DataTypeIF)(datatype)->Release()
     }
+}
+
+// Components Procedures
+
+datatype_components_add :: proc {
+    datatype_components_add_,
+    datatype_components_add_at_index,
+}
+
+datatype_components_add_ :: proc(datatype: DataType, component: c.Component) -> (ok: bool) {
+    ok = false
+
+    if datatype == nil do return
+    if component == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    ok = c.components_add_(comps, component)
+    if !ok do return
+
+    return true
+}
+
+datatype_components_add_at_index :: proc(datatype: DataType, component: c.Component, index: i32) -> (ok: bool) {
+    ok = false
+
+    if datatype == nil do return
+    if component == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    ok = c.components_add_at_index(comps, component, index)
+    if !ok do return
+
+    return true
+}
+
+datatype_component :: proc {
+    datatype_component_by_name,
+    datatype_component_by_index,
+}
+
+datatype_component_by_name :: proc(datatype: DataType, name: string) -> (component: c.Component, ok: bool) {
+    component = nil
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    component, ok = c.components_component_by_name(comps, name)
+    if !ok do return
+
+    return component, true
+}
+
+datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (component: c.Component, ok: bool) {
+    component = nil
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    component, ok = c.components_component_by_index(comps, index)
+    if !ok do return
+
+    return component, true
+}
+
+datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i32, ok: bool) {
+    index = 0
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    index, ok = c.components_component_index(comps, name)
+    if !ok do return
+
+    return index, true
+}
+
+datatype_components_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
+    count = 0
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    count, ok = c.components_count(comps)
+    if !ok do return
+
+    return count, true
+}
+
+datatype_remove :: proc {
+    datatype_remove_by_name,
+    datatype_remove_by_index,
+}
+
+datatype_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    ok = c.components_remove_by_name(comps, name)
+    if !ok do return
+
+    return true
+}
+
+datatype_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
+    ok = false
+
+    if datatype == nil do return
+    if !controlbuilder.connected() do return
+
+    comps: c.Components
+    comps, ok = datatype_components(datatype)
+    if !ok do return
+    defer c.components_release(comps)
+
+    ok = c.components_remove_by_index(comps, index)
+    if !ok do return
+
+    return true
 }
