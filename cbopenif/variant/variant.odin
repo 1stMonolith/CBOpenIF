@@ -11,7 +11,7 @@ foreign oleaut32 {
     VariantClear :: proc(pvarg: ^Variant) ---
 }
 
-VariantType      :: distinct u16
+VariantType         :: distinct u16
 VariantTypeEmpty    :: VariantType(0)
 VariantTypeNull     :: VariantType(1)
 VariantTypeI2       :: VariantType(2)
@@ -40,6 +40,7 @@ VariantBool      :: distinct i16
 VariantBoolTrue  :: VariantBool(-1)
 VariantBoolFalse :: VariantBool(0)
 
+/*
 Variant :: struct #raw_union {
     using _: struct {
         vt:         VariantType,
@@ -62,6 +63,34 @@ Variant :: struct #raw_union {
         },
     },
 }
+*/
+
+Variant :: struct {
+    vt: VariantType,
+    wReserved1: u16,
+    wReserved2: u16,
+    wReserved3: u16,
+    using data: struct #raw_union {
+        llVal:    i64,
+        lVal:     i32,
+        bVal:     u8,
+        iVal:     i16,
+        fltVal:   f32,
+        dblVal:   f64,
+        boolVal:  VariantBool,
+        scode:    i32,
+        bstrVal:  BStr,
+        punkVal:  rawptr, // ^IUnknown
+        pdispVal: rawptr, // ^IDispatch
+        puintVal: ^u32,
+    },
+}
+
+#assert(size_of(Variant) == 16)
+#assert(align_of(Variant) >= 8)
+#assert(offset_of(Variant, vt) == 0)
+#assert(offset_of(Variant, llVal) == 8)
+#assert(offset_of(Variant, bstrVal) == 8)
 
 init :: proc(variant: ^Variant) {
     VariantInit(variant)
@@ -72,10 +101,13 @@ free :: proc(variant: ^Variant) {
 }
 
 string_to_variant :: proc(s: string) -> (variant: Variant) {
-    VariantInit(&variant)
-    variant.vt = VariantTypeBstr
-    variant.bstrVal = bstr.from_string(s)
-    return
+    v: Variant
+    VariantInit(&v)
+    
+    v.vt = VariantTypeBstr
+    v.bstrVal = bstr.from_string(s)
+    
+    return v
 }
 
 bool_to_variant :: proc(b: bool) -> (variant: Variant) {

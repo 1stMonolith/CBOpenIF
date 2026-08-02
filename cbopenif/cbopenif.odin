@@ -327,7 +327,10 @@ connected   :: controlbuilder.connected
 disconnect  :: controlbuilder.disconnect
 online      :: controlbuilder.online
 offline     :: controlbuilder.offline
+set_setting :: controlbuilder.set_setting
 get_setting :: controlbuilder.get_setting
+
+set_setting_invoke :: controlbuilder.set_setting_invoke
 
 // point package types and procedures
 
@@ -459,6 +462,7 @@ Signals    :: signal.Signals
 SignalType :: signal.SignalType
 
 signal_new :: signal.signal_new
+signal_new_invoke :: signal.signal_new_invoke
 
 signal :: proc {
     signal.signals_signal_by_name,

@@ -1,12 +1,12 @@
 package signal
 
+import "core:fmt"
+
 import "../com"
 import "../controlbuilder"
 import "../bstr"
 import "../variant"
 import "../factory"
-
-import "core:fmt"
 
 HResult     :: com.HResult
 BStr        :: bstr.BStr
@@ -50,25 +50,74 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     bstr_path := bstr.from_string(path)
     bstr_direction := bstr.from_string(direction)
 
-    fmt.println("here")
-
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    ag_variant := variant.string_to_variant(acknowledge_group)
+    ag := variant.string_to_variant(acknowledge_group)
 
-    fmt.println("now here", ag_variant)
-    
     defer {
         bstr.free(bstr_name)
         bstr.free(bstr_path)
         bstr.free(bstr_direction)
-        variant.free(&ag_variant)
+        //variant.free(&ag)
     }
-    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, ag_variant, cast(^rawptr)&signal)
-    if com.failed(hr) do return
 
-    fmt.println("hey yo")
+    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, ag, cast(^rawptr)&signal)
+    if com.failed(hr) do return
     
     return signal, true
+}
+
+signal_new_invoke :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
+    signal = nil
+    ok = false
+    if !controlbuilder.connected() do return
+
+    v_name := variant.string_to_variant(name)
+    v_path := variant.string_to_variant(path)
+    v_dir  := variant.string_to_variant(direction)
+    v_ag: variant.Variant
+    if acknowledge_group == "" {
+        variant.init(&v_ag)
+    } else {
+        v_ag = variant.string_to_variant(acknowledge_group)
+    }
+    defer {
+        variant.free(&v_name)
+        variant.free(&v_path)
+        variant.free(&v_dir)
+        variant.free(&v_ag)
+    }
+
+    // IDL order: Name, Path, Direction, AcknowledgeGroup
+    args := []variant.Variant{ v_name, v_path, v_dir, v_ag }
+
+    result: variant.Variant
+    this := cast(^com.IUnknownIF)factory.factoryif
+
+    hr, arg_err := com.invoke(this, i32(0x60030080), args, &result)
+    defer variant.free(&result)
+    fmt.printf("NewSignal Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
+    
+    if com.failed(hr) {
+        return
+    }
+
+    // Retval is usually VT_DISPATCH or VT_UNKNOWN
+    ptr: rawptr
+    switch result.vt {
+    case variant.VariantTypeDispatch:
+        ptr = result.pdispVal
+        result.pdispVal = nil
+        result.vt = variant.VariantTypeEmpty
+    case variant.VariantTypeUnknown:
+        ptr = result.punkVal
+        result.punkVal = nil
+        result.vt = variant.VariantTypeEmpty
+    case:
+        return
+    }
+
+    signal = Signal(ptr)
+    return signal, signal != nil
 }
 
 signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
@@ -195,7 +244,7 @@ signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     
     bs := bstr.from_string(path)
     defer bstr.free(bs)
-    hr := (^SignalIF)(signal)->NamePut(bs)
+    hr := (^SignalIF)(signal)->PathPut(bs)
     if com.failed(hr) do return
     
     return true

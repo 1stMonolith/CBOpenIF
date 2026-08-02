@@ -3,12 +3,21 @@ package main
 import "core:fmt"
 
 import cb "../cbopenif"
+import "../cbopenif/bstr"
+import "../cbopenif/variant"
 
 // odin run main.odin -file -target:windows_i386
 
 main :: proc() {
 
     cb.connect()
+
+    fmt.println("set_setting stuff...")
+    setting := variant.string_to_variant("somefolder")
+    defer variant.free(&setting)
+
+    //ok := cb.set_setting("ProjectsFolder", setting)
+    ok := cb.set_setting_invoke("CpuTimeQuota", setting)
 
     fmt.println("DataType stuff...")
     {
@@ -66,13 +75,11 @@ main :: proc() {
         signals: cb.Signals
         signal: cb.Signal
 
-        signal, ok = cb.signal_new("Signal1", "path.to.signal", "in", "some acknowledge group")
-        fmt.println("here")
-        
+        //signal, ok = cb.signal_new("Signal1", "path.to.signal", "in", "g")
+        signal, ok = cb.signal_new_invoke("S1", "path.to.S1", "In")
         if !ok {
             fmt.println("fail")
         }
-        
         if ok {
             fmt.println("")
             fmt.println("", cb.serialize(signal))
@@ -82,4 +89,14 @@ main :: proc() {
     }
     
     cb.disconnect()
+}
+
+dump_variant :: proc(v: ^variant.Variant, label: string) {
+    p := cast([^]u8)v
+    fmt.printf("%s: vt=%d  bytes:", label, v.vt)
+    for i in 0..<16 {
+        fmt.printf(" %02X", p[i])
+    }
+    fmt.println()
+    fmt.printf("  bstrVal=%p\n", v.bstrVal)
 }

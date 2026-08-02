@@ -145,7 +145,7 @@ FactoryVTable :: struct {
     NewDiagramType1:                    proc "system" (this: ^FactoryIF, Name, Description: BStr, Protected, Hidden: VariantBool, Scope: i32, AlarmOwner: VariantBool, Guid: BStr, DiagramType: ^rawptr) -> HResult,
     DeserializeDiagramInstance:         proc "system" (this: ^FactoryIF, XMLStr: ^BStr, DiagramInstance: ^rawptr) -> HResult,
     NewDiagramInstance:                 proc "system" (this: ^FactoryIF, Name, Type: BStr, _DiagramInstance: ^rawptr) -> HResult,
-    NewDiagramInstance1:                proc "system" (this: ^FactoryIF, Name, Type, Guid, Description: BStr, _DiagramInstance: ^rawptr) -> HResult,
+    NewDiagramInstance1:                proc "system" (this: ^FactoryIF, Name, Type, Guid, Description: BStr, DiagramInstance: ^rawptr) -> HResult,
     DeserializeSignal:                  proc "system" (this: ^FactoryIF, XMLStr: ^BStr, Signal: ^rawptr) -> HResult,
     NewSignal:                          proc "system" (this: ^FactoryIF, Name, Path, Direction: BStr, AcknowledgeGroup: Variant, Signal: ^rawptr) -> HResult,
 }
