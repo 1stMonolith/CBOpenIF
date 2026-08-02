@@ -28,7 +28,6 @@ sfcbranches_add :: proc {
 }
 
 sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -41,7 +40,6 @@ sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok:
 }
 
 sfcbranches_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -60,8 +58,6 @@ sfcbranches_add_branch :: proc {
 }
 
 sfcbranches_add_branch_ :: proc(sfcbranches: SFCBranches) -> (sfcbranch: SFCBranch, ok: bool) {
-    sfcbranch = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -73,8 +69,6 @@ sfcbranches_add_branch_ :: proc(sfcbranches: SFCBranches) -> (sfcbranch: SFCBran
 }
 
 sfcbranches_add_branch_before :: proc(sfcbranches: SFCBranches, index: ^i32) -> (sfcbranch: SFCBranch, ok: bool) {
-    sfcbranch = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -103,8 +97,6 @@ sfcbranches_add_branch_after :: proc(sfcbranches: SFCBranches, index: ^i32) -> (
 */
 
 sfcbranches_branch :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
-    sfcbranch = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -116,8 +108,6 @@ sfcbranches_branch :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: 
 }
 
 sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return
@@ -129,7 +119,6 @@ sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
 }
 
 sfcbranches_remove :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcbranches == nil do return

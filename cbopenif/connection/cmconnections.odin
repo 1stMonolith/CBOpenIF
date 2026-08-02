@@ -28,7 +28,6 @@ cmconnections_add :: proc {
 }
 
 cmconnections_add_ :: proc(cmconnections: rawptr, cmconnection: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -41,7 +40,6 @@ cmconnections_add_ :: proc(cmconnections: rawptr, cmconnection: rawptr) -> (ok: 
 }
 
 cmconnections_add_at_index :: proc(cmconnections: rawptr, cmconnection: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -59,8 +57,6 @@ cmconnections_cmconnection :: proc {
 }
 
 cmconnections_cmconnection_by_name :: proc(cmconnections: rawptr, name: string) -> (cmconnection: rawptr, ok: bool) {
-    cmconnection = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -74,8 +70,6 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: rawptr, name: string) 
 }
 
 cmconnections_cmconnection_by_index :: proc(cmconnections: rawptr, index: i32) -> (cmconnection: rawptr, ok: bool) {
-    cmconnection = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -87,8 +81,6 @@ cmconnections_cmconnection_by_index :: proc(cmconnections: rawptr, index: i32) -
 }
 
 cmconnections_cmconnection_index :: proc(cmconnections: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -102,8 +94,6 @@ cmconnections_cmconnection_index :: proc(cmconnections: rawptr, name: string) ->
 }
 
 cmconnections_count :: proc(cmconnections: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -120,7 +110,6 @@ cmconnections_remove :: proc {
 }
 
 cmconnections_remove_by_name :: proc(cmconnections: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -135,7 +124,6 @@ cmconnections_remove_by_name :: proc(cmconnections: rawptr, name: string) -> (ok
 }
 
 cmconnections_remove_by_index :: proc(cmconnections: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return

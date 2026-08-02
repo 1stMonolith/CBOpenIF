@@ -1,7 +1,5 @@
 package signal
 
-import "core:fmt"
-
 import "../com"
 import "../controlbuilder"
 import "../bstr"
@@ -40,9 +38,8 @@ SignalVTable :: struct {
     Serialize:           proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
 }
 
+/* use of Variant as an out required use of IDispatch->Invoke
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
-    signal = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -51,7 +48,7 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     bstr_direction := bstr.from_string(direction)
 
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    ag := variant.string_to_variant(acknowledge_group)
+    ag := variant.to_variant(acknowledge_group)
 
     defer {
         bstr.free(bstr_name)
@@ -65,21 +62,16 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     
     return signal, true
 }
+*/
 
-signal_new_invoke :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
-    signal = nil
-    ok = false
+signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
+
     if !controlbuilder.connected() do return
 
-    v_name := variant.string_to_variant(name)
-    v_path := variant.string_to_variant(path)
-    v_dir  := variant.string_to_variant(direction)
-    v_ag: variant.Variant
-    if acknowledge_group == "" {
-        variant.init(&v_ag)
-    } else {
-        v_ag = variant.string_to_variant(acknowledge_group)
-    }
+    v_name := variant.to_variant(name)
+    v_path := variant.to_variant(path)
+    v_dir  := variant.to_variant(direction)
+    v_ag   := variant.to_variant(acknowledge_group)
     defer {
         variant.free(&v_name)
         variant.free(&v_path)
@@ -87,41 +79,41 @@ signal_new_invoke :: proc(name, path: string, direction := "", acknowledge_group
         variant.free(&v_ag)
     }
 
-    // IDL order: Name, Path, Direction, AcknowledgeGroup
+    // ars in NewSignal order (Name, Path, Direction, AcknowledgeGroup)
     args := []variant.Variant{ v_name, v_path, v_dir, v_ag }
 
     result: variant.Variant
     this := cast(^com.IUnknownIF)factory.factoryif
 
-    hr, arg_err := com.invoke(this, i32(0x60030080), args, &result)
+    hr, arg_err, ok2 := com.invoke_name(this, "NewSignal", args,  &result)
     defer variant.free(&result)
-    fmt.printf("NewSignal Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
-    
-    if com.failed(hr) {
-        return
-    }
+    //fmt.printf("NewSignal Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
+    if com.failed(hr) do return
 
     // Retval is usually VT_DISPATCH or VT_UNKNOWN
-    ptr: rawptr
+    sig: rawptr
     switch result.vt {
-    case variant.VariantTypeDispatch:
-        ptr = result.pdispVal
-        result.pdispVal = nil
-        result.vt = variant.VariantTypeEmpty
-    case variant.VariantTypeUnknown:
-        ptr = result.punkVal
-        result.punkVal = nil
-        result.vt = variant.VariantTypeEmpty
-    case:
-        return
+        case variant.VariantTypeDispatch:
+            sig = result.pdispVal
+            result.pdispVal = nil
+            result.vt = variant.VariantTypeEmpty
+        /* 
+        I think we only every use Dispatch so this case is probably not needed
+        case variant.VariantTypeUnknown:
+            sig = result.punkVal
+            result.punkVal = nil
+            result.vt = variant.VariantTypeEmpty
+        */
+        case:
+            return
     }
 
-    signal = Signal(ptr)
-    return signal, signal != nil
+    if sig == nil do return
+
+    return Signal(sig), true
 }
 
 signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -134,8 +126,6 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 }
 
 signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -154,8 +144,6 @@ signal_name :: proc {
 }
 
 signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -169,7 +157,6 @@ signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
 }
 
 signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -188,8 +175,6 @@ signal_description :: proc {
 }
 
 signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -203,7 +188,6 @@ signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool
 }
 
 signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -222,8 +206,6 @@ signal_path :: proc {
 }
 
 signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
-    path = ""
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return
@@ -237,7 +219,6 @@ signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
 }
 
 signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
-    ok = false
 
     if signal == nil do return
     if !controlbuilder.connected() do return

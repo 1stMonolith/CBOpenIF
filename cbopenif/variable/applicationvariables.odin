@@ -27,8 +27,6 @@ ApplicationVariablesVTable :: struct {
 }
 
 applicationvariables_new :: proc(description := "") -> (application_variables: rawptr, ok: bool) {
-    application_variables = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -41,7 +39,6 @@ applicationvariables_new :: proc(description := "") -> (application_variables: r
 }
 
 applicationvariables_deserialize :: proc(application_variables: ^rawptr, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -54,8 +51,6 @@ applicationvariables_deserialize :: proc(application_variables: ^rawptr, xml: st
 }
 
 applicationvariables_serialize :: proc(application_variables: rawptr) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if application_variables == nil do return
     if !controlbuilder.connected() do return
@@ -74,8 +69,6 @@ applicationvariables_description :: proc {
 }
 
 applicationvariables_description_get :: proc(application_variables: rawptr) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if application_variables == nil do return
     if !controlbuilder.connected() do return
@@ -89,7 +82,6 @@ applicationvariables_description_get :: proc(application_variables: rawptr) -> (
 }
 
 applicationvariables_description_set :: proc(application_variables: rawptr, description: string) -> (ok: bool) {
-    ok = false
 
     if application_variables == nil do return
     
@@ -107,8 +99,6 @@ applicationvariables_globals :: proc {
 }
 
 applicationvariables_globals_get :: proc(application_variables: rawptr) -> (global_variables: rawptr, ok: bool) {
-    global_variables = nil
-    ok = false
 
     if application_variables == nil do return
     if !controlbuilder.connected() do return
@@ -120,7 +110,6 @@ applicationvariables_globals_get :: proc(application_variables: rawptr) -> (glob
 }
 
 applicationvariables_globals_set :: proc(application_variables: rawptr, global_variables: rawptr) -> (ok: bool) {
-    ok = false
 
     if application_variables == nil do return
     if global_variables == nil do return
@@ -138,8 +127,6 @@ applicationvariables_variables :: proc {
 }
 
 applicationvariables_variables_get :: proc(application_variables: rawptr) -> (variables: rawptr, ok: bool) {
-    variables = nil
-    ok = false
 
     if application_variables == nil do return
     if !controlbuilder.connected() do return
@@ -151,7 +138,6 @@ applicationvariables_variables_get :: proc(application_variables: rawptr) -> (va
 }
 
 applicationvariables_variables_set :: proc(application_variables: rawptr, variables: rawptr) -> (ok: bool) {
-    ok = false
 
     if application_variables == nil do return
     if variables == nil do return
@@ -169,8 +155,6 @@ applicationvariables_signals :: proc {
 }
 
 applicationvariables_signals_get :: proc(application_variables: rawptr) -> (signals: rawptr, ok: bool) {
-    signals = nil
-    ok = false
 
     if application_variables == nil do return
     if !controlbuilder.connected() do return
@@ -182,7 +166,6 @@ applicationvariables_signals_get :: proc(application_variables: rawptr) -> (sign
 }
 
 applicationvariables_signals_set :: proc(application_variables: rawptr, signals: rawptr) -> (ok: bool) {
-    ok = false
 
     if application_variables == nil do return
     if signals == nil do return

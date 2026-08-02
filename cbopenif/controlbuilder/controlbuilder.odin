@@ -6,8 +6,6 @@ import "../bstr"
 import "../cbopen"
 import "../factory"
 
-import "core:fmt"
-
 @(private) BStr             :: bstr.BStr
 @(private) Variant          :: variant.Variant
 @(private) VariantBool      :: variant.VariantBool
@@ -68,6 +66,7 @@ offline :: proc() -> (messages: string, ok: bool) {
     return messages, true
 }
 
+/* use of Variant as an out required use of IDispatch->Invoke
 set_setting :: proc(setting_name: string, value: Variant) -> (ok: bool) {
     ok = false
     if !connected() do return
@@ -77,43 +76,53 @@ set_setting :: proc(setting_name: string, value: Variant) -> (ok: bool) {
 
     // value is copied into the call by value; we still own our VARIANT
     hr := cbopen.cbopenif->SetSetting(bstr_name, value)
-    fmt.printf("SetSetting hr=0x%X\n", u32(hr))
     if com.failed(hr) {
         return
     }
     return true
 }
+*/
 
-set_setting_invoke :: proc(setting_name: string, value: Variant) -> (ok: bool) {
-    ok = false
+set_setting :: proc {
+    set_setting_string,
+}
+
+// TODO: make version for each Variant type used in interface so user does not have to deal with Variant at all.
+set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
+
     if !connected() do return
 
     // IDL: SetSetting(SettingName, Value)  — two args, IDL order
-    v_name := variant.string_to_variant(setting_name)
-    defer variant.free(&v_name)
+    v_setting_name := variant.to_variant(setting_name)
+    v_setting := variant.to_variant(setting)
+    defer {
+        variant.free(&v_setting_name)
+        variant.free(&v_setting)
+    }
 
-    // value is already a Variant; do not free the caller's copy here
-    args := []variant.Variant{ v_name, value }
+    // args in SetSetting order (setting_name, value)
+    args := []variant.Variant{ v_setting_name, v_setting }
 
     this := cast(^com.IUnknownIF)cbopen.cbopenif
     hr, arg_err, ok2 := com.invoke_name(this, "SetSetting", args, nil)
-    if !ok2 {
-        fmt.printf("SetSetting Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
-        return false
-    }
+    //fmt.printf("SetSetting Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
+    if !ok2 do return
+
     return true
 }
 
 
 get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
+    
     if !connected() do return {}, false
-    variant.init(&setting) // caller must variant_free(&value) when done, OR we clear on failure only!
+    
+    // caller must variant_free(&value) when done, OR we clear on failure only!
+    variant.init(&setting)
 
     bstr_name := bstr.from_string(setting_name)
     defer bstr.free(bstr_name)
 
     hr := cbopen.cbopenif->GetSetting(bstr_name, &setting)
-    fmt.printf("NewSignal hr = 0x%X\n", u32(hr))
     if com.failed(hr) {
         variant.free(&setting)
         return {}, false

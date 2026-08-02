@@ -41,8 +41,6 @@ GlobalVariableVTable :: struct {
 }
 
 globalvariable_new :: proc(name: string, type: string, attribute := "", initial_value := "", readpermission := "", writepermission := "", description := "") -> (global_variable: rawptr, ok: bool) {
-    global_variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -69,7 +67,6 @@ globalvariable_new :: proc(name: string, type: string, attribute := "", initial_
 }
 
 globalvariable_deserialize :: proc(global_variable: ^rawptr, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -82,8 +79,6 @@ globalvariable_deserialize :: proc(global_variable: ^rawptr, xml: string) -> (ok
 }
 
 globalvariable_serialize :: proc(global_variable: rawptr) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -102,8 +97,6 @@ globalvariable_name :: proc {
 }
 
 globalvariable_name_get :: proc(global_variable: rawptr) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -117,7 +110,6 @@ globalvariable_name_get :: proc(global_variable: rawptr) -> (name: string, ok: b
 }
 
 globalvariable_name_set :: proc(global_variable: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -136,8 +128,6 @@ globalvariable_type_name :: proc {
 }
 
 globalvariable_type_name_get :: proc(global_variable: rawptr) -> (type_name: string, ok: bool) {
-    type_name = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -151,7 +141,6 @@ globalvariable_type_name_get :: proc(global_variable: rawptr) -> (type_name: str
 }
 
 globalvariable_type_name_set :: proc(global_variable: rawptr, type_name: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -170,8 +159,6 @@ globalvariable_attribute :: proc {
 }
 
 globalvariable_attribute_get :: proc(global_variable: rawptr) -> (attribute: string, ok: bool) {
-    attribute = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -185,7 +172,6 @@ globalvariable_attribute_get :: proc(global_variable: rawptr) -> (attribute: str
 }
 
 globalvariable_attribute_set :: proc(global_variable: rawptr, attribute: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -204,8 +190,6 @@ globalvariable_initial_value :: proc {
 }
 
 globalvariable_initial_value_get :: proc(global_variable: rawptr) -> (inital_value: string, ok: bool) {
-    inital_value = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -219,7 +203,6 @@ globalvariable_initial_value_get :: proc(global_variable: rawptr) -> (inital_val
 }
 
 globalvariable_initial_value_set :: proc(global_variable: rawptr, inital_value: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -238,8 +221,6 @@ globalvariable_description :: proc {
 }
 
 globalvariable_description_get :: proc(global_variable: rawptr) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -253,7 +234,6 @@ globalvariable_description_get :: proc(global_variable: rawptr) -> (description:
 }
 
 globalvariable_description_set :: proc(global_variable: rawptr, description: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -272,8 +252,6 @@ globalvariable_read_permission :: proc {
 }
 
 globalvariable_read_permission_get :: proc(global_variable: rawptr) -> (read_permission: string, ok: bool) {
-    read_permission = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -287,7 +265,6 @@ globalvariable_read_permission_get :: proc(global_variable: rawptr) -> (read_per
 }
 
 globalvariable_read_permission_set :: proc(global_variable: rawptr, read_permission: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -306,8 +283,6 @@ globalvariable_write_permission :: proc {
 }
 
 globalvariable_write_permission_get :: proc(global_variable: rawptr) -> (write_permission: string, ok: bool) {
-    write_permission = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -321,7 +296,6 @@ globalvariable_write_permission_get :: proc(global_variable: rawptr) -> (write_p
 }
 
 globalvariable_write_permission_set :: proc(global_variable: rawptr, write_permission: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -340,8 +314,6 @@ globalvariable_authentication_level :: proc {
 }
 
 globalvariable_authentication_level_get :: proc(global_variable: rawptr) -> (authentication_level: string, ok: bool) {
-    authentication_level = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -355,7 +327,6 @@ globalvariable_authentication_level_get :: proc(global_variable: rawptr) -> (aut
 }
 
 globalvariable_authentication_level_set :: proc(global_variable: rawptr, authentication_level: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -374,8 +345,6 @@ globalvariable_graph_nodes :: proc {
 }
 
 globalvariable_graph_nodes_get :: proc(global_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
-    graph_nodes = nil
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -387,7 +356,6 @@ globalvariable_graph_nodes_get :: proc(global_variable: rawptr) -> (graph_nodes:
 }
 
 globalvariable_graph_nodes_set :: proc(global_variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -399,8 +367,6 @@ globalvariable_graph_nodes_set :: proc(global_variable: rawptr, graph_nodes: raw
 }
 
 globalvariable_type_guid_get :: proc(global_variable: rawptr) -> (guid: string, ok: bool) {
-    guid = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -414,8 +380,6 @@ globalvariable_type_guid_get :: proc(global_variable: rawptr) -> (guid: string, 
 }
 
 globalvariable_type_path_get :: proc(global_variable: rawptr) -> (path: string, ok: bool) {
-    path = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -434,8 +398,6 @@ globalvariable_access_level :: proc {
 }
 
 globalvariable_access_level_get :: proc(global_variable: rawptr) -> (access_level: string, ok: bool) {
-    access_level = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -449,7 +411,6 @@ globalvariable_access_level_get :: proc(global_variable: rawptr) -> (access_leve
 }
 
 globalvariable_access_level_set :: proc(global_variable: rawptr, access_level: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -468,8 +429,6 @@ globalvariable_safety_type :: proc {
 }
 
 globalvariable_safety_type_get :: proc(global_variable: rawptr) -> (safety_type: string, ok: bool) {
-    safety_type = ""
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return
@@ -483,7 +442,6 @@ globalvariable_safety_type_get :: proc(global_variable: rawptr) -> (safety_type:
 }
 
 globalvariable_safety_type_set :: proc(global_variable: rawptr, safety_type: string) -> (ok: bool) {
-    ok = false
 
     if global_variable == nil do return
     if !controlbuilder.connected() do return

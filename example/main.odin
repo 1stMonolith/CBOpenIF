@@ -12,13 +12,13 @@ main :: proc() {
 
     cb.connect()
 
-    fmt.println("set_setting stuff...")
-    setting := variant.string_to_variant("somefolder")
-    defer variant.free(&setting)
+    // Control Builder
+    fmt.println("Control Builder stuff...")
+    {
+        ok := cb.set_setting("ProjectsFolder", "SomeSettingValue")
+    }
 
-    //ok := cb.set_setting("ProjectsFolder", setting)
-    ok := cb.set_setting_invoke("CpuTimeQuota", setting)
-
+    // DataType
     fmt.println("DataType stuff...")
     {
         ok: bool
@@ -58,9 +58,9 @@ main :: proc() {
 
             fmt.println("")
             fmt.println("component", i)
-            fmt.println("   datatype component name: ", name)
-            fmt.println("   datatype component type name: ", type_name)
-            fmt.println("   datatype component description: ", description)
+            fmt.println("   name: ", name)
+            fmt.println("   type name: ", type_name)
+            fmt.println("   description: ", description)
             fmt.println("")
 
             cb.release(component)
@@ -75,28 +75,10 @@ main :: proc() {
         signals: cb.Signals
         signal: cb.Signal
 
-        //signal, ok = cb.signal_new("Signal1", "path.to.signal", "in", "g")
-        signal, ok = cb.signal_new_invoke("S1", "path.to.S1", "In")
-        if !ok {
-            fmt.println("fail")
-        }
-        if ok {
-            fmt.println("")
-            fmt.println("", cb.serialize(signal))
-            fmt.println("")
-            cb.release(signal)
-        }
+        signal, ok = cb.signal_new("S1", "path.to.S1", "In", "")
+        fmt.println("", cb.serialize(signal))
+        cb.release(signal)
     }
     
     cb.disconnect()
-}
-
-dump_variant :: proc(v: ^variant.Variant, label: string) {
-    p := cast([^]u8)v
-    fmt.printf("%s: vt=%d  bytes:", label, v.vt)
-    for i in 0..<16 {
-        fmt.printf(" %02X", p[i])
-    }
-    fmt.println()
-    fmt.printf("  bstrVal=%p\n", v.bstrVal)
 }

@@ -42,7 +42,6 @@ sfcelements_add :: proc {
 }
 
 sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -55,7 +54,6 @@ sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (
 }
 
 sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -68,7 +66,6 @@ sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: S
 }
 
 sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -81,7 +78,6 @@ sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFC
 }
 
 sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -94,7 +90,6 @@ sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneou
 }
 
 sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -107,7 +102,6 @@ sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence:
 }
 
 sfcelements_add_ :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -121,7 +115,6 @@ sfcelements_add_ :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (o
 
 
 sfcelements_add_at_index :: proc(sfcelements: SFCElements, sfcelement: SFCElement, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -138,8 +131,6 @@ sfcelement_sfelement :: proc {
 }
 
 sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) -> (sfcelement: SFCElement, ok: bool) {
-    sfcelement = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -151,8 +142,6 @@ sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) ->
 }
 
 sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return
@@ -164,7 +153,6 @@ sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
 }
 
 sfcelements_remove :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if sfcelements == nil do return

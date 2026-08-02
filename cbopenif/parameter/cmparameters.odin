@@ -28,7 +28,6 @@ cmparameters_add :: proc {
 }
 
 cmparameters_add_ :: proc(cmparameters: rawptr, cmparameter: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -41,7 +40,6 @@ cmparameters_add_ :: proc(cmparameters: rawptr, cmparameter: rawptr) -> (ok: boo
 }
 
 cmparameters_add_at_index :: proc(cmparameters: rawptr, cmparameter: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -59,8 +57,6 @@ cmparameters_cmparameter :: proc {
 }
 
 cmparameters_cmparameter_by_name :: proc(cmparameters: rawptr, name: string) -> (cmparameter: rawptr, ok: bool) {
-    cmparameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -74,8 +70,6 @@ cmparameters_cmparameter_by_name :: proc(cmparameters: rawptr, name: string) -> 
 }
 
 cmparameters_cmparameter_by_index :: proc(cmparameters: rawptr, index: i32) -> (cmparameter: rawptr, ok: bool) {
-    cmparameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -87,8 +81,6 @@ cmparameters_cmparameter_by_index :: proc(cmparameters: rawptr, index: i32) -> (
 }
 
 cmparameters_cmparameter_index :: proc(cmparameters: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -102,8 +94,6 @@ cmparameters_cmparameter_index :: proc(cmparameters: rawptr, name: string) -> (i
 }
 
 cmparameters_count :: proc(cmparameters: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -120,7 +110,6 @@ cmparameters_remove :: proc {
 }
 
 cmparameters_remove_by_name :: proc(cmparameters: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -135,7 +124,6 @@ cmparameters_remove_by_name :: proc(cmparameters: rawptr, name: string) -> (ok: 
 }
 
 cmparameters_remove_by_index :: proc(cmparameters: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return

@@ -5,7 +5,8 @@ import "core:sys/windows"
 import "../bstr"
 import "../variant"
 
-@(private) BStr :: bstr.BStr
+@(private) BStr    :: bstr.BStr
+@(private) Variant :: variant.Variant
 
 GUID    :: windows.GUID
 HResult :: windows.HRESULT
@@ -22,7 +23,7 @@ LOCALE_USER_DEFAULT  :: u32(0x400)
 DISPID_PROPERTYPUT   :: i32(-3)
 
 DISPPARAMS :: struct {
-    rgvarg:            [^]variant.Variant,
+    rgvarg:            [^]Variant,
     rgdispidNamedArgs: [^]i32,
     cArgs:             u32,
     cNamedArgs:        u32,
@@ -54,17 +55,7 @@ IUnknownVTable :: struct {
     GetTypeInfoCount: proc "system" (this: ^IUnknownIF, pctinfo: ^u32) -> HResult,
     GetTypeInfo:      proc "system" (this: ^IUnknownIF, iTInfo: u32, lcid: u32, ppTInfo: ^rawptr) -> HResult,
     GetIDsOfNames:    proc "system" (this: ^IUnknownIF, riid: ^GUID, rgszNames: [^][^]u16, cNames: u32, lcid: u32, rgDispId: [^]i32) -> HResult,
-    Invoke:           proc "system" (
-        this:         ^IUnknownIF,
-        dispIdMember: i32,
-        riid:         ^GUID,
-        lcid:         u32,
-        wFlags:       u16,
-        pDispParams:  ^DISPPARAMS,
-        pVarResult:   ^variant.Variant,
-        pExcepInfo:   ^EXCEPINFO,
-        puArgErr:     ^u32,
-    ) -> HResult,
+    Invoke:           proc "system" (this: ^IUnknownIF, dispIdMember: i32, riid: ^GUID, lcid: u32, wFlags: u16, pDispParams: ^DISPPARAMS, pVarResult: ^Variant, pExcepInfo: ^EXCEPINFO, puArgErr: ^u32) -> HResult,
 }
 
 initialize :: proc() -> (ok: bool) {
@@ -74,7 +65,6 @@ initialize :: proc() -> (ok: bool) {
 }
 
 create_instance :: proc(clsid: windows.REFCLSID, iid: windows.REFIID, vtable: ^windows.LPVOID) -> (ok: bool) {
-    ok = false
 
     hr := windows.CoCreateInstance(
         clsid,
@@ -97,8 +87,7 @@ failed :: proc(hr: HResult) -> (failed: bool) {
 }
 
 get_dispid :: proc(this: ^IUnknownIF, name: string) -> (id: i32, ok: bool) {
-    id = 0
-    ok = false
+
     if this == nil do return
 
     wide := windows.utf8_to_utf16(name, context.temp_allocator)
@@ -123,15 +112,9 @@ get_dispid :: proc(this: ^IUnknownIF, name: string) -> (id: i32, ok: bool) {
     return dispids[0], true
 }
 
-invoke :: proc(
-    this:     ^IUnknownIF,
-    dispid:   i32,
-    args:     []variant.Variant,   // IDL order; may be empty
-    result:   ^variant.Variant,    // out; may be nil
-    wflags := DISPATCH_METHOD,
-) -> (hr: HResult, arg_err: u32) {
+invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Variant, wflags := DISPATCH_METHOD) -> (hr: HResult, arg_err: u32) {
     hr = HResult(-2147467259) // E_FAIL default 0x80004005
-    arg_err = 0
+    
     if this == nil do return
 
     dp: DISPPARAMS
@@ -140,9 +123,9 @@ invoke :: proc(
 
     // Reverse copy for Invoke
     n := len(args)
-    reversed: [dynamic]variant.Variant
+    reversed: [dynamic]Variant
     if n > 0 {
-        reversed = make([dynamic]variant.Variant, n, context.temp_allocator)
+        reversed = make([dynamic]Variant, n, context.temp_allocator)
         for i in 0..<n {
             reversed[n - 1 - i] = args[i]
         }
@@ -181,17 +164,13 @@ invoke :: proc(
 }
 
 // Invoke by name (GetIDsOfNames + Invoke)
-invoke_name :: proc(
-    this:   ^IUnknownIF,
-    name:   string,
-    args:   []variant.Variant,
-    result: ^variant.Variant = nil,
-    wflags := DISPATCH_METHOD,
-) -> (hr: HResult, arg_err: u32, ok: bool) {
+invoke_name :: proc(this: ^IUnknownIF, name: string, args: []Variant, result: ^Variant = nil, wflags := DISPATCH_METHOD) -> (hr: HResult, arg_err: u32, ok: bool) {
+    hr = HResult(-2147352573) // DISP_E_MEMBERNOTFOUND-ish 0x80020003
+
     dispid, found := get_dispid(this, name)
-    if !found {
-        return HResult(-2147352573), 0, false // DISP_E_MEMBERNOTFOUND-ish 0x80020003
-    }
+    if !found do return
+    
     hr, arg_err = invoke(this, dispid, args, result, wflags)
+    
     return hr, arg_err, !failed(hr)
 }

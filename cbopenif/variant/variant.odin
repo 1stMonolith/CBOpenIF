@@ -40,31 +40,6 @@ VariantBool      :: distinct i16
 VariantBoolTrue  :: VariantBool(-1)
 VariantBoolFalse :: VariantBool(0)
 
-/*
-Variant :: struct #raw_union {
-    using _: struct {
-        vt:         VariantType,
-        wReserved1: u16,
-        wReserved2: u16,
-        wReserved3: u16,
-        using _: struct #raw_union {
-            llVal:    i64,
-            lVal:     i32,
-            bVal:     u8,
-            iVal:     i16,
-            fltVal:   f32,
-            dblVal:   f64,
-            boolVal:  VariantBool,
-            scode:    i32,
-            bstrVal:  BStr,
-            punkVal:  rawptr, // ^IUnknown
-            pdispVal: rawptr, // ^IDispatch
-            puintVal: ^u32,
-        },
-    },
-}
-*/
-
 Variant :: struct {
     vt: VariantType,
     wReserved1: u16,
@@ -100,21 +75,25 @@ free :: proc(variant: ^Variant) {
     VariantClear(variant)
 }
 
+to_variant :: proc {
+    string_to_variant,
+    bool_to_variant,
+}
+
 string_to_variant :: proc(s: string) -> (variant: Variant) {
     v: Variant
     VariantInit(&v)
-    
     v.vt = VariantTypeBstr
     v.bstrVal = bstr.from_string(s)
-    
     return v
 }
 
 bool_to_variant :: proc(b: bool) -> (variant: Variant) {
-    VariantInit(&variant)
-    variant.vt = VariantTypeBool
-    variant.boolVal = VariantBoolTrue if b else VariantBoolFalse
-    return
+    v: Variant
+    VariantInit(&v)
+    v.vt = VariantTypeBool
+    v.boolVal = VariantBoolTrue if b else VariantBoolFalse
+    return v
 }
 
 bool_to_variantbool :: proc(b: bool) -> (variantbool: VariantBool) {

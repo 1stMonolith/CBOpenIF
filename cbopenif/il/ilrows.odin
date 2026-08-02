@@ -25,7 +25,6 @@ ilrows_add :: proc {
 }
 
 ilrows_add_ :: proc(ilrows: rawptr, ilrow: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if ilrows == nil do return
@@ -38,7 +37,6 @@ ilrows_add_ :: proc(ilrows: rawptr, ilrow: rawptr) -> (ok: bool) {
 }
 
 ilrows_add_at_index :: proc(ilrows: rawptr, ilrow: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if ilrows == nil do return
@@ -51,8 +49,6 @@ ilrows_add_at_index :: proc(ilrows: rawptr, ilrow: rawptr, index: i32) -> (ok: b
 }
 
 ilrows_ilrow_by_index :: proc(ilrows: rawptr, index: i32) -> (ilrow: rawptr, ok: bool) {
-    ilrow = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if ilrows == nil do return
@@ -64,8 +60,6 @@ ilrows_ilrow_by_index :: proc(ilrows: rawptr, index: i32) -> (ilrow: rawptr, ok:
 }
 
 ilrows_count :: proc(ilrows: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if ilrows == nil do return
@@ -77,7 +71,6 @@ ilrows_count :: proc(ilrows: rawptr) -> (count: i32, ok: bool) {
 }
 
 ilrows_remove :: proc(ilrows: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if ilrows == nil do return

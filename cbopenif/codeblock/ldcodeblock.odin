@@ -25,8 +25,6 @@ LDCodeBlockVTable :: struct {
 }
 
 ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
-    ldcodeblock = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -43,8 +41,6 @@ ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: LDCodeBlock, ok: 
 }
 
 ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if ldcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -63,8 +59,6 @@ ldcodeblock_name :: proc {
 }
 
 ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if ldcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -78,7 +72,6 @@ ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: boo
 }
 
 ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: bool) {
-    ok = false
     
     if ldcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -97,8 +90,6 @@ ldcodeblock_stcode :: proc {
 }
 
 ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok: bool) {
-    stcode = ""
-    ok = false
 
     if ldcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -112,7 +103,6 @@ ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok:
 }
 
 ldcodeblock_stcode_set :: proc(ldcodeblock: LDCodeBlock, stcode: string) -> (ok: bool) {
-    ok = false
     
     if ldcodeblock == nil do return
     if !controlbuilder.connected() do return

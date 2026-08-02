@@ -23,8 +23,6 @@ SFCTransitionVTable :: struct {
 }
 
 sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: SFCTransition, ok: bool) {
-    sfctransition = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -48,8 +46,6 @@ sfctransition_name :: proc {
 }
 
 sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return
@@ -63,7 +59,6 @@ sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, o
 }
 
 sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (ok: bool) {
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return
@@ -82,8 +77,6 @@ sfctransition_dest :: proc {
 }
 
 sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, ok: bool) {
-    dest = ""
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return
@@ -97,7 +90,6 @@ sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, o
 }
 
 sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (ok: bool) {
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return
@@ -116,8 +108,6 @@ sfctransition_stcode :: proc {
 }
 
 sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: string, ok: bool) {
-    stcode = ""
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return
@@ -131,7 +121,6 @@ sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: strin
 }
 
 sfctransition_stcode_set :: proc(sfctransition: SFCTransition, stcode: string) -> (ok: bool) {
-    ok = false
 
     if sfctransition == nil do return
     if !controlbuilder.connected() do return

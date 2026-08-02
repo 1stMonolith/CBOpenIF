@@ -27,7 +27,6 @@ graphnodes_add :: proc {
 }
 
 graphnodes_add_ :: proc(graphnodes: rawptr, graphnode: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -40,7 +39,6 @@ graphnodes_add_ :: proc(graphnodes: rawptr, graphnode: rawptr) -> (ok: bool) {
 }
 
 graphnodes_add_at_index :: proc(graphnodes: rawptr, graphnode: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -58,8 +56,6 @@ graphnodes_graphnode :: proc {
 }
 
 graphnodes_graphnode_by_name :: proc(graphnodes: rawptr, name: string) -> (graphnode: rawptr, ok: bool) {
-    graphnode = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -73,8 +69,6 @@ graphnodes_graphnode_by_name :: proc(graphnodes: rawptr, name: string) -> (graph
 }
 
 graphnodes_graphnode_by_index :: proc(graphnodes: rawptr, index: i32) -> (graphnode: rawptr, ok: bool) {
-    graphnode = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -86,8 +80,6 @@ graphnodes_graphnode_by_index :: proc(graphnodes: rawptr, index: i32) -> (graphn
 }
 
 graphnodes_graphnode_index :: proc(graphnodes: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -101,8 +93,6 @@ graphnodes_graphnode_index :: proc(graphnodes: rawptr, name: string) -> (index: 
 }
 
 graphnodes_count :: proc(graphnodes: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -119,7 +109,6 @@ graphnodes_remove :: proc {
 }
 
 graphnodes_remove_by_name :: proc(graphnodes: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return
@@ -134,7 +123,6 @@ graphnodes_remove_by_name :: proc(graphnodes: rawptr, name: string) -> (ok: bool
 }
 
 graphnodes_remove_by_index :: proc(graphnodes: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if graphnodes == nil do return

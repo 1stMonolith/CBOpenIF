@@ -28,7 +28,6 @@ externalvariables_add :: proc {
 }
 
 externalvariables_add_ :: proc(external_variables: rawptr, external_variable: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -41,7 +40,6 @@ externalvariables_add_ :: proc(external_variables: rawptr, external_variable: ra
 }
 
 externalvariables_add_at_index :: proc(external_variables: rawptr, external_variable: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -59,8 +57,6 @@ externalvariables_external :: proc {
 }
 
 externalvariables_external_by_name :: proc(external_variables: rawptr, name: string) -> (external_variable: rawptr, ok: bool) {
-    external_variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -74,8 +70,6 @@ externalvariables_external_by_name :: proc(external_variables: rawptr, name: str
 }
 
 externalvariables_external_by_index :: proc(external_variables: rawptr, index: i32) -> (external_variable: rawptr, ok: bool) {
-    external_variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -87,8 +81,6 @@ externalvariables_external_by_index :: proc(external_variables: rawptr, index: i
 }
 
 externalvariables_external_index :: proc(external_variables: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -102,8 +94,6 @@ externalvariables_external_index :: proc(external_variables: rawptr, name: strin
 }
 
 externalvariables_count :: proc(external_variables: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -120,7 +110,6 @@ externalvariables_remove :: proc {
 }
 
 externalvariables_remove_by_name :: proc(external_variables: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return
@@ -135,7 +124,6 @@ externalvariables_remove_by_name :: proc(external_variables: rawptr, name: strin
 }
 
 externalvariables_remove_by_index :: proc(external_variables: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if external_variables == nil do return

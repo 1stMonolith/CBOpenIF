@@ -24,8 +24,6 @@ GraphPosVTable :: struct {
 }
 
 graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: rawptr, ok: bool) {
-    graphpos = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -41,8 +39,6 @@ graphpos_x :: proc {
 }
 
 graphpos_x_get :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
-    x = 0
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -54,7 +50,6 @@ graphpos_x_get :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
 }
 
 graphpos_x_set :: proc(graphpos: rawptr, x: f64) -> (ok: bool) {
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -71,8 +66,6 @@ graphpos_y :: proc {
 }
 
 graphpos_y_get :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
-    y = 0
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -84,7 +77,6 @@ graphpos_y_get :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
 }
 
 graphpos_y_set :: proc(graphpos: rawptr, y: f64) -> (ok: bool) {
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -101,8 +93,6 @@ graphpos_rotation :: proc {
 }
 
 graphpos_rotation_get :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
-    rotation = 0
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -114,7 +104,6 @@ graphpos_rotation_get :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
 }
 
 graphpos_rotation_set :: proc(graphpos: rawptr, rotation: f64) -> (ok: bool) {
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -131,8 +120,6 @@ graphpos_xscale :: proc {
 }
 
 graphpos_xscale_get :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
-    xscale = 0
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -144,7 +131,6 @@ graphpos_xscale_get :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
 }
 
 graphpos_xscale_set :: proc(graphpos: rawptr, xscale: f64) -> (ok: bool) {
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -161,8 +147,6 @@ graphpos_yscale :: proc {
 }
 
 graphpos_yscale_get :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
-    yscale = 0
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -174,7 +158,6 @@ graphpos_yscale_get :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
 }
 
 graphpos_yscale_set :: proc(graphpos: rawptr, yscale: f64) -> (ok: bool) {
-    ok = false
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return

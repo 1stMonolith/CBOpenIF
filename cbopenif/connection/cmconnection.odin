@@ -31,8 +31,6 @@ CMConnectionVTable :: struct {
 }
 
 cmconnection_new :: proc(name: string, actual_parameter: string, graphical_connection: bool) -> (cmconnection: rawptr, ok: bool) {
-    cmconnection = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -49,7 +47,6 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
 }
 
 cmconnection_deserialize :: proc(cmconnection: ^rawptr, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -62,8 +59,6 @@ cmconnection_deserialize :: proc(cmconnection: ^rawptr, xml: string) -> (ok: boo
 }
 
 cmconnection_serialize :: proc(cmconnection: rawptr) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -82,8 +77,6 @@ cmconnection_name :: proc {
 }
 
 cmconnection_name_get :: proc(cmconnection: rawptr) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -97,7 +90,6 @@ cmconnection_name_get :: proc(cmconnection: rawptr) -> (name: string, ok: bool) 
 }
 
 cmconnection_name_set :: proc(cmconnection: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -116,8 +108,6 @@ cmconnection_actual_parameter :: proc {
 }
 
 cmconnection_actual_parameter_get :: proc(cmconnection: rawptr) -> (actual_parameter: string, ok: bool) {
-    actual_parameter = ""
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -131,7 +121,6 @@ cmconnection_actual_parameter_get :: proc(cmconnection: rawptr) -> (actual_param
 }
 
 cmconnection_actual_parameter_set :: proc(cmconnection: rawptr, actual_parameter: string) -> (ok: bool) {
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -151,8 +140,6 @@ cmconnection_graphical_connection :: proc {
 
 
 cmconnection_graphical_connection_get :: proc(cmconnection: rawptr) -> (graphical_connection: bool, ok: bool) {
-    graphical_connection = false
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -166,7 +153,6 @@ cmconnection_graphical_connection_get :: proc(cmconnection: rawptr) -> (graphica
 
 
 cmconnection_graphical_connection_set :: proc(cmconnection: rawptr, graphical_connection: bool) -> (ok: bool) {
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -185,8 +171,6 @@ cmconnection_points :: proc {
 
 
 cmconnection_points_get :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool) {
-    points = nil
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -199,7 +183,6 @@ cmconnection_points_get :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bo
 
 
 cmconnection_points_set :: proc(cmconnection: rawptr, points: rawptr) -> (ok: bool) {
-    ok = false
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return

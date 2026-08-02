@@ -19,8 +19,6 @@ SFCSelectionVTable :: struct {
 }
 
 sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: SFCSelection, ok: bool) {
-    sfcselection = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -36,8 +34,6 @@ sfcselection_branches :: proc {
 }
 
 sfcselection_branches_get :: proc(sfcselection: SFCSelection) -> (sfcbranches: SFCBranches, ok: bool) {
-    sfcbranches = nil
-    ok = false
 
     if sfcselection == nil do return
     if !controlbuilder.connected() do return
@@ -49,7 +45,6 @@ sfcselection_branches_get :: proc(sfcselection: SFCSelection) -> (sfcbranches: S
 }
 
 sfcselection_branches_set :: proc(sfcselection: SFCSelection, sfcbranches: SFCBranches) -> (ok: bool) {
-    ok = false
 
     if sfcselection == nil do return
     if !controlbuilder.connected() do return

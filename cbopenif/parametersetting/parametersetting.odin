@@ -26,8 +26,6 @@ ParameterSettingVTable :: struct {
 }
 
 parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting: rawptr, ok: bool) {
-    parameter_setting = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -49,8 +47,6 @@ parameter_setting_name :: proc {
 }
 
 parameter_setting_name_get :: proc(parameter_setting: rawptr) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -64,7 +60,6 @@ parameter_setting_name_get :: proc(parameter_setting: rawptr) -> (name: string, 
 }
 
 parameter_setting_name_set :: proc(parameter_setting: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -83,8 +78,6 @@ parameter_setting_parameter_value :: proc {
 }
 
 parameter_setting_parameter_value_get :: proc(parameter_setting: rawptr) -> (type_name: string, ok: bool) {
-    type_name = ""
-    ok = false
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -98,7 +91,6 @@ parameter_setting_parameter_value_get :: proc(parameter_setting: rawptr) -> (typ
 }
 
 parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_name: string) -> (ok: bool) {
-    ok = false
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -112,8 +104,6 @@ parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_na
 }
 
 parameter_setting_description_get :: proc(parameter_setting: rawptr) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return

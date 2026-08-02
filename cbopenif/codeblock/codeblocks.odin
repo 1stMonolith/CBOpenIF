@@ -43,7 +43,6 @@ codeblocks_add :: proc {
 }
 
 codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -57,7 +56,6 @@ codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bo
 
 
 codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -70,7 +68,6 @@ codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, in
 }
 
 codeblocks_add_st :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -83,7 +80,6 @@ codeblocks_add_st :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (
 }
 
 codeblocks_add_ld :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -96,7 +92,6 @@ codeblocks_add_ld :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (
 }
 
 codeblocks_add_fbd :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -109,7 +104,6 @@ codeblocks_add_fbd :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -
 }
 
 codeblocks_add_il :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -122,7 +116,6 @@ codeblocks_add_il :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (
 }
 
 codeblocks_add_sfc :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -135,7 +128,6 @@ codeblocks_add_sfc :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -
 }
 
 codeblocks_add_fd :: proc(codeblocks: CodeBlocks, fdcodeblock: FDCodeBlock) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -153,8 +145,6 @@ codeblocks_codeblock :: proc {
 }
 
 codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
-    codeblock = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -168,8 +158,6 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
 }
 
 codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
-    codeblock = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -181,8 +169,6 @@ codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (co
 }
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -196,8 +182,6 @@ codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (ind
 }
 
 codeblocks_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return
@@ -209,7 +193,6 @@ codeblocks_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
 }
 
 codeblocks_remove :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if codeblocks == nil do return

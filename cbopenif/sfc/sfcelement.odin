@@ -22,8 +22,6 @@ SFCElementVTable :: struct {
 }
 
 sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) {
-    is_step = false
-    ok = false
 
     if sfcelement == nil do return
     if !controlbuilder.connected() do return
@@ -36,8 +34,6 @@ sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) 
 }
 
 sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool, ok: bool) {
-    is_transition = false
-    ok = false
 
     if sfcelement == nil do return
     if !controlbuilder.connected() do return
@@ -50,8 +46,6 @@ sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool
 }
 
 sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bool, ok: bool) {
-    is_subsequence = false
-    ok = false
 
     if sfcelement == nil do return
     if !controlbuilder.connected() do return
@@ -64,8 +58,6 @@ sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bo
 }
 
 sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, ok: bool) {
-    is_selection = false
-    ok = false
 
     if sfcelement == nil do return
     if !controlbuilder.connected() do return
@@ -78,8 +70,6 @@ sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, 
 }
 
 sfcelement_is_simultaneous :: proc(sfcelement: SFCElement) -> (is_simultaneous: bool, ok: bool) {
-    is_simultaneous = false
-    ok = false
 
     if sfcelement == nil do return
     if !controlbuilder.connected() do return

@@ -20,8 +20,6 @@ PointVTable :: struct {
 }
 
 point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
-    point = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -37,8 +35,6 @@ point_x :: proc {
 }
 
 point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
-    x = 0
-    ok = false
 
     if point == nil do return
     if !controlbuilder.connected() do return
@@ -50,7 +46,6 @@ point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
 }
 
 point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
-    ok = false
 
     if point == nil do return
     if !controlbuilder.connected() do return
@@ -67,8 +62,6 @@ point_y :: proc {
 }
 
 point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
-    y = 0
-    ok = false
 
     if point == nil do return
     if !controlbuilder.connected() do return
@@ -80,7 +73,6 @@ point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
 }
 
 point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
-    ok = false
 
     if point == nil do return
     if !controlbuilder.connected() do return

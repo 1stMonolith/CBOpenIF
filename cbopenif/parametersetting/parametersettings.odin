@@ -27,7 +27,6 @@ parametersettings_add :: proc {
 }
 
 parametersettings_add_get :: proc(parameter_settings: rawptr, parameter_setting: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -40,7 +39,6 @@ parametersettings_add_get :: proc(parameter_settings: rawptr, parameter_setting:
 }
 
 parametersettings_add_at_index :: proc(parameter_settings: rawptr, parameter_setting: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -58,8 +56,6 @@ parametersettings_parametersetting :: proc {
 }
 
 parametersettings_parametersetting_by_name :: proc(parameter_settings: rawptr, name: string) -> (parameter_setting: rawptr, ok: bool) {
-    parameter_setting = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -73,8 +69,6 @@ parametersettings_parametersetting_by_name :: proc(parameter_settings: rawptr, n
 }
 
 parametersettings_parametersetting_by_index :: proc(parameter_settings: rawptr, index: i32) -> (parameter_setting: rawptr, ok: bool) {
-    parameter_setting = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -86,8 +80,6 @@ parametersettings_parametersetting_by_index :: proc(parameter_settings: rawptr, 
 }
 
 parametersettings_parametersetting_index :: proc(parameter_settings: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -101,8 +93,6 @@ parametersettings_parametersetting_index :: proc(parameter_settings: rawptr, nam
 }
 
 parametersettings_count :: proc(parameter_settings: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -119,7 +109,6 @@ parametersettings_remove :: proc {
 }
 
 parametersettings_remove_by_name :: proc(parameter_settings: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return
@@ -134,7 +123,6 @@ parametersettings_remove_by_name :: proc(parameter_settings: rawptr, name: strin
 }
 
 parametersettings_remove_by_index :: proc(parameter_settings: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameter_settings == nil do return

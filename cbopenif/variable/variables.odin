@@ -28,7 +28,6 @@ variables_add :: proc {
 }
 
 variables_add_ :: proc(variables: rawptr, variable: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -41,7 +40,6 @@ variables_add_ :: proc(variables: rawptr, variable: rawptr) -> (ok: bool) {
 }
 
 variables_add_at_index :: proc(variables: rawptr, variable: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -59,8 +57,6 @@ variables_variable :: proc {
 }
 
 variables_variable_by_name :: proc(variables: rawptr, name: string) -> (variable: rawptr, ok: bool) {
-    variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -74,8 +70,6 @@ variables_variable_by_name :: proc(variables: rawptr, name: string) -> (variable
 }
 
 variables_variable_by_index :: proc(variables: rawptr, index: i32) -> (variable: rawptr, ok: bool) {
-    variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -87,8 +81,6 @@ variables_variable_by_index :: proc(variables: rawptr, index: i32) -> (variable:
 }
 
 variables_variable_index :: proc(variables: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -102,8 +94,6 @@ variables_variable_index :: proc(variables: rawptr, name: string) -> (index: i32
 }
 
 variables_count :: proc(variables: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -120,7 +110,6 @@ variables_remove :: proc {
 }
 
 variables_remove_by_name :: proc(variables: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -135,7 +124,6 @@ variables_remove_by_name :: proc(variables: rawptr, name: string) -> (ok: bool) 
 }
 
 variables_remove_by_index :: proc(variables: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if variables == nil do return

@@ -26,7 +26,6 @@ points_add :: proc {
 }
 
 points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return
@@ -39,7 +38,6 @@ points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
 }
 
 points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return
@@ -52,8 +50,6 @@ points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bo
 }
 
 points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: bool) {
-    point = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return
@@ -65,8 +61,6 @@ points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: 
 }
 
 points_count :: proc(points: Points) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return
@@ -78,7 +72,6 @@ points_count :: proc(points: Points) -> (count: i32, ok: bool) {
 }
 
 points_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if points == nil do return

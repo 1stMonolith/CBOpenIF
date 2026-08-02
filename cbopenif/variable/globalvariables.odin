@@ -28,7 +28,6 @@ globalvariables_add :: proc {
 }
 
 globalvariables_add_ :: proc(global_variables: rawptr, global_variable: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -41,7 +40,6 @@ globalvariables_add_ :: proc(global_variables: rawptr, global_variable: rawptr) 
 }
 
 globalvariables_add_at_index :: proc(global_variables: rawptr, global_variable: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -59,8 +57,6 @@ globalvariables_global :: proc {
 }
 
 globalvariables_global_by_name :: proc(global_variables: rawptr, name: string) -> (global_variable: rawptr, ok: bool) {
-    global_variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -74,8 +70,6 @@ globalvariables_global_by_name :: proc(global_variables: rawptr, name: string) -
 }
 
 globalvariables_global_by_index :: proc(global_variables: rawptr, index: i32) -> (global_variable: rawptr, ok: bool) {
-    global_variable = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -87,8 +81,6 @@ globalvariables_global_by_index :: proc(global_variables: rawptr, index: i32) ->
 }
 
 globalvariables_global_index :: proc(global_variables: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -102,8 +94,6 @@ globalvariables_global_index :: proc(global_variables: rawptr, name: string) -> 
 }
 
 globalvariables_count :: proc(global_variables: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -120,7 +110,6 @@ globalvariables_remove :: proc {
 }
 
 globalvariables_remove_by_name :: proc(global_variables: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -135,7 +124,6 @@ globalvariables_remove_by_name :: proc(global_variables: rawptr, name: string) -
 }
 
 globalvariables_remove_by_index :: proc(global_variables: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return

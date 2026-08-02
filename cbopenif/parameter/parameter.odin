@@ -51,8 +51,6 @@ ParameterVTable :: struct {
 }
 
 parameter_new :: proc(name: string, type_name: string, attribute := "", direction := Direction.InOut, initial_value := "", readpermission := "", writepermission := "", description := "") -> (parameter: rawptr, ok: bool) {
-    parameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -79,7 +77,6 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
 }
 
 parameter_deserialize :: proc(parameter: ^rawptr, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -92,8 +89,6 @@ parameter_deserialize :: proc(parameter: ^rawptr, xml: string) -> (ok: bool) {
 }
 
 parameter_serialize :: proc(parameter: rawptr) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -112,8 +107,6 @@ parameter_name :: proc {
 }
 
 parameter_name_get :: proc(parameter: rawptr) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -127,7 +120,6 @@ parameter_name_get :: proc(parameter: rawptr) -> (name: string, ok: bool) {
 }
 
 parameter_name_set :: proc(parameter: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -146,8 +138,6 @@ parameter_type_name :: proc {
 }
 
 parameter_type_name_get :: proc(parameter: rawptr) -> (type_name: string, ok: bool) {
-    type_name = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -161,7 +151,6 @@ parameter_type_name_get :: proc(parameter: rawptr) -> (type_name: string, ok: bo
 }
 
 parameter_type_name_set :: proc(parameter: rawptr, type_name: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -180,8 +169,6 @@ parameter_attribute :: proc {
 }
 
 parameter_attribute_get :: proc(parameter: rawptr) -> (attribute: string, ok: bool) {
-    attribute = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -195,7 +182,6 @@ parameter_attribute_get :: proc(parameter: rawptr) -> (attribute: string, ok: bo
 }
 
 parameter_attribute_set :: proc(parameter: rawptr, attribute: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -214,8 +200,6 @@ parameter_description :: proc {
 }
 
 parameter_description_get :: proc(parameter: rawptr) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -229,7 +213,6 @@ parameter_description_get :: proc(parameter: rawptr) -> (description: string, ok
 }
 
 parameter_description_set :: proc(parameter: rawptr, description: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -248,8 +231,6 @@ parameter_read_permission :: proc {
 }
 
 parameter_read_permission_get :: proc(parameter: rawptr) -> (read_permission: string, ok: bool) {
-    read_permission = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -263,7 +244,6 @@ parameter_read_permission_get :: proc(parameter: rawptr) -> (read_permission: st
 }
 
 parameter_read_permission_set :: proc(parameter: rawptr, read_permission: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -282,8 +262,6 @@ parameter_write_permission :: proc {
 }
 
 parameter_write_permission_get :: proc(parameter: rawptr) -> (write_permission: string, ok: bool) {
-    write_permission = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -297,7 +275,6 @@ parameter_write_permission_get :: proc(parameter: rawptr) -> (write_permission: 
 }
 
 parameter_write_permission_set :: proc(parameter: rawptr, write_permission: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -316,8 +293,6 @@ parameter_authentication_level :: proc {
 }
 
 parameter_authentication_level_get :: proc(parameter: rawptr) -> (authentication_level: string, ok: bool) {
-    authentication_level = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -331,7 +306,6 @@ parameter_authentication_level_get :: proc(parameter: rawptr) -> (authentication
 }
 
 parameter_authentication_level_set :: proc(parameter: rawptr, authentication_level: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -345,8 +319,6 @@ parameter_authentication_level_set :: proc(parameter: rawptr, authentication_lev
 }
 
 parameter_type_guid_get :: proc(parameter: rawptr) -> (guid: string, ok: bool) {
-    guid = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -360,8 +332,6 @@ parameter_type_guid_get :: proc(parameter: rawptr) -> (guid: string, ok: bool) {
 }
 
 parameter_type_path_get :: proc(parameter: rawptr) -> (path: string, ok: bool) {
-    path = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -380,8 +350,6 @@ parameter_access_level :: proc {
 }
 
 parameter_access_level_get :: proc(parameter: rawptr) -> (access_level: string, ok: bool) {
-    access_level = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -395,7 +363,6 @@ parameter_access_level_get :: proc(parameter: rawptr) -> (access_level: string, 
 }
 
 parameter_access_level_set :: proc(parameter: rawptr, access_level: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -414,8 +381,6 @@ parameter_safety_type :: proc {
 }
 
 parameter_safety_type_get :: proc(parameter: rawptr) -> (safety_type: string, ok: bool) {
-    safety_type = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -429,7 +394,6 @@ parameter_safety_type_get :: proc(parameter: rawptr) -> (safety_type: string, ok
 }
 
 parameter_safety_type_set :: proc(parameter: rawptr, safety_type: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -448,8 +412,6 @@ parameter_fdport :: proc {
 }
 
 parameter_fdport_get :: proc(parameter: rawptr) -> (fdport: string, ok: bool) {
-    fdport = ""
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return
@@ -463,7 +425,6 @@ parameter_fdport_get :: proc(parameter: rawptr) -> (fdport: string, ok: bool) {
 }
 
 parameter_fdport_set :: proc(parameter: rawptr, fdport: string) -> (ok: bool) {
-    ok = false
 
     if parameter == nil do return
     if !controlbuilder.connected() do return

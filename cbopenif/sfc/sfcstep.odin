@@ -28,8 +28,6 @@ SFCStepVTable :: struct {
 }
 
 sfcstep_new :: proc(name: string, initial_step: bool, p1_action_stcode := "", n_action_stcode := "", p0_action_stcode := "") -> (sfcstep: SFCStep, ok: bool) {
-    sfcstep = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -55,8 +53,6 @@ sfcstep_name :: proc {
 }
 
 sfcstep_name_get :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -70,7 +66,6 @@ sfcstep_name_get :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
 }
 
 sfcstep_name_set :: proc(sfcstep: SFCStep, name: string) -> (ok: bool) {
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -89,8 +84,6 @@ sfcstep_initial_step :: proc {
 }
 
 sfcstep_initial_step_get :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: bool) {
-    initial_step = false
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -103,7 +96,6 @@ sfcstep_initial_step_get :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: b
 }
 
 sfcstep_initial_step_set :: proc(sfcstep: SFCStep, initial_step: bool) -> (ok: bool) {
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -120,8 +112,6 @@ sfcstep_p1_action_stcode :: proc {
 }
 
 sfcstep_p1_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
-    stcode = ""
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -135,7 +125,6 @@ sfcstep_p1_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: b
 }
 
 sfcstep_p1_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -154,8 +143,6 @@ sfcstep_p0_action_stcode :: proc {
 }
 
 sfcstep_p0_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
-    stcode = ""
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -169,7 +156,6 @@ sfcstep_p0_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: b
 }
 
 sfcstep_p0_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -188,8 +174,6 @@ sfcstep_n_action_stcode :: proc {
 }
 
 sfcstep_n_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
-    stcode = ""
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return
@@ -203,7 +187,6 @@ sfcstep_n_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bo
 }
 
 sfcstep_n_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
-    ok = false
 
     if sfcstep == nil do return
     if !controlbuilder.connected() do return

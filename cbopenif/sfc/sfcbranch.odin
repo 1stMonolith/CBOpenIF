@@ -25,8 +25,6 @@ sfcbranch_priority :: proc {
 }
 
 sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: SFCPriorityType, ok: bool) {
-    priority = .Default
-    ok = false
 
     if sfcbranch == nil do return
     if !controlbuilder.connected() do return
@@ -38,7 +36,6 @@ sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: SFCPriorityTy
 }
 
 sfcbranch_priority_set :: proc(sfcbranch: SFCBranch, priority: SFCPriorityType) -> (ok: bool) {
-    ok = false
 
     if sfcbranch == nil do return
     if !controlbuilder.connected() do return
@@ -55,8 +52,6 @@ sfcbranch_elements :: proc {
 }
 
 sfcbranch_elements_get :: proc(sfcbranch: SFCBranch) -> (sfcelements: SFCElements, ok: bool) {
-    sfcelements = nil
-    ok = false
 
     if sfcbranch == nil do return
     if !controlbuilder.connected() do return
@@ -68,7 +63,6 @@ sfcbranch_elements_get :: proc(sfcbranch: SFCBranch) -> (sfcelements: SFCElement
 }
 
 sfcbranch_elements_set :: proc(sfcbranch: SFCBranch, sfcelements: SFCElements) -> (ok: bool) {
-    ok = false
 
     if sfcbranch == nil do return
     if !controlbuilder.connected() do return

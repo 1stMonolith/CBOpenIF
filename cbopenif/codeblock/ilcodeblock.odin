@@ -26,8 +26,6 @@ ILCodeBlockVTable :: struct {
 }
 
 ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
-    ilcodeblock = nil
-    ok = false
 
     if !controlbuilder.connected() do return
 
@@ -40,8 +38,6 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
 }
 
 ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if ilcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -60,8 +56,6 @@ ilcodeblock_name :: proc {
 }
 
 ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if ilcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -75,7 +69,6 @@ ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: boo
 }
 
 ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
-    ok = false
     
     if ilcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -94,8 +87,6 @@ ilcodeblock_stcode :: proc {
 }
 
 ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok: bool) {
-    ilrows = nil
-    ok = false
 
     if ilcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -107,7 +98,6 @@ ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok:
 }
 
 ilcodeblock_stcode_set :: proc(ilcodeblock: ILCodeBlock, ilrows: rawptr) -> (ok: bool) {
-    ok = false
     
     if ilcodeblock == nil do return
     if !controlbuilder.connected() do return

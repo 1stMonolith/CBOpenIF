@@ -29,7 +29,6 @@ parameters_add :: proc {
 }
 
 parameters_add_ :: proc(parameters: rawptr, parameter: rawptr) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -42,7 +41,6 @@ parameters_add_ :: proc(parameters: rawptr, parameter: rawptr) -> (ok: bool) {
 }
 
 parameters_add_at_index :: proc(parameters: rawptr, parameter: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -60,8 +58,6 @@ parameters_external :: proc {
 }
 
 parameters_external_by_name :: proc(parameters: rawptr, name: string) -> (parameter: rawptr, ok: bool) {
-    parameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -75,8 +71,6 @@ parameters_external_by_name :: proc(parameters: rawptr, name: string) -> (parame
 }
 
 parameters_external_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: rawptr, ok: bool) {
-    parameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -88,8 +82,6 @@ parameters_external_by_index :: proc(parameters: rawptr, index: i32) -> (paramet
 }
 
 parameters_external_index :: proc(parameters: rawptr, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -103,8 +95,6 @@ parameters_external_index :: proc(parameters: rawptr, name: string) -> (index: i
 }
 
 parameters_count :: proc(parameters: rawptr) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -121,7 +111,6 @@ parameters_remove :: proc {
 }
 
 parameters_remove_by_name :: proc(parameters: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return
@@ -136,7 +125,6 @@ parameters_remove_by_name :: proc(parameters: rawptr, name: string) -> (ok: bool
 }
 
 parameters_remove_by_index :: proc(parameters: rawptr, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if parameters == nil do return

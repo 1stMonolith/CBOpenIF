@@ -24,8 +24,6 @@ FDCodeBlockVTable :: struct {
 }
 
 fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if fdcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -44,8 +42,6 @@ fdcodeblock_name :: proc {
 }
 
 fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if fdcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -59,7 +55,6 @@ fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: boo
 }
 
 fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
-    ok = false
     
     if fdcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -78,8 +73,6 @@ fdcodeblock_xml_string :: proc {
 }
 
 fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
-    xml_string = ""
-    ok = false
 
     if fdcodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -93,7 +86,6 @@ fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: str
 }
 
 fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
-    ok = false
     
     if fdcodeblock == nil do return
     if !controlbuilder.connected() do return

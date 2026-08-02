@@ -29,7 +29,6 @@ signals_add :: proc {
 }
 
 signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -42,7 +41,6 @@ signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
 }
 
 signals_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -60,8 +58,6 @@ signals_signal :: proc {
 }
 
 signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signal, ok: bool) {
-    signal = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -75,8 +71,6 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
 }
 
 signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
-    signal = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -88,8 +82,6 @@ signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal
 }
 
 signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok: bool) {
-    index = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -103,8 +95,6 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
 }
 
 signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
-    count = 0
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -121,7 +111,6 @@ signals_remove :: proc {
 }
 
 signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return
@@ -136,7 +125,6 @@ signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
 }
 
 signals_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     if signals == nil do return

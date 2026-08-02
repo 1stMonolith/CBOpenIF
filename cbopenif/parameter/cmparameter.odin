@@ -49,8 +49,6 @@ CMParameterVTable :: struct {
 }
 
 cmparameter_new :: proc(name: string, type_name: string, attribute := "", initial_value := "", read_permission := "", write_permission := "", description := "", auto_point : rawptr = nil) -> (cmparameter: rawptr, ok: bool) {
-    cmparameter = nil
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -87,7 +85,6 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
 }
 
 cmparameter_deserialize :: proc(cmparameter: ^rawptr, xml: string) -> (ok: bool) {
-    ok = false
 
     if !controlbuilder.connected() do return
     
@@ -100,8 +97,6 @@ cmparameter_deserialize :: proc(cmparameter: ^rawptr, xml: string) -> (ok: bool)
 }
 
 cmparameter_serialize :: proc(cmparameter: rawptr) -> (xml: string, ok: bool) {
-    xml = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -120,8 +115,6 @@ cmparameter_name :: proc {
 }
 
 cmparameter_name_get :: proc(cmparameter: rawptr) -> (name: string, ok: bool) {
-    name = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -135,7 +128,6 @@ cmparameter_name_get :: proc(cmparameter: rawptr) -> (name: string, ok: bool) {
 }
 
 cmparameter_name_set :: proc(cmparameter: rawptr, name: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -154,8 +146,6 @@ cmparameter_type_name :: proc {
 }
 
 cmparameter_type_name_get :: proc(cmparameter: rawptr) -> (type_name: string, ok: bool) {
-    type_name = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -169,7 +159,6 @@ cmparameter_type_name_get :: proc(cmparameter: rawptr) -> (type_name: string, ok
 }
 
 cmparameter_type_name_set :: proc(cmparameter: rawptr, type_name: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -188,8 +177,6 @@ cmparameter_initial_value :: proc {
 }
 
 cmparameter_initial_value_get :: proc(cmparameter: rawptr) -> (inital_value: string, ok: bool) {
-    inital_value = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -203,7 +190,6 @@ cmparameter_initial_value_get :: proc(cmparameter: rawptr) -> (inital_value: str
 }
 
 cmparameter_initial_value_set :: proc(cmparameter: rawptr, inital_value: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -222,8 +208,6 @@ cmparameter_description :: proc {
 }
 
 cmparameter_description_get :: proc(cmparameter: rawptr) -> (description: string, ok: bool) {
-    description = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -237,7 +221,6 @@ cmparameter_description_get :: proc(cmparameter: rawptr) -> (description: string
 }
 
 cmparameter_description_set :: proc(cmparameter: rawptr, description: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -256,8 +239,6 @@ cmparameter_read_permission :: proc {
 }
 
 cmparameter_read_permission_get :: proc(cmparameter: rawptr) -> (read_permission: string, ok: bool) {
-    read_permission = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -271,7 +252,6 @@ cmparameter_read_permission_get :: proc(cmparameter: rawptr) -> (read_permission
 }
 
 cmparameter_read_permission_set :: proc(cmparameter: rawptr, read_permission: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -290,8 +270,6 @@ cmparameter_write_permission :: proc {
 }
 
 cmparameter_write_permission_get :: proc(cmparameter: rawptr) -> (write_permission: string, ok: bool) {
-    write_permission = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -305,7 +283,6 @@ cmparameter_write_permission_get :: proc(cmparameter: rawptr) -> (write_permissi
 }
 
 cmparameter_write_permission_set :: proc(cmparameter: rawptr, write_permission: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -324,8 +301,6 @@ cmparameter_authentication_level :: proc {
 }
 
 cmparameter_authentication_level_get :: proc(cmparameter: rawptr) -> (authentication_level: string, ok: bool) {
-    authentication_level = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -339,7 +314,6 @@ cmparameter_authentication_level_get :: proc(cmparameter: rawptr) -> (authentica
 }
 
 cmparameter_authentication_level_set :: proc(cmparameter: rawptr, authentication_level: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -358,8 +332,6 @@ cmparameter_batch_property :: proc {
 }
 
 cmparameter_batch_property_get :: proc(cmparameter: rawptr) -> (batch_property: string, ok: bool) {
-    batch_property = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -373,7 +345,6 @@ cmparameter_batch_property_get :: proc(cmparameter: rawptr) -> (batch_property: 
 }
 
 cmparameter_batch_property_set :: proc(cmparameter: rawptr, batch_property: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -392,8 +363,6 @@ cmparameter_auto_point :: proc {
 }
 
 cmparameter_auto_point_get :: proc(cmparameter: rawptr) -> (auto_point: rawptr, ok: bool) {
-    auto_point = nil
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -405,7 +374,6 @@ cmparameter_auto_point_get :: proc(cmparameter: rawptr) -> (auto_point: rawptr, 
 }
 
 cmparameter_auto_point_set :: proc(cmparameter: rawptr, auto_point: rawptr) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -422,8 +390,6 @@ cmparameter_graph_nodes :: proc {
 }
 
 cmparameter_graph_nodes_get :: proc(cmparameter: rawptr) -> (graph_nodes: rawptr, ok: bool) {
-    graph_nodes = nil
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -435,7 +401,6 @@ cmparameter_graph_nodes_get :: proc(cmparameter: rawptr) -> (graph_nodes: rawptr
 }
 
 cmparameter_graph_nodes_set :: proc(cmparameter: rawptr, graph_nodes: rawptr) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -447,8 +412,6 @@ cmparameter_graph_nodes_set :: proc(cmparameter: rawptr, graph_nodes: rawptr) ->
 }
 
 cmparameter_type_guid_get :: proc(cmparameter: rawptr) -> (guid: string, ok: bool) {
-    guid = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -462,8 +425,6 @@ cmparameter_type_guid_get :: proc(cmparameter: rawptr) -> (guid: string, ok: boo
 }
 
 cmparameter_type_path_get :: proc(cmparameter: rawptr) -> (path: string, ok: bool) {
-    path = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -482,8 +443,6 @@ cmparameter_access_level :: proc {
 }
 
 cmparameter_access_level_get :: proc(cmparameter: rawptr) -> (access_level: string, ok: bool) {
-    access_level = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -497,7 +456,6 @@ cmparameter_access_level_get :: proc(cmparameter: rawptr) -> (access_level: stri
 }
 
 cmparameter_access_level_set :: proc(cmparameter: rawptr, access_level: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -516,8 +474,6 @@ cmparameter_safety_type :: proc {
 }
 
 cmparameter_safety_type_get :: proc(cmparameter: rawptr) -> (safety_type: string, ok: bool) {
-    safety_type = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -531,7 +487,6 @@ cmparameter_safety_type_get :: proc(cmparameter: rawptr) -> (safety_type: string
 }
 
 cmparameter_safety_type_set :: proc(cmparameter: rawptr, safety_type: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -550,8 +505,6 @@ cmparameter_direction :: proc {
 }
 
 cmparameter_direction_get :: proc(cmparameter: rawptr) -> (direction: string, ok: bool) {
-    direction = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -565,7 +518,6 @@ cmparameter_direction_get :: proc(cmparameter: rawptr) -> (direction: string, ok
 }
 
 cmparameter_direction_set :: proc(cmparameter: rawptr, direction: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -584,8 +536,6 @@ cmparameter_fdport :: proc {
 }
 
 cmparameter_fdport_get :: proc(cmparameter: rawptr) -> (fdport: string, ok: bool) {
-    fdport = ""
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
@@ -599,7 +549,6 @@ cmparameter_fdport_get :: proc(cmparameter: rawptr) -> (fdport: string, ok: bool
 }
 
 cmparameter_fdport_set :: proc(cmparameter: rawptr, fdport: string) -> (ok: bool) {
-    ok = false
 
     if cmparameter == nil do return
     if !controlbuilder.connected() do return
