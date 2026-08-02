@@ -6,11 +6,13 @@ import "../controlbuilder"
 import "../factory"
 import "../graph"
 import "../point"
+import "../type"
 
-@(private="file") AutoPoint  :: point.AutoPoint
-@(private="file") BStr       :: bstr.BStr
-@(private="file") GraphNodes :: graph.GraphNodes
-@(private="file") HResult    :: com.HResult
+@(private="file") AutoPoint   :: point.AutoPoint
+@(private="file") AutoPosType :: type.AutoPosType
+@(private="file") BStr        :: bstr.BStr
+@(private="file") GraphNodes  :: graph.GraphNodes
+@(private="file") HResult     :: com.HResult
 
 CMParameter :: distinct rawptr
 
@@ -56,7 +58,7 @@ CMParameterVTable :: struct {
     FDPortPut:              proc "system" (this: ^CMParameterIF, FDPort: BStr) -> HResult,
 }
 
-cmparameter_new :: proc(name: string, type_name: string, attribute := "", initial_value := "", read_permission := "", write_permission := "", description := "", auto_point : rawptr = nil) -> (cmparameter: CMParameter, ok: bool) {
+cmparameter_new :: proc(name: string, type_name: string, attribute := "", initial_value := "", read_permission := "", write_permission := "", description := "", auto_point : AutoPoint = nil) -> (cmparameter: CMParameter, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -77,11 +79,11 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
         bstr.free(bstr_description)
     }
 
-    ap: rawptr
+    ap: AutoPoint
     if auto_point == nil {
-        ap, ok = autopoint.autopoint_new(AutoPos.Top)
+        ap, ok = point.autopoint_new(AutoPosType.Top)
         if !ok do return
-        defer autopoint.autopoint_release(ap)
+        defer point.autopoint_release(ap)
     } else {
         ap = auto_point
     }
