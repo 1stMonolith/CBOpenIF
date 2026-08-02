@@ -1,7 +1,7 @@
 package bstr
 
-import "core:sys/windows"
 import "base:runtime"
+import "core:sys/windows"
 
 BStr :: distinct rawptr
 

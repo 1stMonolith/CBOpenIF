@@ -3,6 +3,8 @@ package sfc
 import "../com"
 import "../controlbuilder"
 
+@(private="file") HResult :: com.HResult
+
 SFCBranches :: distinct rawptr
 
 SFCBranchesIF :: struct #raw_union {

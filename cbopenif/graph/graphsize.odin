@@ -1,8 +1,16 @@
 package graph
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
+import "../point"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+@(private="file") Point   :: point.Point
+
+GraphSize :: distinct rawptr
 
 GraphSizeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -19,7 +27,7 @@ GraphSizeVTable :: struct {
     UpperRightPut: proc "system" (this: ^GraphSizeIF, UpperRight: rawptr) -> HResult,
 }
 
-graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: rawptr, ok: bool) {
+graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: GraphSize, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -34,18 +42,18 @@ graphsize_lower_left :: proc {
     graphsize_lower_left_set,
 }
 
-graphsize_lower_left_get :: proc(graphsize: rawptr) -> (lower_left: rawptr, ok: bool) {
+graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok: bool) {
 
     if graphsize == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^GraphSizeIF)(graphsize)->LowerLeftGet(&lower_left)
+    hr := (^GraphSizeIF)(graphsize)->LowerLeftGet(cast(^rawptr)&lower_left)
     if com.failed(hr) do return
     
     return lower_left, true
 }
 
-graphsize_lower_left_set :: proc(graphsize: rawptr, lower_left: rawptr) -> (ok: bool) {
+graphsize_lower_left_set :: proc(graphsize: GraphSize, lower_left: Point) -> (ok: bool) {
 
     if graphsize == nil do return
     if !controlbuilder.connected() do return
@@ -61,18 +69,18 @@ graphsize_upper_right :: proc {
     graphsize_upper_right_set,
 }
 
-graphsize_upper_right_get :: proc(graphsize: rawptr) -> (upper_right: rawptr, ok: bool) {
+graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, ok: bool) {
 
     if graphsize == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^GraphSizeIF)(graphsize)->UpperRightGet(&upper_right)
+    hr := (^GraphSizeIF)(graphsize)->UpperRightGet(cast(^rawptr)&upper_right)
     if com.failed(hr) do return
     
     return upper_right, true
 }
 
-graphsize_upper_right_set :: proc(graphsize: rawptr, upper_right: rawptr) -> (ok: bool) {
+graphsize_upper_right_set :: proc(graphsize: GraphSize, upper_right: Point) -> (ok: bool) {
 
     if graphsize == nil do return
     if !controlbuilder.connected() do return
@@ -83,7 +91,7 @@ graphsize_upper_right_set :: proc(graphsize: rawptr, upper_right: rawptr) -> (ok
     return true
 }
 
-graphsize_release :: proc(graphsize: rawptr) {
+graphsize_release :: proc(graphsize: GraphSize) {
     if graphsize != nil {
         (^GraphSizeIF)(graphsize)->Release()
     }

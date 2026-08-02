@@ -3,6 +3,8 @@ package point
 import "../com"
 import "../controlbuilder"
 
+@(private="file") HResult :: com.HResult
+
 Points :: distinct rawptr
 
 PointsIF :: struct #raw_union {

@@ -1,8 +1,11 @@
 package codeblock
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
 
 FDCodeBlock :: distinct rawptr
 

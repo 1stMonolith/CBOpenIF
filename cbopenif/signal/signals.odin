@@ -1,8 +1,13 @@
 package signal
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../variant"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+@(private="file") Variant :: variant.VariantBool
 
 Signals :: distinct rawptr
 

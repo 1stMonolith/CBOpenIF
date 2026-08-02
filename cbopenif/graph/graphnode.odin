@@ -1,9 +1,14 @@
 package graph
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 import "../factory"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+
+GraphNode :: distinct rawptr
 
 GraphNodeIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -20,7 +25,7 @@ GraphNodeVTable :: struct {
     YPut:    proc "system" (this: ^GraphNodeIF, Y: f64) -> HResult,
 }
 
-graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: rawptr, ok: bool) {
+graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -37,7 +42,7 @@ graphnode_name :: proc {
     graphnode_name_set,
 }
 
-graphnode_name_get :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
+graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -50,7 +55,7 @@ graphnode_name_get :: proc(graphnode: rawptr) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-graphnode_name_set :: proc(graphnode: rawptr, name: string) -> (ok: bool) {
+graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -68,7 +73,7 @@ graphnode_x :: proc {
     graphnode_x_set,
 }
 
-graphnode_x_get :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
+graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -79,7 +84,7 @@ graphnode_x_get :: proc(graphnode: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-graphnode_x_set :: proc(graphnode: rawptr, x: f64) -> (ok: bool) {
+graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -95,7 +100,7 @@ graphnode_y :: proc {
     graphnode_y_set,
 }
 
-graphnode_y_get :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
+graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -106,7 +111,7 @@ graphnode_y_get :: proc(graphnode: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-graphnode_y_set :: proc(graphnode: rawptr, y: f64) -> (ok: bool) {
+graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
 
     if graphnode == nil do return
     if !controlbuilder.connected() do return
@@ -117,7 +122,7 @@ graphnode_y_set :: proc(graphnode: rawptr, y: f64) -> (ok: bool) {
     return true
 }
 
-graphnode_release :: proc(graphnode: rawptr) {
+graphnode_release :: proc(graphnode: GraphNode) {
     if graphnode != nil {
         (^GraphNodeIF)(graphnode)->Release()
     }

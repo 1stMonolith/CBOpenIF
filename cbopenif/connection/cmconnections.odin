@@ -1,8 +1,15 @@
 package connection
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../variant"
+
+@(private="file") BStr        :: bstr.BStr
+@(private="file") HResult     :: com.HResult
+@(private="file") VariantBool :: variant.VariantBool
+
+CMConnections :: distinct rawptr
 
 CMConnectionsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -27,7 +34,7 @@ cmconnections_add :: proc {
     cmconnections_add_at_index,
 }
 
-cmconnections_add_ :: proc(cmconnections: rawptr, cmconnection: rawptr) -> (ok: bool) {
+cmconnections_add_ :: proc(cmconnections: CMConnections, cmconnection: CMConnection) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -39,7 +46,7 @@ cmconnections_add_ :: proc(cmconnections: rawptr, cmconnection: rawptr) -> (ok: 
     return true
 }
 
-cmconnections_add_at_index :: proc(cmconnections: rawptr, cmconnection: rawptr, index: i32) -> (ok: bool) {
+cmconnections_add_at_index :: proc(cmconnections: CMConnections, cmconnection: CMConnection, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -56,31 +63,31 @@ cmconnections_cmconnection :: proc {
     cmconnections_cmconnection_by_index,
 }
 
-cmconnections_cmconnection_by_name :: proc(cmconnections: rawptr, name: string) -> (cmconnection: rawptr, ok: bool) {
+cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: string) -> (cmconnection: CMConnection, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
     
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := (^CMConnectionsIF)(cmconnections)->Find(bstr_name, &cmconnection)
+    hr := (^CMConnectionsIF)(cmconnections)->Find(bstr_name, cast(^rawptr)&cmconnection)
     if com.failed(hr) do return
     
     return cmconnection, true
 }
 
-cmconnections_cmconnection_by_index :: proc(cmconnections: rawptr, index: i32) -> (cmconnection: rawptr, ok: bool) {
+cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index: i32) -> (cmconnection: CMConnection, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
     
-    hr := (^CMConnectionsIF)(cmconnections)->Item(index, &cmconnection)
+    hr := (^CMConnectionsIF)(cmconnections)->Item(index, cast(^rawptr)&cmconnection)
     if com.failed(hr) do return
     
     return cmconnection, true
 }
 
-cmconnections_cmconnection_index :: proc(cmconnections: rawptr, name: string) -> (index: i32, ok: bool) {
+cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: string) -> (index: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -93,7 +100,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: rawptr, name: string) ->
     return index, true
 }
 
-cmconnections_count :: proc(cmconnections: rawptr) -> (count: i32, ok: bool) {
+cmconnections_count :: proc(cmconnections: CMConnections) -> (count: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -109,7 +116,7 @@ cmconnections_remove :: proc {
     cmconnections_remove_by_index,
 }
 
-cmconnections_remove_by_name :: proc(cmconnections: rawptr, name: string) -> (ok: bool) {
+cmconnections_remove_by_name :: proc(cmconnections: CMConnections, name: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -123,7 +130,7 @@ cmconnections_remove_by_name :: proc(cmconnections: rawptr, name: string) -> (ok
     return true
 }
 
-cmconnections_remove_by_index :: proc(cmconnections: rawptr, index: i32) -> (ok: bool) {
+cmconnections_remove_by_index :: proc(cmconnections: CMConnections, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmconnections == nil do return
@@ -134,7 +141,7 @@ cmconnections_remove_by_index :: proc(cmconnections: rawptr, index: i32) -> (ok:
     return true
 }
 
-cmconnections_release :: proc(cmconnections: rawptr) {
+cmconnections_release :: proc(cmconnections: CMConnections) {
     if cmconnections != nil {
         (^CMConnectionsIF)(cmconnections)->Release()
     }

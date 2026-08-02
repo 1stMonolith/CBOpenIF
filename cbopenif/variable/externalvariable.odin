@@ -1,9 +1,16 @@
 package variable
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 import "../factory"
+import "../graph"
+
+@(private="file") BStr       :: bstr.BStr
+@(private="file") GraphNodes :: graph.GraphNodes
+@(private="file") HResult    :: com.HResult
+
+ExternalVariable :: distinct rawptr
 
 ExternalVariableIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -38,7 +45,7 @@ ExternalVariableVTable :: struct {
     SafetyTypePut:          proc "system" (this: ^ExternalVariableIF, SafetyType: BStr) -> HResult,
 }
 
-externalvariable_new :: proc(name: string, type: string, attribute := "", readpermission := "", writepermission := "", description := "") -> (external_variable: rawptr, ok: bool) {
+externalvariable_new :: proc(name: string, type: string, attribute := "", readpermission := "", writepermission := "", description := "") -> (external_variable: ExternalVariable, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -62,7 +69,7 @@ externalvariable_new :: proc(name: string, type: string, attribute := "", readpe
     return external_variable, true
 }
 
-externalvariable_deserialize :: proc(external_variable: ^rawptr, xml: string) -> (ok: bool) {
+externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -74,7 +81,7 @@ externalvariable_deserialize :: proc(external_variable: ^rawptr, xml: string) ->
     return true
 }
 
-externalvariable_serialize :: proc(external_variable: rawptr) -> (xml: string, ok: bool) {
+externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -92,7 +99,7 @@ externalvariable_name :: proc {
     externalvariable_name_set,
 }
 
-externalvariable_name_get :: proc(external_variable: rawptr) -> (name: string, ok: bool) {
+externalvariable_name_get :: proc(external_variable: ExternalVariable) -> (name: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -105,7 +112,7 @@ externalvariable_name_get :: proc(external_variable: rawptr) -> (name: string, o
     return bstr.to_string(bs), true
 }
 
-externalvariable_name_set :: proc(external_variable: rawptr, name: string) -> (ok: bool) {
+externalvariable_name_set :: proc(external_variable: ExternalVariable, name: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -123,7 +130,7 @@ externalvariable_type_name :: proc {
     externalvariable_type_name_set,
 }
 
-externalvariable_type_name_get :: proc(external_variable: rawptr) -> (type_name: string, ok: bool) {
+externalvariable_type_name_get :: proc(external_variable: ExternalVariable) -> (type_name: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -136,7 +143,7 @@ externalvariable_type_name_get :: proc(external_variable: rawptr) -> (type_name:
     return bstr.to_string(bs), true
 }
 
-externalvariable_type_name_set :: proc(external_variable: rawptr, type_name: string) -> (ok: bool) {
+externalvariable_type_name_set :: proc(external_variable: ExternalVariable, type_name: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -154,7 +161,7 @@ externalvariable_attribute :: proc {
     externalvariable_attribute_set,
 }
 
-externalvariable_attribute_get :: proc(external_variable: rawptr) -> (attribute: string, ok: bool) {
+externalvariable_attribute_get :: proc(external_variable: ExternalVariable) -> (attribute: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -167,7 +174,7 @@ externalvariable_attribute_get :: proc(external_variable: rawptr) -> (attribute:
     return bstr.to_string(bs), true
 }
 
-externalvariable_attribute_set :: proc(external_variable: rawptr, attribute: string) -> (ok: bool) {
+externalvariable_attribute_set :: proc(external_variable: ExternalVariable, attribute: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -185,7 +192,7 @@ externalvariable_description :: proc {
     externalvariable_description_set,
 }
 
-externalvariable_description_get :: proc(external_variable: rawptr) -> (description: string, ok: bool) {
+externalvariable_description_get :: proc(external_variable: ExternalVariable) -> (description: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -198,7 +205,7 @@ externalvariable_description_get :: proc(external_variable: rawptr) -> (descript
     return bstr.to_string(bs), true
 }
 
-externalvariable_description_set :: proc(external_variable: rawptr, description: string) -> (ok: bool) {
+externalvariable_description_set :: proc(external_variable: ExternalVariable, description: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -216,7 +223,7 @@ externalvariable_read_permission :: proc {
     externalvariable_read_permission_set,
 }
 
-externalvariable_read_permission_get :: proc(external_variable: rawptr) -> (read_permission: string, ok: bool) {
+externalvariable_read_permission_get :: proc(external_variable: ExternalVariable) -> (read_permission: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -229,7 +236,7 @@ externalvariable_read_permission_get :: proc(external_variable: rawptr) -> (read
     return bstr.to_string(bs), true
 }
 
-externalvariable_read_permission_set :: proc(external_variable: rawptr, read_permission: string) -> (ok: bool) {
+externalvariable_read_permission_set :: proc(external_variable: ExternalVariable, read_permission: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -247,7 +254,7 @@ externalvariable_write_permission :: proc {
     externalvariable_write_permission_set,
 }
 
-externalvariable_write_permission_get :: proc(external_variable: rawptr) -> (write_permission: string, ok: bool) {
+externalvariable_write_permission_get :: proc(external_variable: ExternalVariable) -> (write_permission: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -260,7 +267,7 @@ externalvariable_write_permission_get :: proc(external_variable: rawptr) -> (wri
     return bstr.to_string(bs), true
 }
 
-externalvariable_write_permission_set :: proc(external_variable: rawptr, write_permission: string) -> (ok: bool) {
+externalvariable_write_permission_set :: proc(external_variable: ExternalVariable, write_permission: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -278,7 +285,7 @@ externalvariable_authentication_level :: proc {
     externalvariable_authentication_level_set,
 }
 
-externalvariable_authentication_level_get :: proc(external_variable: rawptr) -> (authentication_level: string, ok: bool) {
+externalvariable_authentication_level_get :: proc(external_variable: ExternalVariable) -> (authentication_level: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -291,7 +298,7 @@ externalvariable_authentication_level_get :: proc(external_variable: rawptr) -> 
     return bstr.to_string(bs), true
 }
 
-externalvariable_authentication_level_set :: proc(external_variable: rawptr, authentication_level: string) -> (ok: bool) {
+externalvariable_authentication_level_set :: proc(external_variable: ExternalVariable, authentication_level: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -309,18 +316,18 @@ externalvariable_graph_nodes :: proc {
     externalvariable_graph_nodes_set,
 }
 
-externalvariable_graph_nodes_get :: proc(external_variable: rawptr) -> (graph_nodes: rawptr, ok: bool) {
+externalvariable_graph_nodes_get :: proc(external_variable: ExternalVariable) -> (graph_nodes: GraphNodes, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
     
-    hr := (^ExternalVariableIF)(external_variable)->GraphNodesGet(&graph_nodes)
+    hr := (^ExternalVariableIF)(external_variable)->GraphNodesGet(cast(^rawptr)&graph_nodes)
     if com.failed(hr) do return
     
     return graph_nodes, true
 }
 
-externalvariable_graph_nodes_set :: proc(external_variable: rawptr, graph_nodes: rawptr) -> (ok: bool) {
+externalvariable_graph_nodes_set :: proc(external_variable: ExternalVariable, graph_nodes: GraphNodes) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -331,7 +338,7 @@ externalvariable_graph_nodes_set :: proc(external_variable: rawptr, graph_nodes:
     return true
 }
 
-externalvariable_type_guid_get :: proc(external_variable: rawptr) -> (guid: string, ok: bool) {
+externalvariable_type_guid_get :: proc(external_variable: ExternalVariable) -> (guid: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -344,7 +351,7 @@ externalvariable_type_guid_get :: proc(external_variable: rawptr) -> (guid: stri
     return bstr.to_string(bs), true
 }
 
-externalvariable_type_path_get :: proc(external_variable: rawptr) -> (path: string, ok: bool) {
+externalvariable_type_path_get :: proc(external_variable: ExternalVariable) -> (path: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -362,7 +369,7 @@ externalvariable_access_level :: proc {
     externalvariable_access_level_set,
 }
 
-externalvariable_access_level_get :: proc(external_variable: rawptr) -> (access_level: string, ok: bool) {
+externalvariable_access_level_get :: proc(external_variable: ExternalVariable) -> (access_level: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -375,7 +382,7 @@ externalvariable_access_level_get :: proc(external_variable: rawptr) -> (access_
     return bstr.to_string(bs), true
 }
 
-externalvariable_access_level_set :: proc(external_variable: rawptr, access_level: string) -> (ok: bool) {
+externalvariable_access_level_set :: proc(external_variable: ExternalVariable, access_level: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -393,7 +400,7 @@ externalvariable_safety_type :: proc {
     externalvariable_safety_type_set,
 }
 
-externalvariable_safety_type_get :: proc(external_variable: rawptr) -> (safety_type: string, ok: bool) {
+externalvariable_safety_type_get :: proc(external_variable: ExternalVariable) -> (safety_type: string, ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -406,7 +413,7 @@ externalvariable_safety_type_get :: proc(external_variable: rawptr) -> (safety_t
     return bstr.to_string(bs), true
 }
 
-externalvariable_safety_type_set :: proc(external_variable: rawptr, safety_type: string) -> (ok: bool) {
+externalvariable_safety_type_set :: proc(external_variable: ExternalVariable, safety_type: string) -> (ok: bool) {
 
     if external_variable == nil do return
     if !controlbuilder.connected() do return
@@ -419,7 +426,7 @@ externalvariable_safety_type_set :: proc(external_variable: rawptr, safety_type:
     return true
 }
 
-externalvariable_release :: proc(external_variable: rawptr) {
+externalvariable_release :: proc(external_variable: ExternalVariable) {
     if external_variable != nil {
         (^ExternalVariableIF)(external_variable)->Release()
     }

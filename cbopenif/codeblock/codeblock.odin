@@ -1,15 +1,15 @@
 package codeblock
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
-import "../variant"
 import "../factory"
+import "../variant"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
+@(private="file") BStr        :: bstr.BStr
+@(private="file") GUID        :: com.GUID
+@(private="file") HResult     :: com.HResult
+@(private="file") VariantBool :: variant.VariantBool
 
 CodeBlockType :: enum i32 {
     ST  = 0,

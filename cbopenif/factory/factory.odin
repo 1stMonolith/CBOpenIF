@@ -1,14 +1,14 @@
 package factory
 
-import "../com"
 import "../bstr"
+import "../com"
 import "../variant"
 
-@(private) HResult     :: com.HResult
-@(private) GUID        :: com.GUID
-@(private) BStr        :: bstr.BStr
-@(private) Variant     :: variant.Variant
-@(private) VariantBool :: variant.VariantBool
+@(private="file") BStr        :: bstr.BStr
+@(private="file") HResult     :: com.HResult
+@(private="file") GUID        :: com.GUID
+@(private="file") Variant     :: variant.Variant
+@(private="file") VariantBool :: variant.VariantBool
 
 FactoryIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

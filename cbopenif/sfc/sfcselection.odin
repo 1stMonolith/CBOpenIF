@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../factory"
 
+@(private="file") HResult :: com.HResult
+
 SFCSelection :: distinct rawptr
 
 SFCSelectionIF :: struct #raw_union {

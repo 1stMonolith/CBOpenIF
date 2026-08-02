@@ -3,7 +3,9 @@ package sfc
 import "../com"
 import "../controlbuilder"
 import "../variant"
-import "../type"
+
+@(private="file") HResult     :: com.HResult
+@(private="file") VariantBool :: variant.VariantBool
 
 SFCElement :: distinct rawptr
 

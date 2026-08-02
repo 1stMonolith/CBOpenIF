@@ -1,8 +1,8 @@
 package cbopenif
 
 import "codeblock"
-import "controlbuilder"
 import "component"
+import "controlbuilder"
 import "point"
 import "sfc"
 import "signal"

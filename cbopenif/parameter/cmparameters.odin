@@ -1,8 +1,13 @@
 package parameter
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+
+CMParameters :: distinct rawptr
 
 CMParametersIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -27,7 +32,7 @@ cmparameters_add :: proc {
     cmparameters_add_at_index,
 }
 
-cmparameters_add_ :: proc(cmparameters: rawptr, cmparameter: rawptr) -> (ok: bool) {
+cmparameters_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -39,7 +44,7 @@ cmparameters_add_ :: proc(cmparameters: rawptr, cmparameter: rawptr) -> (ok: boo
     return true
 }
 
-cmparameters_add_at_index :: proc(cmparameters: rawptr, cmparameter: rawptr, index: i32) -> (ok: bool) {
+cmparameters_add_at_index :: proc(cmparameters: CMParameters, cmparameter: CMParameter, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -56,31 +61,31 @@ cmparameters_cmparameter :: proc {
     cmparameters_cmparameter_by_index,
 }
 
-cmparameters_cmparameter_by_name :: proc(cmparameters: rawptr, name: string) -> (cmparameter: rawptr, ok: bool) {
+cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: string) -> (cmparameter: CMParameter, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
     
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := (^CMParametersIF)(cmparameters)->Find(bstr_name, &cmparameter)
+    hr := (^CMParametersIF)(cmparameters)->Find(bstr_name, cast(^rawptr)&cmparameter)
     if com.failed(hr) do return
     
     return cmparameter, true
 }
 
-cmparameters_cmparameter_by_index :: proc(cmparameters: rawptr, index: i32) -> (cmparameter: rawptr, ok: bool) {
+cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32) -> (cmparameter: CMParameter, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
     
-    hr := (^CMParametersIF)(cmparameters)->Item(index, &cmparameter)
+    hr := (^CMParametersIF)(cmparameters)->Item(index, cast(^rawptr)&cmparameter)
     if com.failed(hr) do return
     
     return cmparameter, true
 }
 
-cmparameters_cmparameter_index :: proc(cmparameters: rawptr, name: string) -> (index: i32, ok: bool) {
+cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string) -> (index: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -93,7 +98,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: rawptr, name: string) -> (i
     return index, true
 }
 
-cmparameters_count :: proc(cmparameters: rawptr) -> (count: i32, ok: bool) {
+cmparameters_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -109,7 +114,7 @@ cmparameters_remove :: proc {
     cmparameters_remove_by_index,
 }
 
-cmparameters_remove_by_name :: proc(cmparameters: rawptr, name: string) -> (ok: bool) {
+cmparameters_remove_by_name :: proc(cmparameters: CMParameters, name: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -123,7 +128,7 @@ cmparameters_remove_by_name :: proc(cmparameters: rawptr, name: string) -> (ok: 
     return true
 }
 
-cmparameters_remove_by_index :: proc(cmparameters: rawptr, index: i32) -> (ok: bool) {
+cmparameters_remove_by_index :: proc(cmparameters: CMParameters, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if cmparameters == nil do return
@@ -134,7 +139,7 @@ cmparameters_remove_by_index :: proc(cmparameters: rawptr, index: i32) -> (ok: b
     return true
 }
 
-cmparameters_release :: proc(cmparameters: rawptr) {
+cmparameters_release :: proc(cmparameters: CMParameters) {
     if cmparameters != nil {
         (^CMParametersIF)(cmparameters)->Release()
     }

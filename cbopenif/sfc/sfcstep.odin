@@ -1,10 +1,14 @@
 package sfc
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 import "../factory"
 import "../variant"
+
+@(private="file") BStr        :: bstr.BStr
+@(private="file") HResult     :: com.HResult
+@(private="file") VariantBool :: variant.VariantBool
 
 SFCStep :: distinct rawptr
 

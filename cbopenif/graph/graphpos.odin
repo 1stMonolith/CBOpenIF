@@ -1,8 +1,14 @@
 package graph
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+
+GraphPos :: distinct rawptr
 
 GraphPosIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -23,7 +29,7 @@ GraphPosVTable :: struct {
     YScalePut:   proc "system" (this: ^GraphPosIF, YScale: f64) -> HResult,
 }
 
-graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: rawptr, ok: bool) {
+graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: GraphPos, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -38,7 +44,7 @@ graphpos_x :: proc {
     graphpos_x_set,
 }
 
-graphpos_x_get :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
+graphpos_x_get :: proc(graphpos: GraphPos) -> (x: f64, ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -49,7 +55,7 @@ graphpos_x_get :: proc(graphpos: rawptr) -> (x: f64, ok: bool) {
     return x, true
 }
 
-graphpos_x_set :: proc(graphpos: rawptr, x: f64) -> (ok: bool) {
+graphpos_x_set :: proc(graphpos: GraphPos, x: f64) -> (ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -65,7 +71,7 @@ graphpos_y :: proc {
     graphpos_y_set,
 }
 
-graphpos_y_get :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
+graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -76,7 +82,7 @@ graphpos_y_get :: proc(graphpos: rawptr) -> (y: f64, ok: bool) {
     return y, true
 }
 
-graphpos_y_set :: proc(graphpos: rawptr, y: f64) -> (ok: bool) {
+graphpos_y_set :: proc(graphpos: GraphPos, y: f64) -> (ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -92,7 +98,7 @@ graphpos_rotation :: proc {
     graphpos_rotation_set,
 }
 
-graphpos_rotation_get :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
+graphpos_rotation_get :: proc(graphpos: GraphPos) -> (rotation: f64, ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -103,7 +109,7 @@ graphpos_rotation_get :: proc(graphpos: rawptr) -> (rotation: f64, ok: bool) {
     return rotation, true
 }
 
-graphpos_rotation_set :: proc(graphpos: rawptr, rotation: f64) -> (ok: bool) {
+graphpos_rotation_set :: proc(graphpos: GraphPos, rotation: f64) -> (ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -119,7 +125,7 @@ graphpos_xscale :: proc {
     graphpos_xscale_set,
 }
 
-graphpos_xscale_get :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
+graphpos_xscale_get :: proc(graphpos: GraphPos) -> (xscale: f64, ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -130,7 +136,7 @@ graphpos_xscale_get :: proc(graphpos: rawptr) -> (xscale: f64, ok: bool) {
     return xscale, true
 }
 
-graphpos_xscale_set :: proc(graphpos: rawptr, xscale: f64) -> (ok: bool) {
+graphpos_xscale_set :: proc(graphpos: GraphPos, xscale: f64) -> (ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -146,7 +152,7 @@ graphpos_yscale :: proc {
     graphpos_yscale_set,
 }
 
-graphpos_yscale_get :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
+graphpos_yscale_get :: proc(graphpos: GraphPos) -> (yscale: f64, ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -157,7 +163,7 @@ graphpos_yscale_get :: proc(graphpos: rawptr) -> (yscale: f64, ok: bool) {
     return yscale, true
 }
 
-graphpos_yscale_set :: proc(graphpos: rawptr, yscale: f64) -> (ok: bool) {
+graphpos_yscale_set :: proc(graphpos: GraphPos, yscale: f64) -> (ok: bool) {
 
     if graphpos == nil do return
     if !controlbuilder.connected() do return
@@ -168,7 +174,7 @@ graphpos_yscale_set :: proc(graphpos: rawptr, yscale: f64) -> (ok: bool) {
     return true
 }
 
-graphpos_release :: proc(graphpos: rawptr) {
+graphpos_release :: proc(graphpos: GraphPos) {
     if graphpos != nil {
         (^GraphPosIF)(graphpos)->Release()
     }

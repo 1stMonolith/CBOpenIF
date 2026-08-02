@@ -1,16 +1,16 @@
 package controlbuilder
 
-import "../com"
-import "../variant"
 import "../bstr"
 import "../cbopen"
+import "../com"
 import "../factory"
+import "../variant"
 
-@(private) BStr             :: bstr.BStr
-@(private) Variant          :: variant.Variant
-@(private) VariantBool      :: variant.VariantBool
-@(private) VariantBoolTrue  :: variant.VariantBoolTrue
-@(private) VariantBoolFalse :: variant.VariantBoolFalse
+@(private="file") BStr             :: bstr.BStr
+@(private="file") Variant          :: variant.Variant
+@(private="file") VariantBool      :: variant.VariantBool
+@(private="file") VariantBoolTrue  :: variant.VariantBoolTrue
+@(private="file") VariantBoolFalse :: variant.VariantBoolFalse
 
 connect :: proc() -> (ok: bool) {
     cbopen.connect()

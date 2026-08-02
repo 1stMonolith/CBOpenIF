@@ -1,15 +1,12 @@
 package component
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
-import "../variant"
 import "../factory"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
 
 Component :: distinct rawptr
 

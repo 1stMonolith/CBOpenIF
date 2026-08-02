@@ -5,8 +5,8 @@ import "core:sys/windows"
 import "../bstr"
 import "../variant"
 
-@(private) BStr    :: bstr.BStr
-@(private) Variant :: variant.Variant
+@(private="file") BStr    :: bstr.BStr
+@(private="file") Variant :: variant.Variant
 
 GUID    :: windows.GUID
 HResult :: windows.HRESULT

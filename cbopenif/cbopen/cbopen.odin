@@ -1,14 +1,14 @@
 package cbopen
 
-import "../com"
 import "../bstr"
+import "../com"
 import "../variant"
 
-@(private) HResult     :: com.HResult
-@(private) GUID        :: com.GUID
-@(private) BStr        :: bstr.BStr
-@(private) Variant     :: variant.Variant
-@(private) VariantBool :: variant.VariantBool
+@(private="file") BStr        :: bstr.BStr
+@(private="file") GUID        :: com.GUID
+@(private="file") HResult     :: com.HResult
+@(private="file") Variant     :: variant.Variant
+@(private="file") VariantBool :: variant.VariantBool
 
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,

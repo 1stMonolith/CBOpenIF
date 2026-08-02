@@ -1,9 +1,9 @@
 package project
 
-import "../com"
-import "../controlbuilder"
 import "../bstr"
 import "../cbopen"
+import "../com"
+import "../controlbuilder"
 
 new :: proc(name, dir, guid, template: string) -> (ok: bool) {
     if !controlbuilder.connected() do return false

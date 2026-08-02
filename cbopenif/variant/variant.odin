@@ -1,7 +1,8 @@
 package variant
 
 import "../bstr"
-@(private) BStr :: bstr.BStr
+
+@(private="file") BStr :: bstr.BStr
 
 foreign import oleaut32 "system:oleaut32.lib"
 

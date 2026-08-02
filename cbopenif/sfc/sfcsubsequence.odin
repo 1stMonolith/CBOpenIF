@@ -1,9 +1,12 @@
 package sfc
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 import "../factory"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
 
 SFCSubSequence :: distinct rawptr
 

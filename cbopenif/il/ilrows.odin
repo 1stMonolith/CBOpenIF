@@ -1,7 +1,11 @@
 package il
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
 
 ILRowsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,

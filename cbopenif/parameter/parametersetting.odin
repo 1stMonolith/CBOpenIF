@@ -1,15 +1,14 @@
-package parametersetting
+package parameter
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
-import "../variant"
 import "../factory"
 
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+
+ParameterSetting :: distinct rawptr
 
 ParameterSettingIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -25,7 +24,7 @@ ParameterSettingVTable :: struct {
     DescriptionGet:    proc "system" (this: ^ParameterSettingIF, Description: ^BStr) -> HResult,
 }
 
-parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting: rawptr, ok: bool) {
+parameter_setting_new :: proc(name: string, value: string) -> (parameter_setting: ParameterSetting, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -46,7 +45,7 @@ parameter_setting_name :: proc {
     parameter_setting_name_set,
 }
 
-parameter_setting_name_get :: proc(parameter_setting: rawptr) -> (name: string, ok: bool) {
+parameter_setting_name_get :: proc(parameter_setting: ParameterSetting) -> (name: string, ok: bool) {
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -59,7 +58,7 @@ parameter_setting_name_get :: proc(parameter_setting: rawptr) -> (name: string, 
     return bstr.to_string(bs), true
 }
 
-parameter_setting_name_set :: proc(parameter_setting: rawptr, name: string) -> (ok: bool) {
+parameter_setting_name_set :: proc(parameter_setting: ParameterSetting, name: string) -> (ok: bool) {
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -77,7 +76,7 @@ parameter_setting_parameter_value :: proc {
     parameter_setting_parameter_value_set,
 }
 
-parameter_setting_parameter_value_get :: proc(parameter_setting: rawptr) -> (type_name: string, ok: bool) {
+parameter_setting_parameter_value_get :: proc(parameter_setting: ParameterSetting) -> (type_name: string, ok: bool) {
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -90,7 +89,7 @@ parameter_setting_parameter_value_get :: proc(parameter_setting: rawptr) -> (typ
     return bstr.to_string(bs), true
 }
 
-parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_name: string) -> (ok: bool) {
+parameter_setting_parameter_value_set :: proc(parameter_setting: ParameterSetting, type_name: string) -> (ok: bool) {
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return
@@ -103,7 +102,7 @@ parameter_setting_parameter_value_set :: proc(parameter_setting: rawptr, type_na
     return true
 }
 
-parameter_setting_description_get :: proc(parameter_setting: rawptr) -> (description: string, ok: bool) {
+parameter_setting_description_get :: proc(parameter_setting: ParameterSetting) -> (description: string, ok: bool) {
 
     if parameter_setting == nil do return
     if !controlbuilder.connected() do return

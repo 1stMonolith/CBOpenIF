@@ -1,8 +1,12 @@
 package component
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+import "../variant"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
 
 Components :: distinct rawptr
 

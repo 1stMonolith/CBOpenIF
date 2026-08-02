@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../factory"
 
+@(private="file") HResult :: com.HResult
+
 SFCSimultaneous :: distinct rawptr
 
 SFCSimultaneousIF :: struct #raw_union {

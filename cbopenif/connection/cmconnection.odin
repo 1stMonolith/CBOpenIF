@@ -1,15 +1,18 @@
-package cmconnection
+package connection
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
-import "../variant"
 import "../factory"
+import "../point"
+import "../variant"
 
- HResult     :: com.HResult
- BStr        :: bstr.BStr
- GUID        :: com.GUID
- VariantBool :: variant.VariantBool
+@(private="file") BStr        :: bstr.BStr
+@(private="file") HResult     :: com.HResult
+@(private="file") Points      :: point.Points
+@(private="file") VariantBool :: variant.VariantBool
+
+CMConnection :: distinct rawptr
 
 CMConnectionIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -24,13 +27,13 @@ CMConnectionVTable :: struct {
     ActualParameterPut:     proc "system" (this: ^CMConnectionIF, ActualParameter: BStr) -> HResult,
     GraphicalConnectionGet: proc "system" (this: ^CMConnectionIF, GraphicalConnection: ^VariantBool) -> HResult,
     GraphicalConnectionPut: proc "system" (this: ^CMConnectionIF, GraphicalConnection: VariantBool) -> HResult,
-    PointsGet:              proc "system" (this: ^CMConnectionIF, Point: ^rawptr) -> HResult,
-    PointsPut:              proc "system" (this: ^CMConnectionIF, Point: rawptr) -> HResult,
+    PointsGet:              proc "system" (this: ^CMConnectionIF, Points: ^rawptr) -> HResult,
+    PointsPut:              proc "system" (this: ^CMConnectionIF, Points: rawptr) -> HResult,
     Missing14:              proc "system" (this: ^CMConnectionIF) -> HResult,
     Serialize:              proc "system" (this: ^CMConnectionIF, XML: ^BStr) -> HResult,
 }
 
-cmconnection_new :: proc(name: string, actual_parameter: string, graphical_connection: bool) -> (cmconnection: rawptr, ok: bool) {
+cmconnection_new :: proc(name: string, actual_parameter: string, graphical_connection: bool) -> (cmconnection: CMConnection, ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -46,7 +49,7 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
     return cmconnection, true
 }
 
-cmconnection_deserialize :: proc(cmconnection: ^rawptr, xml: string) -> (ok: bool) {
+cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     
@@ -58,7 +61,7 @@ cmconnection_deserialize :: proc(cmconnection: ^rawptr, xml: string) -> (ok: boo
     return true
 }
 
-cmconnection_serialize :: proc(cmconnection: rawptr) -> (xml: string, ok: bool) {
+cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -76,7 +79,7 @@ cmconnection_name :: proc {
     cmconnection_name_set,
 }
 
-cmconnection_name_get :: proc(cmconnection: rawptr) -> (name: string, ok: bool) {
+cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -89,7 +92,7 @@ cmconnection_name_get :: proc(cmconnection: rawptr) -> (name: string, ok: bool) 
     return bstr.to_string(bs), true
 }
 
-cmconnection_name_set :: proc(cmconnection: rawptr, name: string) -> (ok: bool) {
+cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -107,7 +110,7 @@ cmconnection_actual_parameter :: proc {
     cmconnection_actual_parameter_set,
 }
 
-cmconnection_actual_parameter_get :: proc(cmconnection: rawptr) -> (actual_parameter: string, ok: bool) {
+cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual_parameter: string, ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -120,7 +123,7 @@ cmconnection_actual_parameter_get :: proc(cmconnection: rawptr) -> (actual_param
     return bstr.to_string(bs), true
 }
 
-cmconnection_actual_parameter_set :: proc(cmconnection: rawptr, actual_parameter: string) -> (ok: bool) {
+cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_parameter: string) -> (ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -139,7 +142,7 @@ cmconnection_graphical_connection :: proc {
 }
 
 
-cmconnection_graphical_connection_get :: proc(cmconnection: rawptr) -> (graphical_connection: bool, ok: bool) {
+cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (graphical_connection: bool, ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -152,7 +155,7 @@ cmconnection_graphical_connection_get :: proc(cmconnection: rawptr) -> (graphica
 }
 
 
-cmconnection_graphical_connection_set :: proc(cmconnection: rawptr, graphical_connection: bool) -> (ok: bool) {
+cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphical_connection: bool) -> (ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -170,19 +173,19 @@ cmconnection_points :: proc {
 }
 
 
-cmconnection_points_get :: proc(cmconnection: rawptr) -> (points: rawptr, ok: bool) {
+cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
 
-    hr := (^CMConnectionIF)(cmconnection)->PointsGet(&points)
+    hr := (^CMConnectionIF)(cmconnection)->PointsGet(cast(^rawptr)&points)
     if com.failed(hr) do return
 
     return points, true
 }
 
 
-cmconnection_points_set :: proc(cmconnection: rawptr, points: rawptr) -> (ok: bool) {
+cmconnection_points_set :: proc(cmconnection: CMConnection, points: Points) -> (ok: bool) {
 
     if cmconnection == nil do return
     if !controlbuilder.connected() do return
@@ -193,7 +196,7 @@ cmconnection_points_set :: proc(cmconnection: rawptr, points: rawptr) -> (ok: bo
     return true
 }
 
-cmconnection_release :: proc(cmconnection: rawptr) {
+cmconnection_release :: proc(cmconnection: CMConnection) {
     if cmconnection != nil {
         (^CMConnectionIF)(cmconnection)->Release()
     }

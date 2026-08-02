@@ -4,6 +4,8 @@ import "../com"
 import "../controlbuilder"
 import "../factory"
 
+@(private="file") HResult :: com.HResult
+
 Point :: distinct rawptr
 
 PointIF :: struct #raw_union {

@@ -1,8 +1,13 @@
 package variable
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+
+GlobalVariables :: distinct rawptr
 
 GlobalVariablesIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -27,7 +32,7 @@ globalvariables_add :: proc {
     globalvariables_add_at_index,
 }
 
-globalvariables_add_ :: proc(global_variables: rawptr, global_variable: rawptr) -> (ok: bool) {
+globalvariables_add_ :: proc(global_variables: GlobalVariables, global_variable: GlobalVariable) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -39,7 +44,7 @@ globalvariables_add_ :: proc(global_variables: rawptr, global_variable: rawptr) 
     return true
 }
 
-globalvariables_add_at_index :: proc(global_variables: rawptr, global_variable: rawptr, index: i32) -> (ok: bool) {
+globalvariables_add_at_index :: proc(global_variables: GlobalVariables, global_variable: GlobalVariable, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -56,31 +61,31 @@ globalvariables_global :: proc {
     globalvariables_global_by_index,
 }
 
-globalvariables_global_by_name :: proc(global_variables: rawptr, name: string) -> (global_variable: rawptr, ok: bool) {
+globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: string) -> (global_variable: GlobalVariable, ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
     
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := (^GlobalVariablesIF)(global_variables)->Find(bstr_name, &global_variable)
+    hr := (^GlobalVariablesIF)(global_variables)->Find(bstr_name, cast(^rawptr)&global_variable)
     if com.failed(hr) do return
     
     return global_variable, true
 }
 
-globalvariables_global_by_index :: proc(global_variables: rawptr, index: i32) -> (global_variable: rawptr, ok: bool) {
+globalvariables_global_by_index :: proc(global_variables: GlobalVariables, index: i32) -> (global_variable: GlobalVariable, ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
     
-    hr := (^GlobalVariablesIF)(global_variables)->Item(index, &global_variable)
+    hr := (^GlobalVariablesIF)(global_variables)->Item(index, cast(^rawptr)&global_variable)
     if com.failed(hr) do return
     
     return global_variable, true
 }
 
-globalvariables_global_index :: proc(global_variables: rawptr, name: string) -> (index: i32, ok: bool) {
+globalvariables_global_index :: proc(global_variables: GlobalVariables, name: string) -> (index: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -93,7 +98,7 @@ globalvariables_global_index :: proc(global_variables: rawptr, name: string) -> 
     return index, true
 }
 
-globalvariables_count :: proc(global_variables: rawptr) -> (count: i32, ok: bool) {
+globalvariables_count :: proc(global_variables: GlobalVariables) -> (count: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -109,7 +114,7 @@ globalvariables_remove :: proc {
     globalvariables_remove_by_index,
 }
 
-globalvariables_remove_by_name :: proc(global_variables: rawptr, name: string) -> (ok: bool) {
+globalvariables_remove_by_name :: proc(global_variables: GlobalVariables, name: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -123,7 +128,7 @@ globalvariables_remove_by_name :: proc(global_variables: rawptr, name: string) -
     return true
 }
 
-globalvariables_remove_by_index :: proc(global_variables: rawptr, index: i32) -> (ok: bool) {
+globalvariables_remove_by_index :: proc(global_variables: GlobalVariables, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if global_variables == nil do return
@@ -134,7 +139,7 @@ globalvariables_remove_by_index :: proc(global_variables: rawptr, index: i32) ->
     return true
 }
 
-globalvariables_release :: proc(global_variables: rawptr) {
+globalvariables_release :: proc(global_variables: GlobalVariables) {
     if global_variables != nil {
         (^GlobalVariablesIF)(global_variables)->Release()
     }

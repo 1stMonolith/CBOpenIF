@@ -1,16 +1,14 @@
 package signal
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
-import "../variant"
 import "../factory"
+import "../variant"
 
-HResult     :: com.HResult
-BStr        :: bstr.BStr
-GUID        :: com.GUID
-Variant     :: variant.Variant
-VariantBool :: variant.VariantBool
+@(private="file") BStr    :: bstr.BStr
+@(private="file") HResult :: com.HResult
+@(private="file") Variant :: variant.Variant
 
 SignalType :: enum {
     Siganl = 0

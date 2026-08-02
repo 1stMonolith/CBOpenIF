@@ -1,14 +1,5 @@
 package type
 
-import "../com"
-import "../bstr"
-import "../variant"
-
-@(private) HResult     :: com.HResult
-@(private) BStr        :: bstr.BStr
-@(private) GUID        :: com.GUID
-@(private) VariantBool :: variant.VariantBool
-
 VariableType :: enum i32 {
     Variable              = 0,
     ExternalVariable      = 1,

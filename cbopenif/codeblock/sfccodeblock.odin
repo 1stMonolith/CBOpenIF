@@ -1,11 +1,17 @@
 package codeblock
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
 import "../factory"
-import "../variant"
 import "../sfc"
+import "../variant"
+
+@(private="file") BStr        :: bstr.BStr
+@(private="file") GUID        :: com.GUID
+@(private="file") HResult     :: com.HResult
+@(private="file") SFCElements :: sfc.SFCElements
+@(private="file") VariantBool :: variant.VariantBool
 
 SFCCodeBlock :: distinct rawptr
 
@@ -170,7 +176,7 @@ sfccodeblock_elements :: proc {
     sfccodeblock_elements_set,
 }
 
-sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: sfc.SFCElements, ok: bool) {
+sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: SFCElements, ok: bool) {
 
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return
@@ -181,7 +187,7 @@ sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: s
     return sfcelements, true
 }
 
-sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: sfc.SFCElements) -> (ok: bool) {
+sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCElements) -> (ok: bool) {
 
     if sfccodeblock == nil do return
     if !controlbuilder.connected() do return

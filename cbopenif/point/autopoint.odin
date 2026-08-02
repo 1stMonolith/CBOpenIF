@@ -5,8 +5,8 @@ import "../controlbuilder"
 import "../factory"
 import "../type"
 
-@(private) HResult :: com.HResult
-@(private) AutoPosType :: type.AutoPosType
+@(private="file") HResult :: com.HResult
+@(private="file") AutoPosType :: type.AutoPosType
 
 AutoPoint :: distinct rawptr
 

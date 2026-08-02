@@ -1,8 +1,13 @@
 package variable
 
+import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../bstr"
+
+@(private="file") BStr        :: bstr.BStr
+@(private="file") HResult     :: com.HResult
+
+Variables :: distinct rawptr
 
 VariablesIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
@@ -27,7 +32,7 @@ variables_add :: proc {
     variables_add_at_index,
 }
 
-variables_add_ :: proc(variables: rawptr, variable: rawptr) -> (ok: bool) {
+variables_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -39,7 +44,7 @@ variables_add_ :: proc(variables: rawptr, variable: rawptr) -> (ok: bool) {
     return true
 }
 
-variables_add_at_index :: proc(variables: rawptr, variable: rawptr, index: i32) -> (ok: bool) {
+variables_add_at_index :: proc(variables: Variables, variable: Variable, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -56,31 +61,31 @@ variables_variable :: proc {
     variables_variable_by_index,
 }
 
-variables_variable_by_name :: proc(variables: rawptr, name: string) -> (variable: rawptr, ok: bool) {
+variables_variable_by_name :: proc(variables: Variables, name: string) -> (variable: Variable, ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
     
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
-    hr := (^VariablesIF)(variables)->Find(bstr_name, &variable)
+    hr := (^VariablesIF)(variables)->Find(bstr_name, cast(^rawptr)&variable)
     if com.failed(hr) do return
     
     return variable, true
 }
 
-variables_variable_by_index :: proc(variables: rawptr, index: i32) -> (variable: rawptr, ok: bool) {
+variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variable: Variable, ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
     
-    hr := (^VariablesIF)(variables)->Item(index, &variable)
+    hr := (^VariablesIF)(variables)->Item(index, cast(^rawptr)&variable)
     if com.failed(hr) do return
     
     return variable, true
 }
 
-variables_variable_index :: proc(variables: rawptr, name: string) -> (index: i32, ok: bool) {
+variables_variable_index :: proc(variables: Variables, name: string) -> (index: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -93,7 +98,7 @@ variables_variable_index :: proc(variables: rawptr, name: string) -> (index: i32
     return index, true
 }
 
-variables_count :: proc(variables: rawptr) -> (count: i32, ok: bool) {
+variables_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -109,7 +114,7 @@ variables_remove :: proc {
     variables_remove_by_index
 }
 
-variables_remove_by_name :: proc(variables: rawptr, name: string) -> (ok: bool) {
+variables_remove_by_name :: proc(variables: Variables, name: string) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -123,7 +128,7 @@ variables_remove_by_name :: proc(variables: rawptr, name: string) -> (ok: bool) 
     return true
 }
 
-variables_remove_by_index :: proc(variables: rawptr, index: i32) -> (ok: bool) {
+variables_remove_by_index :: proc(variables: Variables, index: i32) -> (ok: bool) {
 
     if !controlbuilder.connected() do return
     if variables == nil do return
@@ -134,7 +139,7 @@ variables_remove_by_index :: proc(variables: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-variables_release :: proc(variables: rawptr) {
+variables_release :: proc(variables: Variables) {
     if variables != nil {
         (^VariablesIF)(variables)->Release()
     }
