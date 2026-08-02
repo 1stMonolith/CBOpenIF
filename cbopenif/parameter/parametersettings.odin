@@ -27,13 +27,13 @@ ParameterSettingsVTable :: struct {
 }
 
 parametersettings_add :: proc {
-    parametersettings_add_get,
+    parametersettings_add_,
     parametersettings_add_at_index,
 }
 
-parametersettings_add_get :: proc(parameter_settings: ParameterSettings, parameter_setting: ParameterSetting) -> (ok: bool) {
+parametersettings_add_ :: proc(parameter_settings: ParameterSettings, parameter_setting: ParameterSetting) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     if parameter_setting == nil do return
 
@@ -45,7 +45,7 @@ parametersettings_add_get :: proc(parameter_settings: ParameterSettings, paramet
 
 parametersettings_add_at_index :: proc(parameter_settings: ParameterSettings, parameter_setting: ParameterSetting, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     if parameter_setting == nil do return
     
@@ -62,7 +62,7 @@ parametersettings_parametersetting :: proc {
 
 parametersettings_parametersetting_by_name :: proc(parameter_settings: ParameterSettings, name: string) -> (parameter_setting: ParameterSetting, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -75,7 +75,7 @@ parametersettings_parametersetting_by_name :: proc(parameter_settings: Parameter
 
 parametersettings_parametersetting_by_index :: proc(parameter_settings: ParameterSettings, index: i32) -> (parameter_setting: ParameterSetting, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     
     hr := (^ParameterSettingsIF)(parameter_settings)->Item(index, cast(^rawptr)&parameter_setting)
@@ -86,7 +86,7 @@ parametersettings_parametersetting_by_index :: proc(parameter_settings: Paramete
 
 parametersettings_parametersetting_index :: proc(parameter_settings: ParameterSettings, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -99,7 +99,7 @@ parametersettings_parametersetting_index :: proc(parameter_settings: ParameterSe
 
 parametersettings_count :: proc(parameter_settings: ParameterSettings) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     
     hr := (^ParameterSettingsIF)(parameter_settings)->Count(&count)
@@ -115,7 +115,7 @@ parametersettings_remove :: proc {
 
 parametersettings_remove_by_name :: proc(parameter_settings: ParameterSettings, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
 
     index: i32
@@ -129,7 +129,7 @@ parametersettings_remove_by_name :: proc(parameter_settings: ParameterSettings, 
 
 parametersettings_remove_by_index :: proc(parameter_settings: ParameterSettings, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameter_settings == nil do return
     
     hr := (^ParameterSettingsIF)(parameter_settings)->Remove(index)

@@ -12,25 +12,25 @@ import "../variant"
 @(private="file") VariantBoolTrue  :: variant.VariantBoolTrue
 @(private="file") VariantBoolFalse :: variant.VariantBoolFalse
 
-connect :: proc() -> (ok: bool) {
+controlbuilder_connect :: proc() -> (ok: bool) {
     cbopen.connect()
     factory.connect()
     return true
 }
 
-connected :: proc() -> (ok: bool) {
+controlbuilder_connected :: proc() -> (ok: bool) {
     if (cbopen.cbopenif != nil) & (factory.factoryif != nil) do return true
     return false
 }
 
-disconnect :: proc() -> (ok: bool) {
+controlbuilder_disconnect :: proc() -> (ok: bool) {
     cbopen.disconnect()
     factory.disconnect()
     return true
 }
 
-online :: proc() -> (is_online: bool, messages: string, ok: bool) {
-    if !connected() do return false, "", false
+controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
+    if !controlbuilder_connected() do return false, "", false
     vb: VariantBool
     bstr_messages: BStr
 
@@ -49,8 +49,8 @@ online :: proc() -> (is_online: bool, messages: string, ok: bool) {
     return is_online, messages, false
 }
 
-offline :: proc() -> (messages: string, ok: bool) {
-    if !connected() do return "", false
+controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
+    if !controlbuilder_connected() do return "", false
     bstr_messages: BStr
 
     hr := cbopen.cbopenif->Offline(&bstr_messages)
@@ -83,14 +83,34 @@ set_setting :: proc(setting_name: string, value: Variant) -> (ok: bool) {
 }
 */
 
-set_setting :: proc {
-    set_setting_string,
+controlbuilder_setting :: proc {
+    controlbuilder_get_setting,
+    controlbuilder_set_setting_string,
+}
+
+controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
+    
+    if !controlbuilder_connected() do return {}, false
+    
+    // caller must variant_free(&value) when done, OR we clear on failure only!
+    variant.init(&setting)
+
+    bstr_name := bstr.from_string(setting_name)
+    defer bstr.free(bstr_name)
+
+    hr := cbopen.cbopenif->GetSetting(bstr_name, &setting)
+    if com.failed(hr) {
+        variant.free(&setting)
+        return {}, false
+    }
+
+    return setting, true
 }
 
 // TODO: make version for each Variant type used in interface so user does not have to deal with Variant at all.
-set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
+controlbuilder_set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
 
-    if !connected() do return
+    if !controlbuilder_connected() do return
 
     // IDL: SetSetting(SettingName, Value)  — two args, IDL order
     v_setting_name := variant.to_variant(setting_name)
@@ -109,24 +129,4 @@ set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) 
     if !ok2 do return
 
     return true
-}
-
-
-get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
-    
-    if !connected() do return {}, false
-    
-    // caller must variant_free(&value) when done, OR we clear on failure only!
-    variant.init(&setting)
-
-    bstr_name := bstr.from_string(setting_name)
-    defer bstr.free(bstr_name)
-
-    hr := cbopen.cbopenif->GetSetting(bstr_name, &setting)
-    if com.failed(hr) {
-        variant.free(&setting)
-        return {}, false
-    }
-
-    return setting, true
 }

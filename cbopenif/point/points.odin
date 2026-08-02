@@ -29,7 +29,7 @@ points_add :: proc {
 
 points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if points == nil do return
     if point == nil do return
     
@@ -41,7 +41,7 @@ points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
 
 points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if points == nil do return
     if point == nil do return
     
@@ -53,7 +53,7 @@ points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bo
 
 points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if points == nil do return
     
     hr := (^PointsIF)(points)->Item(index, cast(^rawptr)&point)
@@ -64,7 +64,7 @@ points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: 
 
 points_count :: proc(points: Points) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if points == nil do return
     
     hr := (^PointsIF)(points)->Count(&count)
@@ -75,7 +75,7 @@ points_count :: proc(points: Points) -> (count: i32, ok: bool) {
 
 points_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if points == nil do return
     
     hr := (^PointsIF)(points)->Remove(index)

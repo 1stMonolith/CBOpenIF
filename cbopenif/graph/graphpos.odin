@@ -31,7 +31,7 @@ GraphPosVTable :: struct {
 
 graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: GraphPos, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := factory.factoryif->NewGraphPos(x_pos, y_pos, rotation, x_scale, y_scale, cast(^rawptr)&graphpos)
     if com.failed(hr) do return
@@ -47,7 +47,7 @@ graphpos_x :: proc {
 graphpos_x_get :: proc(graphpos: GraphPos) -> (x: f64, ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XGet(&x)
     if com.failed(hr) do return
@@ -58,7 +58,7 @@ graphpos_x_get :: proc(graphpos: GraphPos) -> (x: f64, ok: bool) {
 graphpos_x_set :: proc(graphpos: GraphPos, x: f64) -> (ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XPut(x)
     if com.failed(hr) do return
@@ -74,7 +74,7 @@ graphpos_y :: proc {
 graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XGet(&y)
     if com.failed(hr) do return
@@ -85,7 +85,7 @@ graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
 graphpos_y_set :: proc(graphpos: GraphPos, y: f64) -> (ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XPut(y)
     if com.failed(hr) do return
@@ -101,7 +101,7 @@ graphpos_rotation :: proc {
 graphpos_rotation_get :: proc(graphpos: GraphPos) -> (rotation: f64, ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->RotationGet(&rotation)
     if com.failed(hr) do return
@@ -112,7 +112,7 @@ graphpos_rotation_get :: proc(graphpos: GraphPos) -> (rotation: f64, ok: bool) {
 graphpos_rotation_set :: proc(graphpos: GraphPos, rotation: f64) -> (ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->RotationPut(rotation)
     if com.failed(hr) do return
@@ -128,7 +128,7 @@ graphpos_xscale :: proc {
 graphpos_xscale_get :: proc(graphpos: GraphPos) -> (xscale: f64, ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XScaleGet(&xscale)
     if com.failed(hr) do return
@@ -139,7 +139,7 @@ graphpos_xscale_get :: proc(graphpos: GraphPos) -> (xscale: f64, ok: bool) {
 graphpos_xscale_set :: proc(graphpos: GraphPos, xscale: f64) -> (ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XScalePut(xscale)
     if com.failed(hr) do return
@@ -155,7 +155,7 @@ graphpos_yscale :: proc {
 graphpos_yscale_get :: proc(graphpos: GraphPos) -> (yscale: f64, ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YScaleGet(&yscale)
     if com.failed(hr) do return
@@ -166,7 +166,7 @@ graphpos_yscale_get :: proc(graphpos: GraphPos) -> (yscale: f64, ok: bool) {
 graphpos_yscale_set :: proc(graphpos: GraphPos, yscale: f64) -> (ok: bool) {
 
     if graphpos == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YScalePut(yscale)
     if com.failed(hr) do return

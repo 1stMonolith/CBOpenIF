@@ -30,7 +30,7 @@ ILCodeBlockVTable :: struct {
 
 ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := bstr.from_string(name)
     bstr.free(bstr_name)
@@ -43,7 +43,7 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
 ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: bool) {
 
     if ilcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -61,7 +61,7 @@ ilcodeblock_name :: proc {
 ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: bool) {
 
     if ilcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -74,7 +74,7 @@ ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: boo
 ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
     
     if ilcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -92,7 +92,7 @@ ilcodeblock_stcode :: proc {
 ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok: bool) {
 
     if ilcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsGet(&ilrows)
     if com.failed(hr) do return
@@ -103,7 +103,7 @@ ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok:
 ilcodeblock_stcode_set :: proc(ilcodeblock: ILCodeBlock, ilrows: rawptr) -> (ok: bool) {
     
     if ilcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsPut(ilrows)
     if com.failed(hr) do return

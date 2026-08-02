@@ -10,12 +10,12 @@ import "../cbopenif/variant"
 
 main :: proc() {
 
-    cb.connect()
+    cb.controlbuilder_connect()
 
     // Control Builder
     fmt.println("Control Builder stuff...")
     {
-        ok := cb.set_setting("ProjectsFolder", "SomeSettingValue")
+        ok := cb.controlbuilder_setting("ProjectsFolder", "SomeSettingValue")
     }
 
     // DataType
@@ -80,5 +80,5 @@ main :: proc() {
         cb.release(signal)
     }
     
-    cb.disconnect()
+    cb.controlbuilder_disconnect()
 }

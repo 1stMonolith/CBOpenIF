@@ -34,7 +34,7 @@ cmparameters_add :: proc {
 
 cmparameters_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     if cmparameter == nil do return
 
@@ -46,7 +46,7 @@ cmparameters_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) 
 
 cmparameters_add_at_index :: proc(cmparameters: CMParameters, cmparameter: CMParameter, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     if cmparameter == nil do return
     
@@ -63,7 +63,7 @@ cmparameters_cmparameter :: proc {
 
 cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: string) -> (cmparameter: CMParameter, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -76,7 +76,7 @@ cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: strin
 
 cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32) -> (cmparameter: CMParameter, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     
     hr := (^CMParametersIF)(cmparameters)->Item(index, cast(^rawptr)&cmparameter)
@@ -87,7 +87,7 @@ cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32
 
 cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -100,7 +100,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
 
 cmparameters_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     
     hr := (^CMParametersIF)(cmparameters)->Count(&count)
@@ -116,7 +116,7 @@ cmparameters_remove :: proc {
 
 cmparameters_remove_by_name :: proc(cmparameters: CMParameters, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
 
     index: i32
@@ -130,7 +130,7 @@ cmparameters_remove_by_name :: proc(cmparameters: CMParameters, name: string) ->
 
 cmparameters_remove_by_index :: proc(cmparameters: CMParameters, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmparameters == nil do return
     
     hr := (^CMParametersIF)(cmparameters)->Remove(index)

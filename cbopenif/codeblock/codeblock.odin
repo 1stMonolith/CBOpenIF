@@ -41,7 +41,7 @@ CodeBlockVTable :: struct {
 
 codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
@@ -59,7 +59,7 @@ codeblock_name :: proc {
 codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -72,7 +72,7 @@ codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
 codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -85,7 +85,7 @@ codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
 codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsSTCodeBlock(&vb)
@@ -97,7 +97,7 @@ codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
 codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsSFCCodeBlock(&vb)
@@ -109,7 +109,7 @@ codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
 codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsILCodeBlock(&vb)
@@ -121,7 +121,7 @@ codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
 codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsFBDCodeBlock(&vb)
@@ -133,7 +133,7 @@ codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
 codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsLDCodeBlock(&vb)
@@ -145,7 +145,7 @@ codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
 codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
 
     if codeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CodeBlockIF)(codeblock)->IsFDCodeBlock(&vb)

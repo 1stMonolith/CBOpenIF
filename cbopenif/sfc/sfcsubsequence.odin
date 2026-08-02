@@ -26,7 +26,7 @@ SFCSubSequenceVTable :: struct {
 
 sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
@@ -44,7 +44,7 @@ sfcsubsequence_name :: proc {
 sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string, ok: bool) {
 
     if sfcsubsequence == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -57,7 +57,7 @@ sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string
 sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
 
     if sfcsubsequence == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -75,7 +75,7 @@ sfcsubsequence_elements :: proc {
 sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfcelements: SFCElements, ok: bool) {
 
     if sfcsubsequence == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsGet(cast(^rawptr)&sfcelements)
     if com.failed(hr) do return
@@ -86,7 +86,7 @@ sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfceleme
 sfcsubsequence_elements_set :: proc(sfcsubsequence: SFCSubSequence, sfcelements: SFCElements) -> (ok: bool) {
 
     if sfcsubsequence == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsPut(sfcelements)
     if com.failed(hr) do return

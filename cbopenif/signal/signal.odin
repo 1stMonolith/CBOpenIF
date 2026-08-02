@@ -39,7 +39,7 @@ SignalVTable :: struct {
 /* use of Variant as an out required use of IDispatch->Invoke
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := bstr.from_string(name)
     bstr_path := bstr.from_string(path)
@@ -64,7 +64,7 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
 
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     v_name := variant.to_variant(name)
     v_path := variant.to_variant(path)
@@ -113,7 +113,7 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
 
 signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
@@ -126,7 +126,7 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -144,7 +144,7 @@ signal_name :: proc {
 signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -157,7 +157,7 @@ signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
 signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -175,7 +175,7 @@ signal_description :: proc {
 signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -188,7 +188,7 @@ signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool
 signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(description)
     defer bstr.free(bs)
@@ -206,7 +206,7 @@ signal_path :: proc {
 signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -219,7 +219,7 @@ signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
 signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
 
     if signal == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(path)
     defer bstr.free(bs)

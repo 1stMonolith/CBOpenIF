@@ -35,7 +35,7 @@ parameters_add :: proc {
 
 parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     if parameter == nil do return
 
@@ -47,7 +47,7 @@ parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bo
 
 parameters_add_at_index :: proc(parameters: Parameters, parameter: Parameter, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     if parameter == nil do return
     
@@ -57,14 +57,14 @@ parameters_add_at_index :: proc(parameters: Parameters, parameter: Parameter, in
     return true
 }
 
-parameters_external :: proc {
-    parameters_external_by_name,
-    parameters_external_by_index,
+parameters_parameter :: proc {
+    parameters_parameter_by_name,
+    parameters_parameter_by_index,
 }
 
-parameters_external_by_name :: proc(parameters: Parameters, name: string) -> (parameter: Parameter, ok: bool) {
+parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (parameter: Parameter, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -75,9 +75,9 @@ parameters_external_by_name :: proc(parameters: Parameters, name: string) -> (pa
     return parameter, true
 }
 
-parameters_external_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: rawptr, ok: bool) {
+parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: rawptr, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
     hr := (^ParametersIF)(parameters)->Item(index, &parameter)
@@ -86,9 +86,9 @@ parameters_external_by_index :: proc(parameters: rawptr, index: i32) -> (paramet
     return parameter, true
 }
 
-parameters_external_index :: proc(parameters: Parameters, name: string) -> (index: i32, ok: bool) {
+parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -101,7 +101,7 @@ parameters_external_index :: proc(parameters: Parameters, name: string) -> (inde
 
 parameters_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
     hr := (^ParametersIF)(parameters)->Count(&count)
@@ -117,11 +117,11 @@ parameters_remove :: proc {
 
 parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
 
     index: i32
-    index, ok = parameters_external_index(parameters, name)
+    index, ok = parameters_parameter_index(parameters, name)
     
     hr := (^ParametersIF)(parameters)->Remove(index)
     if com.failed(hr) do return
@@ -131,7 +131,7 @@ parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: 
 
 parameters_remove_by_index :: proc(parameters: Parameters, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
     hr := (^ParametersIF)(parameters)->Remove(index)

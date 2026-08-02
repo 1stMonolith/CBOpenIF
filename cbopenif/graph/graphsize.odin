@@ -29,7 +29,7 @@ GraphSizeVTable :: struct {
 
 graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: GraphSize, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := factory.factoryif->NewGraphSize(lower_left, upper_right, cast(^rawptr)&graphsize)
     if com.failed(hr) do return
@@ -45,7 +45,7 @@ graphsize_lower_left :: proc {
 graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok: bool) {
 
     if graphsize == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->LowerLeftGet(cast(^rawptr)&lower_left)
     if com.failed(hr) do return
@@ -56,7 +56,7 @@ graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok
 graphsize_lower_left_set :: proc(graphsize: GraphSize, lower_left: Point) -> (ok: bool) {
 
     if graphsize == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->LowerLeftPut(lower_left)
     if com.failed(hr) do return
@@ -72,7 +72,7 @@ graphsize_upper_right :: proc {
 graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, ok: bool) {
 
     if graphsize == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->UpperRightGet(cast(^rawptr)&upper_right)
     if com.failed(hr) do return
@@ -83,7 +83,7 @@ graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, 
 graphsize_upper_right_set :: proc(graphsize: GraphSize, upper_right: Point) -> (ok: bool) {
 
     if graphsize == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->UpperRightPut(upper_right)
     if com.failed(hr) do return

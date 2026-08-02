@@ -35,7 +35,7 @@ ApplicationVariablesVTable :: struct {
 
 applicationvariables_new :: proc(description := "") -> (application_variables: ApplicationVariables, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_description := bstr.from_string(description)
     bstr.free(bstr_description)
@@ -47,7 +47,7 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
 
 applicationvariables_deserialize :: proc(application_variables: ^ApplicationVariables, xml: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
@@ -60,7 +60,7 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
 applicationvariables_serialize :: proc(application_variables: ApplicationVariables) -> (xml: string, ok: bool) {
 
     if application_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -78,7 +78,7 @@ applicationvariables_description :: proc {
 applicationvariables_description_get :: proc(application_variables: ApplicationVariables) -> (description: string, ok: bool) {
 
     if application_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -108,7 +108,7 @@ applicationvariables_globals :: proc {
 applicationvariables_globals_get :: proc(application_variables: ApplicationVariables) -> (global_variables: GlobalVariables, ok: bool) {
 
     if application_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesGet(cast(^rawptr)&global_variables)
     if com.failed(hr) do return
@@ -120,7 +120,7 @@ applicationvariables_globals_set :: proc(application_variables: ApplicationVaria
 
     if application_variables == nil do return
     if global_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesPut(global_variables)
     if com.failed(hr) do return
@@ -136,7 +136,7 @@ applicationvariables_variables :: proc {
 applicationvariables_variables_get :: proc(application_variables: ApplicationVariables) -> (variables: Variables, ok: bool) {
 
     if application_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesGet(cast(^rawptr)&variables)
     if com.failed(hr) do return
@@ -148,7 +148,7 @@ applicationvariables_variables_set :: proc(application_variables: ApplicationVar
 
     if application_variables == nil do return
     if variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesPut(variables)
     if com.failed(hr) do return
@@ -164,7 +164,7 @@ applicationvariables_signals :: proc {
 applicationvariables_signals_get :: proc(application_variables: ApplicationVariables) -> (signals: Signals, ok: bool) {
 
     if application_variables == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsGet(cast(^rawptr)&signals)
     if com.failed(hr) do return
@@ -176,7 +176,7 @@ applicationvariables_signals_set :: proc(application_variables: ApplicationVaria
 
     if application_variables == nil do return
     if signals == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsPut(signals)
     if com.failed(hr) do return

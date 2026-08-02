@@ -29,7 +29,7 @@ FDCodeBlockVTable :: struct {
 fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
 
     if fdcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -47,7 +47,7 @@ fdcodeblock_name :: proc {
 fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
 
     if fdcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -60,7 +60,7 @@ fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: boo
 fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
     
     if fdcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs :=bstr.from_string(name)
     defer bstr.free(bs)
@@ -78,7 +78,7 @@ fdcodeblock_xml_string :: proc {
 fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
 
     if fdcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -91,7 +91,7 @@ fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: str
 fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
     
     if fdcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs :=bstr.from_string(xml_string)
     defer bstr.free(bs)

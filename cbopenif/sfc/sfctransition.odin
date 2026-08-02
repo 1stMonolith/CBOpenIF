@@ -27,7 +27,7 @@ SFCTransitionVTable :: struct {
 
 sfctransition_new :: proc(name: string, stcode := "", dest := "") -> (sfctransition: SFCTransition, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := bstr.from_string(name)
     bstr_stcode := bstr.from_string(stcode)
@@ -51,7 +51,7 @@ sfctransition_name :: proc {
 sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -64,7 +64,7 @@ sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, o
 sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -82,7 +82,7 @@ sfctransition_dest :: proc {
 sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -95,7 +95,7 @@ sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, o
 sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(dest)
     defer bstr.free(bs)
@@ -113,7 +113,7 @@ sfctransition_stcode :: proc {
 sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: string, ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -126,7 +126,7 @@ sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: strin
 sfctransition_stcode_set :: proc(sfctransition: SFCTransition, stcode: string) -> (ok: bool) {
 
     if sfctransition == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(stcode)
     defer bstr.free(bs)

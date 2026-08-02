@@ -33,7 +33,7 @@ graphnodes_add :: proc {
 
 graphnodes_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     if graphnode == nil do return
     
@@ -45,7 +45,7 @@ graphnodes_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bo
 
 graphnodes_add_at_index :: proc(graphnodes: GraphNodes, graphnode: GraphNode, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     if graphnode == nil do return
     
@@ -62,7 +62,7 @@ graphnodes_graphnode :: proc {
 
 graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (graphnode: GraphNode, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -75,7 +75,7 @@ graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (g
 
 graphnodes_graphnode_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (graphnode: GraphNode, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
     hr := (^GraphNodesIF)(graphnodes)->Item(index, cast(^rawptr)&graphnode)
@@ -86,7 +86,7 @@ graphnodes_graphnode_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (gr
 
 graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -99,7 +99,7 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
 
 graphnodes_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
     hr := (^GraphNodesIF)(graphnodes)->Count(&count)
@@ -115,7 +115,7 @@ graphnodes_remove :: proc {
 
 graphnodes_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
 
     index: i32
@@ -129,7 +129,7 @@ graphnodes_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: 
 
 graphnodes_remove_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
     hr := (^GraphNodesIF)(graphnodes)->Remove(index)

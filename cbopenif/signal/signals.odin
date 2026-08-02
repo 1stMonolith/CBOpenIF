@@ -35,7 +35,7 @@ signals_add :: proc {
 
 signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     if signal == nil do return
 
@@ -47,7 +47,7 @@ signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
 
 signals_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     if signal == nil do return
     
@@ -64,7 +64,7 @@ signals_signal :: proc {
 
 signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signal, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -77,7 +77,7 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
 
 signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
     hr := (^SignalsIF)(signals)->Item(index, cast(^rawptr)&signal)
@@ -88,7 +88,7 @@ signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal
 
 signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -101,7 +101,7 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
 
 signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
     hr := (^SignalsIF)(signals)->Count(&count)
@@ -117,7 +117,7 @@ signals_remove :: proc {
 
 signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
 
     index: i32
@@ -131,7 +131,7 @@ signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
 
 signals_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
     hr := (^SignalsIF)(signals)->Remove(index)

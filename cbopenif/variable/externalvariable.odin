@@ -47,7 +47,7 @@ ExternalVariableVTable :: struct {
 
 externalvariable_new :: proc(name: string, type: string, attribute := "", readpermission := "", writepermission := "", description := "") -> (external_variable: ExternalVariable, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := bstr.from_string(name)
     bstr_type := bstr.from_string(type)
@@ -71,7 +71,7 @@ externalvariable_new :: proc(name: string, type: string, attribute := "", readpe
 
 externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
@@ -84,7 +84,7 @@ externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: 
 externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -102,7 +102,7 @@ externalvariable_name :: proc {
 externalvariable_name_get :: proc(external_variable: ExternalVariable) -> (name: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -115,7 +115,7 @@ externalvariable_name_get :: proc(external_variable: ExternalVariable) -> (name:
 externalvariable_name_set :: proc(external_variable: ExternalVariable, name: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -133,7 +133,7 @@ externalvariable_type_name :: proc {
 externalvariable_type_name_get :: proc(external_variable: ExternalVariable) -> (type_name: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -146,7 +146,7 @@ externalvariable_type_name_get :: proc(external_variable: ExternalVariable) -> (
 externalvariable_type_name_set :: proc(external_variable: ExternalVariable, type_name: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(type_name)
     defer bstr.free(bs)
@@ -164,7 +164,7 @@ externalvariable_attribute :: proc {
 externalvariable_attribute_get :: proc(external_variable: ExternalVariable) -> (attribute: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -177,7 +177,7 @@ externalvariable_attribute_get :: proc(external_variable: ExternalVariable) -> (
 externalvariable_attribute_set :: proc(external_variable: ExternalVariable, attribute: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(attribute)
     defer bstr.free(bs)
@@ -195,7 +195,7 @@ externalvariable_description :: proc {
 externalvariable_description_get :: proc(external_variable: ExternalVariable) -> (description: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -208,7 +208,7 @@ externalvariable_description_get :: proc(external_variable: ExternalVariable) ->
 externalvariable_description_set :: proc(external_variable: ExternalVariable, description: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(description)
     defer bstr.free(bs)
@@ -226,7 +226,7 @@ externalvariable_read_permission :: proc {
 externalvariable_read_permission_get :: proc(external_variable: ExternalVariable) -> (read_permission: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -239,7 +239,7 @@ externalvariable_read_permission_get :: proc(external_variable: ExternalVariable
 externalvariable_read_permission_set :: proc(external_variable: ExternalVariable, read_permission: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(read_permission)
     defer bstr.free(bs)
@@ -257,7 +257,7 @@ externalvariable_write_permission :: proc {
 externalvariable_write_permission_get :: proc(external_variable: ExternalVariable) -> (write_permission: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -270,7 +270,7 @@ externalvariable_write_permission_get :: proc(external_variable: ExternalVariabl
 externalvariable_write_permission_set :: proc(external_variable: ExternalVariable, write_permission: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(write_permission)
     defer bstr.free(bs)
@@ -288,7 +288,7 @@ externalvariable_authentication_level :: proc {
 externalvariable_authentication_level_get :: proc(external_variable: ExternalVariable) -> (authentication_level: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -301,7 +301,7 @@ externalvariable_authentication_level_get :: proc(external_variable: ExternalVar
 externalvariable_authentication_level_set :: proc(external_variable: ExternalVariable, authentication_level: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(authentication_level)
     defer bstr.free(bs)
@@ -319,7 +319,7 @@ externalvariable_graph_nodes :: proc {
 externalvariable_graph_nodes_get :: proc(external_variable: ExternalVariable) -> (graph_nodes: GraphNodes, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariableIF)(external_variable)->GraphNodesGet(cast(^rawptr)&graph_nodes)
     if com.failed(hr) do return
@@ -330,7 +330,7 @@ externalvariable_graph_nodes_get :: proc(external_variable: ExternalVariable) ->
 externalvariable_graph_nodes_set :: proc(external_variable: ExternalVariable, graph_nodes: GraphNodes) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariableIF)(external_variable)->GraphNodesPut(graph_nodes)
     if com.failed(hr) do return
@@ -341,7 +341,7 @@ externalvariable_graph_nodes_set :: proc(external_variable: ExternalVariable, gr
 externalvariable_type_guid_get :: proc(external_variable: ExternalVariable) -> (guid: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -354,7 +354,7 @@ externalvariable_type_guid_get :: proc(external_variable: ExternalVariable) -> (
 externalvariable_type_path_get :: proc(external_variable: ExternalVariable) -> (path: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -372,7 +372,7 @@ externalvariable_access_level :: proc {
 externalvariable_access_level_get :: proc(external_variable: ExternalVariable) -> (access_level: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -385,7 +385,7 @@ externalvariable_access_level_get :: proc(external_variable: ExternalVariable) -
 externalvariable_access_level_set :: proc(external_variable: ExternalVariable, access_level: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(access_level)
     defer bstr.free(bs)
@@ -403,7 +403,7 @@ externalvariable_safety_type :: proc {
 externalvariable_safety_type_get :: proc(external_variable: ExternalVariable) -> (safety_type: string, ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -416,7 +416,7 @@ externalvariable_safety_type_get :: proc(external_variable: ExternalVariable) ->
 externalvariable_safety_type_set :: proc(external_variable: ExternalVariable, safety_type: string) -> (ok: bool) {
 
     if external_variable == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(safety_type)
     defer bstr.free(bs)

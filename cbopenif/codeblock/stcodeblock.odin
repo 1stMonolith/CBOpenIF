@@ -29,7 +29,7 @@ STCodeBlockVTable :: struct {
 
 stcodeblock_new :: proc(name, stcode: string) -> (stcodeblock: STCodeBlock, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := bstr.from_string(name)
     bstr_stcode := bstr.from_string(stcode)
@@ -46,7 +46,7 @@ stcodeblock_new :: proc(name, stcode: string) -> (stcodeblock: STCodeBlock, ok: 
 stcodeblock_serialize :: proc(stcodeblock: STCodeBlock) -> (xml: string, ok: bool) {
 
     if stcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -64,7 +64,7 @@ stcodeblock_name :: proc {
 stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: bool) {
 
     if stcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -77,7 +77,7 @@ stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: boo
 stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: bool) {
     
     if stcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -95,7 +95,7 @@ stcodeblock_stcode :: proc {
 stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok: bool) {
 
     if stcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -108,7 +108,7 @@ stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok:
 stcodeblock_stcode_set :: proc(stcodeblock: STCodeBlock, stcode: string) -> (ok: bool) {
     
     if stcodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(stcode)
     defer bstr.free(bs)

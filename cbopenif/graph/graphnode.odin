@@ -27,7 +27,7 @@ GraphNodeVTable :: struct {
 
 graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
@@ -45,7 +45,7 @@ graphnode_name :: proc {
 graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -58,7 +58,7 @@ graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
 graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -76,7 +76,7 @@ graphnode_x :: proc {
 graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XGet(&x)
     if com.failed(hr) do return
@@ -87,7 +87,7 @@ graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
 graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XPut(x)
     if com.failed(hr) do return
@@ -103,7 +103,7 @@ graphnode_y :: proc {
 graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YGet(&y)
     if com.failed(hr) do return
@@ -114,7 +114,7 @@ graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
 graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
 
     if graphnode == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YPut(y)
     if com.failed(hr) do return

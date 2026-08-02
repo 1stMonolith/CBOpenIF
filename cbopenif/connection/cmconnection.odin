@@ -35,7 +35,7 @@ CMConnectionVTable :: struct {
 
 cmconnection_new :: proc(name: string, actual_parameter: string, graphical_connection: bool) -> (cmconnection: CMConnection, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := bstr.from_string(name)
     bstr_actual_parameter := bstr.from_string(actual_parameter)
@@ -51,7 +51,7 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
 
 cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(xml)
     defer bstr.free(bs)
@@ -64,7 +64,7 @@ cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (o
 cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -82,7 +82,7 @@ cmconnection_name :: proc {
 cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -95,7 +95,7 @@ cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: 
 cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -113,7 +113,7 @@ cmconnection_actual_parameter :: proc {
 cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual_parameter: string, ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -126,7 +126,7 @@ cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual
 cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_parameter: string) -> (ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(actual_parameter)
     defer bstr.free(bs)
@@ -145,7 +145,7 @@ cmconnection_graphical_connection :: proc {
 cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (graphical_connection: bool, ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     vb: VariantBool
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionGet(&vb)
@@ -158,7 +158,7 @@ cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (gr
 cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphical_connection: bool) -> (ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     vb := variant.bool_to_variantbool(graphical_connection)
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(vb)
@@ -176,7 +176,7 @@ cmconnection_points :: proc {
 cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CMConnectionIF)(cmconnection)->PointsGet(cast(^rawptr)&points)
     if com.failed(hr) do return
@@ -188,7 +188,7 @@ cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, 
 cmconnection_points_set :: proc(cmconnection: CMConnection, points: Points) -> (ok: bool) {
 
     if cmconnection == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CMConnectionIF)(cmconnection)->PointsPut(points)
     if com.failed(hr) do return

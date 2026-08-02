@@ -45,7 +45,7 @@ ComponentVTable :: struct {
 
 component_new :: proc(name: string, type: string, attribute := "", initial_value := "", description := "") -> (component: Component, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := bstr.from_string(name)
     bstr_type := bstr.from_string(type)
@@ -73,7 +73,7 @@ component_name :: proc {
 component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -86,7 +86,7 @@ component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
 component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -104,7 +104,7 @@ component_type_name :: proc {
 component_type_name_get :: proc(component: Component) -> (type_name: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -117,7 +117,7 @@ component_type_name_get :: proc(component: Component) -> (type_name: string, ok:
 component_type_name_set :: proc(component: Component, type_name: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(type_name)
     defer bstr.free(bs)
@@ -135,7 +135,7 @@ component_attribute :: proc {
 component_attribute_get :: proc(component: Component) -> (attribute: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -148,7 +148,7 @@ component_attribute_get :: proc(component: Component) -> (attribute: string, ok:
 component_attribute_set :: proc(component: Component, attribute: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(attribute)
     defer bstr.free(bs)
@@ -166,7 +166,7 @@ component_initial_value :: proc {
 component_initial_value_get :: proc(component: Component) -> (inital_value: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -179,7 +179,7 @@ component_initial_value_get :: proc(component: Component) -> (inital_value: stri
 component_initial_value_set :: proc(component: Component, inital_value: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(inital_value)
     defer bstr.free(bs)
@@ -197,7 +197,7 @@ component_read_permission :: proc {
 component_read_permission_get :: proc(component: Component) -> (read_permission: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -210,7 +210,7 @@ component_read_permission_get :: proc(component: Component) -> (read_permission:
 component_read_permission_set :: proc(component: Component, read_permission: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(read_permission)
     defer bstr.free(bs)
@@ -228,7 +228,7 @@ component_write_permission :: proc {
 component_write_permission_get :: proc(component: Component) -> (write_permission: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -241,7 +241,7 @@ component_write_permission_get :: proc(component: Component) -> (write_permissio
 component_write_permission_set :: proc(component: Component, write_permission: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(write_permission)
     defer bstr.free(bs)
@@ -259,7 +259,7 @@ component_authentication_level :: proc {
 component_authentication_level_get :: proc(component: Component) -> (authentication_level: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -272,7 +272,7 @@ component_authentication_level_get :: proc(component: Component) -> (authenticat
 component_authentication_level_set :: proc(component: Component, authentication_level: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(authentication_level)
     defer bstr.free(bs)
@@ -290,7 +290,7 @@ component_description :: proc {
 component_description_get :: proc(component: Component) -> (description: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
     defer bstr.free(bs)
@@ -303,7 +303,7 @@ component_description_get :: proc(component: Component) -> (description: string,
 component_description_set :: proc(component: Component, description: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := bstr.from_string(description)
     defer bstr.free(bs)
@@ -316,7 +316,7 @@ component_description_set :: proc(component: Component, description: string) -> 
 component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -329,7 +329,7 @@ component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok:
 component_type_path_get :: proc(component: Component) -> (type_path: string, ok: bool) {
     
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -347,7 +347,7 @@ component_access_level :: proc {
 component_access_level_get :: proc(component: Component) -> (access_level: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -360,7 +360,7 @@ component_access_level_get :: proc(component: Component) -> (access_level: strin
 component_access_level_set :: proc(component: Component, access_level: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(access_level)
     defer bstr.free(bs)
@@ -378,7 +378,7 @@ component_safety_type :: proc {
 component_safety_type_get :: proc(component: Component) -> (safety_type: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -391,7 +391,7 @@ component_safety_type_get :: proc(component: Component) -> (safety_type: string,
 component_safety_type_set :: proc(component: Component, safety_type: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(safety_type)
     defer bstr.free(bs)
@@ -409,7 +409,7 @@ component_isp_value :: proc {
 component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -422,7 +422,7 @@ component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok:
 component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok: bool) {
 
     if component == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(isp_value)
     defer bstr.free(bs)

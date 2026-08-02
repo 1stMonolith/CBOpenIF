@@ -41,7 +41,7 @@ SFCCodeBlockVTable :: struct {
 
 sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time := false) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := bstr.from_string(name)
     defer bstr.free(bstr_name)
@@ -64,7 +64,7 @@ sfccodeblock_name :: proc {
 sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)
@@ -77,7 +77,7 @@ sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: 
 sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
  
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs := bstr.from_string(name)
     defer bstr.free(bs)
@@ -95,7 +95,7 @@ sfccodeblock_seq_control :: proc {
 sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control: bool, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlGet(&vb)
@@ -107,7 +107,7 @@ sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control
 sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(variant.bool_to_variantbool(seq_control))
     if com.failed(hr) do return
@@ -123,7 +123,7 @@ sfccodeblock_step_elapsed_time :: proc {
 sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_elapsed_time: bool, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimeGet(&vb)
@@ -135,7 +135,7 @@ sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_
 sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(variant.bool_to_variantbool(step_elapsed_time))
     if com.failed(hr) do return
@@ -151,7 +151,7 @@ sfccodeblock_viewer_aspect :: proc {
 sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_aspect: bool, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectGet(&vb)
@@ -163,7 +163,7 @@ sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_as
 sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(variant.bool_to_variantbool(viewer_aspect))
     if com.failed(hr) do return
@@ -179,7 +179,7 @@ sfccodeblock_elements :: proc {
 sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: SFCElements, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsGet(cast(^rawptr)&sfcelements)
     if com.failed(hr) do return
@@ -190,7 +190,7 @@ sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: S
 sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCElements) -> (ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsPut(sfcelements)
     if com.failed(hr) do return
@@ -201,7 +201,7 @@ sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCEl
 sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: bool) {
 
     if sfccodeblock == nil do return
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer bstr.free(bs)

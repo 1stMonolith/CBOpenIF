@@ -36,7 +36,7 @@ cmconnections_add :: proc {
 
 cmconnections_add_ :: proc(cmconnections: CMConnections, cmconnection: CMConnection) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     if cmconnection == nil do return
 
@@ -48,7 +48,7 @@ cmconnections_add_ :: proc(cmconnections: CMConnections, cmconnection: CMConnect
 
 cmconnections_add_at_index :: proc(cmconnections: CMConnections, cmconnection: CMConnection, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     if cmconnection == nil do return
     
@@ -65,7 +65,7 @@ cmconnections_cmconnection :: proc {
 
 cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: string) -> (cmconnection: CMConnection, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -78,7 +78,7 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: s
 
 cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index: i32) -> (cmconnection: CMConnection, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Item(index, cast(^rawptr)&cmconnection)
@@ -89,7 +89,7 @@ cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index:
 
 cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -102,7 +102,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
 
 cmconnections_count :: proc(cmconnections: CMConnections) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Count(&count)
@@ -118,7 +118,7 @@ cmconnections_remove :: proc {
 
 cmconnections_remove_by_name :: proc(cmconnections: CMConnections, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
 
     index: i32
@@ -132,7 +132,7 @@ cmconnections_remove_by_name :: proc(cmconnections: CMConnections, name: string)
 
 cmconnections_remove_by_index :: proc(cmconnections: CMConnections, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Remove(index)

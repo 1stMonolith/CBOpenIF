@@ -7,6 +7,8 @@ import "../controlbuilder"
 @(private="file") BStr    :: bstr.BStr
 @(private="file") HResult :: com.HResult
 
+ILRows :: distinct rawptr
+
 ILRowsIF :: struct #raw_union {
     #subtype iunknownif: com.IUnknownIF,
     using vtable: ^ILRowsVTable,
@@ -28,9 +30,9 @@ ilrows_add :: proc {
     ilrows_add_at_index,
 }
 
-ilrows_add_ :: proc(ilrows: rawptr, ilrow: rawptr) -> (ok: bool) {
+ilrows_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     if ilrow == nil do return
 
@@ -40,9 +42,9 @@ ilrows_add_ :: proc(ilrows: rawptr, ilrow: rawptr) -> (ok: bool) {
     return true
 }
 
-ilrows_add_at_index :: proc(ilrows: rawptr, ilrow: rawptr, index: i32) -> (ok: bool) {
+ilrows_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     if ilrow == nil do return
     
@@ -52,20 +54,20 @@ ilrows_add_at_index :: proc(ilrows: rawptr, ilrow: rawptr, index: i32) -> (ok: b
     return true
 }
 
-ilrows_ilrow_by_index :: proc(ilrows: rawptr, index: i32) -> (ilrow: rawptr, ok: bool) {
+ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     
-    hr := (^ILRowsIF)(ilrows)->Item(index, &ilrow)
+    hr := (^ILRowsIF)(ilrows)->Item(index, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
     
     return ilrow, true
 }
 
-ilrows_count :: proc(ilrows: rawptr) -> (count: i32, ok: bool) {
+ilrows_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     
     hr := (^ILRowsIF)(ilrows)->Count(&count)
@@ -74,9 +76,9 @@ ilrows_count :: proc(ilrows: rawptr) -> (count: i32, ok: bool) {
     return count, true
 }
 
-ilrows_remove :: proc(ilrows: rawptr, index: i32) -> (ok: bool) {
+ilrows_remove :: proc(ilrows: ILRows, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     
     hr := (^ILRowsIF)(ilrows)->Remove(index)
@@ -85,7 +87,7 @@ ilrows_remove :: proc(ilrows: rawptr, index: i32) -> (ok: bool) {
     return true
 }
 
-ilrows_release :: proc(ilrows: rawptr) {
+ilrows_release :: proc(ilrows: ILRows) {
     if ilrows != nil {
         (^ILRowsIF)(ilrows)->Release()
     }

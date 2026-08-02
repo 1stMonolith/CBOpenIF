@@ -34,7 +34,7 @@ globalvariables_add :: proc {
 
 globalvariables_add_ :: proc(global_variables: GlobalVariables, global_variable: GlobalVariable) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     if global_variable == nil do return
 
@@ -46,7 +46,7 @@ globalvariables_add_ :: proc(global_variables: GlobalVariables, global_variable:
 
 globalvariables_add_at_index :: proc(global_variables: GlobalVariables, global_variable: GlobalVariable, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     if global_variable == nil do return
     
@@ -63,7 +63,7 @@ globalvariables_global :: proc {
 
 globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: string) -> (global_variable: GlobalVariable, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -76,7 +76,7 @@ globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: 
 
 globalvariables_global_by_index :: proc(global_variables: GlobalVariables, index: i32) -> (global_variable: GlobalVariable, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
     hr := (^GlobalVariablesIF)(global_variables)->Item(index, cast(^rawptr)&global_variable)
@@ -87,7 +87,7 @@ globalvariables_global_by_index :: proc(global_variables: GlobalVariables, index
 
 globalvariables_global_index :: proc(global_variables: GlobalVariables, name: string) -> (index: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
     bstr_name := bstr.from_string(name)
@@ -100,7 +100,7 @@ globalvariables_global_index :: proc(global_variables: GlobalVariables, name: st
 
 globalvariables_count :: proc(global_variables: GlobalVariables) -> (count: i32, ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
     hr := (^GlobalVariablesIF)(global_variables)->Count(&count)
@@ -116,7 +116,7 @@ globalvariables_remove :: proc {
 
 globalvariables_remove_by_name :: proc(global_variables: GlobalVariables, name: string) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
 
     index: i32
@@ -130,7 +130,7 @@ globalvariables_remove_by_name :: proc(global_variables: GlobalVariables, name: 
 
 globalvariables_remove_by_index :: proc(global_variables: GlobalVariables, index: i32) -> (ok: bool) {
 
-    if !controlbuilder.connected() do return
+    if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
     hr := (^GlobalVariablesIF)(global_variables)->Remove(index)
