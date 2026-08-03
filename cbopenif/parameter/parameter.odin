@@ -191,6 +191,34 @@ parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok:
     return true
 }
 
+parameter_direction :: proc {
+    parameter_direction_get,
+    parameter_direction_set,
+}
+
+parameter_direction_get :: proc(parameter: Parameter) -> (direction: DirectionType, ok: bool) {
+
+    if parameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+
+    d: i32
+    hr := (^ParameterIF)(parameter)->DirectionGet(&d)
+    if com.failed(hr) do return
+    
+    return DirectionType(d), true
+}
+
+parameter_direction_set :: proc(parameter: Parameter, direction: DirectionType) -> (ok: bool) {
+
+    if parameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+
+    hr := (^ParameterIF)(parameter)->DirectionPut(i32(direction))
+    if com.failed(hr) do return
+    
+    return true
+}
+
 parameter_initial_value :: proc {
     parameter_initial_value_get,
     parameter_initial_value_set,
