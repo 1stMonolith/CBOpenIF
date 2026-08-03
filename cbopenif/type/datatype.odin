@@ -435,12 +435,12 @@ datatype_components_count :: proc(datatype: DataType) -> (count: i32, ok: bool) 
     return count, true
 }
 
-datatype_remove :: proc {
-    datatype_remove_by_name,
-    datatype_remove_by_index,
+datatype_componentsremove :: proc {
+    datatype_components_remove_by_name,
+    datatype_components_remove_by_index,
 }
 
-datatype_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
+datatype_components_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
 
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -456,7 +456,7 @@ datatype_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) 
     return true
 }
 
-datatype_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
+datatype_components_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
 
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
