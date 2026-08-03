@@ -34,32 +34,6 @@ SignalVTable :: struct {
     Serialize:           proc "system" (this: ^SignalIF, XML: ^BStr) -> HResult,
 }
 
-/* use of Variant as an out required use of IDispatch->Invoke
-signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
-    
-    bstr_name := com.from_string(name)
-    bstr_path := com.from_string(path)
-    bstr_direction := com.from_string(direction)
-
-    // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    ag := com.to_variant(acknowledge_group)
-
-    defer {
-        com.bstr_free(bstr_name)
-        com.bstr_free(bstr_path)
-        com.bstr_free(bstr_direction)
-        //com.free(&ag)
-    }
-
-    hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, ag, cast(^rawptr)&signal)
-    if com.failed(hr) do return
-    
-    return signal, true
-}
-*/
-
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
@@ -93,13 +67,11 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
             sig = result.pdispVal
             result.pdispVal = nil
             result.vt = com.VariantTypeEmpty
-        /* 
-        I think we only every use Dispatch so this case is probably not needed
+        // I think we only every use Dispatch so this case is probably not needed
         case com.VariantTypeUnknown:
             sig = result.punkVal
             result.punkVal = nil
             result.vt = com.VariantTypeEmpty
-        */
         case:
             return
     }
@@ -165,37 +137,6 @@ signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
     return true
 }
 
-signal_description :: proc {
-    signal_description_get,
-    signal_description_set,
-}
-
-signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
-
-    if signal == nil do return
-    if !controlbuilder.controlbuilder_connected() do return
-    
-    bs: BStr
-    defer com.bstr_free(bs)
-    hr := (^SignalIF)(signal)->DescriptionGet(&bs)
-    if com.failed(hr) do return
-    
-    return com.to_string(bs), true
-}
-
-signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
-
-    if signal == nil do return
-    if !controlbuilder.controlbuilder_connected() do return
-    
-    bs := com.from_string(description)
-    defer com.bstr_free(bs)
-    hr := (^SignalIF)(signal)->DescriptionPut(bs)
-    if com.failed(hr) do return
-    
-    return true
-}
-
 signal_path :: proc {
     signal_path_get,
     signal_path_set,
@@ -222,6 +163,99 @@ signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     bs := com.from_string(path)
     defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->PathPut(bs)
+    if com.failed(hr) do return
+    
+    return true
+}
+
+signal_direction :: proc {
+    signal_direction_get,
+    signal_direction_set,
+}
+
+signal_direction_get :: proc(signal: Signal) -> (direction: string, ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs: BStr
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->DirectionGet(&bs)
+    if com.failed(hr) do return
+    
+    return com.to_string(bs), true
+}
+
+signal_direction_set :: proc(signal: Signal, direction: string) -> (ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs := com.from_string(direction)
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->DirectionPut(bs)
+    if com.failed(hr) do return
+    
+    return true
+}
+
+signal_acknowledge_group :: proc {
+    signal_acknowledge_group_get,
+    signal_acknowledge_group_set,
+}
+
+signal_acknowledge_group_get :: proc(signal: Signal) -> (acknowledge_group: string, ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs: BStr
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->AcknowledgeGroupGet(&bs)
+    if com.failed(hr) do return
+    
+    return com.to_string(bs), true
+}
+
+signal_acknowledge_group_set :: proc(signal: Signal, acknowledge_group: string) -> (ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs := com.from_string(acknowledge_group)
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->AcknowledgeGroupPut(bs)
+    if com.failed(hr) do return
+    
+    return true
+}
+
+signal_description :: proc {
+    signal_description_get,
+    signal_description_set,
+}
+
+signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs: BStr
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->DescriptionGet(&bs)
+    if com.failed(hr) do return
+    
+    return com.to_string(bs), true
+}
+
+signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
+
+    if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
+    hr := (^SignalIF)(signal)->DescriptionPut(bs)
     if com.failed(hr) do return
     
     return true
