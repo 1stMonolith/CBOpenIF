@@ -64,26 +64,10 @@ controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
     return messages, true
 }
 
-/* use of Variant as an out required use of IDispatch->Invoke
-set_setting :: proc(setting_name: string, value: Variant) -> (ok: bool) {
-    ok = false
-    if !connected() do return
-
-    bstr_name := com.from_string(setting_name)
-    defer com.bstr_free(bstr_name)
-
-    // value is copied into the call by value; we still own our VARIANT
-    hr := cbopen.cbopenif->SetSetting(bstr_name, value)
-    if com.failed(hr) {
-        return
-    }
-    return true
-}
-*/
-
 controlbuilder_setting :: proc {
     controlbuilder_get_setting,
     controlbuilder_set_setting_string,
+    controlbuilder_set_setting_bool,
 }
 
 controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
@@ -105,8 +89,30 @@ controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, o
     return setting, true
 }
 
-// TODO: make version for each Variant type used in interface so user does not have to deal with Variant at all.
 controlbuilder_set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
+
+    if !controlbuilder_connected() do return
+
+    // IDL: SetSetting(SettingName, Value)  — two args, IDL order
+    v_setting_name := com.to_variant(setting_name)
+    v_setting := com.to_variant(setting)
+    defer {
+        com.variant_free(&v_setting_name)
+        com.variant_free(&v_setting)
+    }
+
+    // args in SetSetting order (setting_name, value)
+    args := []com.Variant{ v_setting_name, v_setting }
+
+    this := cast(^com.IUnknownIF)cbopen.cbopenif
+    hr, arg_err, ok2 := com.invoke_name(this, "SetSetting", args, nil)
+    //fmt.printf("SetSetting Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
+    if !ok2 do return
+
+    return true
+}
+
+controlbuilder_set_setting_bool :: proc(setting_name: string, setting: bool) -> (ok: bool) {
 
     if !controlbuilder_connected() do return
 
