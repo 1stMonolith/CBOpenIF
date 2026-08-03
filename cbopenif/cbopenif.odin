@@ -6,6 +6,7 @@ import "connection"
 import "controlbuilder"
 import "graph"
 import "il"
+import "message"
 import "parameter"
 import "point"
 import "project"
@@ -198,6 +199,11 @@ CodeBlockType :: codeblock.CodeBlockType
 
 CodeBlocks :: codeblock.CodeBlocks
 
+column :: proc {
+    message.posinfo_column_get,
+    message.posinfo_column_set,
+}
+
 Component :: component.Component
 
 component_new :: component.component_new
@@ -277,6 +283,7 @@ DirectionType :: type.DirectionType
 deserialize :: proc {
     codeblock.codeblock_deserialize,
     connection.cmconnection_deserialize,
+    message.messagebucket_deserialize,
     parameter.cmparameter_deserialize,
     parameter.parameter_deserialize,
     signal.signal_deserialize,
@@ -311,7 +318,38 @@ description :: proc {
     variable.variable_description_set,
 }
 
+element_name :: proc {
+    message.posinfo_element_name_get,
+    message.posinfo_element_name_set,
+}
+
+end_position :: proc {
+    message.posinfo_end_position_get,
+    message.posinfo_end_position_set,
+}
+
+error_number :: proc {
+    message.errormsg_error_number_get,
+    message.errormsg_error_number_set,
+}
+
+ExtraInfo :: message.ExtraInfo
+
+extrainfo :: proc {
+    message.errormsg_extra_info_get,
+    message.errormsg_extra_info_set,
+    message.infomsg_extra_info_get,
+    message.infomsg_extra_info_set,
+    message.warningmsg_extra_info_get,
+    message.warningmsg_extra_info_set,
+}
+
 ExecutionInstanceType :: type.ExecutionInstanceType
+
+expected_type :: proc {
+    message.extrainfo_expected_type_get,
+    message.extrainfo_expected_type_set,
+}
 
 ExternalVariable :: variable.ExternalVariable
 
@@ -356,6 +394,16 @@ fdport :: proc {
 }
 
 FolderType :: type.FolderType
+
+fou_name :: proc {
+    message.posinfo_fou_name_get,
+    message.posinfo_fou_name_set,
+}
+
+function_name :: proc {
+    message.extrainfo_function_name_get,
+    message.extrainfo_function_name_set,
+}
 
 GlobalVariable :: variable.GlobalVariable
 
@@ -448,6 +496,11 @@ hidden :: proc {
     type.datatype_hidden_set,
 }
 
+id :: proc {
+    message.posinfo_id_get,
+    message.posinfo_id_set,
+}
+
 initial_value :: proc {
     component.component_initial_value_get,
     component.component_initial_value_set,
@@ -519,11 +572,52 @@ isp_value :: proc {
     component.component_isp_value_set,
 }
 
+jump_destination :: proc {
+    message.extrainfo_jump_destination_get,
+    message.extrainfo_jump_destination_set,
+}
+
 LDCodeBlock :: codeblock.LDCodeBlock
 
 ldcodeblock_new  :: codeblock.ldcodeblock_new
 
+Msg :: message.Msg
+
+msg_is_error :: message.msg_is_error
+
+msg_is_warning :: message.msg_is_warning
+
+msg_is_info :: message.msg_is_info
+
+msg_is_find :: message.msg_is_find
+
+message :: proc {
+    message.errormsg_message_get,
+    message.errormsg_message_set,
+    message.findmsg_message_get,
+    message.findmsg_message_set,
+    message.infomsg_message_get,
+    message.infomsg_message_set,
+    message.msg_message_get,
+    message.msg_message_set,
+    message.warningmsg_message_get,
+    message.warningmsg_message_set,
+}
+
+message_add :: message.messagebucket_message_add
+
+message_by_index :: message.messagebucket_message_by_index
+
+message_count :: message.messagebucket_message_count
+
+message_remove :: message.messagebucket_message_remove_by_index
+
 MessageType :: type.MessageType
+
+message_type :: proc {
+    message.posinfo_message_type_get,
+    message.posinfo_message_type_set,
+}
 
 name :: proc {
     codeblock.codeblock_name_get,
@@ -570,7 +664,22 @@ name :: proc {
     variable.variable_name_set,
 }
 
+number_of_errors :: proc {
+    message.messagebucket_number_of_errors_get,
+    message.messagebucket_number_of_errors_set,
+}
+
+number_of_warnings :: proc {
+    message.messagebucket_number_of_warnings_get,
+    message.messagebucket_number_of_warnings_set,
+}
+
 OutputUpdateType :: type.OutputUpdateType
+
+page_number :: proc {
+    message.posinfo_page_number_get,
+    message.posinfo_page_number_set,
+}
 
 Parameter  :: parameter.Parameter
 
@@ -666,6 +775,24 @@ points :: proc {
     connection.cmconnection_points_set,
 }
 
+PosInfo :: message.PosInfo
+
+posinfo :: proc {
+    message.errormsg_posinfo_get,
+    message.errormsg_posinfo_set,
+    message.findmsg_posinfo_get,
+    message.findmsg_posinfo_set,
+    message.infomsg_posinfo_get,
+    message.infomsg_posinfo_set,
+    message.warningmsg_posinfo_get,
+    message.warningmsg_posinfo_set,
+}
+
+pou_name :: proc {
+    message.posinfo_pou_name_get,
+    message.posinfo_pou_name_set,
+}
+
 project_new :: project.project_new
 
 project_open :: project.project_open
@@ -713,6 +840,14 @@ release :: proc {
     graph.graphsize_release,
     il.ilrow_release,
     il.ilrows_release,
+    message.errormsg_release,
+    message.extrainfo_release,
+    message.findmsg_release,
+    message.infomsg_release,
+    message.messagebucket_release,
+    message.msg_release,
+    message.posinfo_release,
+    message.warningmsg_release,
     parameter.cmparameter_release,
     parameter.cmparameters_release,
     parameter.parameter_release,
@@ -753,6 +888,11 @@ rotation :: proc {
     graph.graphpos_rotation_set,
 }
 
+row :: proc {
+    message.posinfo_row_get,
+    message.posinfo_row_set,
+}
+
 safety_type :: proc {
     component.component_safety_type_get,
     component.component_safety_type_set,
@@ -783,6 +923,7 @@ serialize :: proc {
     codeblock.sfccodeblock_serialize,
     codeblock.stcodeblock_serialize,
     connection.cmconnection_serialize,
+    message.messagebucket_serialize,
     parameter.cmparameter_serialize,
     parameter.parameter_serialize,
     signal.signal_serialize,
@@ -796,8 +937,6 @@ serialize :: proc {
 SFCCodeBlock  :: codeblock.SFCCodeBlock
 
 sfccodeblock_new :: codeblock.sfccodeblock_new
-
-stcodeblock_new  :: codeblock.stcodeblock_new
 
 sfccodeblock_seq_control :: proc {
     codeblock.sfccodeblock_seq_control_get,
@@ -814,6 +953,11 @@ sfccodeblock_viewer_aspect :: proc {
     codeblock.sfccodeblock_viewer_aspect_set,
 }
 
+start_position :: proc {
+    message.posinfo_start_position_get,
+    message.posinfo_start_position_set,
+}
+
 stcode :: proc {
     codeblock.fbdcodeblock_stcode_get,
     codeblock.fbdcodeblock_stcode_set,
@@ -826,6 +970,8 @@ stcode :: proc {
 }
 
 STCodeBlock   :: codeblock.STCodeBlock
+
+stcodeblock_new  :: codeblock.stcodeblock_new
 
 SFCBranch :: sfc.SFCBranch
 
@@ -944,9 +1090,19 @@ signals :: proc {
 
 SignalType :: signal.SignalType
 
+tab_name :: proc {
+    message.posinfo_tab_name_get,
+    message.posinfo_tab_name_set,
+}
+
 TaskPriorityType :: type.TaskPriorityType
 
 TaskSILLevelType :: type.TaskSILLevelType
+
+traverse_number :: proc {
+    message.extrainfo_traverse_number_get,
+    message.extrainfo_traverse_number_set,
+}
 
 type_guid :: proc {
     component.component_type_guid_get,
@@ -981,6 +1137,11 @@ type_name :: proc {
     variable.variable_type_name_set,
 }
 
+var_name :: proc {
+    message.extrainfo_var_name_get,
+    message.extrainfo_var_name_set,
+}
+
 Variable :: variable.Variable
 
 variable_new :: variable.variable_new
@@ -1010,6 +1171,11 @@ variables :: proc {
 VariableType :: type.VariableType
 
 VisibilityInGraphicsType :: type.VisibilityInGraphicsType
+
+warning_number :: proc {
+    message.warningmsg_warning_number_get,
+    message.warningmsg_warning_number_set,
+}
 
 write_permission :: proc {
     component.component_write_permission_get,
