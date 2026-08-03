@@ -188,3 +188,5 @@ applicationvariables_release :: proc(application_variables: ApplicationVariables
         (^ApplicationVariablesIF)(application_variables)->Release()
     }
 }
+
+// TODO: procedures to interact with global vars, vars, and singals same as was done with compoents in DataType? Too much?
