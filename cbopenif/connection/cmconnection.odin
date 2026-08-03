@@ -141,7 +141,6 @@ cmconnection_graphical_connection :: proc {
     cmconnection_graphical_connection_set,
 }
 
-
 cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (graphical_connection: bool, ok: bool) {
 
     if cmconnection == nil do return
@@ -153,7 +152,6 @@ cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (gr
 
     return variant.variantbool_to_bool(vb), true
 }
-
 
 cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphical_connection: bool) -> (ok: bool) {
 
@@ -172,7 +170,6 @@ cmconnection_points :: proc {
     cmconnection_points_set,
 }
 
-
 cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, ok: bool) {
 
     if cmconnection == nil do return
@@ -183,7 +180,6 @@ cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, 
 
     return points, true
 }
-
 
 cmconnection_points_set :: proc(cmconnection: CMConnection, points: Points) -> (ok: bool) {
 

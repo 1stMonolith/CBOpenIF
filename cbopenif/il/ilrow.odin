@@ -70,12 +70,12 @@ ilrow_new_comment :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
     return ilrow, true
 }
 
-ilrow_name :: proc {
-    ilrow_name_get,
-    ilrow_name_set,
+ilrow_label :: proc {
+    ilrow_label_get,
+    ilrow_label_set,
 }
 
-ilrow_name_get :: proc(ilrow: ILRow) -> (name: string, ok: bool) {
+ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
 
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -88,14 +88,76 @@ ilrow_name_get :: proc(ilrow: ILRow) -> (name: string, ok: bool) {
     return bstr.to_string(bs), true
 }
 
-ilrow_name_set :: proc(ilrow: ILRow, name: string) -> (ok: bool) {
+ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
 
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
+    bs := bstr.from_string(label)
     defer bstr.free(bs)
     hr := (^ILRowIF)(ilrow)->LabelPut(bs)
+    if com.failed(hr) do return
+    
+    return true
+}
+
+ilrow_instruction :: proc {
+    ilrow_instruction_get,
+    ilrow_instruction_set,
+}
+
+ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
+
+    if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->InstructionGet(&bs)
+    if com.failed(hr) do return
+
+    return bstr.to_string(bs), true
+}
+
+ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
+
+    if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs := bstr.from_string(instruction)
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->InstructionPut(bs)
+    if com.failed(hr) do return
+    
+    return true
+}
+
+ilrow_operand :: proc {
+    ilrow_operand_get,
+    ilrow_operand_set,
+}
+
+ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
+
+    if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->InstructionGet(&bs)
+    if com.failed(hr) do return
+
+    return bstr.to_string(bs), true
+}
+
+ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
+
+    if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
+    
+    bs := bstr.from_string(operand)
+    defer bstr.free(bs)
+    hr := (^ILRowIF)(ilrow)->InstructionPut(bs)
     if com.failed(hr) do return
     
     return true
