@@ -328,6 +328,8 @@ end_position :: proc {
     message.posinfo_end_position_set,
 }
 
+ErrorMsg :: message.ErrorMsg
+
 error_number :: proc {
     message.errormsg_error_number_get,
     message.errormsg_error_number_set,
@@ -392,6 +394,8 @@ fdport :: proc {
     parameter.parameter_fdport_get,
     parameter.parameter_fdport_set,
 }
+
+FindMsg :: message.FindMsg
 
 FolderType :: type.FolderType
 
@@ -567,6 +571,8 @@ ilrows :: proc {
     codeblock.ilcodeblock_ilrows_set,
 }
 
+InfoMsg :: message.InfoMsg
+
 isp_value :: proc {
     component.component_isp_value_get,
     component.component_isp_value_set,
@@ -611,6 +617,8 @@ message_by_index :: message.messagebucket_message_by_index
 message_count :: message.messagebucket_message_count
 
 message_remove :: message.messagebucket_message_remove_by_index
+
+MessageBucket :: message.MessageBucket
 
 MessageType :: type.MessageType
 
@@ -1171,6 +1179,8 @@ variables :: proc {
 VariableType :: type.VariableType
 
 VisibilityInGraphicsType :: type.VisibilityInGraphicsType
+
+WarningMsg :: message.WarningMsg
 
 warning_number :: proc {
     message.warningmsg_warning_number_get,
