@@ -24,7 +24,6 @@ ParametersVTable :: struct {
     Item:      proc "system" (this: ^ParametersIF, Index: i32, Parameter: ^rawptr) -> HResult,
     Count:     proc "system" (this: ^ParametersIF, count: ^i32) -> HResult,
     Remove:    proc "system" (this: ^ParametersIF, Index: i32) -> HResult,
-    NewEnum:   proc "system" (this: ^ParametersIF, Enum: ^rawptr) -> HResult,
 }
 
 parameters_add :: proc {
