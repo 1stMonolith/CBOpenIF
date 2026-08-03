@@ -1,11 +1,10 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 FBDCodeBlock :: distinct rawptr
@@ -31,11 +30,11 @@ fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, o
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    bstr_stcode := bstr.from_string(stcode)
+    bstr_name := com.from_string(name)
+    bstr_stcode := com.from_string(stcode)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_stcode)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_stcode)
     }
     hr := factory.factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&fbdcodeblock)
     if com.failed(hr) do return
@@ -49,11 +48,11 @@ fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FBDCodeBlockIF)(fbdcodeblock)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 fbdcodeblock_name :: proc {
@@ -67,11 +66,11 @@ fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FBDCodeBlockIF)(fbdcodeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 
@@ -80,8 +79,8 @@ fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: 
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^FBDCodeBlockIF)(fbdcodeblock)->NamePut(bs)
     if com.failed(hr) do return
 
@@ -99,11 +98,11 @@ fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodeGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
@@ -111,8 +110,8 @@ fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(stcode)
-    defer bstr.free(bs)
+    bs := com.from_string(stcode)
+    defer com.bstr_free(bs)
     hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodePut(bs)
     if com.failed(hr) do return
 

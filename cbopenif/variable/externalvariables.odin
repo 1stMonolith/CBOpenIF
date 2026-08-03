@@ -1,10 +1,9 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 ExternalVariables :: distinct rawptr
@@ -66,8 +65,8 @@ externalvariables_external_by_name :: proc(external_variables: ExternalVariables
     if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->Find(bstr_name, cast(^rawptr)&external_variable)
     if com.failed(hr) do return
     
@@ -90,8 +89,8 @@ externalvariables_external_index :: proc(external_variables: ExternalVariables, 
     if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

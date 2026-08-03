@@ -1,14 +1,12 @@
 package signal
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
-import "../variant"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
-@(private="file") Variant :: variant.Variant
+@(private="file") Variant :: com.Variant
 
 SignalType :: enum {
     Siganl = 0
@@ -41,18 +39,18 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_path := bstr.from_string(path)
-    bstr_direction := bstr.from_string(direction)
+    bstr_name := com.from_string(name)
+    bstr_path := com.from_string(path)
+    bstr_direction := com.from_string(direction)
 
     // NewSignal takes acknowledge group as a type Variant but signal takes it as type BStr for some reason.
-    ag := variant.to_variant(acknowledge_group)
+    ag := com.to_variant(acknowledge_group)
 
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_path)
-        bstr.free(bstr_direction)
-        //variant.free(&ag)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_path)
+        com.bstr_free(bstr_direction)
+        //com.free(&ag)
     }
 
     hr := factory.factoryif->NewSignal(bstr_name, bstr_path, bstr_direction, ag, cast(^rawptr)&signal)
@@ -66,41 +64,41 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    v_name := variant.to_variant(name)
-    v_path := variant.to_variant(path)
-    v_dir  := variant.to_variant(direction)
-    v_ag   := variant.to_variant(acknowledge_group)
+    v_name := com.to_variant(name)
+    v_path := com.to_variant(path)
+    v_dir  := com.to_variant(direction)
+    v_ag   := com.to_variant(acknowledge_group)
     defer {
-        variant.free(&v_name)
-        variant.free(&v_path)
-        variant.free(&v_dir)
-        variant.free(&v_ag)
+        com.variant_free(&v_name)
+        com.variant_free(&v_path)
+        com.variant_free(&v_dir)
+        com.variant_free(&v_ag)
     }
 
     // ars in NewSignal order (Name, Path, Direction, AcknowledgeGroup)
-    args := []variant.Variant{ v_name, v_path, v_dir, v_ag }
+    args := []com.Variant{ v_name, v_path, v_dir, v_ag }
 
-    result: variant.Variant
+    result: com.Variant
     this := cast(^com.IUnknownIF)factory.factoryif
 
     hr, arg_err, ok2 := com.invoke_name(this, "NewSignal", args,  &result)
-    defer variant.free(&result)
+    defer com.variant_free(&result)
     //fmt.printf("NewSignal Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
     if com.failed(hr) do return
 
     // Retval is usually VT_DISPATCH or VT_UNKNOWN
     sig: rawptr
     switch result.vt {
-        case variant.VariantTypeDispatch:
+        case com.VariantTypeDispatch:
             sig = result.pdispVal
             result.pdispVal = nil
-            result.vt = variant.VariantTypeEmpty
+            result.vt = com.VariantTypeEmpty
         /* 
         I think we only every use Dispatch so this case is probably not needed
-        case variant.VariantTypeUnknown:
+        case com.VariantTypeUnknown:
             sig = result.punkVal
             result.punkVal = nil
-            result.vt = variant.VariantTypeEmpty
+            result.vt = com.VariantTypeEmpty
         */
         case:
             return
@@ -115,8 +113,8 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeSignal(&bs, cast(^rawptr)signal)
     if com.failed(hr) do return
     
@@ -129,11 +127,11 @@ signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 signal_name :: proc {
@@ -147,11 +145,11 @@ signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
@@ -159,8 +157,8 @@ signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -178,11 +176,11 @@ signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->DescriptionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
@@ -190,8 +188,8 @@ signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -209,11 +207,11 @@ signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->PathGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
@@ -221,8 +219,8 @@ signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(path)
-    defer bstr.free(bs)
+    bs := com.from_string(path)
+    defer com.bstr_free(bs)
     hr := (^SignalIF)(signal)->PathPut(bs)
     if com.failed(hr) do return
     

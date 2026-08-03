@@ -1,11 +1,10 @@
 package graph
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 GraphNode :: distinct rawptr
@@ -29,8 +28,8 @@ graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := factory.factoryif->NewGraphNode(bstr_name, x, y, cast(^rawptr)&graphnode)
     if com.failed(hr) do return
     
@@ -48,11 +47,11 @@ graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GraphNodeIF)(graphnode)->NameGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
@@ -60,8 +59,8 @@ graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^GraphNodeIF)(graphnode)->NamePut(bs)
     if com.failed(hr) do return
     

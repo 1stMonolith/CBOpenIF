@@ -1,10 +1,9 @@
 package graph
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 GraphNodes :: distinct rawptr
@@ -65,8 +64,8 @@ graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (g
     if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^GraphNodesIF)(graphnodes)->Find(bstr_name, cast(^rawptr)&graphnode)
     if com.failed(hr) do return
     
@@ -89,8 +88,8 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
     if !controlbuilder.controlbuilder_connected() do return
     if graphnodes == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^GraphNodesIF)(graphnodes)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

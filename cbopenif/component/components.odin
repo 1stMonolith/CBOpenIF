@@ -1,11 +1,9 @@
 package component
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../variant"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 Components :: distinct rawptr
@@ -67,10 +65,10 @@ components_component_by_name :: proc(components: Components, name: string) -> (c
     if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
     
-    bstr_name := bstr.from_string(name)
+    bstr_name := com.from_string(name)
     p: rawptr
     hr := (^ComponentsIF)(components)->Find(bstr_name, &p)
-    defer bstr.free(bstr_name)
+    defer com.bstr_free(bstr_name)
     if com.failed(hr) do return
     
     return Component(p), true
@@ -93,8 +91,8 @@ components_component_index :: proc(components: Components, name: string) -> (ind
     if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
     
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := (^ComponentsIF)(components)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

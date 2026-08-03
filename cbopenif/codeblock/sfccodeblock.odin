@@ -1,17 +1,15 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../sfc"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") GUID        :: com.GUID
 @(private="file") HResult     :: com.HResult
 @(private="file") SFCElements :: sfc.SFCElements
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 SFCCodeBlock :: distinct rawptr
 
@@ -43,12 +41,12 @@ sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time :
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := factory.factoryif->NewSFCCodeBlock1(
         bstr_name,
-        variant.bool_to_variantbool(seq_control),
-        variant.bool_to_variantbool(step_elapsed_time),
+        com.bool_to_variantbool(seq_control),
+        com.bool_to_variantbool(step_elapsed_time),
         cast(^rawptr)&sfccodeblock,
     )
     if com.failed(hr) do return
@@ -67,11 +65,11 @@ sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SFCCodeBlockIF)(sfccodeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
@@ -79,8 +77,8 @@ sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: 
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^SFCCodeBlockIF)(sfccodeblock)->NamePut(bs)
     if com.failed(hr) do return
 
@@ -101,7 +99,7 @@ sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
@@ -109,7 +107,7 @@ sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bo
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(variant.bool_to_variantbool(seq_control))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(com.bool_to_variantbool(seq_control))
     if com.failed(hr) do return
 
     return true
@@ -129,7 +127,7 @@ sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimeGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
@@ -137,7 +135,7 @@ sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elap
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(variant.bool_to_variantbool(step_elapsed_time))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(com.bool_to_variantbool(step_elapsed_time))
     if com.failed(hr) do return
 
     return true
@@ -157,7 +155,7 @@ sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_as
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
@@ -165,7 +163,7 @@ sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(variant.bool_to_variantbool(viewer_aspect))
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(com.bool_to_variantbool(viewer_aspect))
     if com.failed(hr) do return
 
     return true
@@ -204,11 +202,11 @@ sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SFCCodeBlockIF)(sfccodeblock)->Serialize(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 sfccodeblock_release :: proc(sfccodeblock: SFCCodeBlock) {

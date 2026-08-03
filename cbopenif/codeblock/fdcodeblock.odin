@@ -1,10 +1,9 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 FDCodeBlock :: distinct rawptr
@@ -32,11 +31,11 @@ fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FDCodeBlockIF)(fdcodeblock)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 fdcodeblock_name :: proc {
@@ -50,11 +49,11 @@ fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FDCodeBlockIF)(fdcodeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
@@ -62,8 +61,8 @@ fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: boo
     if fdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs :=bstr.from_string(name)
-    defer bstr.free(bs)
+    bs :=com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^FDCodeBlockIF)(fdcodeblock)->NamePut(bs)
     if com.failed(hr) do return
 
@@ -81,11 +80,11 @@ fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: str
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
@@ -93,8 +92,8 @@ fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string)
     if fdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs :=bstr.from_string(xml_string)
-    defer bstr.free(bs)
+    bs :=com.from_string(xml_string)
+    defer com.bstr_free(bs)
     hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLPut(bs)
     if com.failed(hr) do return
 

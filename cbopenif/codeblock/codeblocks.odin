@@ -1,13 +1,11 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") HResult     :: com.HResult
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 CodeBlocks :: distinct rawptr
 
@@ -154,8 +152,8 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
     if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
 
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&codeblock)
     if com.failed(hr) do return
 
@@ -178,8 +176,8 @@ codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (ind
     if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
 
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := (^CodeBlocksIF)(codeblocks)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
 

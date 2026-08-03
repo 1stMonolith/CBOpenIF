@@ -1,8 +1,4 @@
-package variant
-
-import "../bstr"
-
-@(private="file") BStr :: bstr.BStr
+package com
 
 foreign import oleaut32 "system:oleaut32.lib"
 
@@ -68,11 +64,11 @@ Variant :: struct {
 #assert(offset_of(Variant, llVal) == 8)
 #assert(offset_of(Variant, bstrVal) == 8)
 
-init :: proc(variant: ^Variant) {
+variant_init :: proc(variant: ^Variant) {
     VariantInit(variant)
 }
 
-free :: proc(variant: ^Variant) {
+variant_free :: proc(variant: ^Variant) {
     VariantClear(variant)
 }
 
@@ -85,7 +81,7 @@ string_to_variant :: proc(s: string) -> (variant: Variant) {
     v: Variant
     VariantInit(&v)
     v.vt = VariantTypeBstr
-    v.bstrVal = bstr.from_string(s)
+    v.bstrVal = from_string(s)
     return v
 }
 

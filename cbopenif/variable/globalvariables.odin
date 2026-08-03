@@ -1,10 +1,9 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 GlobalVariables :: distinct rawptr
@@ -66,8 +65,8 @@ globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: 
     if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->Find(bstr_name, cast(^rawptr)&global_variable)
     if com.failed(hr) do return
     
@@ -90,8 +89,8 @@ globalvariables_global_index :: proc(global_variables: GlobalVariables, name: st
     if !controlbuilder.controlbuilder_connected() do return
     if global_variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

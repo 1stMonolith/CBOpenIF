@@ -1,11 +1,10 @@
 package component
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 Component :: distinct rawptr
@@ -47,17 +46,17 @@ component_new :: proc(name: string, type: string, attribute := "", initial_value
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_type := bstr.from_string(type)
-    bstr_attribute := bstr.from_string(attribute)
-    bstr_initial_value := bstr.from_string(initial_value)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_type := com.from_string(type)
+    bstr_attribute := com.from_string(attribute)
+    bstr_initial_value := com.from_string(initial_value)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_type)
-        bstr.free(bstr_attribute)
-        bstr.free(bstr_initial_value)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_type)
+        com.bstr_free(bstr_attribute)
+        com.bstr_free(bstr_initial_value)
+        com.bstr_free(bstr_description)
     }
     hr := factory.factoryif->NewComponent1(bstr_name, bstr_type, bstr_attribute, bstr_initial_value, bstr_description, cast(^rawptr)&component)
     if com.failed(hr) do return
@@ -76,11 +75,11 @@ component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->NameGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
@@ -88,8 +87,8 @@ component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -107,11 +106,11 @@ component_type_name_get :: proc(component: Component) -> (type_name: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->TypeNameGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_type_name_set :: proc(component: Component, type_name: string) -> (ok: bool) {
@@ -119,8 +118,8 @@ component_type_name_set :: proc(component: Component, type_name: string) -> (ok:
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(type_name)
-    defer bstr.free(bs)
+    bs := com.from_string(type_name)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->TypeNamePut(bs)
     if com.failed(hr) do return
     
@@ -138,11 +137,11 @@ component_attribute_get :: proc(component: Component) -> (attribute: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AttributeGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_attribute_set :: proc(component: Component, attribute: string) -> (ok: bool) {
@@ -150,8 +149,8 @@ component_attribute_set :: proc(component: Component, attribute: string) -> (ok:
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(attribute)
-    defer bstr.free(bs)
+    bs := com.from_string(attribute)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AttributePut(bs)
     if com.failed(hr) do return
 
@@ -169,11 +168,11 @@ component_initial_value_get :: proc(component: Component) -> (inital_value: stri
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->InitialValueGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_initial_value_set :: proc(component: Component, inital_value: string) -> (ok: bool) {
@@ -181,8 +180,8 @@ component_initial_value_set :: proc(component: Component, inital_value: string) 
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(inital_value)
-    defer bstr.free(bs)
+    bs := com.from_string(inital_value)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->InitialValuePut(bs)
     if com.failed(hr) do return
     
@@ -200,11 +199,11 @@ component_read_permission_get :: proc(component: Component) -> (read_permission:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->ReadPermissionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_read_permission_set :: proc(component: Component, read_permission: string) -> (ok: bool) {
@@ -212,8 +211,8 @@ component_read_permission_set :: proc(component: Component, read_permission: str
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(read_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(read_permission)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->ReadPermissionPut(bs)
     if com.failed(hr) do return
     
@@ -231,11 +230,11 @@ component_write_permission_get :: proc(component: Component) -> (write_permissio
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->WritePermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_write_permission_set :: proc(component: Component, write_permission: string) -> (ok: bool) {
@@ -243,8 +242,8 @@ component_write_permission_set :: proc(component: Component, write_permission: s
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(write_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(write_permission)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->WritePermissionPut(bs)
     if com.failed(hr) do return
 
@@ -262,11 +261,11 @@ component_authentication_level_get :: proc(component: Component) -> (authenticat
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_authentication_level_set :: proc(component: Component, authentication_level: string) -> (ok: bool) {
@@ -274,8 +273,8 @@ component_authentication_level_set :: proc(component: Component, authentication_
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(authentication_level)
-    defer bstr.free(bs)
+    bs := com.from_string(authentication_level)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
 
@@ -293,11 +292,11 @@ component_description_get :: proc(component: Component) -> (description: string,
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->DescriptionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_description_set :: proc(component: Component, description: string) -> (ok: bool) {
@@ -305,8 +304,8 @@ component_description_set :: proc(component: Component, description: string) -> 
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->DescriptionPut(bs)
     if com.failed(hr) do return
 
@@ -319,11 +318,11 @@ component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->TypeGuidGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_type_path_get :: proc(component: Component) -> (type_path: string, ok: bool) {
@@ -332,11 +331,11 @@ component_type_path_get :: proc(component: Component) -> (type_path: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->TypePathGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_access_level :: proc {
@@ -350,11 +349,11 @@ component_access_level_get :: proc(component: Component) -> (access_level: strin
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AccessLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_access_level_set :: proc(component: Component, access_level: string) -> (ok: bool) {
@@ -362,8 +361,8 @@ component_access_level_set :: proc(component: Component, access_level: string) -
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(access_level)
-    defer bstr.free(bs)
+    bs := com.from_string(access_level)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->AccessLevelPut(bs)
     if com.failed(hr) do return
     
@@ -381,11 +380,11 @@ component_safety_type_get :: proc(component: Component) -> (safety_type: string,
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_safety_type_set :: proc(component: Component, safety_type: string) -> (ok: bool) {
@@ -393,8 +392,8 @@ component_safety_type_set :: proc(component: Component, safety_type: string) -> 
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(safety_type)
-    defer bstr.free(bs)
+    bs := com.from_string(safety_type)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->SafetyTypePut(bs)
     if com.failed(hr) do return
     
@@ -412,11 +411,11 @@ component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->ISPValueGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok: bool) {
@@ -424,8 +423,8 @@ component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok:
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(isp_value)
-    defer bstr.free(bs)
+    bs := com.from_string(isp_value)
+    defer com.bstr_free(bs)
     hr := (^ComponentIF)(component)->ISPValuePut(bs)
     if com.failed(hr) do return
 

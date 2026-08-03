@@ -3,8 +3,6 @@ package main
 import "core:fmt"
 
 import cb "../cbopenif"
-import "../cbopenif/bstr"
-import "../cbopenif/variant"
 
 // odin run main.odin -file -target:windows_i386
 

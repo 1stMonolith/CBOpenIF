@@ -1,10 +1,9 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") HResult     :: com.HResult
 
 Variables :: distinct rawptr
@@ -66,8 +65,8 @@ variables_variable_by_name :: proc(variables: Variables, name: string) -> (varia
     if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->Find(bstr_name, cast(^rawptr)&variable)
     if com.failed(hr) do return
     
@@ -90,8 +89,8 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
     if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

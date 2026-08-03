@@ -1,11 +1,10 @@
 package graph
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 GraphPos :: distinct rawptr

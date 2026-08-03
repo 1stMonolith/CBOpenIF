@@ -1,14 +1,12 @@
 package il
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") HResult     :: com.HResult
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 ILRow :: distinct rawptr
 
@@ -42,15 +40,15 @@ ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: I
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    bstr_instruction := bstr.from_string(instruction)
-    bstr_operand := bstr.from_string(operand)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_instruction := com.from_string(instruction)
+    bstr_operand := com.from_string(operand)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_instruction)
-        bstr.free(bstr_operand)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_instruction)
+        com.bstr_free(bstr_operand)
+        com.bstr_free(bstr_description)
     }
     hr := factory.factoryif->NewILRow(bstr_name, bstr_instruction, bstr_operand, bstr_description, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
@@ -62,8 +60,8 @@ ilrow_new_comment :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_comment := bstr.from_string(comment)
-    bstr.free(bstr_comment)
+    bstr_comment := com.from_string(comment)
+    com.bstr_free(bstr_comment)
     hr := factory.factoryif->NewILComment(bstr_comment, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
 
@@ -81,11 +79,11 @@ ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->LabelGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
@@ -93,8 +91,8 @@ ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(label)
-    defer bstr.free(bs)
+    bs := com.from_string(label)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->LabelPut(bs)
     if com.failed(hr) do return
     
@@ -112,11 +110,11 @@ ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->InstructionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
@@ -124,8 +122,8 @@ ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(instruction)
-    defer bstr.free(bs)
+    bs := com.from_string(instruction)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->InstructionPut(bs)
     if com.failed(hr) do return
     
@@ -143,11 +141,11 @@ ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->InstructionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
@@ -155,8 +153,8 @@ ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(operand)
-    defer bstr.free(bs)
+    bs := com.from_string(operand)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->InstructionPut(bs)
     if com.failed(hr) do return
     
@@ -174,11 +172,11 @@ ilrow_description_get :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->DescriptionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
@@ -186,8 +184,8 @@ ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -205,11 +203,11 @@ ilrow_row_comment_get :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->RowCommentGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
@@ -217,8 +215,8 @@ ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(row_comment)
-    defer bstr.free(bs)
+    bs := com.from_string(row_comment)
+    defer com.bstr_free(bs)
     hr := (^ILRowIF)(ilrow)->RowCommentPut(bs)
     if com.failed(hr) do return
     
@@ -239,7 +237,7 @@ ilrow_is_row_comment_get :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: boo
     hr := (^ILRowIF)(ilrow)->IsRowCommentGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: bool) {
@@ -247,7 +245,7 @@ ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: boo
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    vb := variant.bool_to_variantbool(is_row_comment)
+    vb := com.bool_to_variantbool(is_row_comment)
     hr := (^ILRowIF)(ilrow)->IsRowCommentPut(vb)
     if com.failed(hr) do return
 

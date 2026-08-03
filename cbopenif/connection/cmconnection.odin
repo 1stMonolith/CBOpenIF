@@ -1,16 +1,14 @@
 package connection
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../point"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") HResult     :: com.HResult
 @(private="file") Points      :: point.Points
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 CMConnection :: distinct rawptr
 
@@ -37,13 +35,13 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_actual_parameter := bstr.from_string(actual_parameter)
+    bstr_name := com.from_string(name)
+    bstr_actual_parameter := com.from_string(actual_parameter)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_actual_parameter)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_actual_parameter)
     }
-    hr := factory.factoryif->NewCMConnection1(bstr_name, bstr_actual_parameter, variant.bool_to_variantbool(graphical_connection), cast(^rawptr)&cmconnection)
+    hr := factory.factoryif->NewCMConnection1(bstr_name, bstr_actual_parameter, com.bool_to_variantbool(graphical_connection), cast(^rawptr)&cmconnection)
     if com.failed(hr) do return
     
     return cmconnection, true
@@ -53,8 +51,8 @@ cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (o
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeCMConnection(&bs, cast(^rawptr)cmconnection)
     if com.failed(hr) do return
     
@@ -67,11 +65,11 @@ cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMConnectionIF)(cmconnection)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmconnection_name :: proc {
@@ -85,11 +83,11 @@ cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMConnectionIF)(cmconnection)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: bool) {
@@ -97,8 +95,8 @@ cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: 
     if cmconnection == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^CMConnectionIF)(cmconnection)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -116,11 +114,11 @@ cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMConnectionIF)(cmconnection)->ActualParameterGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_parameter: string) -> (ok: bool) {
@@ -128,8 +126,8 @@ cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_par
     if cmconnection == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(actual_parameter)
-    defer bstr.free(bs)
+    bs := com.from_string(actual_parameter)
+    defer com.bstr_free(bs)
     hr := (^CMConnectionIF)(cmconnection)->ActualParameterPut(bs)
     if com.failed(hr) do return
     
@@ -150,7 +148,7 @@ cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (gr
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphical_connection: bool) -> (ok: bool) {
@@ -158,7 +156,7 @@ cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphi
     if cmconnection == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    vb := variant.bool_to_variantbool(graphical_connection)
+    vb := com.bool_to_variantbool(graphical_connection)
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(vb)
     if com.failed(hr) do return
     

@@ -1,12 +1,11 @@
 package graph
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../point"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 @(private="file") Point   :: point.Point
 

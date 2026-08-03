@@ -1,11 +1,10 @@
 package sfc
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 SFCSubSequence :: distinct rawptr
@@ -28,8 +27,8 @@ sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok:
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    defer bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    defer com.bstr_free(bstr_name)
     hr := factory.factoryif->NewSFCSubSequence(bstr_name, cast(^rawptr)&sfcsubsequence)
     if com.failed(hr) do return
 
@@ -47,11 +46,11 @@ sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
@@ -59,8 +58,8 @@ sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) ->
     if sfcsubsequence == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->NamePut(bs)
     if com.failed(hr) do return
 

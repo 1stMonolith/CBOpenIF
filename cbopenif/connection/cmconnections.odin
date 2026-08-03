@@ -1,13 +1,11 @@
 package connection
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") HResult     :: com.HResult
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 CMConnections :: distinct rawptr
 
@@ -68,8 +66,8 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: s
     if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->Find(bstr_name, cast(^rawptr)&cmconnection)
     if com.failed(hr) do return
     
@@ -92,8 +90,8 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
     if !controlbuilder.controlbuilder_connected() do return
     if cmconnections == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

@@ -1,6 +1,5 @@
 package parameter
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
@@ -10,7 +9,7 @@ import "../type"
 
 @(private="file") AutoPoint   :: point.AutoPoint
 @(private="file") AutoPosType :: type.AutoPosType
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") GraphNodes  :: graph.GraphNodes
 @(private="file") HResult     :: com.HResult
 
@@ -62,21 +61,21 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_type_name := bstr.from_string(type_name)
-    bstr_attribute := bstr.from_string(attribute)
-    bstr_initial_value := bstr.from_string(initial_value)
-    bstr_read_permission := bstr.from_string(read_permission)
-    bstr_write_permission := bstr.from_string(write_permission)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_type_name := com.from_string(type_name)
+    bstr_attribute := com.from_string(attribute)
+    bstr_initial_value := com.from_string(initial_value)
+    bstr_read_permission := com.from_string(read_permission)
+    bstr_write_permission := com.from_string(write_permission)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_type_name)
-        bstr.free(bstr_attribute)
-        bstr.free(bstr_initial_value)
-        bstr.free(bstr_read_permission)
-        bstr.free(bstr_write_permission)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_type_name)
+        com.bstr_free(bstr_attribute)
+        com.bstr_free(bstr_initial_value)
+        com.bstr_free(bstr_read_permission)
+        com.bstr_free(bstr_write_permission)
+        com.bstr_free(bstr_description)
     }
 
     ap: AutoPoint
@@ -98,8 +97,8 @@ cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: 
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeCMParameter(&bs, cast(^rawptr)cmparameter)
     if com.failed(hr) do return
     
@@ -112,11 +111,11 @@ cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_name :: proc {
@@ -130,11 +129,11 @@ cmparameter_name_get :: proc(cmparameter: CMParameter) -> (name: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: bool) {
@@ -142,8 +141,8 @@ cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: boo
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -161,11 +160,11 @@ cmparameter_type_name_get :: proc(cmparameter: CMParameter) -> (type_name: strin
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->TypeNameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -> (ok: bool) {
@@ -173,8 +172,8 @@ cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(type_name)
-    defer bstr.free(bs)
+    bs := com.from_string(type_name)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->TypeNamePut(bs)
     if com.failed(hr) do return
     
@@ -192,11 +191,11 @@ cmparameter_initial_value_get :: proc(cmparameter: CMParameter) -> (inital_value
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->InitialValueGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: string) -> (ok: bool) {
@@ -204,8 +203,8 @@ cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: st
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(inital_value)
-    defer bstr.free(bs)
+    bs := com.from_string(inital_value)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->InitialValuePut(bs)
     if com.failed(hr) do return
     
@@ -223,11 +222,11 @@ cmparameter_description_get :: proc(cmparameter: CMParameter) -> (description: s
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->DescriptionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_description_set :: proc(cmparameter: CMParameter, description: string) -> (ok: bool) {
@@ -235,8 +234,8 @@ cmparameter_description_set :: proc(cmparameter: CMParameter, description: strin
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -254,11 +253,11 @@ cmparameter_read_permission_get :: proc(cmparameter: CMParameter) -> (read_permi
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->ReadPermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permission: string) -> (ok: bool) {
@@ -266,8 +265,8 @@ cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permissio
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(read_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(read_permission)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->ReadPermissionPut(bs)
     if com.failed(hr) do return
     
@@ -285,11 +284,11 @@ cmparameter_write_permission_get :: proc(cmparameter: CMParameter) -> (write_per
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->WritePermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permission: string) -> (ok: bool) {
@@ -297,8 +296,8 @@ cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permiss
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(write_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(write_permission)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->WritePermissionPut(bs)
     if com.failed(hr) do return
     
@@ -316,11 +315,11 @@ cmparameter_authentication_level_get :: proc(cmparameter: CMParameter) -> (authe
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentication_level: string) -> (ok: bool) {
@@ -328,8 +327,8 @@ cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentic
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(authentication_level)
-    defer bstr.free(bs)
+    bs := com.from_string(authentication_level)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
     
@@ -347,11 +346,11 @@ cmparameter_batch_property_get :: proc(cmparameter: CMParameter) -> (batch_prope
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property: string) -> (ok: bool) {
@@ -359,8 +358,8 @@ cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property:
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(batch_property)
-    defer bstr.free(bs)
+    bs := com.from_string(batch_property)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
     
@@ -427,11 +426,11 @@ cmparameter_type_guid_get :: proc(cmparameter: CMParameter) -> (guid: string, ok
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->TypeGuid(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_type_path_get :: proc(cmparameter: CMParameter) -> (path: string, ok: bool) {
@@ -440,11 +439,11 @@ cmparameter_type_path_get :: proc(cmparameter: CMParameter) -> (path: string, ok
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->TypePath(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_access_level :: proc {
@@ -458,11 +457,11 @@ cmparameter_access_level_get :: proc(cmparameter: CMParameter) -> (access_level:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AccessLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: string) -> (ok: bool) {
@@ -470,8 +469,8 @@ cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: str
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(access_level)
-    defer bstr.free(bs)
+    bs := com.from_string(access_level)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->AccessLevelPut(bs)
     if com.failed(hr) do return
     
@@ -489,11 +488,11 @@ cmparameter_safety_type_get :: proc(cmparameter: CMParameter) -> (safety_type: s
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: string) -> (ok: bool) {
@@ -501,8 +500,8 @@ cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: strin
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(safety_type)
-    defer bstr.free(bs)
+    bs := com.from_string(safety_type)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->SafetyTypePut(bs)
     if com.failed(hr) do return
     
@@ -520,11 +519,11 @@ cmparameter_direction_get :: proc(cmparameter: CMParameter) -> (direction: strin
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->DirectionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -> (ok: bool) {
@@ -532,8 +531,8 @@ cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(direction)
-    defer bstr.free(bs)
+    bs := com.from_string(direction)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->DirectionPut(bs)
     if com.failed(hr) do return
     
@@ -551,11 +550,11 @@ cmparameter_fdport_get :: proc(cmparameter: CMParameter) -> (fdport: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->FDPortGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 cmparameter_fdport_set :: proc(cmparameter: CMParameter, fdport: string) -> (ok: bool) {
@@ -563,8 +562,8 @@ cmparameter_fdport_set :: proc(cmparameter: CMParameter, fdport: string) -> (ok:
     if cmparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(fdport)
-    defer bstr.free(bs)
+    bs := com.from_string(fdport)
+    defer com.bstr_free(bs)
     hr := (^CMParameterIF)(cmparameter)->FDPortPut(bs)
     if com.failed(hr) do return
     

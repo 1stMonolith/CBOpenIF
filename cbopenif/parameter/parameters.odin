@@ -1,10 +1,9 @@
 package parameter
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 Parameters :: distinct rawptr
@@ -67,8 +66,8 @@ parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (p
     if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->Find(bstr_name, cast(^rawptr)&parameter)
     if com.failed(hr) do return
     
@@ -91,8 +90,8 @@ parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (ind
     if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

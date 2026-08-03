@@ -1,11 +1,10 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 ILCodeBlock :: distinct rawptr
@@ -32,8 +31,8 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := factory.factoryif->NewILCodeBlock(bstr_name, cast(^rawptr)&ilcodeblock)
     if com.failed(hr) do return
 
@@ -46,11 +45,11 @@ ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILCodeBlockIF)(ilcodeblock)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilcodeblock_name :: proc {
@@ -64,11 +63,11 @@ ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ILCodeBlockIF)(ilcodeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
@@ -76,8 +75,8 @@ ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: boo
     if ilcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^ILCodeBlockIF)(ilcodeblock)->NamePut(bs)
     if com.failed(hr) do return
 

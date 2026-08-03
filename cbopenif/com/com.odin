@@ -2,12 +2,6 @@ package com
 
 import "core:sys/windows"
 
-import "../bstr"
-import "../variant"
-
-@(private="file") BStr    :: bstr.BStr
-@(private="file") Variant :: variant.Variant
-
 GUID    :: windows.GUID
 HResult :: windows.HRESULT
 
@@ -137,7 +131,7 @@ invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Variant
     }
 
     if result != nil {
-        variant.init(result)
+        variant_init(result)
     }
 
     excep: EXCEPINFO
@@ -156,9 +150,9 @@ invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Variant
     )
 
     // Free EXCEPINFO strings if present
-    if excep.bstrSource != nil      do bstr.free(excep.bstrSource)
-    if excep.bstrDescription != nil do bstr.free(excep.bstrDescription)
-    if excep.bstrHelpFile != nil    do bstr.free(excep.bstrHelpFile)
+    if excep.bstrSource != nil      do bstr_free(excep.bstrSource)
+    if excep.bstrDescription != nil do bstr_free(excep.bstrDescription)
+    if excep.bstrHelpFile != nil    do bstr_free(excep.bstrHelpFile)
 
     return hr, arg_err
 }

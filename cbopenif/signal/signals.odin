@@ -1,13 +1,11 @@
 package signal
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
-import "../variant"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
-@(private="file") Variant :: variant.VariantBool
+@(private="file") Variant :: com.VariantBool
 
 Signals :: distinct rawptr
 
@@ -67,8 +65,8 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
     if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^SignalsIF)(signals)->Find(bstr_name, cast(^rawptr)&signal)
     if com.failed(hr) do return
     
@@ -91,8 +89,8 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
     if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     
-    bstr_name := bstr.from_string(name)
-    bstr.free(bstr_name)
+    bstr_name := com.from_string(name)
+    com.bstr_free(bstr_name)
     hr := (^SignalsIF)(signals)->FindNr(bstr_name, &index)
     if com.failed(hr) do return
     

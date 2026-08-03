@@ -1,4 +1,4 @@
-package bstr
+package com
 
 import "base:runtime"
 import "core:sys/windows"
@@ -47,6 +47,6 @@ to_string :: proc(bs: BStr, allocator := context.allocator) -> (s: string) {
     return s
 }
 
-free :: proc(bs: BStr) {
+bstr_free :: proc(bs: BStr) {
     SysFreeString(bs)
 }

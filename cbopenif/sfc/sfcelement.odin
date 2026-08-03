@@ -2,10 +2,9 @@ package sfc
 
 import "../com"
 import "../controlbuilder"
-import "../variant"
 
 @(private="file") HResult     :: com.HResult
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 SFCElement :: distinct rawptr
 
@@ -32,7 +31,7 @@ sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) 
     hr := (^SFCElementIF)(sfcelement)->IsSFCStepGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool, ok: bool) {
@@ -44,7 +43,7 @@ sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool
     hr := (^SFCElementIF)(sfcelement)->IsSFCTransitionGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bool, ok: bool) {
@@ -56,7 +55,7 @@ sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bo
     hr := (^SFCElementIF)(sfcelement)->IsSFCSubSequenceGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, ok: bool) {
@@ -68,7 +67,7 @@ sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, 
     hr := (^SFCElementIF)(sfcelement)->IsSFCSelectionGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfcelement_is_simultaneous :: proc(sfcelement: SFCElement) -> (is_simultaneous: bool, ok: bool) {
@@ -80,7 +79,7 @@ sfcelement_is_simultaneous :: proc(sfcelement: SFCElement) -> (is_simultaneous: 
     hr := (^SFCElementIF)(sfcelement)->IsSFCSimultaneousGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 sfcelement_release :: proc(sfcelement: SFCElement) {

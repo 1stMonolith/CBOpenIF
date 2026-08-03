@@ -1,12 +1,11 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../signal"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 @(private="file") Signals :: signal.Signals
 
@@ -37,8 +36,8 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_description := bstr.from_string(description)
-    bstr.free(bstr_description)
+    bstr_description := com.from_string(description)
+    com.bstr_free(bstr_description)
     hr := factory.factoryif->NewApplicationVariables(bstr_description, cast(^rawptr)&application_variables)
     if com.failed(hr) do return
 
@@ -49,8 +48,8 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeApplicationVariables(&bs, cast(^rawptr)application_variables)
     if com.failed(hr) do return
     
@@ -63,11 +62,11 @@ applicationvariables_serialize :: proc(application_variables: ApplicationVariabl
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ApplicationVariablesIF)(application_variables)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 applicationvariables_description :: proc {
@@ -81,19 +80,19 @@ applicationvariables_description_get :: proc(application_variables: ApplicationV
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ApplicationVariablesIF)(application_variables)->DescriptionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 applicationvariables_description_set :: proc(application_variables: ApplicationVariables, description: string) -> (ok: bool) {
 
     if application_variables == nil do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^ApplicationVariablesIF)(application_variables)->DescriptionPut(bs)
     if com.failed(hr) do return
 

@@ -1,15 +1,13 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") GUID        :: com.GUID
 @(private="file") HResult     :: com.HResult
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 CodeBlockType :: enum i32 {
     ST  = 0,
@@ -43,8 +41,8 @@ codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) 
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)codeblock)
     if com.failed(hr) do return
     
@@ -62,11 +60,11 @@ codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^CodeBlockIF)(codeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
@@ -74,8 +72,8 @@ codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^CodeBlockIF)(codeblock)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -91,7 +89,7 @@ codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsSTCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
@@ -103,7 +101,7 @@ codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsSFCCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
@@ -115,7 +113,7 @@ codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsILCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
@@ -127,7 +125,7 @@ codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsFBDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
@@ -139,7 +137,7 @@ codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsLDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
@@ -151,7 +149,7 @@ codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
     hr := (^CodeBlockIF)(codeblock)->IsFDCodeBlock(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 codeblock_release :: proc(codeblock: CodeBlock) {

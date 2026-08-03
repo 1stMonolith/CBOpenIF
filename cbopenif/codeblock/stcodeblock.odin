@@ -1,11 +1,10 @@
 package codeblock
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 
-@(private="file") BStr    :: bstr.BStr
+@(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
 
 STCodeBlock :: distinct rawptr
@@ -31,11 +30,11 @@ stcodeblock_new :: proc(name, stcode: string) -> (stcodeblock: STCodeBlock, ok: 
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    bstr_stcode := bstr.from_string(stcode)
+    bstr_name := com.from_string(name)
+    bstr_stcode := com.from_string(stcode)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_stcode)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_stcode)
     }
     hr := factory.factoryif->NewSTCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&stcodeblock)
     if com.failed(hr) do return
@@ -49,11 +48,11 @@ stcodeblock_serialize :: proc(stcodeblock: STCodeBlock) -> (xml: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^STCodeBlockIF)(stcodeblock)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 stcodeblock_name :: proc {
@@ -67,11 +66,11 @@ stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: boo
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^STCodeBlockIF)(stcodeblock)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: bool) {
@@ -79,8 +78,8 @@ stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: boo
     if stcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^STCodeBlockIF)(stcodeblock)->NamePut(bs)
     if com.failed(hr) do return
 
@@ -98,11 +97,11 @@ stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^STCodeBlockIF)(stcodeblock)->STCodeGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 stcodeblock_stcode_set :: proc(stcodeblock: STCodeBlock, stcode: string) -> (ok: bool) {
@@ -110,8 +109,8 @@ stcodeblock_stcode_set :: proc(stcodeblock: STCodeBlock, stcode: string) -> (ok:
     if stcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(stcode)
-    defer bstr.free(bs)
+    bs := com.from_string(stcode)
+    defer com.bstr_free(bs)
     hr := (^STCodeBlockIF)(stcodeblock)->STCodePut(bs)
     if com.failed(hr) do return
 

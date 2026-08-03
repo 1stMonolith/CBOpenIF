@@ -1,19 +1,17 @@
 package type
 
-import "../bstr"
 import "../com"
 import c "../component"
 import "../controlbuilder"
 import "../factory"
 import "../type"
-import "../variant"
 
-@(private="file") BStr        :: bstr.BStr
+@(private="file") BStr        :: com.BStr
 @(private="file") Component   :: c.Component
 @(private="file") Components  :: c.Components
 @(private="file") HResult     :: com.HResult
 @(private="file") ScopeType   :: type.ScopeType
-@(private="file") VariantBool :: variant.VariantBool
+@(private="file") VariantBool :: com.VariantBool
 
 DataType :: distinct rawptr
 
@@ -48,13 +46,13 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
 
     if !controlbuilder.controlbuilder_connected() do return
 
-    bstr_name := bstr.from_string(name)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_description)
     }
-    hr := factory.factoryif->NewDataType1(bstr_name, bstr_description, variant.bool_to_variantbool(protected), variant.bool_to_variantbool(hidden), i32(scope), cast(^rawptr)&datatype)
+    hr := factory.factoryif->NewDataType1(bstr_name, bstr_description, com.bool_to_variantbool(protected), com.bool_to_variantbool(hidden), i32(scope), cast(^rawptr)&datatype)
     if com.failed(hr) do return
 
     return datatype, true
@@ -64,8 +62,8 @@ datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeDataType(&bs, cast(^rawptr)datatype)
     if com.failed(hr) do return
     
@@ -78,11 +76,11 @@ datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 datatype_name :: proc {
@@ -96,11 +94,11 @@ datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
@@ -108,8 +106,8 @@ datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->NamePut(bs)
     if com.failed(hr) do return
 
@@ -130,7 +128,7 @@ datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool
     hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool) {
@@ -138,7 +136,7 @@ datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ProtectedPut(variant.bool_to_variantbool(protected))
+    hr := (^DataTypeIF)(datatype)->ProtectedPut(com.bool_to_variantbool(protected))
     if com.failed(hr) do return
 
     return true
@@ -158,7 +156,7 @@ datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
     if com.failed(hr) do return
 
-    return variant.variantbool_to_bool(vb), true
+    return com.variantbool_to_bool(vb), true
 }
 
 datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
@@ -166,7 +164,7 @@ datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    hr := (^DataTypeIF)(datatype)->HiddenPut(variant.bool_to_variantbool(hidden))
+    hr := (^DataTypeIF)(datatype)->HiddenPut(com.bool_to_variantbool(hidden))
     if com.failed(hr) do return
 
     return true
@@ -211,11 +209,11 @@ datatype_description_get :: proc(datatype: DataType) -> (description: string, ok
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->DescriptionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 datatype_description_set :: proc(datatype: DataType, description: string) -> (ok: bool) {
@@ -223,8 +221,8 @@ datatype_description_set :: proc(datatype: DataType, description: string) -> (ok
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->DescriptionPut(bs)
     if com.failed(hr) do return
 
@@ -242,11 +240,11 @@ datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->GuidGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
@@ -254,8 +252,8 @@ datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(guid)
-    defer bstr.free(bs)
+    bs := com.from_string(guid)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->GuidPut(bs)
     if com.failed(hr) do return
 
@@ -273,11 +271,11 @@ datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_fu
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->ReservedByFunctionGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_function: string) -> (ok: bool) {
@@ -285,8 +283,8 @@ datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_functi
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(reserved_by_function)
-    defer bstr.free(bs)
+    bs := com.from_string(reserved_by_function)
+    defer com.bstr_free(bs)
     hr := (^DataTypeIF)(datatype)->ReservedByFunctionPut(bs)
     if com.failed(hr) do return
 

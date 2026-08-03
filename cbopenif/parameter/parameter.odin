@@ -1,12 +1,11 @@
 package parameter
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../type"
 
-@(private="file") BStr          :: bstr.BStr
+@(private="file") BStr          :: com.BStr
 @(private="file") DirectionType :: type.DirectionType
 @(private="file") HResult       :: com.HResult
 
@@ -52,21 +51,21 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_type_name := bstr.from_string(type_name)
-    bstr_attribute := bstr.from_string(attribute)
-    bstr_initial_value := bstr.from_string(initial_value)
-    bstr_readpermission := bstr.from_string(readpermission)
-    bstr_writepermission := bstr.from_string(writepermission)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_type_name := com.from_string(type_name)
+    bstr_attribute := com.from_string(attribute)
+    bstr_initial_value := com.from_string(initial_value)
+    bstr_readpermission := com.from_string(readpermission)
+    bstr_writepermission := com.from_string(writepermission)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_type_name)
-        bstr.free(bstr_attribute)
-        bstr.free(bstr_initial_value)
-        bstr.free(bstr_readpermission)
-        bstr.free(bstr_writepermission)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_type_name)
+        com.bstr_free(bstr_attribute)
+        com.bstr_free(bstr_initial_value)
+        com.bstr_free(bstr_readpermission)
+        com.bstr_free(bstr_writepermission)
+        com.bstr_free(bstr_description)
     }
     hr := factory.factoryif->NewParameter1(bstr_name, bstr_type_name, bstr_attribute, i32(direction), bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&parameter)
     if com.failed(hr) do return
@@ -78,8 +77,8 @@ parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) 
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeParameter(&bs, cast(^rawptr)parameter)
     if com.failed(hr) do return
     
@@ -92,11 +91,11 @@ parameter_serialize :: proc(parameter: Parameter) -> (xml: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_name :: proc {
@@ -110,11 +109,11 @@ parameter_name_get :: proc(parameter: Parameter) -> (name: string, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_name_set :: proc(parameter: Parameter, name: string) -> (ok: bool) {
@@ -122,8 +121,8 @@ parameter_name_set :: proc(parameter: Parameter, name: string) -> (ok: bool) {
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -141,11 +140,11 @@ parameter_type_name_get :: proc(parameter: Parameter) -> (type_name: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->TypeNameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_type_name_set :: proc(parameter: Parameter, type_name: string) -> (ok: bool) {
@@ -153,8 +152,8 @@ parameter_type_name_set :: proc(parameter: Parameter, type_name: string) -> (ok:
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(type_name)
-    defer bstr.free(bs)
+    bs := com.from_string(type_name)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->TypeNamePut(bs)
     if com.failed(hr) do return
     
@@ -172,11 +171,11 @@ parameter_attribute_get :: proc(parameter: Parameter) -> (attribute: string, ok:
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AttributeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok: bool) {
@@ -184,8 +183,8 @@ parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok:
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(attribute)
-    defer bstr.free(bs)
+    bs := com.from_string(attribute)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AttributePut(bs)
     if com.failed(hr) do return
     
@@ -203,11 +202,11 @@ parameter_initial_value_get :: proc(parameter: Parameter) -> (inital_value: stri
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->InitialValueGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_initial_value_set :: proc(parameter: Parameter, inital_value: string) -> (ok: bool) {
@@ -215,8 +214,8 @@ parameter_initial_value_set :: proc(parameter: Parameter, inital_value: string) 
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(inital_value)
-    defer bstr.free(bs)
+    bs := com.from_string(inital_value)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->InitialValuePut(bs)
     if com.failed(hr) do return
     
@@ -234,11 +233,11 @@ parameter_description_get :: proc(parameter: Parameter) -> (description: string,
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->DescriptionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_description_set :: proc(parameter: Parameter, description: string) -> (ok: bool) {
@@ -246,8 +245,8 @@ parameter_description_set :: proc(parameter: Parameter, description: string) -> 
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -265,11 +264,11 @@ parameter_read_permission_get :: proc(parameter: Parameter) -> (read_permission:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->ReadPermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_read_permission_set :: proc(parameter: Parameter, read_permission: string) -> (ok: bool) {
@@ -277,8 +276,8 @@ parameter_read_permission_set :: proc(parameter: Parameter, read_permission: str
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(read_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(read_permission)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->ReadPermissionPut(bs)
     if com.failed(hr) do return
     
@@ -296,11 +295,11 @@ parameter_write_permission_get :: proc(parameter: Parameter) -> (write_permissio
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->WritePermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_write_permission_set :: proc(parameter: Parameter, write_permission: string) -> (ok: bool) {
@@ -308,8 +307,8 @@ parameter_write_permission_set :: proc(parameter: Parameter, write_permission: s
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(write_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(write_permission)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->WritePermissionPut(bs)
     if com.failed(hr) do return
     
@@ -327,11 +326,11 @@ parameter_authentication_level_get :: proc(parameter: Parameter) -> (authenticat
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_authentication_level_set :: proc(parameter: Parameter, authentication_level: string) -> (ok: bool) {
@@ -339,8 +338,8 @@ parameter_authentication_level_set :: proc(parameter: Parameter, authentication_
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(authentication_level)
-    defer bstr.free(bs)
+    bs := com.from_string(authentication_level)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
     
@@ -353,11 +352,11 @@ parameter_type_guid_get :: proc(parameter: Parameter) -> (guid: string, ok: bool
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->TypeGuid(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_type_path_get :: proc(parameter: Parameter) -> (path: string, ok: bool) {
@@ -366,11 +365,11 @@ parameter_type_path_get :: proc(parameter: Parameter) -> (path: string, ok: bool
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->TypePath(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_access_level :: proc {
@@ -384,11 +383,11 @@ parameter_access_level_get :: proc(parameter: Parameter) -> (access_level: strin
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AccessLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_access_level_set :: proc(parameter: Parameter, access_level: string) -> (ok: bool) {
@@ -396,8 +395,8 @@ parameter_access_level_set :: proc(parameter: Parameter, access_level: string) -
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(access_level)
-    defer bstr.free(bs)
+    bs := com.from_string(access_level)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->AccessLevelPut(bs)
     if com.failed(hr) do return
     
@@ -415,11 +414,11 @@ parameter_safety_type_get :: proc(parameter: Parameter) -> (safety_type: string,
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_safety_type_set :: proc(parameter: Parameter, safety_type: string) -> (ok: bool) {
@@ -427,8 +426,8 @@ parameter_safety_type_set :: proc(parameter: Parameter, safety_type: string) -> 
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(safety_type)
-    defer bstr.free(bs)
+    bs := com.from_string(safety_type)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->SafetyTypePut(bs)
     if com.failed(hr) do return
     
@@ -446,11 +445,11 @@ parameter_fdport_get :: proc(parameter: Parameter) -> (fdport: string, ok: bool)
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 parameter_fdport_set :: proc(parameter: Parameter, fdport: string) -> (ok: bool) {
@@ -458,8 +457,8 @@ parameter_fdport_set :: proc(parameter: Parameter, fdport: string) -> (ok: bool)
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(fdport)
-    defer bstr.free(bs)
+    bs := com.from_string(fdport)
+    defer com.bstr_free(bs)
     hr := (^ParameterIF)(parameter)->SafetyTypePut(bs)
     if com.failed(hr) do return
     

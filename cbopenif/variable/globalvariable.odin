@@ -1,12 +1,11 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../graph"
 
-@(private="file") BStr       :: bstr.BStr
+@(private="file") BStr       :: com.BStr
 @(private="file") GraphNodes :: graph.GraphNodes
 @(private="file") HResult    :: com.HResult
 
@@ -51,21 +50,21 @@ globalvariable_new :: proc(name: string, type: string, attribute := "", initial_
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_type := bstr.from_string(type)
-    bstr_attribute := bstr.from_string(attribute)
-    bstr_initial_value := bstr.from_string(initial_value)
-    bstr_readpermission := bstr.from_string(readpermission)
-    bstr_writepermission := bstr.from_string(writepermission)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_type := com.from_string(type)
+    bstr_attribute := com.from_string(attribute)
+    bstr_initial_value := com.from_string(initial_value)
+    bstr_readpermission := com.from_string(readpermission)
+    bstr_writepermission := com.from_string(writepermission)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_type)
-        bstr.free(bstr_attribute)
-        bstr.free(bstr_initial_value)
-        bstr.free(bstr_readpermission)
-        bstr.free(bstr_writepermission)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_type)
+        com.bstr_free(bstr_attribute)
+        com.bstr_free(bstr_initial_value)
+        com.bstr_free(bstr_readpermission)
+        com.bstr_free(bstr_writepermission)
+        com.bstr_free(bstr_description)
     }
     hr := factory.factoryif->NewGlobalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_initial_value, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&global_variable)
     if com.failed(hr) do return
@@ -77,8 +76,8 @@ globalvariable_deserialize :: proc(global_variable: ^GlobalVariable, xml: string
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeGlobalVariable(&bs, cast(^rawptr)global_variable)
     if com.failed(hr) do return
     
@@ -91,11 +90,11 @@ globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: strin
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_name :: proc {
@@ -109,11 +108,11 @@ globalvariable_name_get :: proc(global_variable: GlobalVariable) -> (name: strin
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_name_set :: proc(global_variable: GlobalVariable, name: string) -> (ok: bool) {
@@ -121,8 +120,8 @@ globalvariable_name_set :: proc(global_variable: GlobalVariable, name: string) -
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -140,11 +139,11 @@ globalvariable_type_name_get :: proc(global_variable: GlobalVariable) -> (type_n
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->TypeNameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_type_name_set :: proc(global_variable: GlobalVariable, type_name: string) -> (ok: bool) {
@@ -152,8 +151,8 @@ globalvariable_type_name_set :: proc(global_variable: GlobalVariable, type_name:
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(type_name)
-    defer bstr.free(bs)
+    bs := com.from_string(type_name)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->TypeNamePut(bs)
     if com.failed(hr) do return
     
@@ -171,11 +170,11 @@ globalvariable_attribute_get :: proc(global_variable: GlobalVariable) -> (attrib
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AttributeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_attribute_set :: proc(global_variable: GlobalVariable, attribute: string) -> (ok: bool) {
@@ -183,8 +182,8 @@ globalvariable_attribute_set :: proc(global_variable: GlobalVariable, attribute:
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(attribute)
-    defer bstr.free(bs)
+    bs := com.from_string(attribute)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AttributePut(bs)
     if com.failed(hr) do return
     
@@ -202,11 +201,11 @@ globalvariable_initial_value_get :: proc(global_variable: GlobalVariable) -> (in
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->InitialValueGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_initial_value_set :: proc(global_variable: GlobalVariable, inital_value: string) -> (ok: bool) {
@@ -214,8 +213,8 @@ globalvariable_initial_value_set :: proc(global_variable: GlobalVariable, inital
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(inital_value)
-    defer bstr.free(bs)
+    bs := com.from_string(inital_value)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->InitialValuePut(bs)
     if com.failed(hr) do return
     
@@ -233,11 +232,11 @@ globalvariable_description_get :: proc(global_variable: GlobalVariable) -> (desc
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->DescriptionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_description_set :: proc(global_variable: GlobalVariable, description: string) -> (ok: bool) {
@@ -245,8 +244,8 @@ globalvariable_description_set :: proc(global_variable: GlobalVariable, descript
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -264,11 +263,11 @@ globalvariable_read_permission_get :: proc(global_variable: GlobalVariable) -> (
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->ReadPermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_read_permission_set :: proc(global_variable: GlobalVariable, read_permission: string) -> (ok: bool) {
@@ -276,8 +275,8 @@ globalvariable_read_permission_set :: proc(global_variable: GlobalVariable, read
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(read_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(read_permission)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->ReadPermissionPut(bs)
     if com.failed(hr) do return
     
@@ -295,11 +294,11 @@ globalvariable_write_permission_get :: proc(global_variable: GlobalVariable) -> 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->WritePermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_write_permission_set :: proc(global_variable: GlobalVariable, write_permission: string) -> (ok: bool) {
@@ -307,8 +306,8 @@ globalvariable_write_permission_set :: proc(global_variable: GlobalVariable, wri
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(write_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(write_permission)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->WritePermissionPut(bs)
     if com.failed(hr) do return
     
@@ -326,11 +325,11 @@ globalvariable_authentication_level_get :: proc(global_variable: GlobalVariable)
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_authentication_level_set :: proc(global_variable: GlobalVariable, authentication_level: string) -> (ok: bool) {
@@ -338,8 +337,8 @@ globalvariable_authentication_level_set :: proc(global_variable: GlobalVariable,
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(authentication_level)
-    defer bstr.free(bs)
+    bs := com.from_string(authentication_level)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
     
@@ -379,11 +378,11 @@ globalvariable_type_guid_get :: proc(global_variable: GlobalVariable) -> (guid: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->TypeGuid(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_type_path_get :: proc(global_variable: GlobalVariable) -> (path: string, ok: bool) {
@@ -392,11 +391,11 @@ globalvariable_type_path_get :: proc(global_variable: GlobalVariable) -> (path: 
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->TypePath(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_access_level :: proc {
@@ -410,11 +409,11 @@ globalvariable_access_level_get :: proc(global_variable: GlobalVariable) -> (acc
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AccessLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_access_level_set :: proc(global_variable: GlobalVariable, access_level: string) -> (ok: bool) {
@@ -422,8 +421,8 @@ globalvariable_access_level_set :: proc(global_variable: GlobalVariable, access_
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(access_level)
-    defer bstr.free(bs)
+    bs := com.from_string(access_level)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->AccessLevelPut(bs)
     if com.failed(hr) do return
     
@@ -441,11 +440,11 @@ globalvariable_safety_type_get :: proc(global_variable: GlobalVariable) -> (safe
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 globalvariable_safety_type_set :: proc(global_variable: GlobalVariable, safety_type: string) -> (ok: bool) {
@@ -453,8 +452,8 @@ globalvariable_safety_type_set :: proc(global_variable: GlobalVariable, safety_t
     if global_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(safety_type)
-    defer bstr.free(bs)
+    bs := com.from_string(safety_type)
+    defer com.bstr_free(bs)
     hr := (^GlobalVariableIF)(global_variable)->SafetyTypePut(bs)
     if com.failed(hr) do return
     

@@ -1,12 +1,11 @@
 package variable
 
-import "../bstr"
 import "../com"
 import "../controlbuilder"
 import "../factory"
 import "../graph"
 
-@(private="file") BStr       :: bstr.BStr
+@(private="file") BStr       :: com.BStr
 @(private="file") GraphNodes :: graph.GraphNodes
 @(private="file") HResult    :: com.HResult
 
@@ -49,19 +48,19 @@ externalvariable_new :: proc(name: string, type: string, attribute := "", readpe
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bstr_name := bstr.from_string(name)
-    bstr_type := bstr.from_string(type)
-    bstr_attribute := bstr.from_string(attribute)
-    bstr_readpermission := bstr.from_string(readpermission)
-    bstr_writepermission := bstr.from_string(writepermission)
-    bstr_description := bstr.from_string(description)
+    bstr_name := com.from_string(name)
+    bstr_type := com.from_string(type)
+    bstr_attribute := com.from_string(attribute)
+    bstr_readpermission := com.from_string(readpermission)
+    bstr_writepermission := com.from_string(writepermission)
+    bstr_description := com.from_string(description)
     defer {
-        bstr.free(bstr_name)
-        bstr.free(bstr_type)
-        bstr.free(bstr_attribute)
-        bstr.free(bstr_readpermission)
-        bstr.free(bstr_writepermission)
-        bstr.free(bstr_description)
+        com.bstr_free(bstr_name)
+        com.bstr_free(bstr_type)
+        com.bstr_free(bstr_attribute)
+        com.bstr_free(bstr_readpermission)
+        com.bstr_free(bstr_writepermission)
+        com.bstr_free(bstr_description)
     }
     hr := factory.factoryif->NewExternalVariable1(bstr_name, bstr_type, bstr_attribute, bstr_readpermission, bstr_writepermission, bstr_description, cast(^rawptr)&external_variable)
     if com.failed(hr) do return
@@ -73,8 +72,8 @@ externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: 
 
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(xml)
-    defer bstr.free(bs)
+    bs := com.from_string(xml)
+    defer com.bstr_free(bs)
     hr := factory.factoryif->DeserializeExternalVariable(&bs, cast(^rawptr)external_variable)
     if com.failed(hr) do return
     
@@ -87,11 +86,11 @@ externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->Serialize(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_name :: proc {
@@ -105,11 +104,11 @@ externalvariable_name_get :: proc(external_variable: ExternalVariable) -> (name:
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->NameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_name_set :: proc(external_variable: ExternalVariable, name: string) -> (ok: bool) {
@@ -117,8 +116,8 @@ externalvariable_name_set :: proc(external_variable: ExternalVariable, name: str
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(name)
-    defer bstr.free(bs)
+    bs := com.from_string(name)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->NamePut(bs)
     if com.failed(hr) do return
     
@@ -136,11 +135,11 @@ externalvariable_type_name_get :: proc(external_variable: ExternalVariable) -> (
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->TypeNameGet(&bs)
     if com.failed(hr) do return
 
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_type_name_set :: proc(external_variable: ExternalVariable, type_name: string) -> (ok: bool) {
@@ -148,8 +147,8 @@ externalvariable_type_name_set :: proc(external_variable: ExternalVariable, type
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(type_name)
-    defer bstr.free(bs)
+    bs := com.from_string(type_name)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->TypeNamePut(bs)
     if com.failed(hr) do return
     
@@ -167,11 +166,11 @@ externalvariable_attribute_get :: proc(external_variable: ExternalVariable) -> (
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AttributeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_attribute_set :: proc(external_variable: ExternalVariable, attribute: string) -> (ok: bool) {
@@ -179,8 +178,8 @@ externalvariable_attribute_set :: proc(external_variable: ExternalVariable, attr
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    bs := bstr.from_string(attribute)
-    defer bstr.free(bs)
+    bs := com.from_string(attribute)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AttributePut(bs)
     if com.failed(hr) do return
     
@@ -198,11 +197,11 @@ externalvariable_description_get :: proc(external_variable: ExternalVariable) ->
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->DescriptionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_description_set :: proc(external_variable: ExternalVariable, description: string) -> (ok: bool) {
@@ -210,8 +209,8 @@ externalvariable_description_set :: proc(external_variable: ExternalVariable, de
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(description)
-    defer bstr.free(bs)
+    bs := com.from_string(description)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->DescriptionPut(bs)
     if com.failed(hr) do return
     
@@ -229,11 +228,11 @@ externalvariable_read_permission_get :: proc(external_variable: ExternalVariable
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->ReadPermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_read_permission_set :: proc(external_variable: ExternalVariable, read_permission: string) -> (ok: bool) {
@@ -241,8 +240,8 @@ externalvariable_read_permission_set :: proc(external_variable: ExternalVariable
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(read_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(read_permission)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->ReadPermissionPut(bs)
     if com.failed(hr) do return
     
@@ -260,11 +259,11 @@ externalvariable_write_permission_get :: proc(external_variable: ExternalVariabl
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->WritePermissionGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_write_permission_set :: proc(external_variable: ExternalVariable, write_permission: string) -> (ok: bool) {
@@ -272,8 +271,8 @@ externalvariable_write_permission_set :: proc(external_variable: ExternalVariabl
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(write_permission)
-    defer bstr.free(bs)
+    bs := com.from_string(write_permission)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->WritePermissionPut(bs)
     if com.failed(hr) do return
     
@@ -291,11 +290,11 @@ externalvariable_authentication_level_get :: proc(external_variable: ExternalVar
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AuthenticationLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_authentication_level_set :: proc(external_variable: ExternalVariable, authentication_level: string) -> (ok: bool) {
@@ -303,8 +302,8 @@ externalvariable_authentication_level_set :: proc(external_variable: ExternalVar
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(authentication_level)
-    defer bstr.free(bs)
+    bs := com.from_string(authentication_level)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AuthenticationLevelPut(bs)
     if com.failed(hr) do return
     
@@ -344,11 +343,11 @@ externalvariable_type_guid_get :: proc(external_variable: ExternalVariable) -> (
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->TypeGuid(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_type_path_get :: proc(external_variable: ExternalVariable) -> (path: string, ok: bool) {
@@ -357,11 +356,11 @@ externalvariable_type_path_get :: proc(external_variable: ExternalVariable) -> (
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->TypePath(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_access_level :: proc {
@@ -375,11 +374,11 @@ externalvariable_access_level_get :: proc(external_variable: ExternalVariable) -
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AccessLevelGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_access_level_set :: proc(external_variable: ExternalVariable, access_level: string) -> (ok: bool) {
@@ -387,8 +386,8 @@ externalvariable_access_level_set :: proc(external_variable: ExternalVariable, a
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(access_level)
-    defer bstr.free(bs)
+    bs := com.from_string(access_level)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->AccessLevelPut(bs)
     if com.failed(hr) do return
     
@@ -406,11 +405,11 @@ externalvariable_safety_type_get :: proc(external_variable: ExternalVariable) ->
     if !controlbuilder.controlbuilder_connected() do return
     
     bs: BStr
-    defer bstr.free(bs)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
     
-    return bstr.to_string(bs), true
+    return com.to_string(bs), true
 }
 
 externalvariable_safety_type_set :: proc(external_variable: ExternalVariable, safety_type: string) -> (ok: bool) {
@@ -418,8 +417,8 @@ externalvariable_safety_type_set :: proc(external_variable: ExternalVariable, sa
     if external_variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    bs := bstr.from_string(safety_type)
-    defer bstr.free(bs)
+    bs := com.from_string(safety_type)
+    defer com.bstr_free(bs)
     hr := (^ExternalVariableIF)(external_variable)->SafetyTypePut(bs)
     if com.failed(hr) do return
     
