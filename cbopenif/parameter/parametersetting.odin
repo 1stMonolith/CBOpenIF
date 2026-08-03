@@ -101,6 +101,10 @@ parametersetting_parameter_value_set :: proc(parametersetting: ParameterSetting,
     return true
 }
 
+parametersetting_description :: proc {
+    parametersetting_description_get,
+}
+
 parametersetting_description_get :: proc(parametersetting: ParameterSetting) -> (description: string, ok: bool) {
 
     if parametersetting == nil do return
@@ -114,7 +118,7 @@ parametersetting_description_get :: proc(parametersetting: ParameterSetting) -> 
     return com.to_string(bs), true
 }
 
-parametersetting_realease :: proc(parametersetting: ParameterSetting) {
+parametersetting_release :: proc(parametersetting: ParameterSetting) {
     if parametersetting != nil {
         (^ParameterSettingIF)(parametersetting)->Release()
     }
