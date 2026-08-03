@@ -347,7 +347,7 @@ cmparameter_batch_property_get :: proc(cmparameter: CMParameter) -> (batch_prope
     
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelGet(&bs)
+    hr := (^CMParameterIF)(cmparameter)->BatchPropertyGet(&bs)
     if com.failed(hr) do return
     
     return com.to_string(bs), true
@@ -360,7 +360,7 @@ cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property:
     
     bs := com.from_string(batch_property)
     defer com.bstr_free(bs)
-    hr := (^CMParameterIF)(cmparameter)->AuthenticationLevelPut(bs)
+    hr := (^CMParameterIF)(cmparameter)->BatchPropertyPut(bs)
     if com.failed(hr) do return
     
     return true
