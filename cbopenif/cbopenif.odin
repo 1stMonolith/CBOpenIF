@@ -14,19 +14,19 @@ import "signal"
 import "type"
 import "variable"
 
-// ---------------------------------------------------------------------------
-// Shared property overload groups
-// ---------------------------------------------------------------------------
-
 access_level :: proc {
     component.component_access_level_get,
     component.component_access_level_set,
-    variable.variable_access_level_get,
-    variable.variable_access_level_set,
-    variable.globalvariable_access_level_get,
-    variable.globalvariable_access_level_set,
+    parameter.cmparameter_access_level_get,
+    parameter.cmparameter_access_level_set,
+    parameter.parameter_access_level_get,
+    parameter.parameter_access_level_set,
     variable.externalvariable_access_level_get,
     variable.externalvariable_access_level_set,
+    variable.globalvariable_access_level_get,
+    variable.globalvariable_access_level_set,
+    variable.variable_access_level_get,
+    variable.variable_access_level_set,
 }
 
 actual_parameter :: proc {
@@ -34,33 +34,47 @@ actual_parameter :: proc {
     connection.cmconnection_actual_parameter_set,
 }
 
+acknowledge_group :: proc {
+    signal.signal_acknowledge_group_get,
+    signal.signal_acknowledge_group_set,
+}
+
 attribute :: proc {
     component.component_attribute_get,
     component.component_attribute_set,
     parameter.parameter_attribute_get,
     parameter.parameter_attribute_set,
-    variable.variable_attribute_get,
-    variable.variable_attribute_set,
-    variable.globalvariable_attribute_get,
-    variable.globalvariable_attribute_set,
     variable.externalvariable_attribute_get,
     variable.externalvariable_attribute_set,
+    variable.globalvariable_attribute_get,
+    variable.globalvariable_attribute_set,
+    variable.variable_attribute_get,
+    variable.variable_attribute_set,
 }
 
 authentication_level :: proc {
     component.component_authentication_level_get,
     component.component_authentication_level_set,
-    variable.variable_authentication_level_get,
-    variable.variable_authentication_level_set,
-    variable.globalvariable_authentication_level_get,
-    variable.globalvariable_authentication_level_set,
+    parameter.cmparameter_authentication_level_get,
+    parameter.cmparameter_authentication_level_set,
+    parameter.parameter_authentication_level_get,
+    parameter.parameter_authentication_level_set,
     variable.externalvariable_authentication_level_get,
     variable.externalvariable_authentication_level_set,
+    variable.globalvariable_authentication_level_get,
+    variable.globalvariable_authentication_level_set,
+    variable.variable_authentication_level_get,
+    variable.variable_authentication_level_set,
 }
 
 AutoPoint :: point.AutoPoint
 
 autopoint_new :: point.autopoint_new
+
+autopoint :: proc {
+    parameter.cmparameter_auto_point_get,
+    parameter.cmparameter_auto_point_set,
+}
 
 autopos :: proc {
     point.autopoint_autopos_get,
@@ -88,6 +102,13 @@ applicationvariables_signals :: proc {
     variable.applicationvariables_signals_set,
 }
 
+batch_property :: proc {
+    parameter.cmparameter_batch_property_get,
+    parameter.cmparameter_batch_property_set,
+    variable.variable_batch_property_get,
+    variable.variable_batch_property_set,
+}
+
 CMConnection  :: connection.CMConnection
 
 cmconnection_new :: connection.cmconnection_new
@@ -97,12 +118,13 @@ cmconnection_add :: proc {
     connection.cmconnections_add_at_index,
 }
 
-cmconnection :: proc {
+cmconnection_by_name :: proc {
     connection.cmconnections_cmconnection_by_name,
     connection.cmconnections_cmconnection_by_index,
 }
 
 cmconnection_index :: connection.cmconnections_cmconnection_index
+
 cmconnection_count :: connection.cmconnections_count
 
 cmconnection_remove :: proc {
@@ -122,8 +144,11 @@ cmparameter_add :: proc {
 }
 
 cmparameter_by_name  :: parameter.cmparameters_cmparameter_by_name
+
 cmparameter_by_index :: parameter.cmparameters_cmparameter_by_index
+
 cmparameter_index    :: parameter.cmparameters_cmparameter_index
+
 cmparameter_count    :: parameter.cmparameters_count
 
 cmparameter_remove :: proc {
@@ -151,26 +176,29 @@ codeblock_add :: proc {
     codeblock.codeblocks_add_fd,
 }
 
-codeblock_index  :: codeblock.codeblocks_codeblock_index
-codeblock_count  :: codeblock.codeblocks_count
+codeblock_index :: codeblock.codeblocks_codeblock_index
+
+codeblock_count :: codeblock.codeblocks_count
+
 codeblock_remove :: codeblock.codeblocks_remove
 
-codeblock_stcode :: proc {
-    codeblock.fbdcodeblock_stcode_get,
-    codeblock.fbdcodeblock_stcode_set,
-    codeblock.ilcodeblock_stcode_get,
-    codeblock.ilcodeblock_stcode_set,
-    codeblock.ldcodeblock_stcode_get,
-    codeblock.ldcodeblock_stcode_set,
-    codeblock.stcodeblock_stcode_get,
-    codeblock.stcodeblock_stcode_set,
-}
+codeblock_is_fbd :: codeblock.codeblock_is_fbd
 
-CodeBlocks :: codeblock.CodeBlocks
+codeblock_is_fd :: codeblock.codeblock_is_fd
+
+codeblock_is_il :: codeblock.codeblock_is_il
+
+codeblock_is_ld :: codeblock.codeblock_is_ld
+
+codeblock_is_sfc :: codeblock.codeblock_is_sfc
+
+codeblock_is_st :: codeblock.codeblock_is_st
 
 CodeBlockType :: codeblock.CodeBlockType
 
-Component  :: component.Component
+CodeBlocks :: codeblock.CodeBlocks
+
+Component :: component.Component
 
 component_new :: component.component_new
 
@@ -204,8 +232,8 @@ component_count :: proc {
 component_remove :: proc {
     component.components_remove_by_name,
     component.components_remove_by_index,
-    type.datatype_remove_by_name,
-    type.datatype_remove_by_index,
+    type.datatype_components_remove_by_name,
+    type.datatype_components_remove_by_index,
 }
 
 Components :: component.Components
@@ -216,33 +244,47 @@ components :: proc {
 }
 
 controlbuilder_connect    :: controlbuilder.controlbuilder_connect
+
 controlbuilder_connected  :: controlbuilder.controlbuilder_connected
+
 controlbuilder_disconnect :: controlbuilder.controlbuilder_disconnect
+
 controlbuilder_online     :: controlbuilder.controlbuilder_online
+
 controlbuilder_offline    :: controlbuilder.controlbuilder_offline
 
 controlbuilder_setting :: proc {
     controlbuilder.controlbuilder_get_setting,
     controlbuilder.controlbuilder_set_setting_string,
+    controlbuilder.controlbuilder_set_setting_bool,
 }
 
 DataType :: type.DataType
 
 datatype_new :: type.datatype_new
 
+direction :: proc {
+    parameter.cmparameter_direction_get,
+    parameter.cmparameter_direction_set,
+    parameter.parameter_direction_get,
+    parameter.parameter_direction_set,
+    signal.signal_direction_get,
+    signal.signal_direction_set,
+}
+
 DirectionType :: type.DirectionType
 
 deserialize :: proc {
     codeblock.codeblock_deserialize,
     connection.cmconnection_deserialize,
-    parameter.parameter_deserialize,
     parameter.cmparameter_deserialize,
+    parameter.parameter_deserialize,
     signal.signal_deserialize,
     type.datatype_deserialize,
-    variable.variable_deserialize,
-    variable.globalvariable_deserialize,
-    variable.externalvariable_deserialize,
     variable.applicationvariables_deserialize,
+    variable.externalvariable_deserialize,
+    variable.globalvariable_deserialize,
+    variable.variable_deserialize,
 }
 
 description :: proc {
@@ -250,22 +292,23 @@ description :: proc {
     component.component_description_set,
     il.ilrow_description_get,
     il.ilrow_description_set,
-    parameter.parameter_description_get,
-    parameter.parameter_description_set,
     parameter.cmparameter_description_get,
     parameter.cmparameter_description_set,
+    parameter.parameter_description_get,
+    parameter.parameter_description_set,
+    parameter.parametersetting_description_get,
     signal.signal_description_get,
     signal.signal_description_set,
     type.datatype_description_get,
     type.datatype_description_set,
-    variable.variable_description_get,
-    variable.variable_description_set,
-    variable.globalvariable_description_get,
-    variable.globalvariable_description_set,
-    variable.externalvariable_description_get,
-    variable.externalvariable_description_set,
     variable.applicationvariables_description_get,
     variable.applicationvariables_description_set,
+    variable.externalvariable_description_get,
+    variable.externalvariable_description_set,
+    variable.globalvariable_description_get,
+    variable.globalvariable_description_set,
+    variable.variable_description_get,
+    variable.variable_description_set,
 }
 
 ExecutionInstanceType :: type.ExecutionInstanceType
@@ -279,10 +322,13 @@ externalvariable_add :: proc {
     variable.externalvariables_add_at_index,
 }
 
-externalvariable_by_name  :: variable.externalvariables_external_by_name
+externalvariable_by_name :: variable.externalvariables_external_by_name
+
 externalvariable_by_index :: variable.externalvariables_external_by_index
-externalvariable_index    :: variable.externalvariables_external_index
-externalvariable_count    :: variable.externalvariables_count
+
+externalvariable_index :: variable.externalvariables_external_index
+
+externalvariable_count :: variable.externalvariables_count
 
 externalvariable_remove :: proc {
     variable.externalvariables_remove_by_name,
@@ -302,6 +348,13 @@ fdcodeblock_xml_string :: proc {
     codeblock.fdcodeblock_xml_string_set,
 }
 
+fdport :: proc {
+    parameter.cmparameter_fdport_get,
+    parameter.cmparameter_fdport_set,
+    parameter.parameter_fdport_get,
+    parameter.parameter_fdport_set,
+}
+
 FolderType :: type.FolderType
 
 GlobalVariable :: variable.GlobalVariable
@@ -314,8 +367,11 @@ globalvariable_add :: proc {
 }
 
 globalvariable_by_name  :: variable.globalvariables_global_by_name
+
 globalvariable_by_index :: variable.globalvariables_global_by_index
+
 globalvariable_index    :: variable.globalvariables_global_index
+
 globalvariable_count    :: variable.globalvariables_count
 
 globalvariable_remove :: proc {
@@ -325,11 +381,14 @@ globalvariable_remove :: proc {
 
 GlobalVariables :: variable.GlobalVariables
 
+globalvariables :: proc {
+    variable.applicationvariables_globals_get,
+    variable.applicationvariables_globals_set,
+}
+
 GraphNode :: graph.GraphNode
 
 graphnode_new :: graph.graphnode_new
-graphpos_new  :: graph.graphpos_new
-graphsize_new :: graph.graphsize_new
 
 graphnode_add :: proc {
     graph.graphnodes_add_,
@@ -337,8 +396,11 @@ graphnode_add :: proc {
 }
 
 graphnode_by_name  :: graph.graphnodes_graphnode_by_name
+
 graphnode_by_index :: graph.graphnodes_graphnode_by_index
+
 graphnode_index    :: graph.graphnodes_graphnode_index
+
 graphnode_count    :: graph.graphnodes_count
 
 graphnode_remove :: proc {
@@ -348,9 +410,24 @@ graphnode_remove :: proc {
 
 GraphNodes :: graph.GraphNodes
 
+graphnodes :: proc {
+    parameter.cmparameter_graph_nodes_get,
+    parameter.cmparameter_graph_nodes_set,
+    variable.externalvariable_graph_nodes_get,
+    variable.externalvariable_graph_nodes_set,
+    variable.globalvariable_graph_nodes_get,
+    variable.globalvariable_graph_nodes_set,
+    variable.variable_graph_nodes_get,
+    variable.variable_graph_nodes_set,
+}
+
 GraphPos :: graph.GraphPos
 
+graphpos_new  :: graph.graphpos_new
+
 GraphSize :: graph.GraphSize
+
+graphsize_new :: graph.graphsize_new
 
 graphical_connection :: proc {
     connection.cmconnection_graphical_connection_get,
@@ -374,14 +451,14 @@ hidden :: proc {
 initial_value :: proc {
     component.component_initial_value_get,
     component.component_initial_value_set,
-    parameter.parameter_initial_value_get,
-    parameter.parameter_initial_value_set,
     parameter.cmparameter_initial_value_get,
     parameter.cmparameter_initial_value_set,
-    variable.variable_initial_value_get,
-    variable.variable_initial_value_set,
+    parameter.parameter_initial_value_get,
+    parameter.parameter_initial_value_set,
     variable.globalvariable_initial_value_get,
     variable.globalvariable_initial_value_set,
+    variable.variable_initial_value_get,
+    variable.variable_initial_value_set,
 }
 
 ILCodeBlock :: codeblock.ILCodeBlock
@@ -427,8 +504,15 @@ ilrow_add :: proc {
 }
 
 ilrow_by_index :: il.ilrows_ilrow_by_index
+
 ilrow_count    :: il.ilrows_count
+
 ilrow_remove   :: il.ilrows_remove
+
+ilrows :: proc {
+    codeblock.ilcodeblock_ilrows_get,
+    codeblock.ilcodeblock_ilrows_set,
+}
 
 isp_value :: proc {
     component.component_isp_value_get,
@@ -478,30 +562,34 @@ name :: proc {
     signal.signal_name_set,
     type.datatype_name_get,
     type.datatype_name_set,
-    variable.variable_name_get,
-    variable.variable_name_set,
-    variable.globalvariable_name_get,
-    variable.globalvariable_name_set,
     variable.externalvariable_name_get,
     variable.externalvariable_name_set,
+    variable.globalvariable_name_get,
+    variable.globalvariable_name_set,
+    variable.variable_name_get,
+    variable.variable_name_set,
 }
 
 OutputUpdateType :: type.OutputUpdateType
 
 Parameter  :: parameter.Parameter
+
 Parameters :: parameter.Parameters
 
-parameter_new         :: parameter.parameter_new
+parameter_new :: parameter.parameter_new
 
 parameter_add :: proc {
     parameter.parameters_add_,
     parameter.parameters_add_at_index,
 }
 
-parameter_by_name  :: parameter.parameters_parameter_by_name
+parameter_by_name :: parameter.parameters_parameter_by_name
+
 parameter_by_index :: parameter.parameters_parameter_by_index
-parameter_index    :: parameter.parameters_parameter_index
-parameter_count    :: parameter.parameters_count
+
+parameter_index :: parameter.parameters_parameter_index
+
+parameter_count :: parameter.parameters_count
 
 parameter_remove :: proc {
     parameter.parameters_remove_by_name,
@@ -517,14 +605,22 @@ parametersetting_add :: proc {
     parameter.parametersettings_add_at_index,
 }
 
-parametersetting_by_name  :: parameter.parametersettings_parametersetting_by_name
+parametersetting_by_name :: parameter.parametersettings_parametersetting_by_name
+
 parametersetting_by_index :: parameter.parametersettings_parametersetting_by_index
-parametersetting_index    :: parameter.parametersettings_parametersetting_index
-parametersetting_count    :: parameter.parametersettings_count
+
+parametersetting_index :: parameter.parametersettings_parametersetting_index
+
+parametersetting_count :: parameter.parametersettings_count
 
 parametersetting_remove :: proc {
     parameter.parametersettings_remove_by_name,
     parameter.parametersettings_remove_by_index,
+}
+
+parametersetting_value :: proc {
+    parameter.parametersetting_parameter_value_get,
+    parameter.parametersetting_parameter_value_set,
 }
 
 ParameterSettings :: parameter.ParameterSettings
@@ -560,6 +656,7 @@ point_add :: proc {
 }
 
 point_count    :: point.points_count
+
 point_remove   :: point.points_remove_by_index
 
 Points :: point.Points
@@ -569,9 +666,12 @@ points :: proc {
     connection.cmconnection_points_set,
 }
 
-project_new     :: project.project_new
-project_open    :: project.project_open
-project_close   :: project.project_close
+project_new :: project.project_new
+
+project_open :: project.project_open
+
+project_close :: project.project_close
+
 project_refresh :: project.project_refresh
 
 protected :: proc {
@@ -582,16 +682,16 @@ protected :: proc {
 read_permission :: proc {
     component.component_read_permission_get,
     component.component_read_permission_set,
-    parameter.parameter_read_permission_get,
-    parameter.parameter_read_permission_set,
     parameter.cmparameter_read_permission_get,
     parameter.cmparameter_read_permission_set,
-    variable.variable_read_permission_get,
-    variable.variable_read_permission_set,
-    variable.globalvariable_read_permission_get,
-    variable.globalvariable_read_permission_set,
+    parameter.parameter_read_permission_get,
+    parameter.parameter_read_permission_set,
     variable.externalvariable_read_permission_get,
     variable.externalvariable_read_permission_set,
+    variable.globalvariable_read_permission_get,
+    variable.globalvariable_read_permission_set,
+    variable.variable_read_permission_get,
+    variable.variable_read_permission_set,
 }
 
 release :: proc {
@@ -613,15 +713,15 @@ release :: proc {
     graph.graphsize_release,
     il.ilrow_release,
     il.ilrows_release,
-    parameter.parameter_release,
-    parameter.parameters_release,
     parameter.cmparameter_release,
     parameter.cmparameters_release,
-    parameter.parametersetting_realease,
+    parameter.parameter_release,
+    parameter.parameters_release,
+    parameter.parametersetting_release,
     parameter.parametersettings_release,
+    point.autopoint_release,
     point.point_release,
     point.points_release,
-    point.autopoint_release,
     sfc.sfcbranch_release,
     sfc.sfcbranches_release,
     sfc.sfcelement_release,
@@ -634,13 +734,18 @@ release :: proc {
     signal.signal_release,
     signal.signals_release,
     type.datatype_release,
-    variable.variable_release,
-    variable.variables_release,
-    variable.globalvariable_release,
-    variable.globalvariables_release,
+    variable.applicationvariables_release,
     variable.externalvariable_release,
     variable.externalvariables_release,
-    variable.applicationvariables_release,
+    variable.globalvariable_release,
+    variable.globalvariables_release,
+    variable.variable_release,
+    variable.variables_release,
+}
+
+reserved_by_function :: proc {
+    type.datatype_reserved_by_function_get,
+    type.datatype_reserved_by_function_set,
 }
 
 rotation :: proc {
@@ -651,12 +756,16 @@ rotation :: proc {
 safety_type :: proc {
     component.component_safety_type_get,
     component.component_safety_type_set,
-    variable.variable_safety_type_get,
-    variable.variable_safety_type_set,
-    variable.globalvariable_safety_type_get,
-    variable.globalvariable_safety_type_set,
+    parameter.cmparameter_safety_type_get,
+    parameter.cmparameter_safety_type_set,
+    parameter.parameter_safety_type_get,
+    parameter.parameter_safety_type_set,
     variable.externalvariable_safety_type_get,
     variable.externalvariable_safety_type_set,
+    variable.globalvariable_safety_type_get,
+    variable.globalvariable_safety_type_set,
+    variable.variable_safety_type_get,
+    variable.variable_safety_type_set,
 }
 
 scope :: proc {
@@ -674,19 +783,20 @@ serialize :: proc {
     codeblock.sfccodeblock_serialize,
     codeblock.stcodeblock_serialize,
     connection.cmconnection_serialize,
-    parameter.parameter_serialize,
     parameter.cmparameter_serialize,
+    parameter.parameter_serialize,
     signal.signal_serialize,
     type.datatype_serialize,
-    variable.variable_serialize,
-    variable.globalvariable_serialize,
-    variable.externalvariable_serialize,
     variable.applicationvariables_serialize,
+    variable.externalvariable_serialize,
+    variable.globalvariable_serialize,
+    variable.variable_serialize,
 }
 
 SFCCodeBlock  :: codeblock.SFCCodeBlock
 
 sfccodeblock_new :: codeblock.sfccodeblock_new
+
 stcodeblock_new  :: codeblock.stcodeblock_new
 
 sfccodeblock_seq_control :: proc {
@@ -704,14 +814,31 @@ sfccodeblock_viewer_aspect :: proc {
     codeblock.sfccodeblock_viewer_aspect_set,
 }
 
-sfccodeblock_elements :: proc {
-    codeblock.sfccodeblock_elements_get,
-    codeblock.sfccodeblock_elements_set,
+stcode :: proc {
+    codeblock.fbdcodeblock_stcode_get,
+    codeblock.fbdcodeblock_stcode_set,
+    codeblock.ldcodeblock_stcode_get,
+    codeblock.ldcodeblock_stcode_set,
+    codeblock.stcodeblock_stcode_get,
+    codeblock.stcodeblock_stcode_set,
+    sfc.sfctransition_stcode_get,
+    sfc.sfctransition_stcode_set,
 }
 
 STCodeBlock   :: codeblock.STCodeBlock
 
 SFCBranch :: sfc.SFCBranch
+
+sfcbrach_add :: proc {
+    sfc.sfcbranches_add_,
+    sfc.sfcbranches_add_at_index,
+}
+
+sfcbrach_by_index :: sfc.sfcbranches_branch_by_index
+
+sfcbrach_count :: sfc.sfcbranches_count
+
+sfcbrach_remove :: sfc.sfcbranches_remove_by_index
 
 SFCBranches :: sfc.SFCBranches
 
@@ -735,7 +862,9 @@ sfcelement_add :: proc {
 }
 
 sfcelement_by_index :: sfc.sfcelements_sfcelement_by_index
+
 sfcelement_count    :: sfc.sfcelements_count
+
 sfcelement_remove   :: sfc.sfcelements_remove
 
 sfcelement_is_step         :: sfc.sfcelement_is_step
@@ -749,6 +878,8 @@ SFCElementType :: sfc.SFCElementType
 SFCElements :: sfc.SFCElements
 
 sfcelements :: proc {
+    codeblock.sfccodeblock_elements_get,
+    codeblock.sfccodeblock_elements_set,
     sfc.sfcbranch_elements_get,
     sfc.sfcbranch_elements_set,
     sfc.sfcsubsequence_elements_get,
@@ -766,9 +897,9 @@ SFCSelection :: sfc.SFCSelection
 
 sfcselection_new :: sfc.sfcselection_new
 
-sfcsimultaneous_new :: sfc.sfcsimultaneous_new
-
 SFCSimultaneous :: sfc.SFCSimultaneous
+
+sfcsimultaneous_new :: sfc.sfcsimultaneous_new
 
 SFCStep :: sfc.SFCStep
 
@@ -792,8 +923,11 @@ signal_add :: proc {
 }
 
 signal_by_name  :: signal.signals_signal_by_name
+
 signal_by_index :: signal.signals_signal_by_index
+
 signal_index    :: signal.signals_signal_index
+
 signal_count    :: signal.signals_count
 
 signal_remove :: proc {
@@ -803,6 +937,11 @@ signal_remove :: proc {
 
 Signals :: signal.Signals
 
+signals :: proc {
+    variable.applicationvariables_signals_get,
+    variable.applicationvariables_signals_set,
+}
+
 SignalType :: signal.SignalType
 
 TaskPriorityType :: type.TaskPriorityType
@@ -811,25 +950,35 @@ TaskSILLevelType :: type.TaskSILLevelType
 
 type_guid :: proc {
     component.component_type_guid_get,
+    parameter.cmparameter_type_guid_get,
+    parameter.parameter_type_guid_get,
+    variable.externalvariable_type_guid_get,
+    variable.globalvariable_type_guid_get,
+    variable.variable_type_guid_get,
 }
 
 type_path :: proc {
     component.component_type_path_get,
+    parameter.cmparameter_type_path_get,
+    parameter.parameter_type_path_get,
+    variable.externalvariable_type_path_get,
+    variable.globalvariable_type_path_get,
+    variable.variable_type_path_get,
 }
 
 type_name :: proc {
     component.component_type_name_get,
     component.component_type_name_set,
-    parameter.parameter_type_name_get,
-    parameter.parameter_type_name_set,
     parameter.cmparameter_type_name_get,
     parameter.cmparameter_type_name_set,
-    variable.variable_type_name_get,
-    variable.variable_type_name_set,
-    variable.globalvariable_type_name_get,
-    variable.globalvariable_type_name_set,
+    parameter.parameter_type_name_get,
+    parameter.parameter_type_name_set,
     variable.externalvariable_type_name_get,
     variable.externalvariable_type_name_set,
+    variable.globalvariable_type_name_get,
+    variable.globalvariable_type_name_set,
+    variable.variable_type_name_get,
+    variable.variable_type_name_set,
 }
 
 Variable :: variable.Variable
@@ -853,6 +1002,11 @@ variable_remove :: proc {
 
 Variables :: variable.Variables
 
+variables :: proc {
+    variable.applicationvariables_variables_get,
+    variable.applicationvariables_variables_set,
+}
+
 VariableType :: type.VariableType
 
 VisibilityInGraphicsType :: type.VisibilityInGraphicsType
@@ -860,16 +1014,16 @@ VisibilityInGraphicsType :: type.VisibilityInGraphicsType
 write_permission :: proc {
     component.component_write_permission_get,
     component.component_write_permission_set,
-    parameter.parameter_write_permission_get,
-    parameter.parameter_write_permission_set,
     parameter.cmparameter_write_permission_get,
     parameter.cmparameter_write_permission_set,
-    variable.variable_write_permission_get,
-    variable.variable_write_permission_set,
-    variable.globalvariable_write_permission_get,
-    variable.globalvariable_write_permission_set,
+    parameter.parameter_write_permission_get,
+    parameter.parameter_write_permission_set,
     variable.externalvariable_write_permission_get,
     variable.externalvariable_write_permission_set,
+    variable.globalvariable_write_permission_get,
+    variable.globalvariable_write_permission_set,
+    variable.variable_write_permission_get,
+    variable.variable_write_permission_set,
 }
 
 x :: proc {

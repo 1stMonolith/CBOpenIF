@@ -173,10 +173,11 @@ cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, 
     if cmconnection == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    hr := (^CMConnectionIF)(cmconnection)->PointsGet(cast(^rawptr)&points)
+    p: rawptr
+    hr := (^CMConnectionIF)(cmconnection)->PointsGet(&p)
     if com.failed(hr) do return
 
-    return points, true
+    return Points(p), true
 }
 
 cmconnection_points_set :: proc(cmconnection: CMConnection, points: Points) -> (ok: bool) {

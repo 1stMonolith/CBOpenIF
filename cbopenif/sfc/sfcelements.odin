@@ -156,7 +156,11 @@ sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
     return count, true
 }
 
-sfcelements_remove :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
+sfcelements_remove :: proc {
+    sfcelements_remove_by_index,
+}
+
+sfcelements_remove_by_index :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
     if sfcelements == nil do return
