@@ -75,7 +75,7 @@ graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
     if graphpos == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    hr := (^GraphPosIF)(graphpos)->XGet(&y)
+    hr := (^GraphPosIF)(graphpos)->YGet(&y)
     if com.failed(hr) do return
     
     return y, true
@@ -86,7 +86,7 @@ graphpos_y_set :: proc(graphpos: GraphPos, y: f64) -> (ok: bool) {
     if graphpos == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
-    hr := (^GraphPosIF)(graphpos)->XPut(y)
+    hr := (^GraphPosIF)(graphpos)->YPut(y)
     if com.failed(hr) do return
     
     return true
