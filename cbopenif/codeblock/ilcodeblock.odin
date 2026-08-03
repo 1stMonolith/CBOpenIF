@@ -3,9 +3,11 @@ package codeblock
 import "../com"
 import "../controlbuilder"
 import "../factory"
+import "../il"
 
 @(private="file") BStr    :: com.BStr
 @(private="file") HResult :: com.HResult
+@(private="file") ILRows  :: il.ILRows
 
 ILCodeBlock :: distinct rawptr
 
@@ -83,27 +85,29 @@ ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: boo
     return true
 }
 
-ilcodeblock_stcode :: proc {
-    ilcodeblock_stcode_get,
-    ilcodeblock_stcode_set,
+ilcodeblock_ilrows :: proc {
+    ilcodeblock_ilrows_get,
+    ilcodeblock_ilrows_set,
 }
 
-ilcodeblock_stcode_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: rawptr, ok: bool) {
+ilcodeblock_ilrows_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: ILRows, ok: bool) {
 
     if ilcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
-    
-    hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsGet(&ilrows)
+
+    p: rawptr
+    hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsGet(&p)
     if com.failed(hr) do return
 
-    return ilrows, true
+    return ILRows(p), true
 }
 
-ilcodeblock_stcode_set :: proc(ilcodeblock: ILCodeBlock, ilrows: rawptr) -> (ok: bool) {
-    
+ilcodeblock_ilrows_set :: proc(ilcodeblock: ILCodeBlock, ilrows: ILRows) -> (ok: bool) {
+
     if ilcodeblock == nil do return
+    if ilrows == nil do return
     if !controlbuilder.controlbuilder_connected() do return
-    
+
     hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsPut(ilrows)
     if com.failed(hr) do return
 
