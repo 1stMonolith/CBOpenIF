@@ -59,12 +59,15 @@ authentication_level :: proc {
 }
 
 AutoPoint :: point.AutoPoint
+
 autopoint_new :: point.autopoint_new
 
 autopos :: proc {
     point.autopoint_autopos_get,
     point.autopoint_autopos_set,
 }
+
+AutoPosType :: type.AutoPosType
 
 ApplicationVariables :: variable.ApplicationVariables
 
@@ -128,23 +131,9 @@ cmparameter_remove :: proc {
     parameter.cmparameters_remove_by_index,
 }
 
-CMParameters      :: parameter.CMParameters
+CMParameters :: parameter.CMParameters
 
-CodeBlock     :: codeblock.CodeBlock
-CodeBlocks    :: codeblock.CodeBlocks
-CodeBlockType :: codeblock.CodeBlockType
-FBDCodeBlock  :: codeblock.FBDCodeBlock
-FDCodeBlock   :: codeblock.FDCodeBlock
-ILCodeBlock   :: codeblock.ILCodeBlock
-LDCodeBlock   :: codeblock.LDCodeBlock
-SFCCodeBlock  :: codeblock.SFCCodeBlock
-STCodeBlock   :: codeblock.STCodeBlock
-
-fbdcodeblock_new :: codeblock.fbdcodeblock_new
-ilcodeblock_new  :: codeblock.ilcodeblock_new
-ldcodeblock_new  :: codeblock.ldcodeblock_new
-sfccodeblock_new :: codeblock.sfccodeblock_new
-stcodeblock_new  :: codeblock.stcodeblock_new
+CodeBlock :: codeblock.CodeBlock
 
 codeblock :: proc {
     codeblock.codeblocks_codeblock_by_name,
@@ -177,30 +166,9 @@ codeblock_stcode :: proc {
     codeblock.stcodeblock_stcode_set,
 }
 
-fdcodeblock_xml_string :: proc {
-    codeblock.fdcodeblock_xml_string_get,
-    codeblock.fdcodeblock_xml_string_set,
-}
+CodeBlocks :: codeblock.CodeBlocks
 
-sfccodeblock_seq_control :: proc {
-    codeblock.sfccodeblock_seq_control_get,
-    codeblock.sfccodeblock_seq_control_set,
-}
-
-sfccodeblock_step_elapsed_time :: proc {
-    codeblock.sfccodeblock_step_elapsed_time_get,
-    codeblock.sfccodeblock_step_elapsed_time_set,
-}
-
-sfccodeblock_viewer_aspect :: proc {
-    codeblock.sfccodeblock_viewer_aspect_get,
-    codeblock.sfccodeblock_viewer_aspect_set,
-}
-
-sfccodeblock_elements :: proc {
-    codeblock.sfccodeblock_elements_get,
-    codeblock.sfccodeblock_elements_set,
-}
+CodeBlockType :: codeblock.CodeBlockType
 
 Component  :: component.Component
 
@@ -262,6 +230,8 @@ DataType :: type.DataType
 
 datatype_new :: type.datatype_new
 
+DirectionType :: type.DirectionType
+
 deserialize :: proc {
     codeblock.codeblock_deserialize,
     connection.cmconnection_deserialize,
@@ -298,6 +268,8 @@ description :: proc {
     variable.applicationvariables_description_set,
 }
 
+ExecutionInstanceType :: type.ExecutionInstanceType
+
 ExternalVariable :: variable.ExternalVariable
 
 externalvariable_new :: variable.externalvariable_new
@@ -318,6 +290,19 @@ externalvariable_remove :: proc {
 }
 
 ExternalVariables :: variable.ExternalVariables
+
+FBDCodeBlock :: codeblock.FBDCodeBlock
+
+fbdcodeblock_new :: codeblock.fbdcodeblock_new
+
+FDCodeBlock   :: codeblock.FDCodeBlock
+
+fdcodeblock_xml_string :: proc {
+    codeblock.fdcodeblock_xml_string_get,
+    codeblock.fdcodeblock_xml_string_set,
+}
+
+FolderType :: type.FolderType
 
 GlobalVariable :: variable.GlobalVariable
 
@@ -377,6 +362,10 @@ guid :: proc {
     type.datatype_guid_set,
 }
 
+HardwareFileType :: type.HardwareFileType
+
+HardwareLibraryFileType :: type.HardwareLibraryFileType
+
 hidden :: proc {
     type.datatype_hidden_get,
     type.datatype_hidden_set,
@@ -394,6 +383,10 @@ initial_value :: proc {
     variable.globalvariable_initial_value_get,
     variable.globalvariable_initial_value_set,
 }
+
+ILCodeBlock :: codeblock.ILCodeBlock
+
+ilcodeblock_new  :: codeblock.ilcodeblock_new
 
 ILRow  :: il.ILRow
 ILRows :: il.ILRows
@@ -442,6 +435,12 @@ isp_value :: proc {
     component.component_isp_value_set,
 }
 
+LDCodeBlock :: codeblock.LDCodeBlock
+
+ldcodeblock_new  :: codeblock.ldcodeblock_new
+
+MessageType :: type.MessageType
+
 name :: proc {
     codeblock.codeblock_name_get,
     codeblock.codeblock_name_set,
@@ -487,6 +486,8 @@ name :: proc {
     variable.externalvariable_name_set,
 }
 
+OutputUpdateType :: type.OutputUpdateType
+
 Parameter  :: parameter.Parameter
 Parameters :: parameter.Parameters
 
@@ -511,7 +512,6 @@ ParameterSetting :: parameter.ParameterSetting
 
 parametersetting_new  :: parameter.parametersetting_new
 
-
 parametersetting_add :: proc {
     parameter.parametersettings_add_,
     parameter.parametersettings_add_at_index,
@@ -528,6 +528,8 @@ parametersetting_remove :: proc {
 }
 
 ParameterSettings :: parameter.ParameterSettings
+
+ParameterType :: type.ParameterType
 
 path :: proc {
     signal.signal_path_get,
@@ -662,6 +664,8 @@ scope :: proc {
     type.datatype_scope_set,
 }
 
+ScopeType :: type.ScopeType
+
 serialize :: proc {
     codeblock.fbdcodeblock_serialize,
     codeblock.fdcodeblock_serialize,
@@ -680,28 +684,36 @@ serialize :: proc {
     variable.applicationvariables_serialize,
 }
 
-SFCBranch       :: sfc.SFCBranch
-SFCBranches     :: sfc.SFCBranches
-SFCElement      :: sfc.SFCElement
-SFCElementType  :: sfc.SFCElementType
-SFCElements     :: sfc.SFCElements
-SFCPriorityType :: sfc.SFCPriorityType
-SFCSelection    :: sfc.SFCSelection
-SFCSimultaneous :: sfc.SFCSimultaneous
-SFCStep         :: sfc.SFCStep
-SFCSubSequence  :: sfc.SFCSubSequence
-SFCTransition   :: sfc.SFCTransition
+SFCCodeBlock  :: codeblock.SFCCodeBlock
 
-sfcselection_new    :: sfc.sfcselection_new
-sfcsimultaneous_new :: sfc.sfcsimultaneous_new
-sfcstep_new         :: sfc.sfcstep_new
-sfcsubsequence_new  :: sfc.sfcsubsequence_new
-sfctransition_new   :: sfc.sfctransition_new
+sfccodeblock_new :: codeblock.sfccodeblock_new
+stcodeblock_new  :: codeblock.stcodeblock_new
 
-sfcpriority :: proc {
-    sfc.sfcbranch_priority_get,
-    sfc.sfcbranch_priority_set,
+sfccodeblock_seq_control :: proc {
+    codeblock.sfccodeblock_seq_control_get,
+    codeblock.sfccodeblock_seq_control_set,
 }
+
+sfccodeblock_step_elapsed_time :: proc {
+    codeblock.sfccodeblock_step_elapsed_time_get,
+    codeblock.sfccodeblock_step_elapsed_time_set,
+}
+
+sfccodeblock_viewer_aspect :: proc {
+    codeblock.sfccodeblock_viewer_aspect_get,
+    codeblock.sfccodeblock_viewer_aspect_set,
+}
+
+sfccodeblock_elements :: proc {
+    codeblock.sfccodeblock_elements_get,
+    codeblock.sfccodeblock_elements_set,
+}
+
+STCodeBlock   :: codeblock.STCodeBlock
+
+SFCBranch :: sfc.SFCBranch
+
+SFCBranches :: sfc.SFCBranches
 
 sfcbranches :: proc {
     sfc.sfcselection_branches_get,
@@ -710,12 +722,7 @@ sfcbranches :: proc {
     sfc.sfcsimultaneous_branches_set,
 }
 
-sfcelements :: proc {
-    sfc.sfcbranch_elements_get,
-    sfc.sfcbranch_elements_set,
-    sfc.sfcsubsequence_elements_get,
-    sfc.sfcsubsequence_elements_set,
-}
+SFCElement :: sfc.SFCElement
 
 sfcelement_add :: proc {
     sfc.sfcelements_add_sfcstep,
@@ -736,6 +743,44 @@ sfcelement_is_transition   :: sfc.sfcelement_is_transition
 sfcelement_is_subsequence  :: sfc.sfcelement_is_subsequence
 sfcelement_is_selection    :: sfc.sfcelement_is_selection
 sfcelement_is_simultaneous :: sfc.sfcelement_is_simultaneous
+
+SFCElementType :: sfc.SFCElementType
+
+SFCElements :: sfc.SFCElements
+
+sfcelements :: proc {
+    sfc.sfcbranch_elements_get,
+    sfc.sfcbranch_elements_set,
+    sfc.sfcsubsequence_elements_get,
+    sfc.sfcsubsequence_elements_set,
+}
+
+sfcpriority :: proc {
+    sfc.sfcbranch_priority_get,
+    sfc.sfcbranch_priority_set,
+}
+
+SFCPriorityType :: sfc.SFCPriorityType
+
+SFCSelection :: sfc.SFCSelection
+
+sfcselection_new :: sfc.sfcselection_new
+
+sfcsimultaneous_new :: sfc.sfcsimultaneous_new
+
+SFCSimultaneous :: sfc.SFCSimultaneous
+
+SFCStep :: sfc.SFCStep
+
+sfcstep_new :: sfc.sfcstep_new
+
+SFCSubSequence :: sfc.SFCSubSequence
+
+sfcsubsequence_new  :: sfc.sfcsubsequence_new
+
+SFCTransition :: sfc.SFCTransition
+
+sfctransition_new :: sfc.sfctransition_new
 
 Signal :: signal.Signal
 
@@ -759,6 +804,10 @@ signal_remove :: proc {
 Signals :: signal.Signals
 
 SignalType :: signal.SignalType
+
+TaskPriorityType :: type.TaskPriorityType
+
+TaskSILLevelType :: type.TaskSILLevelType
 
 type_guid :: proc {
     component.component_type_guid_get,
@@ -804,6 +853,10 @@ variable_remove :: proc {
 
 Variables :: variable.Variables
 
+VariableType :: type.VariableType
+
+VisibilityInGraphicsType :: type.VisibilityInGraphicsType
+
 write_permission :: proc {
     component.component_write_permission_get,
     component.component_write_permission_set,
@@ -846,23 +899,3 @@ yscale :: proc {
     graph.graphpos_yscale_get,
     graph.graphpos_yscale_set,
 }
-
-// ---------------------------------------------------------------------------
-// TODO: Sort
-// ---------------------------------------------------------------------------
-
-
-AutoPosType              :: type.AutoPosType
-DirectionType            :: type.DirectionType
-ExecutionInstanceType    :: type.ExecutionInstanceType
-FolderType               :: type.FolderType
-HardwareFileType         :: type.HardwareFileType
-HardwareLibraryFileType  :: type.HardwareLibraryFileType
-MessageType              :: type.MessageType
-OutputUpdateType         :: type.OutputUpdateType
-ParameterType            :: type.ParameterType
-ScopeType                :: type.ScopeType
-TaskPriorityType         :: type.TaskPriorityType
-TaskSILLevelType         :: type.TaskSILLevelType
-VariableType             :: type.VariableType
-VisibilityInGraphicsType :: type.VisibilityInGraphicsType
