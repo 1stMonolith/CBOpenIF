@@ -787,8 +787,6 @@ output_update :: proc {
     task.task_output_update_set,
 }
 
-OutputUpdateType :: type.OutputUpdateType
-
 page_number :: proc {
     message.posinfo_page_number_get,
     message.posinfo_page_number_set,
@@ -847,7 +845,7 @@ parametersetting_value :: proc {
 
 ParameterSettings :: parameter.ParameterSettings
 
-ParameterType :: type.ParameterType
+ParameterType :: parameter.ParameterType
 
 path :: proc {
     signal.signal_path_get,
@@ -1277,9 +1275,11 @@ Task :: task.Task
 
 task_new :: task.task_new
 
-TaskPriorityType :: type.TaskPriorityType
+TaskOutputUpdateType :: task.TaskOutputUpdateType
 
-TaskSILLevelType :: type.TaskSILLevelType
+TaskPriorityType :: task.TaskPriorityType
+
+TaskSILLevelType :: task.TaskSILLevelType
 
 traverse_number :: proc {
     message.extrainfo_traverse_number_get,
@@ -1357,7 +1357,7 @@ variables :: proc {
     variable.applicationvariables_variables_set,
 }
 
-VariableType :: type.VariableType
+VariableType :: variable.VariableType
 
 VisibilityInGraphicsType :: type.VisibilityInGraphicsType
 

@@ -13,6 +13,13 @@ import "../signal"
 @(private="file") GraphNodes  :: graph.GraphNodes
 @(private="file") Signals     :: signal.Signals
 
+VariableType :: enum i32 {
+    Variable              = 0,
+    ExternalVariable      = 1,
+    GlobalVariable        = 2,
+    CommunicationVariable = 3,
+}
+
 Variable :: distinct rawptr
 
 VariableIF :: struct #raw_union {

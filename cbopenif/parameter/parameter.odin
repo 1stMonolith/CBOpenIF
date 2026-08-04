@@ -9,6 +9,12 @@ import "../type"
 @(private="file") DirectionType :: type.DirectionType
 @(private="file") HResult       :: com.HResult
 
+ParameterType :: enum i32 {
+    Parameter     = 0,
+    Extensible    = 1,
+    ControlModule = 2,
+}
+
 Parameter :: distinct rawptr
 
 ParameterIF :: struct #raw_union {

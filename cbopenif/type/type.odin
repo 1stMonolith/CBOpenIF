@@ -1,18 +1,5 @@
 package type
 
-VariableType :: enum i32 {
-    Variable              = 0,
-    ExternalVariable      = 1,
-    GlobalVariable        = 2,
-    CommunicationVariable = 3,
-}
-
-ParameterType :: enum i32 {
-    Parameter     = 0,
-    Extensible    = 1,
-    ControlModule = 2,
-}
-
 HardwareFileType :: enum i32 {
     Firmware         = 0,
     Update           = 1,
@@ -71,26 +58,6 @@ DirectionType :: enum i32 {
     In    = 0,
     InOut = 1,
     Out   = 2,
-}
-
-TaskPriorityType :: enum i32 {
-    Priority0 = 0,
-    Priority1 = 1,
-    Priority2 = 2,
-    Priority3 = 3,
-    Priority4 = 4,
-    Priority5 = 5,
-}
-
-OutputUpdateType :: enum i32 {
-    First = 0,
-    Last  = 1,
-}
-
-TaskSILLevelType :: enum i32 {
-    SIL0 = 0,
-    SIL2 = 1,
-    SIL3 = 2,
 }
 
 AutoPosType :: enum i32 {

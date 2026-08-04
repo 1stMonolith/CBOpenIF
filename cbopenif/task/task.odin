@@ -7,10 +7,27 @@ import "../type"
 
 @(private="file") BStr              :: com.BStr
 @(private="file") HResult           :: com.HResult
-@(private="file") OutputUpdateType  :: type.OutputUpdateType
-@(private="file") TaskPriorityType  :: type.TaskPriorityType
-@(private="file") TaskSILLevelType  :: type.TaskSILLevelType
 @(private="file") VariantBool       :: com.VariantBool
+
+TaskOutputUpdateType :: enum i32 {
+    First = 0,
+    Last  = 1,
+}
+
+TaskPriorityType :: enum i32 {
+    Priority0 = 0,
+    Priority1 = 1,
+    Priority2 = 2,
+    Priority3 = 3,
+    Priority4 = 4,
+    Priority5 = 5,
+}
+
+TaskSILLevelType :: enum i32 {
+    SIL0 = 0,
+    SIL2 = 1,
+    SIL3 = 2,
+}
 
 Task :: distinct rawptr
 
@@ -47,7 +64,7 @@ task_new :: proc(
     interval_time: i32,
     priority: TaskPriorityType,
     offset: i32 = 0,
-    output_update: OutputUpdateType = .First,
+    output_update: TaskOutputUpdateType = .First,
 ) -> (task: Task, ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -200,7 +217,7 @@ task_output_update :: proc {
     task_output_update_set,
 }
 
-task_output_update_get :: proc(task: Task) -> (output_update: OutputUpdateType, ok: bool) {
+task_output_update_get :: proc(task: Task) -> (output_update: TaskOutputUpdateType, ok: bool) {
     if task == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -208,10 +225,10 @@ task_output_update_get :: proc(task: Task) -> (output_update: OutputUpdateType, 
     hr := (^TaskIF)(task)->OutputUpdateGet(&t)
     if com.failed(hr) do return
 
-    return OutputUpdateType(t), true
+    return TaskOutputUpdateType(t), true
 }
 
-task_output_update_set :: proc(task: Task, output_update: OutputUpdateType) -> (ok: bool) {
+task_output_update_set :: proc(task: Task, output_update: TaskOutputUpdateType) -> (ok: bool) {
     if task == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
