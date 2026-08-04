@@ -21,7 +21,6 @@ SFCSimultaneousVTable :: struct {
 }
 
 sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: SFCSimultaneous, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     hr := factory.factoryif->NewSFCSimultaneous(nr_of_branches, cast(^rawptr)&sfcsimultaneous)
@@ -36,7 +35,6 @@ sfcsimultaneous_branches :: proc {
 }
 
 sfcsimultaneous_branches_get :: proc(sfcsimultaneous: SFCSimultaneous) -> (sfcbranches: SFCBranches, ok: bool) {
-
     if sfcsimultaneous == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 

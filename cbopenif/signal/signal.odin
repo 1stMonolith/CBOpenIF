@@ -35,7 +35,6 @@ SignalVTable :: struct {
 }
 
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     v_name := com.to_variant(name)
@@ -82,7 +81,6 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
 }
 
 signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -94,7 +92,6 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
 }
 
 signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -112,7 +109,6 @@ signal_name :: proc {
 }
 
 signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -125,7 +121,6 @@ signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
 }
 
 signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -143,7 +138,6 @@ signal_path :: proc {
 }
 
 signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -156,7 +150,6 @@ signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
 }
 
 signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -174,7 +167,6 @@ signal_direction :: proc {
 }
 
 signal_direction_get :: proc(signal: Signal) -> (direction: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -187,7 +179,6 @@ signal_direction_get :: proc(signal: Signal) -> (direction: string, ok: bool) {
 }
 
 signal_direction_set :: proc(signal: Signal, direction: string) -> (ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -205,7 +196,6 @@ signal_acknowledge_group :: proc {
 }
 
 signal_acknowledge_group_get :: proc(signal: Signal) -> (acknowledge_group: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -218,7 +208,6 @@ signal_acknowledge_group_get :: proc(signal: Signal) -> (acknowledge_group: stri
 }
 
 signal_acknowledge_group_set :: proc(signal: Signal, acknowledge_group: string) -> (ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -236,7 +225,6 @@ signal_description :: proc {
 }
 
 signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -249,7 +237,6 @@ signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool
 }
 
 signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
-
     if signal == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

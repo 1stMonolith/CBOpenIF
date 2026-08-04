@@ -246,8 +246,6 @@ CBOpenVTable :: struct {
 }
 
 connect :: proc() -> (ok: bool) {
-    ok = false
-
     if cbopenif != nil do return
     
     ok = com.initialize()

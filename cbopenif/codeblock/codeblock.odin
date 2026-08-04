@@ -38,7 +38,6 @@ CodeBlockVTable :: struct {
 }
 
 codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -55,7 +54,6 @@ codeblock_name :: proc {
 }
 
 codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -68,7 +66,6 @@ codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
 }
 
 codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -81,7 +78,6 @@ codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
 }
 
 codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -93,7 +89,6 @@ codeblock_is_st :: proc(codeblock: CodeBlock) -> (is_st: bool, ok: bool) {
 }
 
 codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -105,7 +100,6 @@ codeblock_is_sfc :: proc(codeblock: CodeBlock) -> (is_sfc: bool, ok: bool) {
 }
 
 codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -117,7 +111,6 @@ codeblock_is_il :: proc(codeblock: CodeBlock) -> (is_il: bool, ok: bool) {
 }
 
 codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -129,7 +122,6 @@ codeblock_is_fbd :: proc(codeblock: CodeBlock) -> (is_fbd: bool, ok: bool) {
 }
 
 codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -141,7 +133,6 @@ codeblock_is_ld :: proc(codeblock: CodeBlock) -> (is_ld: bool, ok: bool) {
 }
 
 codeblock_is_fd :: proc(codeblock: CodeBlock) -> (is_fd: bool, ok: bool) {
-
     if codeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -159,7 +150,6 @@ codeblock_release :: proc(codeblock: CodeBlock) {
 }
 
 codeblock_as_st :: proc(codeblock: CodeBlock) -> (stcodeblock: STCodeBlock, ok: bool) {
-
     if codeblock == nil do return
 
     IID := GUID{

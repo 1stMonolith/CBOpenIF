@@ -22,7 +22,6 @@ AutoPointVTable :: struct {
 }
 
 autopoint_new :: proc(autopos: AutoPosType) -> (autopoint: AutoPoint, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     hr := factory.factoryif->NewAutoPoint(i32(autopos), cast(^rawptr)&autopoint)
@@ -37,7 +36,6 @@ autopoint_autopos :: proc {
 }
 
 autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: AutoPosType, ok: bool) {
-
     if autopoint == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -51,7 +49,6 @@ autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: AutoPosType, ok
 }
 
 autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: AutoPosType) -> (ok: bool) {
-
     if autopoint == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

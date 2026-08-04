@@ -33,7 +33,6 @@ ApplicationVariablesVTable :: struct {
 }
 
 applicationvariables_new :: proc(description := "") -> (application_variables: ApplicationVariables, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bstr_description := com.from_string(description)
@@ -45,7 +44,6 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
 }
 
 applicationvariables_deserialize :: proc(application_variables: ^ApplicationVariables, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -57,7 +55,6 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
 }
 
 applicationvariables_serialize :: proc(application_variables: ApplicationVariables) -> (xml: string, ok: bool) {
-
     if application_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -75,7 +72,6 @@ applicationvariables_description :: proc {
 }
 
 applicationvariables_description_get :: proc(application_variables: ApplicationVariables) -> (description: string, ok: bool) {
-
     if application_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -88,8 +84,8 @@ applicationvariables_description_get :: proc(application_variables: ApplicationV
 }
 
 applicationvariables_description_set :: proc(application_variables: ApplicationVariables, description: string) -> (ok: bool) {
-
     if application_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(description)
     defer com.bstr_free(bs)
@@ -105,7 +101,6 @@ applicationvariables_globals :: proc {
 }
 
 applicationvariables_globals_get :: proc(application_variables: ApplicationVariables) -> (global_variables: GlobalVariables, ok: bool) {
-
     if application_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -116,7 +111,6 @@ applicationvariables_globals_get :: proc(application_variables: ApplicationVaria
 }
 
 applicationvariables_globals_set :: proc(application_variables: ApplicationVariables, global_variables: GlobalVariables) -> (ok: bool) {
-
     if application_variables == nil do return
     if global_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -133,7 +127,6 @@ applicationvariables_variables :: proc {
 }
 
 applicationvariables_variables_get :: proc(application_variables: ApplicationVariables) -> (variables: Variables, ok: bool) {
-
     if application_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -144,7 +137,6 @@ applicationvariables_variables_get :: proc(application_variables: ApplicationVar
 }
 
 applicationvariables_variables_set :: proc(application_variables: ApplicationVariables, variables: Variables) -> (ok: bool) {
-
     if application_variables == nil do return
     if variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -161,7 +153,6 @@ applicationvariables_signals :: proc {
 }
 
 applicationvariables_signals_get :: proc(application_variables: ApplicationVariables) -> (signals: Signals, ok: bool) {
-
     if application_variables == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -172,7 +163,6 @@ applicationvariables_signals_get :: proc(application_variables: ApplicationVaria
 }
 
 applicationvariables_signals_set :: proc(application_variables: ApplicationVariables, signals: Signals) -> (ok: bool) {
-
     if application_variables == nil do return
     if signals == nil do return
     if !controlbuilder.controlbuilder_connected() do return

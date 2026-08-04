@@ -29,9 +29,9 @@ controlbuilder_disconnect :: proc() -> (ok: bool) {
 
 controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
     if !controlbuilder_connected() do return false, "", false
+    
     vb: VariantBool
     bstr_messages: BStr
-
     hr := cbopen.cbopenif->Online(&vb, &bstr_messages)
     if com.failed(hr) {
         return false, "", false
@@ -49,8 +49,8 @@ controlbuilder_online :: proc() -> (is_online: bool, messages: string, ok: bool)
 
 controlbuilder_offline :: proc() -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return "", false
+    
     bstr_messages: BStr
-
     hr := cbopen.cbopenif->Offline(&bstr_messages)
     if com.failed(hr) {
         return "", false
@@ -71,7 +71,6 @@ controlbuilder_setting :: proc {
 }
 
 controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, ok: bool) {
-    
     if !controlbuilder_connected() do return {}, false
     
     // caller must variant_free(&value) when done, OR we clear on failure only!
@@ -90,7 +89,6 @@ controlbuilder_get_setting :: proc(setting_name: string) -> (setting: Variant, o
 }
 
 controlbuilder_set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
-
     if !controlbuilder_connected() do return
 
     // IDL: SetSetting(SettingName, Value)  — two args, IDL order
@@ -113,7 +111,6 @@ controlbuilder_set_setting_string :: proc(setting_name: string, setting: string)
 }
 
 controlbuilder_set_setting_bool :: proc(setting_name: string, setting: bool) -> (ok: bool) {
-
     if !controlbuilder_connected() do return
 
     // IDL: SetSetting(SettingName, Value)  — two args, IDL order

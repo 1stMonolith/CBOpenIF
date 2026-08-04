@@ -30,10 +30,9 @@ ilrows_add :: proc {
 }
 
 ilrows_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ILRowsIF)(ilrows)->Add(ilrow)
     if com.failed(hr) do return
@@ -42,10 +41,9 @@ ilrows_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
 }
 
 ilrows_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
     if ilrow == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->AddBefore(ilrow, index)
     if com.failed(hr) do return
@@ -54,9 +52,8 @@ ilrows_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bo
 }
 
 ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Item(index, cast(^rawptr)&ilrow)
     if com.failed(hr) do return
@@ -65,9 +62,8 @@ ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: 
 }
 
 ilrows_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Count(&count)
     if com.failed(hr) do return
@@ -76,9 +72,8 @@ ilrows_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
 }
 
 ilrows_remove :: proc(ilrows: ILRows, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if ilrows == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Remove(index)
     if com.failed(hr) do return

@@ -48,7 +48,7 @@ extensibleparameter_new :: proc(
     direction := DirectionType.InOut,
     initial_value := "",
     description := "",
-) -> (ep: ExtensibleParameter, ok: bool) {
+) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
 
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -68,31 +68,31 @@ extensibleparameter_new :: proc(
     hr := factory.factoryif->NewExtensibleParameter1(
         bstr_name, bstr_type_name, bstr_attribute,
         i32(direction), bstr_initial_value, bstr_description,
-        cast(^rawptr)&ep,
+        cast(^rawptr)&extensibleparameter,
     )
     if com.failed(hr) do return
 
-    return ep, true
+    return extensibleparameter, true
 }
 
-extensibleparameter_deserialize :: proc(ep: ^ExtensibleParameter, xml: string) -> (ok: bool) {
+extensibleparameter_deserialize :: proc(extensibleparameter: ^ExtensibleParameter, xml: string) -> (ok: bool) {
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(xml)
     defer com.bstr_free(bs)
-    hr := factory.factoryif->DeserializeExtensibleParameter(&bs, cast(^rawptr)ep)
+    hr := factory.factoryif->DeserializeExtensibleParameter(&bs, cast(^rawptr)extensibleparameter)
     if com.failed(hr) do return
 
     return true
 }
 
-extensibleparameter_serialize :: proc(ep: ExtensibleParameter) -> (xml: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_serialize :: proc(extensibleparameter: ExtensibleParameter) -> (xml: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->Serialize(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->Serialize(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
@@ -103,25 +103,25 @@ extensibleparameter_name :: proc {
     extensibleparameter_name_set,
 }
 
-extensibleparameter_name_get :: proc(ep: ExtensibleParameter) -> (name: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_name_get :: proc(extensibleparameter: ExtensibleParameter) -> (name: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->NameGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->NameGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_name_set :: proc(ep: ExtensibleParameter, name: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_name_set :: proc(extensibleparameter: ExtensibleParameter, name: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(name)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->NamePut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->NamePut(bs)
     if com.failed(hr) do return
 
     return true
@@ -132,25 +132,25 @@ extensibleparameter_type_name :: proc {
     extensibleparameter_type_name_set,
 }
 
-extensibleparameter_type_name_get :: proc(ep: ExtensibleParameter) -> (type_name: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_type_name_get :: proc(extensibleparameter: ExtensibleParameter) -> (type_name: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->TypeNameGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->TypeNameGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_type_name_set :: proc(ep: ExtensibleParameter, type_name: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_type_name_set :: proc(extensibleparameter: ExtensibleParameter, type_name: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(type_name)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->TypeNamePut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->TypeNamePut(bs)
     if com.failed(hr) do return
 
     return true
@@ -161,25 +161,25 @@ extensibleparameter_attribute :: proc {
     extensibleparameter_attribute_set,
 }
 
-extensibleparameter_attribute_get :: proc(ep: ExtensibleParameter) -> (attribute: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_attribute_get :: proc(extensibleparameter: ExtensibleParameter) -> (attribute: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->AttributeGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->AttributeGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_attribute_set :: proc(ep: ExtensibleParameter, attribute: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_attribute_set :: proc(extensibleparameter: ExtensibleParameter, attribute: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(attribute)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->AttributePut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->AttributePut(bs)
     if com.failed(hr) do return
 
     return true
@@ -190,22 +190,22 @@ extensibleparameter_direction :: proc {
     extensibleparameter_direction_set,
 }
 
-extensibleparameter_direction_get :: proc(ep: ExtensibleParameter) -> (direction: DirectionType, ok: bool) {
-    if ep == nil do return
+extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: DirectionType, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     d: i32
-    hr := (^ExtensibleParameterIF)(ep)->DirectionGet(&d)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionGet(&d)
     if com.failed(hr) do return
 
     return DirectionType(d), true
 }
 
-extensibleparameter_direction_set :: proc(ep: ExtensibleParameter, direction: DirectionType) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: DirectionType) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
-    hr := (^ExtensibleParameterIF)(ep)->DirectionPut(i32(direction))
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionPut(i32(direction))
     if com.failed(hr) do return
 
     return true
@@ -216,25 +216,25 @@ extensibleparameter_initial_value :: proc {
     extensibleparameter_initial_value_set,
 }
 
-extensibleparameter_initial_value_get :: proc(ep: ExtensibleParameter) -> (initial_value: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_initial_value_get :: proc(extensibleparameter: ExtensibleParameter) -> (initial_value: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->InitialValueGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->InitialValueGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_initial_value_set :: proc(ep: ExtensibleParameter, initial_value: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_initial_value_set :: proc(extensibleparameter: ExtensibleParameter, initial_value: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(initial_value)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->InitialValuePut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->InitialValuePut(bs)
     if com.failed(hr) do return
 
     return true
@@ -245,25 +245,25 @@ extensibleparameter_description :: proc {
     extensibleparameter_description_set,
 }
 
-extensibleparameter_description_get :: proc(ep: ExtensibleParameter) -> (description: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_description_get :: proc(extensibleparameter: ExtensibleParameter) -> (description: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->DescriptionGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->DescriptionGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_description_set :: proc(ep: ExtensibleParameter, description: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_description_set :: proc(extensibleparameter: ExtensibleParameter, description: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(description)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->DescriptionPut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->DescriptionPut(bs)
     if com.failed(hr) do return
 
     return true
@@ -274,25 +274,25 @@ extensibleparameter_access_level :: proc {
     extensibleparameter_access_level_set,
 }
 
-extensibleparameter_access_level_get :: proc(ep: ExtensibleParameter) -> (access_level: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_access_level_get :: proc(extensibleparameter: ExtensibleParameter) -> (access_level: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->AccessLevelGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->AccessLevelGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_access_level_set :: proc(ep: ExtensibleParameter, access_level: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_access_level_set :: proc(extensibleparameter: ExtensibleParameter, access_level: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(access_level)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->AccessLevelPut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->AccessLevelPut(bs)
     if com.failed(hr) do return
 
     return true
@@ -303,49 +303,49 @@ extensibleparameter_safety_type :: proc {
     extensibleparameter_safety_type_set,
 }
 
-extensibleparameter_safety_type_get :: proc(ep: ExtensibleParameter) -> (safety_type: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_safety_type_get :: proc(extensibleparameter: ExtensibleParameter) -> (safety_type: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->SafetyTypeGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->SafetyTypeGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_safety_type_set :: proc(ep: ExtensibleParameter, safety_type: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_safety_type_set :: proc(extensibleparameter: ExtensibleParameter, safety_type: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(safety_type)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->SafetyTypePut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->SafetyTypePut(bs)
     if com.failed(hr) do return
 
     return true
 }
 
-extensibleparameter_type_guid_get :: proc(ep: ExtensibleParameter) -> (guid: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_type_guid_get :: proc(extensibleparameter: ExtensibleParameter) -> (guid: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->TypeGuid(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->TypeGuid(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_type_path_get :: proc(ep: ExtensibleParameter) -> (path: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_type_path_get :: proc(extensibleparameter: ExtensibleParameter) -> (path: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->TypePath(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->TypePath(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
@@ -356,32 +356,32 @@ extensibleparameter_fdport :: proc {
     extensibleparameter_fdport_set,
 }
 
-extensibleparameter_fdport_get :: proc(ep: ExtensibleParameter) -> (fdport: string, ok: bool) {
-    if ep == nil do return
+extensibleparameter_fdport_get :: proc(extensibleparameter: ExtensibleParameter) -> (fdport: string, ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs: BStr
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->FDPortGet(&bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->FDPortGet(&bs)
     if com.failed(hr) do return
 
     return com.to_string(bs), true
 }
 
-extensibleparameter_fdport_set :: proc(ep: ExtensibleParameter, fdport: string) -> (ok: bool) {
-    if ep == nil do return
+extensibleparameter_fdport_set :: proc(extensibleparameter: ExtensibleParameter, fdport: string) -> (ok: bool) {
+    if extensibleparameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(fdport)
     defer com.bstr_free(bs)
-    hr := (^ExtensibleParameterIF)(ep)->FDPortPut(bs)
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->FDPortPut(bs)
     if com.failed(hr) do return
 
     return true
 }
 
-extensibleparameter_release :: proc(ep: ExtensibleParameter) {
-    if ep != nil {
-        (^ExtensibleParameterIF)(ep)->Release()
+extensibleparameter_release :: proc(extensibleparameter: ExtensibleParameter) {
+    if extensibleparameter != nil {
+        (^ExtensibleParameterIF)(extensibleparameter)->Release()
     }
 }

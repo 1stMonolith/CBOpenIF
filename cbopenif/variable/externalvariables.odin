@@ -32,10 +32,9 @@ externalvariables_add :: proc {
 }
 
 externalvariables_add_ :: proc(external_variables: ExternalVariables, external_variable: ExternalVariable) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
     if external_variable == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExternalVariablesIF)(external_variables)->Add(external_variable)
     if com.failed(hr) do return
@@ -44,10 +43,9 @@ externalvariables_add_ :: proc(external_variables: ExternalVariables, external_v
 }
 
 externalvariables_add_at_index :: proc(external_variables: ExternalVariables, external_variable: ExternalVariable, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
     if external_variable == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariablesIF)(external_variables)->AddBefore(external_variable, index)
     if com.failed(hr) do return
@@ -61,9 +59,8 @@ externalvariables_external :: proc {
 }
 
 externalvariables_external_by_name :: proc(external_variables: ExternalVariables, name: string) -> (external_variable: ExternalVariable, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -74,9 +71,8 @@ externalvariables_external_by_name :: proc(external_variables: ExternalVariables
 }
 
 externalvariables_external_by_index :: proc(external_variables: ExternalVariables, index: i32) -> (external_variable: ExternalVariable, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariablesIF)(external_variables)->Item(index, cast(^rawptr)&external_variable)
     if com.failed(hr) do return
@@ -85,9 +81,8 @@ externalvariables_external_by_index :: proc(external_variables: ExternalVariable
 }
 
 externalvariables_external_index :: proc(external_variables: ExternalVariables, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -98,9 +93,8 @@ externalvariables_external_index :: proc(external_variables: ExternalVariables, 
 }
 
 externalvariables_count :: proc(external_variables: ExternalVariables) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariablesIF)(external_variables)->Count(&count)
     if com.failed(hr) do return
@@ -114,9 +108,8 @@ externalvariables_remove :: proc {
 }
 
 externalvariables_remove_by_name :: proc(external_variables: ExternalVariables, name: string) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index: i32
     index, ok = externalvariables_external_index(external_variables, name)
@@ -128,9 +121,8 @@ externalvariables_remove_by_name :: proc(external_variables: ExternalVariables, 
 }
 
 externalvariables_remove_by_index :: proc(external_variables: ExternalVariables, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if external_variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ExternalVariablesIF)(external_variables)->Remove(index)
     if com.failed(hr) do return

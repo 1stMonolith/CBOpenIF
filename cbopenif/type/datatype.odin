@@ -43,7 +43,6 @@ DataTypeVTable :: struct {
 }
 
 datatype_new :: proc(name: string, description := "", hidden := false, protected := false, scope := ScopeType.Public) -> (datatype: DataType, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
@@ -59,7 +58,6 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
 }
 
 datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -71,7 +69,6 @@ datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
 }
 
 datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -89,7 +86,6 @@ datatype_name :: proc {
 }
 
 datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -102,7 +98,6 @@ datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
 }
 
 datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
-    
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -120,7 +115,6 @@ datatype_protected :: proc {
 }
 
 datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -132,7 +126,6 @@ datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool
 }
 
 datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool) {
-    
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -148,7 +141,6 @@ datatype_hidden :: proc {
 }
 
 datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
-    
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -160,7 +152,6 @@ datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
 }
 
 datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -176,7 +167,6 @@ datatype_scope :: proc {
 }
 
 datatype_scope_get :: proc(datatype: DataType) -> (scope: ScopeType, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -188,7 +178,6 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: ScopeType, ok: bool) {
 }
 
 datatype_scope_set :: proc(datatype: DataType, scope: ScopeType) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -204,7 +193,6 @@ datatype_description :: proc {
 }
 
 datatype_description_get :: proc(datatype: DataType) -> (description: string, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -217,7 +205,6 @@ datatype_description_get :: proc(datatype: DataType) -> (description: string, ok
 }
 
 datatype_description_set :: proc(datatype: DataType, description: string) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -235,7 +222,6 @@ datatype_guid :: proc {
 }
 
 datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -248,7 +234,6 @@ datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
 }
 
 datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -266,7 +251,6 @@ datatype_reserved_by_function :: proc {
 }
 
 datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_function: string, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -279,7 +263,6 @@ datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_fu
 }
 
 datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_function: string) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -297,7 +280,6 @@ datatype_components :: proc {
 }
 
 datatype_components_get :: proc(datatype: DataType) -> (components: Components, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -309,7 +291,6 @@ datatype_components_get :: proc(datatype: DataType) -> (components: Components, 
 }
 
 datatype_components_set :: proc(datatype: DataType, components: Components) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -333,7 +314,6 @@ datatype_components_add :: proc {
 }
 
 datatype_components_add_ :: proc(datatype: DataType, component: Component) -> (ok: bool) {
-
     if datatype == nil do return
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -350,7 +330,6 @@ datatype_components_add_ :: proc(datatype: DataType, component: Component) -> (o
 }
 
 datatype_components_add_at_index :: proc(datatype: DataType, component: Component, index: i32) -> (ok: bool) {
-
     if datatype == nil do return
     if component == nil do return
     if !controlbuilder.controlbuilder_connected() do return
@@ -372,7 +351,6 @@ datatype_component :: proc {
 }
 
 datatype_component_by_name :: proc(datatype: DataType, name: string) -> (component: Component, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -388,7 +366,6 @@ datatype_component_by_name :: proc(datatype: DataType, name: string) -> (compone
 }
 
 datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (component: Component, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -404,7 +381,6 @@ datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (componen
 }
 
 datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i32, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -420,7 +396,6 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
 }
 
 datatype_components_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -441,7 +416,6 @@ datatype_componentsremove :: proc {
 }
 
 datatype_components_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -457,7 +431,6 @@ datatype_components_remove_by_name :: proc(datatype: DataType, name: string) -> 
 }
 
 datatype_components_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
-
     if datatype == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 

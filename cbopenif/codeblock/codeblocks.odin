@@ -46,10 +46,9 @@ codeblocks_add :: proc {
 }
 
 codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if codeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Add(codeblock)
     if com.failed(hr) do return
@@ -59,10 +58,9 @@ codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bo
 
 
 codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if codeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddBefore(codeblock, index)
     if com.failed(hr) do return
@@ -71,10 +69,9 @@ codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, in
 }
 
 codeblocks_add_st :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if stcodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddSTCodeBlock(stcodeblock)
     if com.failed(hr) do return
@@ -83,10 +80,9 @@ codeblocks_add_st :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (
 }
 
 codeblocks_add_ld :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if ldcodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddLDCodeBlock(ldcodeblock)
     if com.failed(hr) do return
@@ -95,10 +91,9 @@ codeblocks_add_ld :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (
 }
 
 codeblocks_add_fbd :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if fbdcodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddFBDCodeBlock(fbdcodeblock)
     if com.failed(hr) do return
@@ -107,10 +102,9 @@ codeblocks_add_fbd :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -
 }
 
 codeblocks_add_il :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if ilcodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddILCodeBlock(ilcodeblock)
     if com.failed(hr) do return
@@ -119,10 +113,9 @@ codeblocks_add_il :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (
 }
 
 codeblocks_add_sfc :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if sfccodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddSFCCodeBlock(sfccodeblock)
     if com.failed(hr) do return
@@ -131,10 +124,9 @@ codeblocks_add_sfc :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -
 }
 
 codeblocks_add_fd :: proc(codeblocks: CodeBlocks, fdcodeblock: FDCodeBlock) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
     if fdcodeblock == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->AddFDCodeBlock(fdcodeblock)
     if com.failed(hr) do return
@@ -148,9 +140,8 @@ codeblocks_codeblock :: proc {
 }
 
 codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -161,9 +152,8 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
 }
 
 codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&codeblock)
     if com.failed(hr) do return
@@ -172,9 +162,8 @@ codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (co
 }
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -185,9 +174,8 @@ codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (ind
 }
 
 codeblocks_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Count(&count)
     if com.failed(hr) do return
@@ -196,9 +184,8 @@ codeblocks_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
 }
 
 codeblocks_remove :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if codeblocks == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Remove(index)
     if com.failed(hr) do return

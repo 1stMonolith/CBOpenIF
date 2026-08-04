@@ -28,6 +28,7 @@ ProjectConstantsVTable :: struct {
 }
 
 projectconstants_new :: proc() -> (projectconstants: ProjectConstants, ok: bool) {
+    if projectconstants == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     hr := factory.factoryif->NewProjectConstants(cast(^rawptr)&projectconstants)
@@ -37,6 +38,7 @@ projectconstants_new :: proc() -> (projectconstants: ProjectConstants, ok: bool)
 }
 
 projectconstants_deserialize :: proc(projectconstants: ^ProjectConstants, xml: string) -> (ok: bool) {
+    if projectconstants == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
     bs := com.from_string(xml)
@@ -65,9 +67,9 @@ projectconstants_add :: proc {
 }
 
 projectconstants_add_ :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
     if projectconstant == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Add(projectconstant)
     if com.failed(hr) do return
@@ -76,9 +78,9 @@ projectconstants_add_ :: proc(projectconstants: ProjectConstants, projectconstan
 }
 
 projectconstants_add_at_index :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
     if projectconstant == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->AddBefore(projectconstant, index)
     if com.failed(hr) do return
@@ -92,8 +94,8 @@ projectconstants_constant :: proc {
 }
 
 projectconstants_constant_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (projectconstant: ProjectConstant, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -104,8 +106,8 @@ projectconstants_constant_by_name :: proc(projectconstants: ProjectConstants, na
 }
 
 projectconstants_constant_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (projectconstant: ProjectConstant, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Item(index, cast(^rawptr)&projectconstant)
     if com.failed(hr) do return
@@ -114,8 +116,8 @@ projectconstants_constant_by_index :: proc(projectconstants: ProjectConstants, i
 }
 
 projectconstants_constant_index :: proc(projectconstants: ProjectConstants, name: string) -> (index: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -126,8 +128,8 @@ projectconstants_constant_index :: proc(projectconstants: ProjectConstants, name
 }
 
 projectconstants_count :: proc(projectconstants: ProjectConstants) -> (count: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Count(&count)
     if com.failed(hr) do return
@@ -141,8 +143,8 @@ projectconstants_remove :: proc {
 }
 
 projectconstants_remove_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index, found := projectconstants_constant_index(projectconstants, name)
     if !found do return
@@ -154,8 +156,8 @@ projectconstants_remove_by_name :: proc(projectconstants: ProjectConstants, name
 }
 
 projectconstants_remove_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if projectconstants == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Remove(index)
     if com.failed(hr) do return

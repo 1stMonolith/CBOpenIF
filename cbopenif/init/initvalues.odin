@@ -31,9 +31,9 @@ initvalues_add :: proc {
 }
 
 initvalues_add_ :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
     if initvalue == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Add(initvalue)
     if com.failed(hr) do return
@@ -42,9 +42,9 @@ initvalues_add_ :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bo
 }
 
 initvalues_add_at_index :: proc(initvalues: InitValues, initvalue: InitValue, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
     if initvalue == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->AddBefore(initvalue, index)
     if com.failed(hr) do return
@@ -58,8 +58,8 @@ initvalues_value :: proc {
 }
 
 initvalues_value_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (initvalue: InitValue, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_pou  := com.from_string(pou_path)
     bstr_name := com.from_string(name)
@@ -74,8 +74,8 @@ initvalues_value_by_name :: proc(initvalues: InitValues, pou_path, name: string)
 }
 
 initvalues_value_by_index :: proc(initvalues: InitValues, index: i32) -> (initvalue: InitValue, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Item(index, cast(^rawptr)&initvalue)
     if com.failed(hr) do return
@@ -84,8 +84,8 @@ initvalues_value_by_index :: proc(initvalues: InitValues, index: i32) -> (initva
 }
 
 initvalues_value_index :: proc(initvalues: InitValues, pou_path, name: string) -> (index: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_pou  := com.from_string(pou_path)
     bstr_name := com.from_string(name)
@@ -100,8 +100,8 @@ initvalues_value_index :: proc(initvalues: InitValues, pou_path, name: string) -
 }
 
 initvalues_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Count(&count)
     if com.failed(hr) do return
@@ -115,8 +115,8 @@ initvalues_remove :: proc {
 }
 
 initvalues_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index, found := initvalues_value_index(initvalues, pou_path, name)
     if !found do return
@@ -128,8 +128,8 @@ initvalues_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string
 }
 
 initvalues_remove_by_index :: proc(initvalues: InitValues, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if initvalues == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Remove(index)
     if com.failed(hr) do return

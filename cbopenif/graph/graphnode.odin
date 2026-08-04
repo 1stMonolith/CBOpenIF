@@ -25,7 +25,6 @@ GraphNodeVTable :: struct {
 }
 
 graphnode_new :: proc(name: string, x: f64, y: f64) -> (graphnode: GraphNode, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
@@ -42,7 +41,6 @@ graphnode_name :: proc {
 }
 
 graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -55,7 +53,6 @@ graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
 }
 
 graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -73,7 +70,6 @@ graphnode_x :: proc {
 }
 
 graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -84,7 +80,6 @@ graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
 }
 
 graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -100,7 +95,6 @@ graphnode_y :: proc {
 }
 
 graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -111,7 +105,6 @@ graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
 }
 
 graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
-
     if graphnode == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

@@ -1350,14 +1350,14 @@ variable_remove :: proc {
     variable.variables_remove_by_index,
 }
 
+VariableType :: variable.VariableType
+
 Variables :: variable.Variables
 
 variables :: proc {
     variable.applicationvariables_variables_get,
     variable.applicationvariables_variables_set,
 }
-
-VariableType :: variable.VariableType
 
 VisibilityInGraphicsType :: type.VisibilityInGraphicsType
 

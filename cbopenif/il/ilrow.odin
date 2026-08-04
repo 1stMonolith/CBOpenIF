@@ -37,7 +37,6 @@ ilrow_new :: proc {
 }
 
 ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: ILRow, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
@@ -57,7 +56,6 @@ ilrow_new_ :: proc(name, instruction, operand, description: string) -> (ilrow: I
 }
 
 ilrow_new_comment :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_comment := com.from_string(comment)
@@ -74,7 +72,6 @@ ilrow_label :: proc {
 }
 
 ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -87,7 +84,6 @@ ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
 }
 
 ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -105,7 +101,6 @@ ilrow_instruction :: proc {
 }
 
 ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -118,7 +113,6 @@ ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
 }
 
 ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -136,7 +130,6 @@ ilrow_operand :: proc {
 }
 
 ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -149,7 +142,6 @@ ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
 }
 
 ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -167,7 +159,6 @@ ilrow_description :: proc {
 }
 
 ilrow_description_get :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -180,7 +171,6 @@ ilrow_description_get :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
 }
 
 ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -198,7 +188,6 @@ ilrow_row_comment :: proc {
 }
 
 ilrow_row_comment_get :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -211,7 +200,6 @@ ilrow_row_comment_get :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
 }
 
 ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -229,7 +217,6 @@ ilrow_is_row_comment :: proc {
 }
 
 ilrow_is_row_comment_get :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -241,7 +228,6 @@ ilrow_is_row_comment_get :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: boo
 }
 
 ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: bool) {
-
     if ilrow == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

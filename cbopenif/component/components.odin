@@ -32,10 +32,9 @@ components_add :: proc {
 }
 
 components_add_ :: proc(components: Components, component: Component) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
     if component == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ComponentsIF)(components)->Add(component)
     if com.failed(hr) do return
@@ -44,10 +43,9 @@ components_add_ :: proc(components: Components, component: Component) -> (ok: bo
 }
 
 components_add_at_index :: proc(components: Components, component: Component, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
     if component == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ComponentsIF)(components)->AddBefore(component, index)
     if com.failed(hr) do return
@@ -61,9 +59,8 @@ components_component :: proc {
 }
 
 components_component_by_name :: proc(components: Components, name: string) -> (component: Component, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     p: rawptr
@@ -75,9 +72,8 @@ components_component_by_name :: proc(components: Components, name: string) -> (c
 }
 
 components_component_by_index :: proc(components: Components, index: i32) -> (component: Component, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     p: rawptr
     hr := (^ComponentsIF)(components)->Item(index, &p)
@@ -87,9 +83,8 @@ components_component_by_index :: proc(components: Components, index: i32) -> (co
 }
 
 components_component_index :: proc(components: Components, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -100,9 +95,8 @@ components_component_index :: proc(components: Components, name: string) -> (ind
 }
 
 components_count :: proc(components: Components) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ComponentsIF)(components)->Count(&count)
     if com.failed(hr) do return
@@ -116,9 +110,8 @@ components_remove :: proc {
 }
 
 components_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index: i32
     index, ok = components_component_index(components, name)
@@ -131,9 +124,8 @@ components_remove_by_name :: proc(components: Components, name: string) -> (ok: 
 }
 
 components_remove_by_index :: proc(components: Components, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if components == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ComponentsIF)(components)->Remove(index)
     if com.failed(hr) do return

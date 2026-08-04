@@ -59,7 +59,6 @@ initialize :: proc() -> (ok: bool) {
 }
 
 create_instance :: proc(clsid: windows.REFCLSID, iid: windows.REFIID, vtable: ^windows.LPVOID) -> (ok: bool) {
-
     hr := windows.CoCreateInstance(
         clsid,
         nil,
@@ -81,7 +80,6 @@ failed :: proc(hr: HResult) -> (failed: bool) {
 }
 
 get_dispid :: proc(this: ^IUnknownIF, name: string) -> (id: i32, ok: bool) {
-
     if this == nil do return
 
     wide := windows.utf8_to_utf16(name, context.temp_allocator)

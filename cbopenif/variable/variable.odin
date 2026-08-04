@@ -60,7 +60,6 @@ VariableVTable :: struct {
 }
 
 variable_new :: proc(name: string, type: string, attribute := "", initial_value := "", readpermission := "", writepermission := "", description := "") -> (variable: Variable, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
@@ -86,7 +85,6 @@ variable_new :: proc(name: string, type: string, attribute := "", initial_value 
 }
 
 variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -98,7 +96,6 @@ variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
 }
 
 variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -116,7 +113,6 @@ variable_name :: proc {
 }
 
 variable_name_get :: proc(variable: Variable) -> (name: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -129,7 +125,6 @@ variable_name_get :: proc(variable: Variable) -> (name: string, ok: bool) {
 }
 
 variable_name_set :: proc(variable: Variable, name: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -147,7 +142,6 @@ variable_type_name :: proc {
 }
 
 variable_type_name_get :: proc(variable: Variable) -> (type_name: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -160,7 +154,6 @@ variable_type_name_get :: proc(variable: Variable) -> (type_name: string, ok: bo
 }
 
 variable_type_name_set :: proc(variable: Variable, type_name: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -178,7 +171,6 @@ variable_attribute :: proc {
 }
 
 variable_attribute_get :: proc(variable: Variable) -> (attribute: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -191,7 +183,6 @@ variable_attribute_get :: proc(variable: Variable) -> (attribute: string, ok: bo
 }
 
 variable_attribute_set :: proc(variable: Variable, attribute: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -209,7 +200,6 @@ variable_initial_value :: proc {
 }
 
 variable_initial_value_get :: proc(variable: Variable) -> (inital_value: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -222,7 +212,6 @@ variable_initial_value_get :: proc(variable: Variable) -> (inital_value: string,
 }
 
 variable_initial_value_set :: proc(variable: Variable, inital_value: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -240,7 +229,6 @@ variable_description :: proc {
 }
 
 variable_description_get :: proc(variable: Variable) -> (description: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -253,7 +241,6 @@ variable_description_get :: proc(variable: Variable) -> (description: string, ok
 }
 
 variable_description_set :: proc(variable: Variable, description: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -271,7 +258,6 @@ variable_read_permission :: proc {
 }
 
 variable_read_permission_get :: proc(variable: Variable) -> (read_permission: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -284,7 +270,6 @@ variable_read_permission_get :: proc(variable: Variable) -> (read_permission: st
 }
 
 variable_read_permission_set :: proc(variable: Variable, read_permission: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -302,7 +287,6 @@ variable_write_permission :: proc {
 }
 
 variable_write_permission_get :: proc(variable: Variable) -> (write_permission: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -315,7 +299,6 @@ variable_write_permission_get :: proc(variable: Variable) -> (write_permission: 
 }
 
 variable_write_permission_set :: proc(variable: Variable, write_permission: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -333,7 +316,6 @@ variable_authentication_level :: proc {
 }
 
 variable_authentication_level_get :: proc(variable: Variable) -> (authentication_level: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -346,7 +328,6 @@ variable_authentication_level_get :: proc(variable: Variable) -> (authentication
 }
 
 variable_authentication_level_set :: proc(variable: Variable, authentication_level: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -364,7 +345,6 @@ variable_batch_property :: proc {
 }
 
 variable_batch_property_get :: proc(variable: Variable) -> (batch_property: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -377,7 +357,6 @@ variable_batch_property_get :: proc(variable: Variable) -> (batch_property: stri
 }
 
 variable_batch_property_set :: proc(variable: Variable, batch_property: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -395,7 +374,6 @@ variable_graph_nodes :: proc {
 }
 
 variable_graph_nodes_get :: proc(variable: Variable) -> (graph_nodes: GraphNodes, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -406,7 +384,6 @@ variable_graph_nodes_get :: proc(variable: Variable) -> (graph_nodes: GraphNodes
 }
 
 variable_graph_nodes_set :: proc(variable: Variable, graph_nodes: GraphNodes) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -417,7 +394,6 @@ variable_graph_nodes_set :: proc(variable: Variable, graph_nodes: GraphNodes) ->
 }
 
 variable_type_guid_get :: proc(variable: Variable) -> (guid: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -430,7 +406,6 @@ variable_type_guid_get :: proc(variable: Variable) -> (guid: string, ok: bool) {
 }
 
 variable_type_path_get :: proc(variable: Variable) -> (path: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -448,7 +423,6 @@ variable_access_level :: proc {
 }
 
 variable_access_level_get :: proc(variable: Variable) -> (access_level: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -461,7 +435,6 @@ variable_access_level_get :: proc(variable: Variable) -> (access_level: string, 
 }
 
 variable_access_level_set :: proc(variable: Variable, access_level: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -479,7 +452,6 @@ variable_safety_type :: proc {
 }
 
 variable_safety_type_get :: proc(variable: Variable) -> (safety_type: string, ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -492,7 +464,6 @@ variable_safety_type_get :: proc(variable: Variable) -> (safety_type: string, ok
 }
 
 variable_safety_type_set :: proc(variable: Variable, safety_type: string) -> (ok: bool) {
-
     if variable == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

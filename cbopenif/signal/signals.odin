@@ -32,10 +32,9 @@ signals_add :: proc {
 }
 
 signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SignalsIF)(signals)->Add(signal)
     if com.failed(hr) do return
@@ -44,10 +43,9 @@ signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
 }
 
 signals_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
     if signal == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^SignalsIF)(signals)->AddBefore(signal, index)
     if com.failed(hr) do return
@@ -61,9 +59,8 @@ signals_signal :: proc {
 }
 
 signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signal, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -74,9 +71,8 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
 }
 
 signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^SignalsIF)(signals)->Item(index, cast(^rawptr)&signal)
     if com.failed(hr) do return
@@ -85,9 +81,8 @@ signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal
 }
 
 signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -98,9 +93,8 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
 }
 
 signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^SignalsIF)(signals)->Count(&count)
     if com.failed(hr) do return
@@ -114,9 +108,8 @@ signals_remove :: proc {
 }
 
 signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index: i32
     index, ok = signals_signal_index(signals, name)
@@ -128,9 +121,8 @@ signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
 }
 
 signals_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if signals == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^SignalsIF)(signals)->Remove(index)
     if com.failed(hr) do return

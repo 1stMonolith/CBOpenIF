@@ -32,9 +32,9 @@ extensibleparameters_add :: proc {
 }
 
 extensibleparameters_add_ :: proc(extensibleparameters: ExtensibleParameters, externalparameter: ExtensibleParameter) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
     if externalparameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Add(externalparameter)
     if com.failed(hr) do return
@@ -43,9 +43,9 @@ extensibleparameters_add_ :: proc(extensibleparameters: ExtensibleParameters, ex
 }
 
 extensibleparameters_add_at_index :: proc(extensibleparameters: ExtensibleParameters, externalparameter: ExtensibleParameter, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
     if externalparameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->AddBefore(externalparameter, index)
     if com.failed(hr) do return
@@ -59,8 +59,8 @@ extensibleparameters_parameter :: proc {
 }
 
 extensibleparameters_parameter_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (externalparameter: ExtensibleParameter, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -71,8 +71,8 @@ extensibleparameters_parameter_by_name :: proc(extensibleparameters: ExtensibleP
 }
 
 extensibleparameters_parameter_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (externalparameter: ExtensibleParameter, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index, cast(^rawptr)&externalparameter)
     if com.failed(hr) do return
@@ -81,8 +81,8 @@ extensibleparameters_parameter_by_index :: proc(extensibleparameters: Extensible
 }
 
 extensibleparameters_parameter_index :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (index: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
     defer com.bstr_free(bstr_name)
@@ -93,8 +93,8 @@ extensibleparameters_parameter_index :: proc(extensibleparameters: ExtensiblePar
 }
 
 extensibleparameters_count :: proc(extensibleparameters: ExtensibleParameters) -> (count: i32, ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Count(&count)
     if com.failed(hr) do return
@@ -108,8 +108,8 @@ extensibleparameters_remove :: proc {
 }
 
 extensibleparameters_remove_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index, found := extensibleparameters_parameter_index(extensibleparameters, name)
     if !found do return
@@ -121,8 +121,8 @@ extensibleparameters_remove_by_name :: proc(extensibleparameters: ExtensiblePara
 }
 
 extensibleparameters_remove_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (ok: bool) {
-    if !controlbuilder.controlbuilder_connected() do return
     if extensibleparameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Remove(index)
     if com.failed(hr) do return

@@ -32,10 +32,9 @@ variables_add :: proc {
 }
 
 variables_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
     if variable == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^VariablesIF)(variables)->Add(variable)
     if com.failed(hr) do return
@@ -44,10 +43,9 @@ variables_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
 }
 
 variables_add_at_index :: proc(variables: Variables, variable: Variable, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
     if variable == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^VariablesIF)(variables)->AddBefore(variable, index)
     if com.failed(hr) do return
@@ -61,9 +59,8 @@ variables_variable :: proc {
 }
 
 variables_variable_by_name :: proc(variables: Variables, name: string) -> (variable: Variable, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -74,9 +71,8 @@ variables_variable_by_name :: proc(variables: Variables, name: string) -> (varia
 }
 
 variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variable: Variable, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^VariablesIF)(variables)->Item(index, cast(^rawptr)&variable)
     if com.failed(hr) do return
@@ -85,9 +81,8 @@ variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variab
 }
 
 variables_variable_index :: proc(variables: Variables, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -98,9 +93,8 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
 }
 
 variables_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^VariablesIF)(variables)->Count(&count)
     if com.failed(hr) do return
@@ -114,9 +108,8 @@ variables_remove :: proc {
 }
 
 variables_remove_by_name :: proc(variables: Variables, name: string) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index: i32
     index, ok = variables_variable_index(variables, name)
@@ -128,9 +121,8 @@ variables_remove_by_name :: proc(variables: Variables, name: string) -> (ok: boo
 }
 
 variables_remove_by_index :: proc(variables: Variables, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if variables == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^VariablesIF)(variables)->Remove(index)
     if com.failed(hr) do return

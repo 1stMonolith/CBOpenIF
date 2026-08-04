@@ -38,7 +38,6 @@ SFCCodeBlockVTable :: struct {
 }
 
 sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time := false) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
@@ -60,7 +59,6 @@ sfccodeblock_name :: proc {
 }
 
 sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -73,7 +71,6 @@ sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: 
 }
 
 sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
- 
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -91,7 +88,6 @@ sfccodeblock_seq_control :: proc {
 }
 
 sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control: bool, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -103,7 +99,6 @@ sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control
 }
 
 sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -119,7 +114,6 @@ sfccodeblock_step_elapsed_time :: proc {
 }
 
 sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_elapsed_time: bool, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -131,7 +125,6 @@ sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_
 }
 
 sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -147,7 +140,6 @@ sfccodeblock_viewer_aspect :: proc {
 }
 
 sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_aspect: bool, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -159,7 +151,6 @@ sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_as
 }
 
 sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -175,7 +166,6 @@ sfccodeblock_elements :: proc {
 }
 
 sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: SFCElements, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -186,7 +176,6 @@ sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: S
 }
 
 sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCElements) -> (ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -197,7 +186,6 @@ sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCEl
 }
 
 sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: bool) {
-
     if sfccodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 

@@ -30,10 +30,9 @@ sfcbranches_add :: proc {
 }
 
 sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if sfcbranches == nil do return
     if sfcbranch == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Add(sfcbranch)
     if com.failed(hr) do return
@@ -42,10 +41,9 @@ sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok:
 }
 
 sfcbranches_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if sfcbranches == nil do return
     if sfcbranch == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->AddBefore(sfcbranch, index)
     if com.failed(hr) do return
@@ -58,9 +56,8 @@ sfcbrachs_brach :: proc {
 }
 
 sfcbranches_branch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if sfcbranches == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Item(index, cast(^rawptr)&sfcbranch)
     if com.failed(hr) do return
@@ -69,9 +66,8 @@ sfcbranches_branch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sf
 }
 
 sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if sfcbranches == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Count(&count)
     if com.failed(hr) do return
@@ -84,9 +80,8 @@ sfcbrachs_remove :: proc {
 }
 
 sfcbranches_remove_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if sfcbranches == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Remove(index)
     if com.failed(hr) do return

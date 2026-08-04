@@ -24,7 +24,6 @@ ParameterSettingVTable :: struct {
 }
 
 parametersetting_new :: proc(name: string, value: string) -> (parametersetting: ParameterSetting, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
@@ -45,7 +44,6 @@ parametersetting_name :: proc {
 }
 
 parametersetting_name_get :: proc(parametersetting: ParameterSetting) -> (name: string, ok: bool) {
-
     if parametersetting == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -58,7 +56,6 @@ parametersetting_name_get :: proc(parametersetting: ParameterSetting) -> (name: 
 }
 
 parametersetting_name_set :: proc(parametersetting: ParameterSetting, name: string) -> (ok: bool) {
-
     if parametersetting == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -76,7 +73,6 @@ parametersetting_parameter_value :: proc {
 }
 
 parametersetting_parameter_value_get :: proc(parametersetting: ParameterSetting) -> (type_name: string, ok: bool) {
-
     if parametersetting == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -89,7 +85,6 @@ parametersetting_parameter_value_get :: proc(parametersetting: ParameterSetting)
 }
 
 parametersetting_parameter_value_set :: proc(parametersetting: ParameterSetting, type_name: string) -> (ok: bool) {
-
     if parametersetting == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -106,7 +101,6 @@ parametersetting_description :: proc {
 }
 
 parametersetting_description_get :: proc(parametersetting: ParameterSetting) -> (description: string, ok: bool) {
-
     if parametersetting == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

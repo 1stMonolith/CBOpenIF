@@ -27,7 +27,6 @@ FBDCodeBlockVTable :: struct {
 }
 
 fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
@@ -43,7 +42,6 @@ fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, o
 }
 
 fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: bool) {
-
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -61,7 +59,6 @@ fbdcodeblock_name :: proc {
 }
 
 fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: bool) {
-
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -75,7 +72,6 @@ fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: 
 
 
 fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: bool) {
-    
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -93,7 +89,6 @@ fbdcodeblock_stcode :: proc {
 }
 
 fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, ok: bool) {
-
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -106,7 +101,6 @@ fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, 
 }
 
 fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
-    
     if fbdcodeblock == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

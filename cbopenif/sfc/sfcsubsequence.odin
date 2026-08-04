@@ -24,7 +24,6 @@ SFCSubSequenceVTable :: struct {
 }
 
 sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     bstr_name := com.from_string(name)
@@ -41,7 +40,6 @@ sfcsubsequence_name :: proc {
 }
 
 sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string, ok: bool) {
-
     if sfcsubsequence == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -54,7 +52,6 @@ sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string
 }
 
 sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
-
     if sfcsubsequence == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -72,7 +69,6 @@ sfcsubsequence_elements :: proc {
 }
 
 sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfcelements: SFCElements, ok: bool) {
-
     if sfcsubsequence == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -83,7 +79,6 @@ sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfceleme
 }
 
 sfcsubsequence_elements_set :: proc(sfcsubsequence: SFCSubSequence, sfcelements: SFCElements) -> (ok: bool) {
-
     if sfcsubsequence == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 

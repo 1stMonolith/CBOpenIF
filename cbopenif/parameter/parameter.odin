@@ -54,7 +54,6 @@ ParameterVTable :: struct {
 }
 
 parameter_new :: proc(name: string, type_name: string, attribute := "", direction := DirectionType.InOut, initial_value := "", readpermission := "", writepermission := "", description := "") -> (parameter: Parameter, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
@@ -80,7 +79,6 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
 }
 
 parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     bs := com.from_string(xml)
@@ -92,7 +90,6 @@ parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) 
 }
 
 parameter_serialize :: proc(parameter: Parameter) -> (xml: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -110,7 +107,6 @@ parameter_name :: proc {
 }
 
 parameter_name_get :: proc(parameter: Parameter) -> (name: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -123,7 +119,6 @@ parameter_name_get :: proc(parameter: Parameter) -> (name: string, ok: bool) {
 }
 
 parameter_name_set :: proc(parameter: Parameter, name: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -141,7 +136,6 @@ parameter_type_name :: proc {
 }
 
 parameter_type_name_get :: proc(parameter: Parameter) -> (type_name: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -154,7 +148,6 @@ parameter_type_name_get :: proc(parameter: Parameter) -> (type_name: string, ok:
 }
 
 parameter_type_name_set :: proc(parameter: Parameter, type_name: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -172,7 +165,6 @@ parameter_attribute :: proc {
 }
 
 parameter_attribute_get :: proc(parameter: Parameter) -> (attribute: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -185,7 +177,6 @@ parameter_attribute_get :: proc(parameter: Parameter) -> (attribute: string, ok:
 }
 
 parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -203,7 +194,6 @@ parameter_direction :: proc {
 }
 
 parameter_direction_get :: proc(parameter: Parameter) -> (direction: DirectionType, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -215,7 +205,6 @@ parameter_direction_get :: proc(parameter: Parameter) -> (direction: DirectionTy
 }
 
 parameter_direction_set :: proc(parameter: Parameter, direction: DirectionType) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
 
@@ -231,7 +220,6 @@ parameter_initial_value :: proc {
 }
 
 parameter_initial_value_get :: proc(parameter: Parameter) -> (inital_value: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -244,7 +232,6 @@ parameter_initial_value_get :: proc(parameter: Parameter) -> (inital_value: stri
 }
 
 parameter_initial_value_set :: proc(parameter: Parameter, inital_value: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -262,7 +249,6 @@ parameter_description :: proc {
 }
 
 parameter_description_get :: proc(parameter: Parameter) -> (description: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -275,7 +261,6 @@ parameter_description_get :: proc(parameter: Parameter) -> (description: string,
 }
 
 parameter_description_set :: proc(parameter: Parameter, description: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -293,7 +278,6 @@ parameter_read_permission :: proc {
 }
 
 parameter_read_permission_get :: proc(parameter: Parameter) -> (read_permission: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -306,7 +290,6 @@ parameter_read_permission_get :: proc(parameter: Parameter) -> (read_permission:
 }
 
 parameter_read_permission_set :: proc(parameter: Parameter, read_permission: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -324,7 +307,6 @@ parameter_write_permission :: proc {
 }
 
 parameter_write_permission_get :: proc(parameter: Parameter) -> (write_permission: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -337,7 +319,6 @@ parameter_write_permission_get :: proc(parameter: Parameter) -> (write_permissio
 }
 
 parameter_write_permission_set :: proc(parameter: Parameter, write_permission: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -355,7 +336,6 @@ parameter_authentication_level :: proc {
 }
 
 parameter_authentication_level_get :: proc(parameter: Parameter) -> (authentication_level: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -368,7 +348,6 @@ parameter_authentication_level_get :: proc(parameter: Parameter) -> (authenticat
 }
 
 parameter_authentication_level_set :: proc(parameter: Parameter, authentication_level: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -381,7 +360,6 @@ parameter_authentication_level_set :: proc(parameter: Parameter, authentication_
 }
 
 parameter_type_guid_get :: proc(parameter: Parameter) -> (guid: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -394,7 +372,6 @@ parameter_type_guid_get :: proc(parameter: Parameter) -> (guid: string, ok: bool
 }
 
 parameter_type_path_get :: proc(parameter: Parameter) -> (path: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -412,7 +389,6 @@ parameter_access_level :: proc {
 }
 
 parameter_access_level_get :: proc(parameter: Parameter) -> (access_level: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -425,7 +401,6 @@ parameter_access_level_get :: proc(parameter: Parameter) -> (access_level: strin
 }
 
 parameter_access_level_set :: proc(parameter: Parameter, access_level: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -443,7 +418,6 @@ parameter_safety_type :: proc {
 }
 
 parameter_safety_type_get :: proc(parameter: Parameter) -> (safety_type: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -456,7 +430,6 @@ parameter_safety_type_get :: proc(parameter: Parameter) -> (safety_type: string,
 }
 
 parameter_safety_type_set :: proc(parameter: Parameter, safety_type: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -474,7 +447,6 @@ parameter_fdport :: proc {
 }
 
 parameter_fdport_get :: proc(parameter: Parameter) -> (fdport: string, ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -487,7 +459,6 @@ parameter_fdport_get :: proc(parameter: Parameter) -> (fdport: string, ok: bool)
 }
 
 parameter_fdport_set :: proc(parameter: Parameter, fdport: string) -> (ok: bool) {
-
     if parameter == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

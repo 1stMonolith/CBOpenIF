@@ -22,7 +22,6 @@ PointVTable :: struct {
 }
 
 point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
 
     hr := factory.factoryif->NewPoint(x, y, cast(^rawptr)&point)
@@ -37,7 +36,6 @@ point_x :: proc {
 }
 
 point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
-
     if point == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -48,7 +46,6 @@ point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
 }
 
 point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
-
     if point == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -64,7 +61,6 @@ point_y :: proc {
 }
 
 point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
-
     if point == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -75,7 +71,6 @@ point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
 }
 
 point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
-
     if point == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

@@ -27,7 +27,6 @@ GraphSizeVTable :: struct {
 }
 
 graphsize_new :: proc(lower_left, upper_right: rawptr) -> (graphsize: GraphSize, ok: bool) {
-
     if !controlbuilder.controlbuilder_connected() do return
     
     hr := factory.factoryif->NewGraphSize(lower_left, upper_right, cast(^rawptr)&graphsize)
@@ -42,7 +41,6 @@ graphsize_lower_left :: proc {
 }
 
 graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok: bool) {
-
     if graphsize == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -53,7 +51,6 @@ graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok
 }
 
 graphsize_lower_left_set :: proc(graphsize: GraphSize, lower_left: Point) -> (ok: bool) {
-
     if graphsize == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -69,7 +66,6 @@ graphsize_upper_right :: proc {
 }
 
 graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, ok: bool) {
-
     if graphsize == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     
@@ -80,7 +76,6 @@ graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, 
 }
 
 graphsize_upper_right_set :: proc(graphsize: GraphSize, upper_right: Point) -> (ok: bool) {
-
     if graphsize == nil do return
     if !controlbuilder.controlbuilder_connected() do return
     

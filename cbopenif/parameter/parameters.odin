@@ -32,10 +32,9 @@ parameters_add :: proc {
 }
 
 parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     if parameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     hr := (^ParametersIF)(parameters)->Add(parameter)
     if com.failed(hr) do return
@@ -44,10 +43,9 @@ parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bo
 }
 
 parameters_add_at_index :: proc(parameters: Parameters, parameter: Parameter, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
     if parameter == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ParametersIF)(parameters)->AddBefore(parameter, index)
     if com.failed(hr) do return
@@ -61,9 +59,8 @@ parameters_parameter :: proc {
 }
 
 parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (parameter: Parameter, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -74,9 +71,8 @@ parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (p
 }
 
 parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: rawptr, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ParametersIF)(parameters)->Item(index, &parameter)
     if com.failed(hr) do return
@@ -85,9 +81,8 @@ parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parame
 }
 
 parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (index: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     bstr_name := com.from_string(name)
     com.bstr_free(bstr_name)
@@ -98,9 +93,8 @@ parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (ind
 }
 
 parameters_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ParametersIF)(parameters)->Count(&count)
     if com.failed(hr) do return
@@ -114,9 +108,8 @@ parameters_remove :: proc {
 }
 
 parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
 
     index: i32
     index, ok = parameters_parameter_index(parameters, name)
@@ -128,9 +121,8 @@ parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: 
 }
 
 parameters_remove_by_index :: proc(parameters: Parameters, index: i32) -> (ok: bool) {
-
-    if !controlbuilder.controlbuilder_connected() do return
     if parameters == nil do return
+    if !controlbuilder.controlbuilder_connected() do return
     
     hr := (^ParametersIF)(parameters)->Remove(index)
     if com.failed(hr) do return
