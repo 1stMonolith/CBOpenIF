@@ -69,7 +69,7 @@ parameter_new :: proc(name: string, type_name: string, attribute := "", directio
     return parameter, true
 }
 
-parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) {
+parameter_deserialize :: proc(xml: string) -> (parameter: Parameter, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -77,7 +77,7 @@ parameter_deserialize :: proc(parameter: ^Parameter, xml: string) -> (ok: bool) 
     hr := factoryif->DeserializeParameter(&bs, cast(^rawptr)parameter)
     if com_failed(hr) do return
     
-    return true
+    return parameter, true
 }
 
 parameter_serialize :: proc(parameter: Parameter) -> (xml: string, ok: bool) {

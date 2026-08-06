@@ -79,7 +79,7 @@ cmparameter_new :: proc(name: string, type_name: string, attribute := "", initia
     return cmparameter, true
 }
 
-cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: bool) {
+cmparameter_deserialize :: proc(xml: string) -> (cmparameter: CMParameter, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -87,7 +87,7 @@ cmparameter_deserialize :: proc(cmparameter: ^CMParameter, xml: string) -> (ok: 
     hr := factoryif->DeserializeCMParameter(&bs, cast(^rawptr)cmparameter)
     if com_failed(hr) do return
     
-    return true
+    return cmparameter, true
 }
 
 cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: bool) {

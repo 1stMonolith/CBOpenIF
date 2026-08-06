@@ -34,7 +34,7 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
     return application_variables, true
 }
 
-applicationvariables_deserialize :: proc(application_variables: ^ApplicationVariables, xml: string) -> (ok: bool) {
+applicationvariables_deserialize :: proc(xml: string) -> (application_variables: ApplicationVariables, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -42,7 +42,7 @@ applicationvariables_deserialize :: proc(application_variables: ^ApplicationVari
     hr := factoryif->DeserializeApplicationVariables(&bs, cast(^rawptr)application_variables)
     if com_failed(hr) do return
     
-    return true
+    return application_variables, true
 }
 
 applicationvariables_serialize :: proc(application_variables: ApplicationVariables) -> (xml: string, ok: bool) {

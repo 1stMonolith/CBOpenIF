@@ -75,7 +75,7 @@ task_new :: proc(
     return task, true
 }
 
-task_deserialize :: proc(task: ^Task, xml: string) -> (ok: bool) {
+task_deserialize :: proc(xml: string) -> (task: Task, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
@@ -83,7 +83,7 @@ task_deserialize :: proc(task: ^Task, xml: string) -> (ok: bool) {
     hr := factoryif->DeserializeTask(&bs, cast(^rawptr)task)
     if com_failed(hr) do return
 
-    return true
+    return task, true
 }
 
 task_serialize :: proc(task: Task) -> (xml: string, ok: bool) {

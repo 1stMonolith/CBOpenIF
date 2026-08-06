@@ -66,7 +66,7 @@ extensibleparameter_new :: proc(
     return extensibleparameter, true
 }
 
-extensibleparameter_deserialize :: proc(extensibleparameter: ^ExtensibleParameter, xml: string) -> (ok: bool) {
+extensibleparameter_deserialize :: proc(xml: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
@@ -74,7 +74,7 @@ extensibleparameter_deserialize :: proc(extensibleparameter: ^ExtensibleParamete
     hr := factoryif->DeserializeExtensibleParameter(&bs, cast(^rawptr)extensibleparameter)
     if com_failed(hr) do return
 
-    return true
+    return extensibleparameter, true
 }
 
 extensibleparameter_serialize :: proc(extensibleparameter: ExtensibleParameter) -> (xml: string, ok: bool) {

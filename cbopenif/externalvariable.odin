@@ -58,7 +58,7 @@ externalvariable_new :: proc(name: string, type: string, attribute := "", readpe
     return external_variable, true
 }
 
-externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: string) -> (ok: bool) {
+externalvariable_deserialize :: proc(xml: string) -> (external_variable: ExternalVariable, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -66,7 +66,7 @@ externalvariable_deserialize :: proc(external_variable: ^ExternalVariable, xml: 
     hr := factoryif->DeserializeExternalVariable(&bs, cast(^rawptr)external_variable)
     if com_failed(hr) do return
     
-    return true
+    return external_variable, true
 }
 
 externalvariable_serialize :: proc(external_variable: ExternalVariable) -> (xml: string, ok: bool) {

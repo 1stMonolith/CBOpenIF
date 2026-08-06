@@ -71,7 +71,7 @@ variable_new :: proc(name: string, type: string, attribute := "", initial_value 
     return variable, true
 }
 
-variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
+variable_deserialize :: proc(xml: string) -> (variable: Variable, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -79,7 +79,7 @@ variable_deserialize :: proc(variable: ^Variable, xml: string) -> (ok: bool) {
     hr := factoryif->DeserializeVariable(&bs, cast(^rawptr)variable)
     if com_failed(hr) do return
     
-    return true
+    return variable, true
 }
 
 variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {

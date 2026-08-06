@@ -36,7 +36,7 @@ cmconnection_new :: proc(name: string, actual_parameter: string, graphical_conne
     return cmconnection, true
 }
 
-cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (ok: bool) {
+cmconnection_deserialize :: proc(xml: string) -> (cmconnection: CMConnection, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -44,7 +44,7 @@ cmconnection_deserialize :: proc(cmconnection: ^CMConnection, xml: string) -> (o
     hr := factoryif->DeserializeCMConnection(&bs, cast(^rawptr)cmconnection)
     if com_failed(hr) do return
     
-    return true
+    return cmconnection, true
 }
 
 cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: bool) {

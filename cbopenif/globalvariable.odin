@@ -62,7 +62,7 @@ globalvariable_new :: proc(name: string, type: string, attribute := "", initial_
     return global_variable, true
 }
 
-globalvariable_deserialize :: proc(global_variable: ^GlobalVariable, xml: string) -> (ok: bool) {
+globalvariable_deserialize :: proc(xml: string) -> (global_variable: GlobalVariable, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -70,7 +70,7 @@ globalvariable_deserialize :: proc(global_variable: ^GlobalVariable, xml: string
     hr := factoryif->DeserializeGlobalVariable(&bs, cast(^rawptr)global_variable)
     if com_failed(hr) do return
     
-    return true
+    return global_variable, true
 }
 
 globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: string, ok: bool) {

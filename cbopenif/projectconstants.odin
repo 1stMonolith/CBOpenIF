@@ -30,7 +30,7 @@ projectconstants_new :: proc() -> (projectconstants: ProjectConstants, ok: bool)
     return projectconstants, true
 }
 
-projectconstants_deserialize :: proc(projectconstants: ^ProjectConstants, xml: string) -> (ok: bool) {
+projectconstants_deserialize :: proc(xml: string) -> (projectconstants: ProjectConstants, ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
@@ -39,7 +39,7 @@ projectconstants_deserialize :: proc(projectconstants: ^ProjectConstants, xml: s
     hr := factoryif->DeserializeProjectConstants(&bs, cast(^rawptr)projectconstants)
     if com_failed(hr) do return
 
-    return true
+    return projectconstants, true
 }
 
 projectconstants_serialize :: proc(projectconstants: ProjectConstants) -> (xml: string, ok: bool) {

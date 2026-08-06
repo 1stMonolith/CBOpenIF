@@ -32,3 +32,69 @@ FunctionBlockVTable :: struct {
     ExposePropertiesInParentPut: proc "system" (this: ^FunctionBlockIF, Expose: VariantBool) -> HResult,
 }
 
+functionblock_new :: proc (name, type_name: string) -> (functionblock: FunctionBlock, ok: bool) {
+    if !controlbuilder_connect() do return
+
+    bstr_name := to_bstr(name)
+    bstr_type_name := to_bstr(type_name)
+    defer {
+        bstr_free(bstr_name)
+        bstr_free(bstr_type_name)
+    }
+    hr := factoryif->NewFunctionBlock(bstr_name, bstr_type_name, cast(^rawptr)functionblock)
+    if com_failed(hr) do return
+
+    return functionblock, true
+}
+
+functionblock_deserialize :: proc(xml: string) -> (functionblock: FunctionBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(xml)
+    defer bstr_free(bs)
+    hr := factoryif->DeserializeFunctionBlock(&bs, cast(^rawptr)functionblock)
+    if com_failed(hr) do return
+
+    return functionblock, true
+}
+
+functionblock_serialize :: proc(functionblock: FunctionBlock) -> (xml: string, ok: bool) {
+    if functionblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FunctionBlockIF)(functionblock)->Serialize(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+functionblock_name :: proc {
+    functionblock_name_get,
+    functionblock_name_set,
+}
+
+functionblock_name_get :: proc(functionblock: FunctionBlock) -> (name: string, ok: bool) {
+    if functionblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FunctionBlockIF)(functionblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+functionblock_name_set :: proc(functionblock: FunctionBlock, name: string) -> (ok: bool) {
+    if functionblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^FunctionBlockIF)(functionblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}

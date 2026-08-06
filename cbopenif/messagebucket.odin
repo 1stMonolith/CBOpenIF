@@ -20,7 +20,7 @@ MessageBucketVTable :: struct {
     Remove:          proc "system" (this: ^MessageBucketIF, Index: i32) -> HResult,
 }
 
-messagebucket_deserialize :: proc(bucket: ^MessageBucket, xml: string) -> (ok: bool) {
+messagebucket_deserialize :: proc(xml: string) -> (bucket: MessageBucket, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
@@ -28,7 +28,7 @@ messagebucket_deserialize :: proc(bucket: ^MessageBucket, xml: string) -> (ok: b
     hr := factoryif->DeserializeMessageBucket(&bs, cast(^rawptr)bucket)
     if com_failed(hr) do return
 
-    return true
+    return bucket, true
 }
 
 messagebucket_serialize :: proc(bucket: MessageBucket) -> (xml: string, ok: bool) {

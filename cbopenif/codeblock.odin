@@ -28,7 +28,7 @@ CodeBlockVTable :: struct {
     IsFDCodeBlock:  proc "system" (this: ^CodeBlockIF, IsFDCodeBlock: ^VariantBool) -> HResult,
 }
 
-codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) {
+codeblock_deserialize :: proc(xml: string) -> (codeblock: CodeBlock, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -36,7 +36,7 @@ codeblock_deserialize :: proc(codeblock: ^CodeBlock, xml: string) -> (ok: bool) 
     hr := factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)codeblock)
     if com_failed(hr) do return
     
-    return true
+    return codeblock, true
 }
 
 codeblock_name :: proc {

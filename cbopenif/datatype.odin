@@ -44,7 +44,7 @@ datatype_new :: proc(name: string, description := "", hidden := false, protected
     return datatype, true
 }
 
-datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
+datatype_deserialize :: proc(xml: string) -> (datatype: DataType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -52,7 +52,7 @@ datatype_deserialize :: proc(datatype: ^DataType, xml: string) -> (ok: bool) {
     hr := factoryif->DeserializeDataType(&bs, cast(^rawptr)datatype)
     if com_failed(hr) do return
     
-    return true
+    return datatype, true
 }
 
 datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {

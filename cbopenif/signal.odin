@@ -72,7 +72,7 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     return Signal(sig), true
 }
 
-signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
+signal_deserialize :: proc(xml: string) -> (signal: Signal, ok: bool) {
     if !controlbuilder_connected() do return
     
     bs := to_bstr(xml)
@@ -80,7 +80,7 @@ signal_deserialize :: proc(signal: ^Signal, xml: string) -> (ok: bool) {
     hr := factoryif->DeserializeSignal(&bs, cast(^rawptr)signal)
     if com_failed(hr) do return
     
-    return true
+    return signal, true
 }
 
 signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {

@@ -188,23 +188,6 @@ direction :: proc {
     signal_direction_set,
 }
 
-deserialize :: proc {
-    codeblock_deserialize,
-    cmconnection_deserialize,
-    messagebucket_deserialize,
-    cmparameter_deserialize,
-    extensibleparameter_deserialize,
-    parameter_deserialize,
-    projectconstants_deserialize,
-    signal_deserialize,
-    task_deserialize,
-    datatype_deserialize,
-    applicationvariables_deserialize,
-    externalvariable_deserialize,
-    globalvariable_deserialize,
-    variable_deserialize,
-}
-
 description :: proc {
     component_description_get,
     component_description_set,
