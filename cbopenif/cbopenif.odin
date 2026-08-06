@@ -34,6 +34,8 @@ acknowledge_group :: proc {
 alarm_owner :: proc {
     functionblocktype_alarm_owner_get,
     functionblocktype_alarm_owner_set,
+    controlmoduletype_alarm_owner_get,
+    controlmoduletype_alarm_owner_set,
 }
 
 aspect_object :: proc {
@@ -83,6 +85,11 @@ autopos :: proc {
     autopoint_autopos_set,
 }
 
+batch_object :: proc {
+    controlmoduletype_batch_object_get,
+    controlmoduletype_batch_object_set,
+}
+
 batch_property :: proc {
     cmparameter_batch_property_get,
     cmparameter_batch_property_set,
@@ -114,6 +121,11 @@ cmconnections :: proc {
     controlmodule_cmconnections_set,
 }
 
+cmgraphics :: proc {
+    controlmoduletype_cmgraphics_get,
+    controlmoduletype_cmgraphics_set,
+}
+
 cmparameter_add :: proc {
     cmparameters_add_,
     cmparameters_add_at_index,
@@ -130,6 +142,11 @@ cmparameter_count :: cmparameters_count
 cmparameter_remove :: proc {
     cmparameters_remove_by_name,
     cmparameters_remove_by_index,
+}
+
+cmparameters :: proc {
+    controlmoduletype_cmparameters_get,
+    controlmoduletype_cmparameters_set,
 }
 
 codeblock :: proc {
@@ -157,6 +174,8 @@ codeblock_remove :: codeblocks_remove
 codeblocks :: proc {
     functionblocktype_codeblocks_get,
     functionblocktype_codeblocks_set,
+    controlmoduletype_codeblocks_get,
+    controlmoduletype_codeblocks_set,
 }
 
 column :: proc {
@@ -203,6 +222,11 @@ components :: proc {
     datatype_components_set,
 }
 
+controlmodules :: proc {
+    controlmoduletype_controlmodules_get,
+    controlmoduletype_controlmodules_set,
+}
+
 direction :: proc {
     cmparameter_direction_get,
     cmparameter_direction_set,
@@ -244,6 +268,8 @@ description :: proc {
     functionblocktype_description_set,
     controlmodule_description_get,
     controlmodule_description_set,
+    controlmoduletype_description_get,
+    controlmoduletype_description_set,
 }
 
 element_name :: proc {
@@ -319,6 +345,8 @@ externalvariable_remove :: proc {
 externalvariables :: proc {
     functionblocktype_externalvariables_get,
     functionblocktype_externalvariables_set,
+    controlmoduletype_externalvariables_get,
+    controlmoduletype_externalvariables_set,
 }
 
 expose_properties_in_parent :: proc {
@@ -350,6 +378,8 @@ function_name :: proc {
 functionblocks :: proc {
     functionblocktype_functionblocks_get,
     functionblocktype_functionblocks_set,
+    controlmoduletype_functionblocks_get,
+    controlmoduletype_functionblocks_set,
 }
 
 globalvariable_add :: proc {
@@ -404,6 +434,11 @@ graphnodes :: proc {
     variable_graph_nodes_set,
 }
 
+graphsize :: proc {
+    controlmoduletype_graphsize_get,
+    controlmoduletype_graphsize_set,
+}
+
 graphical_connection :: proc {
     cmconnection_graphical_connection_get,
     cmconnection_graphical_connection_set,
@@ -420,6 +455,8 @@ guid :: proc {
     functionblocktype_guid_set,
     controlmodule_guid_get,
     controlmodule_guid_set,
+    controlmoduletype_guid_get,
+    controlmoduletype_guid_set,
 }
 
 hidden :: proc {
@@ -427,6 +464,8 @@ hidden :: proc {
     datatype_hidden_set,
     functionblocktype_hidden_get,
     functionblocktype_hidden_set,
+    controlmoduletype_hidden_get,
+    controlmoduletype_hidden_set,
 }
 
 id :: proc {
@@ -470,6 +509,8 @@ initial_value :: proc {
 interaction_window :: proc {
     functionblocktype_interaction_window_get,
     functionblocktype_interaction_window_set,
+    controlmoduletype_interaction_window_get,
+    controlmoduletype_interaction_window_set,
 }
 
 interval_time :: proc {
@@ -480,6 +521,8 @@ interval_time :: proc {
 instantiate_as_aspect_object :: proc {
     functionblocktype_instantiate_as_aspect_object_get,
     functionblocktype_instantiate_as_aspect_object_set,
+    controlmoduletype_instantiate_as_aspect_object_get,
+    controlmoduletype_instantiate_as_aspect_object_set,
 }
 
 instance_graphics :: proc {
@@ -606,6 +649,8 @@ name :: proc {
     functionblocktype_name_set,
     controlmodule_type_name_get,
     controlmodule_type_name_set,
+    controlmoduletype_name_get,
+    controlmoduletype_name_set,
 }
 
 number_of_errors :: proc {
@@ -758,6 +803,8 @@ protected :: proc {
     datatype_protected_set,
     functionblocktype_protected_get,
     functionblocktype_protected_set,
+    controlmoduletype_protected_get,
+    controlmoduletype_protected_set,
 }
 
 read_permission :: proc {
@@ -840,6 +887,7 @@ release :: proc {
     functionblocks_release,
     functionblocktype_release,
     controlmodule_release,
+    controlmoduletype_release,
 }
 
 reserved_by_function :: proc {
@@ -847,11 +895,15 @@ reserved_by_function :: proc {
     datatype_reserved_by_function_set,
     functionblocktype_reserved_by_function_get,
     functionblocktype_reserved_by_function_set,
+    controlmoduletype_reserved_by_function_get,
+    controlmoduletype_reserved_by_function_set,
 }
 
 restricted_sil :: proc {
     functionblocktype_restricted_sil_get,
     functionblocktype_restricted_sil_set,
+    controlmoduletype_restricted_sil_get,
+    controlmoduletype_restricted_sil_set,
 }
 
 rotation :: proc {
@@ -890,6 +942,8 @@ scope :: proc {
     datatype_scope_set,
     functionblocktype_scope_get,
     functionblocktype_scope_set,
+    controlmoduletype_scope_get,
+    controlmoduletype_scope_set,
 }
 
 serialize :: proc {
@@ -916,11 +970,14 @@ serialize :: proc {
     functionblock_serialize,
     functionblocktype_serialize,
     controlmodule_serialize,
+    controlmoduletype_serialize,
 }
 
 simulation_mark :: proc {
     functionblocktype_simulation_mark_get,
     functionblocktype_simulation_mark_set,
+    controlmoduletype_simulation_mark_get,
+    controlmoduletype_simulation_mark_set,
 }
 
 start_position :: proc {
@@ -933,6 +990,8 @@ sil_level :: proc {
     task_sil_level_set,
     functionblocktype_sil_level_get,
     functionblocktype_sil_level_set,
+    controlmoduletype_sil_level_get,
+    controlmoduletype_sil_level_set,
 }
 
 
@@ -1101,6 +1160,8 @@ variables :: proc {
     applicationvariables_variables_set,
     functionblocktype_variables_get,
     functionblocktype_variables_set,
+    controlmoduletype_variables_get,
+    controlmoduletype_variables_set,
 }
 
 visibility_In_graphics :: proc {
@@ -1108,6 +1169,8 @@ visibility_In_graphics :: proc {
     functionblocktype_embedded_graphiscs_visible_set,
     controlmodule_visibility_in_graphics_get,
     controlmodule_visibility_in_graphics_set,
+    controlmoduletype_embedded_graphiscs_visible_get,
+    controlmoduletype_embedded_graphiscs_visible_set,
 }
 
 warning_number :: proc {
