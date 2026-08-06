@@ -15,8 +15,8 @@ FunctionBlockTypeVTable :: struct {
     ProtectedPut:                 proc "system" (this: ^FunctionBlockTypeIF, Protected: VariantBool) -> HResult,
     HiddenGet:                    proc "system" (this: ^FunctionBlockTypeIF, Hidden: ^VariantBool) -> HResult,
     HiddenPut:                    proc "system" (this: ^FunctionBlockTypeIF, Hidden: VariantBool) -> HResult,
-    ScopeGet:                     proc "system" (this: ^FunctionBlockTypeIF, Scope: ^ScopeType) -> HResult,
-    ScopePut:                     proc "system" (this: ^FunctionBlockTypeIF, Scope: ScopeType) -> HResult,
+    ScopeGet:                     proc "system" (this: ^FunctionBlockTypeIF, Scope: ^i32) -> HResult,
+    ScopePut:                     proc "system" (this: ^FunctionBlockTypeIF, Scope: i32) -> HResult,
     InteractionWindowGet:         proc "system" (this: ^FunctionBlockTypeIF, InteractionWindow: ^BStr) -> HResult,
     InteractionWindowPut:         proc "system" (this: ^FunctionBlockTypeIF, InteractionWindow: BStr) -> HResult,
     AlarmOwnerGet:                proc "system" (this: ^FunctionBlockTypeIF, AlarmOwner: ^VariantBool) -> HResult,
@@ -676,4 +676,10 @@ functionblocktype_restricted_sil_set :: proc(functionblocktype: FunctionBlockTyp
     if com_failed(hr) do return
 
     return true
+}
+
+functionblocktype_release :: proc(functionblocktype: FunctionBlockType) {
+    if functionblocktype != nil {
+        (^FunctionBlockTypeIF)(functionblocktype)->Release()
+    }
 }

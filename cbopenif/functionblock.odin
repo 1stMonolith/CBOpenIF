@@ -349,3 +349,9 @@ functionblock_expose_properties_in_parent_set :: proc(functionblock: FunctionBlo
 
     return true
 }
+
+functionblock_release :: proc(functionblock: FunctionBlock) {
+    if functionblock != nil {
+        (^FunctionBlockIF)(functionblock)->Release()
+    }
+}
