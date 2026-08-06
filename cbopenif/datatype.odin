@@ -157,7 +157,7 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: ScopeType, ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
-    s := i32(scope)
+    s: i32
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com_failed(hr) do return
 

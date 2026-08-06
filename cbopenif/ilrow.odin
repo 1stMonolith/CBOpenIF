@@ -223,8 +223,7 @@ ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: boo
     if ilrow == nil do return
     if !controlbuilder_connected() do return
     
-    vb := to_variantbool(is_row_comment)
-    hr := (^ILRowIF)(ilrow)->IsRowCommentPut(vb)
+    hr := (^ILRowIF)(ilrow)->IsRowCommentPut(to_variantbool(is_row_comment))
     if com_failed(hr) do return
 
     return true

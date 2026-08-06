@@ -10,14 +10,28 @@ main :: proc() {
 
     cb.controlbuilder_connect()
 
+    // Application Variables
+    fmt.println("Application Variables...")
+    {
+        application_variable, ok := cb.applicationvariables_new()
+        defer cb.release(application_variable)
+    }
+
+    // Auto Point
+    fmt.println("Auto Point...")
+    {
+        auto_point, ok := cb.autopoint_new(cb.AutoPosType.Top)
+        defer cb.release(auto_point)
+    }
+
     // Control Builder
-    fmt.println("Control Builder stuff...")
+    fmt.println("Control Builder...")
     {
         ok := cb.controlbuilder_setting("ProjectsFolder", "SomeSettingValue")
     }
 
     // DataType
-    fmt.println("DataType stuff...")
+    fmt.println("DataType...")
     {
         ok: bool
         xml, name, type_name, description: string
@@ -66,7 +80,7 @@ main :: proc() {
     }
 
     // signals
-    fmt.println("Signals stuff...")
+    fmt.println("Signals...")
     {
         ok: bool
         xml, name, path, direction, acknowledge_group, description: string

@@ -137,8 +137,7 @@ cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphi
     if cmconnection == nil do return
     if !controlbuilder_connected() do return
 
-    vb := to_variantbool(graphical_connection)
-    hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(vb)
+    hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(to_variantbool(graphical_connection))
     if com_failed(hr) do return
     
     return true

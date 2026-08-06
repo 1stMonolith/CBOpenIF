@@ -15,6 +15,8 @@ access_level :: proc {
     globalvariable_access_level_set,
     variable_access_level_get,
     variable_access_level_set,
+    functionblock_access_level_get,
+    functionblock_access_level_set,
 }
 
 actual_parameter :: proc {
@@ -25,6 +27,16 @@ actual_parameter :: proc {
 acknowledge_group :: proc {
     signal_acknowledge_group_get,
     signal_acknowledge_group_set,
+}
+
+alarm_owner :: proc {
+    functionblocktype_alarm_owner_get,
+    functionblocktype_alarm_owner_set,
+}
+
+aspect_object :: proc {
+    functionblock_aspect_object_get,
+    functionblock_aspect_object_set,
 }
 
 attribute :: proc {
@@ -133,6 +145,11 @@ codeblock_count :: codeblocks_count
 
 codeblock_remove :: codeblocks_remove
 
+codeblocks :: proc {
+    functionblocktype_codeblocks_get,
+    functionblocktype_codeblocks_set,
+}
+
 column :: proc {
     posinfo_column_get,
     posinfo_column_set,
@@ -212,11 +229,20 @@ description :: proc {
     globalvariable_description_set,
     variable_description_get,
     variable_description_set,
+    functionblock_description_get,
+    functionblock_description_set,
+    functionblocktype_description_get,
+    functionblocktype_description_set,
 }
 
 element_name :: proc {
     posinfo_element_name_get,
     posinfo_element_name_set,
+}
+
+embedded_graphiscs_visible :: proc {
+    functionblocktype_embedded_graphiscs_visible_get,
+    functionblocktype_embedded_graphiscs_visible_set,
 }
 
 end_position :: proc {
@@ -261,6 +287,10 @@ extensibleparameter_index :: extensibleparameters_parameter_index
 
 extensibleparameter_count :: extensibleparameters_count
 
+extensibleparameters :: proc {
+    functionblocktype_extensibleparameters_get,
+    functionblocktype_extensibleparameters_set,
+}
 
 externalvariable_add :: proc {
     externalvariables_add_,
@@ -280,6 +310,16 @@ externalvariable_remove :: proc {
     externalvariables_remove_by_index,
 }
 
+externalvariables :: proc {
+    functionblocktype_externalvariables_get,
+    functionblocktype_externalvariables_set,
+}
+
+expose_properties_in_parent :: proc {
+    functionblock_expose_properties_in_parent_get,
+    functionblock_expose_properties_in_parent_set,
+}
+
 fdport :: proc {
     cmparameter_fdport_get,
     cmparameter_fdport_set,
@@ -297,6 +337,11 @@ fou_name :: proc {
 function_name :: proc {
     extrainfo_function_name_get,
     extrainfo_function_name_set,
+}
+
+functionblocks :: proc {
+    functionblocktype_functionblocks_get,
+    functionblocktype_functionblocks_set,
 }
 
 globalvariable_add :: proc {
@@ -361,11 +406,17 @@ guid :: proc {
     task_guid_set,
     datatype_guid_get,
     datatype_guid_set,
+    functionblock_guid_get,
+    functionblock_guid_set,
+    functionblocktype_guid_get,
+    functionblocktype_guid_set,
 }
 
 hidden :: proc {
     datatype_hidden_get,
     datatype_hidden_set,
+    functionblocktype_hidden_get,
+    functionblocktype_hidden_set,
 }
 
 id :: proc {
@@ -406,9 +457,19 @@ initial_value :: proc {
     variable_initial_value_set,
 }
 
+interaction_window :: proc {
+    functionblocktype_interaction_window_get,
+    functionblocktype_interaction_window_set,
+}
+
 interval_time :: proc {
     task_interval_time_get,
     task_interval_time_set,
+}
+
+instantiate_as_aspect_object :: proc {
+    functionblocktype_instantiate_as_aspect_object_get,
+    functionblocktype_instantiate_as_aspect_object_set,
 }
 
 ilrow_add :: proc {
@@ -524,6 +585,10 @@ name :: proc {
     globalvariable_name_set,
     variable_name_get,
     variable_name_set,
+    functionblock_name_get,
+    functionblock_name_set,
+    functionblocktype_name_get,
+    functionblocktype_name_set,
 }
 
 number_of_errors :: proc {
@@ -567,6 +632,11 @@ parameter_count :: parameters_count
 parameter_remove :: proc {
     parameters_remove_by_name,
     parameters_remove_by_index,
+}
+
+parameters :: proc {
+    functionblocktype_parameters_get,
+    functionblocktype_parameters_set,
 }
 
 parametersetting_add :: proc {
@@ -669,6 +739,8 @@ projectconstant_remove :: proc {
 protected :: proc {
     datatype_protected_get,
     datatype_protected_set,
+    functionblocktype_protected_get,
+    functionblocktype_protected_set,
 }
 
 read_permission :: proc {
@@ -752,6 +824,13 @@ release :: proc {
 reserved_by_function :: proc {
     datatype_reserved_by_function_get,
     datatype_reserved_by_function_set,
+    functionblocktype_reserved_by_function_get,
+    functionblocktype_reserved_by_function_set,
+}
+
+restricted_sil :: proc {
+    functionblocktype_restricted_sil_get,
+    functionblocktype_restricted_sil_set,
 }
 
 rotation :: proc {
@@ -779,11 +858,15 @@ safety_type :: proc {
     globalvariable_safety_type_set,
     variable_safety_type_get,
     variable_safety_type_set,
+    functionblock_safety_type_get,
+    functionblock_safety_type_set,
 }
 
 scope :: proc {
     datatype_scope_get,
     datatype_scope_set,
+    functionblocktype_scope_get,
+    functionblocktype_scope_set,
 }
 
 serialize :: proc {
@@ -807,6 +890,13 @@ serialize :: proc {
     externalvariable_serialize,
     globalvariable_serialize,
     variable_serialize,
+    functionblock_serialize,
+    functionblocktype_serialize,
+}
+
+simulation_mark :: proc {
+    functionblocktype_simulation_mark_get,
+    functionblocktype_simulation_mark_set,
 }
 
 start_position :: proc {
@@ -817,6 +907,8 @@ start_position :: proc {
 sil_level :: proc {
     task_sil_level_get,
     task_sil_level_set,
+    functionblocktype_sil_level_get,
+    functionblocktype_sil_level_set,
 }
 
 
@@ -902,6 +994,11 @@ tab_name :: proc {
     posinfo_tab_name_set,
 }
 
+task_connection :: proc {
+    functionblock_task_connection_get,
+    functionblock_task_connection_set,
+}
+
 traverse_number :: proc {
     extrainfo_traverse_number_get,
     extrainfo_traverse_number_set,
@@ -942,6 +1039,8 @@ type_name :: proc {
     globalvariable_type_name_set,
     variable_type_name_get,
     variable_type_name_set,
+    functionblock_type_name_get,
+    functionblock_type_name_set,
 }
 
 var_name :: proc {
@@ -970,6 +1069,8 @@ variable_remove :: proc {
 variables :: proc {
     applicationvariables_variables_get,
     applicationvariables_variables_set,
+    functionblocktype_variables_get,
+    functionblocktype_variables_set,
 }
 
 warning_number :: proc {
