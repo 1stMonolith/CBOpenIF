@@ -305,7 +305,7 @@ controlmoduletype_batch_object_get :: proc(controlmoduletype: ControlModuleType)
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ControlModuleTypeIF)(controlmoduletype)->GuidGet(&bs)
+    hr := (^ControlModuleTypeIF)(controlmoduletype)->BatchObjectGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
@@ -317,7 +317,7 @@ controlmoduletype_batch_object_set :: proc(controlmoduletype: ControlModuleType,
 
     bs := to_bstr(batch_object)
     defer bstr_free(bs)
-    hr := (^ControlModuleTypeIF)(controlmoduletype)->GuidPut(bs)
+    hr := (^ControlModuleTypeIF)(controlmoduletype)->BatchObjectPut(bs)
     if com_failed(hr) do return
 
     return true

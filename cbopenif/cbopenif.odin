@@ -36,6 +36,8 @@ alarm_owner :: proc {
     functionblocktype_alarm_owner_set,
     controlmoduletype_alarm_owner_get,
     controlmoduletype_alarm_owner_set,
+    singlecontrolmoduletype_alarm_owner_get,
+    singlecontrolmoduletype_alarm_owner_set,
 }
 
 aspect_object :: proc {
@@ -88,6 +90,8 @@ autopos :: proc {
 batch_object :: proc {
     controlmoduletype_batch_object_get,
     controlmoduletype_batch_object_set,
+    singlecontrolmoduletype_batch_object_get,
+    singlecontrolmoduletype_batch_object_set,
 }
 
 batch_property :: proc {
@@ -124,6 +128,8 @@ cmconnections :: proc {
 cmgraphics :: proc {
     controlmoduletype_cmgraphics_get,
     controlmoduletype_cmgraphics_set,
+    singlecontrolmoduletype_cmgraphics_get,
+    singlecontrolmoduletype_cmgraphics_set,
 }
 
 cmparameter_add :: proc {
@@ -147,6 +153,8 @@ cmparameter_remove :: proc {
 cmparameters :: proc {
     controlmoduletype_cmparameters_get,
     controlmoduletype_cmparameters_set,
+    singlecontrolmoduletype_cmparameters_get,
+    singlecontrolmoduletype_cmparameters_set,
 }
 
 codeblock :: proc {
@@ -176,6 +184,8 @@ codeblocks :: proc {
     functionblocktype_codeblocks_set,
     controlmoduletype_codeblocks_get,
     controlmoduletype_codeblocks_set,
+    singlecontrolmoduletype_codeblocks_get,
+    singlecontrolmoduletype_codeblocks_set,
 }
 
 column :: proc {
@@ -225,6 +235,13 @@ components :: proc {
 controlmodules :: proc {
     controlmoduletype_controlmodules_get,
     controlmoduletype_controlmodules_set,
+    singlecontrolmoduletype_controlmodules_get,
+    singlecontrolmoduletype_controlmodules_set,
+}
+
+commvariables :: proc {
+    singlecontrolmoduletype_commvariables_get,
+    singlecontrolmoduletype_commvariables_set,
 }
 
 direction :: proc {
@@ -270,6 +287,8 @@ description :: proc {
     controlmodule_description_set,
     controlmoduletype_description_get,
     controlmoduletype_description_set,
+    singlecontrolmoduletype_description_get,
+    singlecontrolmoduletype_description_set,
 }
 
 element_name :: proc {
@@ -347,6 +366,8 @@ externalvariables :: proc {
     functionblocktype_externalvariables_set,
     controlmoduletype_externalvariables_get,
     controlmoduletype_externalvariables_set,
+    singlecontrolmoduletype_externalvariables_get,
+    singlecontrolmoduletype_externalvariables_set,
 }
 
 expose_properties_in_parent :: proc {
@@ -380,6 +401,8 @@ functionblocks :: proc {
     functionblocktype_functionblocks_set,
     controlmoduletype_functionblocks_get,
     controlmoduletype_functionblocks_set,
+    singlecontrolmoduletype_functionblocks_get,
+    singlecontrolmoduletype_functionblocks_set,
 }
 
 globalvariable_add :: proc {
@@ -437,6 +460,8 @@ graphnodes :: proc {
 graphsize :: proc {
     controlmoduletype_graphsize_get,
     controlmoduletype_graphsize_set,
+    singlecontrolmoduletype_graphsize_get,
+    singlecontrolmoduletype_graphsize_set,
 }
 
 graphical_connection :: proc {
@@ -491,6 +516,11 @@ initvalue_remove :: proc {
     initvalues_remove_by_index,
 }
 
+initvalues :: proc {
+    singlecontrolmoduletype_initvalues_get,
+    singlecontrolmoduletype_initvalues_set,
+}
+
 initial_value :: proc {
     component_initial_value_get,
     component_initial_value_set,
@@ -511,6 +541,8 @@ interaction_window :: proc {
     functionblocktype_interaction_window_set,
     controlmoduletype_interaction_window_get,
     controlmoduletype_interaction_window_set,
+    singlecontrolmoduletype_interaction_window_get,
+    singlecontrolmoduletype_interaction_window_set,
 }
 
 interval_time :: proc {
@@ -651,6 +683,8 @@ name :: proc {
     controlmodule_type_name_set,
     controlmoduletype_name_get,
     controlmoduletype_name_set,
+    singlecontrolmoduletype_name_get,
+    singlecontrolmoduletype_name_set,
 }
 
 number_of_errors :: proc {
@@ -888,6 +922,7 @@ release :: proc {
     functionblocktype_release,
     controlmodule_release,
     controlmoduletype_release,
+    singlecontrolmoduletype_release,
 }
 
 reserved_by_function :: proc {
@@ -897,6 +932,8 @@ reserved_by_function :: proc {
     functionblocktype_reserved_by_function_set,
     controlmoduletype_reserved_by_function_get,
     controlmoduletype_reserved_by_function_set,
+    singlecontrolmoduletype_reserved_by_function_get,
+    singlecontrolmoduletype_reserved_by_function_set,
 }
 
 restricted_sil :: proc {
@@ -904,6 +941,8 @@ restricted_sil :: proc {
     functionblocktype_restricted_sil_set,
     controlmoduletype_restricted_sil_get,
     controlmoduletype_restricted_sil_set,
+    singlecontrolmoduletype_restricted_sil_get,
+    singlecontrolmoduletype_restricted_sil_set,
 }
 
 rotation :: proc {
@@ -971,6 +1010,7 @@ serialize :: proc {
     functionblocktype_serialize,
     controlmodule_serialize,
     controlmoduletype_serialize,
+    singlecontrolmoduletype_serialize,
 }
 
 simulation_mark :: proc {
@@ -978,6 +1018,8 @@ simulation_mark :: proc {
     functionblocktype_simulation_mark_set,
     controlmoduletype_simulation_mark_get,
     controlmoduletype_simulation_mark_set,
+    singlecontrolmoduletype_simulation_mark_get,
+    singlecontrolmoduletype_simulation_mark_set,
 }
 
 start_position :: proc {
@@ -992,6 +1034,8 @@ sil_level :: proc {
     functionblocktype_sil_level_set,
     controlmoduletype_sil_level_get,
     controlmoduletype_sil_level_set,
+    singlecontrolmoduletype_sil_level_get,
+    singlecontrolmoduletype_sil_level_set,
 }
 
 
@@ -1070,6 +1114,8 @@ signal_remove :: proc {
 signals :: proc {
     applicationvariables_signals_get,
     applicationvariables_signals_set,
+    singlecontrolmoduletype_signals_get,
+    singlecontrolmoduletype_signals_set,
 }
 
 tab_name :: proc {
@@ -1099,6 +1145,8 @@ type_guid :: proc {
     variable_type_guid_get,
     functionblock_type_guid_get,
     controlmodule_type_guid_get,
+    singlecontrolmoduletype_type_guid_get,
+    singlecontrolmoduletype_type_guid_set,
 }
 
 type_path :: proc {
@@ -1162,6 +1210,8 @@ variables :: proc {
     functionblocktype_variables_set,
     controlmoduletype_variables_get,
     controlmoduletype_variables_set,
+    singlecontrolmoduletype_variables_get,
+    singlecontrolmoduletype_variables_set,
 }
 
 visibility_In_graphics :: proc {
