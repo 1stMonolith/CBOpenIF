@@ -27,7 +27,7 @@ applicationvariables_new :: proc(description := "") -> (application_variables: A
     if !controlbuilder_connected() do return
     
     bstr_description := to_bstr(description)
-    bstr_free(bstr_description)
+    defer bstr_free(bstr_description)
     hr := factoryif->NewApplicationVariables(bstr_description, cast(^rawptr)&application_variables)
     if com_failed(hr) do return
 

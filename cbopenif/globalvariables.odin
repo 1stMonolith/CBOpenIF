@@ -57,7 +57,7 @@ globalvariables_global_by_name :: proc(global_variables: GlobalVariables, name: 
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->Find(bstr_name, cast(^rawptr)&global_variable)
     if com_failed(hr) do return
     
@@ -79,7 +79,7 @@ globalvariables_global_index :: proc(global_variables: GlobalVariables, name: st
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^GlobalVariablesIF)(global_variables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

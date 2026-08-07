@@ -56,7 +56,7 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: s
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->Find(bstr_name, cast(^rawptr)&cmconnection)
     if com_failed(hr) do return
     
@@ -78,7 +78,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^CMConnectionsIF)(cmconnections)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

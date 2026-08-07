@@ -57,7 +57,7 @@ variables_variable_by_name :: proc(variables: Variables, name: string) -> (varia
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->Find(bstr_name, cast(^rawptr)&variable)
     if com_failed(hr) do return
     
@@ -79,7 +79,7 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^VariablesIF)(variables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

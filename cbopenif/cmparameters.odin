@@ -57,7 +57,7 @@ cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: strin
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^CMParametersIF)(cmparameters)->Find(bstr_name, cast(^rawptr)&cmparameter)
     if com_failed(hr) do return
     
@@ -79,7 +79,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^CMParametersIF)(cmparameters)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

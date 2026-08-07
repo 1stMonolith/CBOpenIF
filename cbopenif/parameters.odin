@@ -57,7 +57,7 @@ parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (p
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->Find(bstr_name, cast(^rawptr)&parameter)
     if com_failed(hr) do return
     
@@ -79,7 +79,7 @@ parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (ind
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^ParametersIF)(parameters)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

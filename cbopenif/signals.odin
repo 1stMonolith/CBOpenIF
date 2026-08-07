@@ -56,7 +56,7 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^SignalsIF)(signals)->Find(bstr_name, cast(^rawptr)&signal)
     if com_failed(hr) do return
     
@@ -78,7 +78,7 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^SignalsIF)(signals)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     

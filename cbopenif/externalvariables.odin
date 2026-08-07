@@ -57,7 +57,7 @@ externalvariables_external_by_name :: proc(external_variables: ExternalVariables
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->Find(bstr_name, cast(^rawptr)&external_variable)
     if com_failed(hr) do return
     
@@ -79,7 +79,7 @@ externalvariables_external_index :: proc(external_variables: ExternalVariables, 
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    bstr_free(bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^ExternalVariablesIF)(external_variables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
