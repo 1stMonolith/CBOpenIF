@@ -240,6 +240,29 @@ components :: proc {
     datatype_components_set,
 }
 
+commvariable_add :: proc {
+    commvariables_add_,
+    commvariables_add_at_index,
+}
+
+commvariable_by_name :: commvariables_commvariable_by_name
+
+commvariable_by_index :: commvariables_commvariable_by_index
+
+commvariable_index :: commvariables_commvariable_index
+
+commvariable_count :: commvariables_commvariable_count
+
+commvariable_remove :: proc {
+    commvariables_remove_by_name,
+    commvariables_remove_by_index
+}
+
+commvariables :: proc {
+    singlecontrolmoduletype_commvariables_get,
+    singlecontrolmoduletype_commvariables_set,
+}
+
 controlmodule_add :: proc {
     controlmodules_add_,
     controlmodules_add_at_index,
@@ -269,11 +292,6 @@ controlmodules :: proc {
     controlmoduletype_controlmodules_set,
     singlecontrolmoduletype_controlmodules_get,
     singlecontrolmoduletype_controlmodules_set,
-}
-
-commvariables :: proc {
-    singlecontrolmoduletype_commvariables_get,
-    singlecontrolmoduletype_commvariables_set,
 }
 
 direction :: proc {
@@ -1004,6 +1022,7 @@ release :: proc {
     controlmodules_release,
     singlecontrolmoduleinst_release,
     commvariable_release,
+    commvariables_release,
 }
 
 reserved_by_function :: proc {
@@ -1297,11 +1316,11 @@ variable_by_index :: variables_variable_by_index
 
 variable_index :: variables_variable_index
 
-variable_count :: variables_count
+variable_count :: variables_variable_count
 
 variable_remove :: proc {
-    variables_remove_by_name,
-    variables_remove_by_index,
+    variables_variable_remove_by_name,
+    variables_variable_remove_by_index,
 }
 
 variables :: proc {
