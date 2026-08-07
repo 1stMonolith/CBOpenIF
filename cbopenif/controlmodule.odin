@@ -281,6 +281,32 @@ controlmodule_cmconnections_set :: proc(controlmodule: ControlModule, cmconnecti
     return true
 }
 
+controlmodule_graphpos :: proc {
+    controlmodule_graphpos_get,
+    controlmodule_graphpos_set,
+}
+
+controlmodule_graphpos_get :: proc(controlmodule: ControlModule) -> (graphpos: GraphPos, ok: bool) {
+    if controlmodule == nil do return
+    if !controlbuilder_connected() do return
+    
+    p: rawptr
+    hr := (^ControlModuleIF)(controlmodule)->GraphPosGet(&p)
+    if com_failed(hr) do return
+
+    return GraphPos(p), true
+}
+
+controlmodule_graphpos_set :: proc(controlmodule: ControlModule, graphpos: GraphPos) -> (ok: bool) {
+    if controlmodule == nil do return
+    if !controlbuilder_connected() do return
+    
+    hr := (^ControlModuleIF)(controlmodule)->GraphPosPut(graphpos)
+    if com_failed(hr) do return
+
+    return true
+}
+
 controlmodule_instance_graphics :: proc {
     controlmodule_instance_graphics_get,
     controlmodule_instance_graphics_set,
