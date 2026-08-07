@@ -56,7 +56,7 @@ graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (g
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
-    defer (bstr_name)
+    defer bstr_free(bstr_name)
     hr := (^GraphNodesIF)(graphnodes)->Find(bstr_name, cast(^rawptr)&graphnode)
     if com_failed(hr) do return
     
