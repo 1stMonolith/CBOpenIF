@@ -669,8 +669,8 @@ message_type :: proc {
 }
 
 name :: proc {
-    codeblock_name_get,
-    codeblock_name_set,
+    icodeblock_name_get,
+    icodeblock_name_set,
     fbdcodeblock_name_get,
     fbdcodeblock_name_set,
     fdcodeblock_name_get,
@@ -903,7 +903,7 @@ read_permission :: proc {
 }
 
 release :: proc {
-    codeblock_release,
+    icodeblock_release,
     codeblocks_release,
     fbdcodeblock_release,
     fdcodeblock_release,

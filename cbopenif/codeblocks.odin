@@ -9,8 +9,8 @@ CodeBlocksIF :: struct #raw_union {
 
 CodeBlocksVTable :: struct {
     using iunknown_vtable: IUnknownVTable,
-    Add:              proc "system" (this: ^CodeBlocksIF, CodeBlock: rawptr) -> HResult,
-    AddBefore:        proc "system" (this: ^CodeBlocksIF, CodeBlock: rawptr, BeforeIndex: i32) -> HResult,
+    Add:              proc "system" (this: ^CodeBlocksIF, ICodeBlock: rawptr) -> HResult,
+    AddBefore:        proc "system" (this: ^CodeBlocksIF, ICodeBlock: rawptr, BeforeIndex: i32) -> HResult,
     AddSTCodeBlock:   proc "system" (this: ^CodeBlocksIF, STCodeBlock: rawptr) -> HResult,
     AddSTCodeBlock1:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCodeBlock: ^rawptr) -> HResult,
     AddSTCodeBlock2:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCode: ^BStr, STCodeBlock: ^rawptr) -> HResult,
@@ -25,9 +25,9 @@ CodeBlocksVTable :: struct {
     AddSFCCodeBlock:  proc "system" (this: ^CodeBlocksIF, SFCCodeBlock: rawptr) -> HResult,
     AddSFCCodeBlock1: proc "system" (this: ^CodeBlocksIF, Name: BStr, SFCCodeBlock: ^rawptr) -> HResult,
     AddSFCCodeBlock2: proc "system" (this: ^CodeBlocksIF, Name: BStr, SeqControl, StepElapsedTime: VariantBool, SFCCodeBlock: ^rawptr) -> HResult,
-    Find:             proc "system" (this: ^CodeBlocksIF, Name: BStr, CodeBlock: ^rawptr) -> HResult,
+    Find:             proc "system" (this: ^CodeBlocksIF, Name: BStr, ICodeBlock: ^rawptr) -> HResult,
     FindNr:           proc "system" (this: ^CodeBlocksIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:             proc "system" (this: ^CodeBlocksIF, Index: i32, CodeBlock: ^rawptr) -> HResult,
+    Item:             proc "system" (this: ^CodeBlocksIF, Index: i32, ICodeBlock: ^rawptr) -> HResult,
     Count:            proc "system" (this: ^CodeBlocksIF, Count: ^i32) -> HResult,
     Remove:           proc "system" (this: ^CodeBlocksIF, Index: i32) -> HResult,
     AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, FDCodeBlock: rawptr) -> HResult,
@@ -38,24 +38,24 @@ codeblocks_add :: proc {
     codeblocks_add_at_index,
 }
 
-codeblocks_add_ :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bool) {
+codeblocks_add_ :: proc(codeblocks: CodeBlocks, icodeblock: ICodeBlock) -> (ok: bool) {
     if codeblocks == nil do return
-    if codeblock == nil do return
+    if icodeblock == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->Add(codeblock)
+    hr := (^CodeBlocksIF)(codeblocks)->Add(icodeblock)
     if com_failed(hr) do return
 
     return true
 }
 
 
-codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock, index: i32) -> (ok: bool) {
+codeblocks_add_at_index :: proc(codeblocks: CodeBlocks, icodeblock: ICodeBlock, index: i32) -> (ok: bool) {
     if codeblocks == nil do return
-    if codeblock == nil do return
+    if icodeblock == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->AddBefore(codeblock, index)
+    hr := (^CodeBlocksIF)(codeblocks)->AddBefore(icodeblock, index)
     if com_failed(hr) do return
 
     return true
@@ -132,26 +132,26 @@ codeblocks_codeblock :: proc {
     codeblocks_codeblock_by_index,
 }
 
-codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
+codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (icodeblock: ICodeBlock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&codeblock)
+    hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&icodeblock)
     if com_failed(hr) do return
 
-    return codeblock, true
+    return icodeblock, true
 }
 
-codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
+codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (icodeblock: ICodeBlock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&codeblock)
+    hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&icodeblock)
     if com_failed(hr) do return
 
-    return codeblock, true
+    return icodeblock, true
 }
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {

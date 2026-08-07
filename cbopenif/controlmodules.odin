@@ -95,7 +95,7 @@ controlmodules_add_controlmodule :: proc(controlmodules: ControlModules, name, t
         bstr_free(bstr_name)
         bstr_free(bstr_type_name)
     }
-    hr := (^ControlModulesIF)(controlmodules)->AddControlModule(bstr_name, bstr_type_name, controlmodule)
+    hr := (^ControlModulesIF)(controlmodules)->AddControlModule(bstr_name, bstr_type_name, cast(^rawptr)controlmodule)
     if com_failed(hr) do return
 
     return true
@@ -108,7 +108,7 @@ controlmodules_add_singlecontrolmodule :: proc(controlmodules: ControlModules, n
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ControlModulesIF)(controlmodules)->AddSingleControlModuleInst(singlecontrolmoduleinst)
+    hr := (^ControlModulesIF)(controlmodules)->AddSingleControlModuleInst(bstr_name, cast(^rawptr)singlecontrolmoduleinst)
     if com_failed(hr) do return
 
     return true
@@ -128,7 +128,7 @@ controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, nam
     hr := (^ControlModulesIF)(controlmodules)->Find(bstr_name, cast(^rawptr)&icontrolmodule)
     if com_failed(hr) do return
     
-    return controlmodule, true
+    return icontrolmodule, true
 }
 
 controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (icontrolmodule: IControlModule, ok: bool) {
@@ -138,7 +138,7 @@ controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, in
     hr := (^ControlModulesIF)(controlmodules)->Item(index, cast(^rawptr)&icontrolmodule)
     if com_failed(hr) do return
     
-    return controlmodule, true
+    return icontrolmodule, true
 }
 
 controlmodules_controlmodule_index :: proc(controlmodules: ControlModules, name: string) -> (index: i32, ok: bool) {
@@ -173,7 +173,7 @@ controlmodules_controlmodule_remove_by_name :: proc(controlmodules: ControlModul
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = controlmodules_index(controlmodules, name)
+    index, ok = controlmodules_controlmodule_index(controlmodules, name)
     
     hr := (^ControlModulesIF)(controlmodules)->Remove(index)
     if com_failed(hr) do return
