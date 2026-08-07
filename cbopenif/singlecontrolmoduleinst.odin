@@ -39,7 +39,7 @@ SingleControlModuleInstVTable :: struct {
     SafetyTypePut:               proc "system" (this: ^SingleControlModuleInstIF, X: BStr) -> HResult,
 }
 
-singlecontrolmoduleinst_new :: proc (name) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
+singlecontrolmoduleinst_new :: proc(name: string) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
     if !controlbuilder_connect() do return
 
     bstr_name := to_bstr(name)
@@ -141,7 +141,7 @@ singlecontrolmoduleinst_visibility_in_graphics_get :: proc(singlecontrolmodulein
     if !controlbuilder_connected() do return
     
     vb: VariantBool
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->ExposePropertiesinParentGet(&vb)
+    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsGet(&vb)
     if com_failed(hr) do return
 
     return from_variantbool(vb), true
@@ -152,7 +152,7 @@ singlecontrolmoduleinst_visibility_in_graphics_set :: proc(singlecontrolmodulein
     if !controlbuilder_connected() do return
     
     vb := to_variantbool(visibility_in_graphics)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->ExposePropertiesinParentPut(vb)
+    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsPut(vb)
     if com_failed(hr) do return
 
     return true
