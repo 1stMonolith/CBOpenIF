@@ -31,6 +31,8 @@ actual_parameter :: proc {
 acknowledge_group :: proc {
     signal_acknowledge_group_get,
     signal_acknowledge_group_set,
+    commvariable_acknowledge_group_get,
+    commvariable_acknowledge_group_set,
 }
 
 alarm_owner :: proc {
@@ -62,6 +64,8 @@ attribute :: proc {
     globalvariable_attribute_set,
     variable_attribute_get,
     variable_attribute_set,
+    commvariable_attribute_get,
+    commvariable_attribute_set,
 }
 
 authentication_level :: proc {
@@ -281,6 +285,8 @@ direction :: proc {
     parameter_direction_set,
     signal_direction_get,
     signal_direction_set,
+    commvariable_direction_get,
+    commvariable_direction_set,
 }
 
 description :: proc {
@@ -319,6 +325,8 @@ description :: proc {
     singlecontrolmoduletype_description_set,
     singlecontrolmoduleinst_description_get,
     singlecontrolmoduleinst_description_set,
+    commvariable_description_get,
+    commvariable_description_set,
 }
 
 element_name :: proc {
@@ -343,6 +351,11 @@ extrainfo :: proc {
     infomsg_extra_info_set,
     warningmsg_extra_info_get,
     warningmsg_extra_info_set,
+}
+
+expected_sil :: proc {
+    commvariable_expected_sil_get,
+    commvariable_expected_sil_set,
 }
 
 expected_type :: proc {
@@ -571,6 +584,8 @@ initial_value :: proc {
     globalvariable_initial_value_set,
     variable_initial_value_get,
     variable_initial_value_set,
+    commvariable_initial_value_get,
+    commvariable_initial_value_set,
 }
 
 inst_guid :: proc {
@@ -590,6 +605,8 @@ interaction_window :: proc {
 interval_time :: proc {
     task_interval_time_get,
     task_interval_time_set,
+    commvariable_interval_time_get,
+    commvariable_interval_time_set,
 }
 
 instantiate_as_aspect_object :: proc {
@@ -622,9 +639,16 @@ ilrows :: proc {
     ilcodeblock_ilrows_set,
 }
 
+ipaddress :: proc {
+    commvariable_ipaddress_get,
+    commvariable_ipaddress_set,
+}
+
 isp_value :: proc {
     component_isp_value_get,
     component_isp_value_set,
+    commvariable_isp_value_get,
+    commvariable_isp_value_set,
 }
 
 jump_destination :: proc {
@@ -733,6 +757,8 @@ name :: proc {
     singlecontrolmoduleinst_name_set,
     icontrolmodule_name_get,
     icontrolmodule_name_set,
+    commvariable_name_get,
+    commvariable_name_set,
 }
 
 number_of_errors :: proc {
@@ -865,6 +891,8 @@ priority :: proc {
     sfcbranch_priority_set,
     task_priority_get,
     task_priority_set,
+    commvariable_priority_get,
+    commvariable_priority_set,
 }
 
 projectconstant_by_name :: projectconstants_constant_by_name
@@ -902,6 +930,8 @@ read_permission :: proc {
     globalvariable_read_permission_set,
     variable_read_permission_get,
     variable_read_permission_set,
+    commvariable_read_permission_get,
+    commvariable_read_permission_set,
 }
 
 release :: proc {
@@ -972,7 +1002,8 @@ release :: proc {
     controlmoduletype_release,
     singlecontrolmoduletype_release,
     controlmodules_release,
-    singlecontrolmoduleinst_release
+    singlecontrolmoduleinst_release,
+    commvariable_release,
 }
 
 reserved_by_function :: proc {
@@ -993,6 +1024,8 @@ restricted_sil :: proc {
     controlmoduletype_restricted_sil_set,
     singlecontrolmoduletype_restricted_sil_get,
     singlecontrolmoduletype_restricted_sil_set,
+    commvariable_restricted_sil_get,
+    commvariable_restricted_sil_set,
 }
 
 rotation :: proc {
@@ -1065,6 +1098,7 @@ serialize :: proc {
     singlecontrolmoduletype_serialize,
     controlmodules_serialize,
     singlecontrolmoduleinst_serialize,
+    commvariable_serialize,
 }
 
 simulation_mark :: proc {
@@ -1205,6 +1239,7 @@ type_guid :: proc {
     singlecontrolmoduletype_type_guid_set,
     singlecontrolmoduleinst_type_guid_get,
     singlecontrolmoduleinst_type_guid_set,
+    commvariable_type_guid_get,
 }
 
 type_path :: proc {
@@ -1217,6 +1252,7 @@ type_path :: proc {
     variable_type_path_get,
     functionblock_type_path_get,
     controlmodule_type_path_get,
+    commvariable_type_path_get,
 }
 
 type_name :: proc {
@@ -1236,6 +1272,13 @@ type_name :: proc {
     variable_type_name_set,
     functionblock_type_name_get,
     functionblock_type_name_set,
+    commvariable_type_name_get,
+    commvariable_type_name_set,
+}
+
+unique_id :: proc {
+    commvariable_unique_id_get,
+    commvariable_unique_id_set,
 }
 
 var_name :: proc {
