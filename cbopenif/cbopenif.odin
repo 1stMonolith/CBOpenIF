@@ -731,6 +731,8 @@ name :: proc {
     singlecontrolmoduletype_name_set,
     singlecontrolmoduleinst_name_get,
     singlecontrolmoduleinst_name_set,
+    icontrolmodule_name_get,
+    icontrolmodule_name_set,
 }
 
 number_of_errors :: proc {
