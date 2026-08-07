@@ -273,6 +273,61 @@ con_variable :: proc {
     hwchannel_con_variable_set,
 }
 
+connectedapplication_add :: proc {
+    connectedapplications_add_,
+    connectedapplications_add_at_index,
+}
+
+connectedapplication_by_name :: connectedapplications_connectedapplication_by_name
+
+connectedapplication_by_index :: connectedapplications_connectedapplication_by_index
+
+connectedapplication_index :: connectedapplications_connectedapplication_index
+
+connectedapplication_count :: connectedapplications_count
+
+connectedapplication_remove :: proc {
+    connectedapplications_remove_by_name,
+    connectedapplications_remove_by_index,
+}
+
+connectedhwlibrary_add :: proc {
+    connectedhwlibraries_add_,
+    connectedhwlibraries_add_at_index,
+}
+
+connectedhwlibrary_by_name :: connectedhwlibraries_connectedhwlibrary_by_name
+
+connectedhwlibrary_by_index :: connectedhwlibraries_connectedhwlibrary_by_index
+
+connectedhwlibrary_index :: connectedhwlibraries_connectedhwlibrary_index
+
+connectedhwlibrary_count :: connectedhwlibraries_count
+
+connectedhwlibrary_remove :: proc {
+    connectedhwlibraries_remove_by_name,
+    connectedhwlibraries_remove_by_index,
+}
+
+
+connectedlibrary_add :: proc {
+    connectedlibraries_add_,
+    connectedlibraries_add_at_index,
+}
+
+connectedlibrary_by_name :: connectedlibraries_connectedlibrary_by_name
+
+connectedlibrary_by_index :: connectedlibraries_connectedlibrary_by_index
+
+connectedlibrary_index :: connectedlibraries_connectedlibrary_index
+
+connectedlibrary_count :: connectedlibraries_count
+
+connectedlibrary_remove :: proc {
+    connectedlibraries_remove_by_name,
+    connectedlibraries_remove_by_index,
+}
+
 controlmodule_add :: proc {
     controlmodules_add_,
     controlmodules_add_at_index,
@@ -766,6 +821,15 @@ latency_percentage :: proc {
     task_latency_percentage_set,
 }
 
+major_version :: proc {
+    connectedapplication_major_version_get,
+    connectedapplication_major_version_set,
+    connectedlibrary_major_version_get,
+    connectedlibrary_major_version_set,
+    connectedhwlibrary_major_version_get,
+    connectedhwlibrary_major_version_set,
+}
+
 max :: proc {
     hwchannel_max_get,
     hwchannel_max_set,
@@ -782,6 +846,15 @@ message :: proc {
     message_set,
     warningmsg_message_get,
     warningmsg_message_set,
+}
+
+minor_version :: proc {
+    connectedapplication_minor_version_get,
+    connectedapplication_minor_version_set,
+    connectedlibrary_minor_version_get,
+    connectedlibrary_minor_version_set,
+    connectedhwlibrary_minor_version_get,
+    connectedhwlibrary_minor_version_set,
 }
 
 message_add :: messagebucket_message_add
@@ -871,6 +944,12 @@ name :: proc {
     commvariable_name_set,
     hwchannel_name_get,
     hwchannel_name_set,
+    connectedapplication_name_get,
+    connectedapplication_name_set,
+    connectedlibrary_name_get,
+    connectedlibrary_name_set,
+    connectedhwlibrary_name_get,
+    connectedhwlibrary_name_set,
 }
 
 number_of_errors :: proc {
@@ -1133,6 +1212,13 @@ release :: proc {
     hwchannels_release,
     hwunit_release,
     hwchannel_release,
+    connectedapplication_release,
+    connectedapplications_release,
+    connectedlibrary_release,
+    connectedlibraries_release,
+    connectedhwlibrary_release,
+    connectedhwlibraries_release,
+
 }
 
 reserved_by_function :: proc {
@@ -1162,6 +1248,15 @@ restricted_sil :: proc {
 reversed :: proc {
     hwchannel_reversed_get,
     hwchannel_reversed_set,
+}
+
+revision :: proc {
+    connectedapplication_revision_get,
+    connectedapplication_revision_set,
+    connectedlibrary_revision_get,
+    connectedlibrary_revision_set,
+    connectedhwlibrary_revision_get,
+    connectedhwlibrary_revision_set,
 }
 
 rotation :: proc {
@@ -1236,6 +1331,9 @@ serialize :: proc {
     singlecontrolmoduleinst_serialize,
     commvariable_serialize,
     hwunit_serialize,
+    connectedhwlibraries_serialize,
+    connectedlibraries_serialize,
+    connectedapplications_serialize,
 }
 
 simulation_mark :: proc {
