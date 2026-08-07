@@ -86,7 +86,7 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
     return index, true
 }
 
-variables_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
+variables_variable_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
     if variables == nil do return
     if !controlbuilder_connected() do return
     
@@ -96,12 +96,12 @@ variables_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
     return count, true
 }
 
-variables_remove :: proc {
-    variables_remove_by_name,
-    variables_remove_by_index
+variables_variable_remove :: proc {
+    variables_variable_remove_by_name,
+    variables_variable_remove_by_index
 }
 
-variables_remove_by_name :: proc(variables: Variables, name: string) -> (ok: bool) {
+variables_variable_remove_by_name :: proc(variables: Variables, name: string) -> (ok: bool) {
     if variables == nil do return
     if !controlbuilder_connected() do return
 
@@ -114,7 +114,7 @@ variables_remove_by_name :: proc(variables: Variables, name: string) -> (ok: boo
     return true
 }
 
-variables_remove_by_index :: proc(variables: Variables, index: i32) -> (ok: bool) {
+variables_variable_remove_by_index :: proc(variables: Variables, index: i32) -> (ok: bool) {
     if variables == nil do return
     if !controlbuilder_connected() do return
     
