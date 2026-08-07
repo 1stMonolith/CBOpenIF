@@ -19,6 +19,8 @@ access_level :: proc {
     functionblock_access_level_set,
     controlmodule_access_level_get,
     controlmodule_access_level_set,
+    singlecontrolmoduleinst_access_level_get,
+    singlecontrolmoduleinst_access_level_set,
 }
 
 actual_parameter :: proc {
@@ -123,6 +125,8 @@ cmconnection_remove :: proc {
 cmconnections :: proc {
     controlmodule_cmconnections_get,
     controlmodule_cmconnections_set,
+    singlecontrolmoduleinst_cmconnections_get,
+    singlecontrolmoduleinst_cmconnections_set,
 }
 
 cmgraphics :: proc {
@@ -232,6 +236,30 @@ components :: proc {
     datatype_components_set,
 }
 
+controlmodule_add :: proc {
+    controlmodules_add_,
+    controlmodules_add_at_index,
+    controlmodules_add_controlmodule,
+    controlmodules_add_singlecontrolmodule,
+}
+
+controlmodule_by_name :: proc {
+    controlmodules_controlmodule_by_name,
+}
+
+controlmodule_by_index :: proc {
+    controlmodules_controlmodule_by_index,
+}
+
+controlmodule_index :: controlmodules_controlmodule_index
+
+controlmodule_count :: controlmodules_controlmodule_count
+
+controlmodule_remove :: proc {
+    controlmodules_controlmodule_remove_by_name,
+    controlmodules_controlmodule_remove_by_index,
+}
+
 controlmodules :: proc {
     controlmoduletype_controlmodules_get,
     controlmoduletype_controlmodules_set,
@@ -289,6 +317,8 @@ description :: proc {
     controlmoduletype_description_set,
     singlecontrolmoduletype_description_get,
     singlecontrolmoduletype_description_set,
+    singlecontrolmoduleinst_description_get,
+    singlecontrolmoduleinst_description_set,
 }
 
 element_name :: proc {
@@ -464,6 +494,13 @@ graphsize :: proc {
     singlecontrolmoduletype_graphsize_set,
 }
 
+graphpos :: proc {
+    singlecontrolmoduleinst_graphpos_get,
+    singlecontrolmoduleinst_graphpos_set,
+    controlmodule_graphpos_get,
+    controlmodule_graphpos_set,
+}
+
 graphical_connection :: proc {
     cmconnection_graphical_connection_get,
     cmconnection_graphical_connection_set,
@@ -536,6 +573,11 @@ initial_value :: proc {
     variable_initial_value_set,
 }
 
+inst_guid :: proc {
+    singlecontrolmoduleinst_inst_guid_get,
+    singlecontrolmoduleinst_inst_guid_set,
+}
+
 interaction_window :: proc {
     functionblocktype_interaction_window_get,
     functionblocktype_interaction_window_set,
@@ -560,6 +602,8 @@ instantiate_as_aspect_object :: proc {
 instance_graphics :: proc {
     controlmodule_instance_graphics_get,
     controlmodule_instance_graphics_set,
+    singlecontrolmoduleinst_instance_graphics_get,
+    singlecontrolmoduleinst_instance_graphics_set,
 }
 
 ilrow_add :: proc {
@@ -685,6 +729,8 @@ name :: proc {
     controlmoduletype_name_set,
     singlecontrolmoduletype_name_get,
     singlecontrolmoduletype_name_set,
+    singlecontrolmoduleinst_name_get,
+    singlecontrolmoduleinst_name_set,
 }
 
 number_of_errors :: proc {
@@ -923,6 +969,8 @@ release :: proc {
     controlmodule_release,
     controlmoduletype_release,
     singlecontrolmoduletype_release,
+    controlmodules_release,
+    singlecontrolmoduleinst_release
 }
 
 reserved_by_function :: proc {
@@ -974,6 +1022,8 @@ safety_type :: proc {
     functionblock_safety_type_set,
     controlmodule_safety_type_get,
     controlmodule_safety_type_set,
+    singlecontrolmoduleinst_safety_type_get,
+    singlecontrolmoduleinst_safety_type_set,
 }
 
 scope :: proc {
@@ -1011,6 +1061,8 @@ serialize :: proc {
     controlmodule_serialize,
     controlmoduletype_serialize,
     singlecontrolmoduletype_serialize,
+    controlmodules_serialize,
+    singlecontrolmoduleinst_serialize,
 }
 
 simulation_mark :: proc {
@@ -1128,6 +1180,8 @@ task_connection :: proc {
     functionblock_task_connection_set,
     controlmodule_task_connection_get,
     controlmodule_task_connection_set,
+    singlecontrolmoduleinst_task_connection_get,
+    singlecontrolmoduleinst_task_connection_set,
 }
 
 traverse_number :: proc {
@@ -1147,6 +1201,8 @@ type_guid :: proc {
     controlmodule_type_guid_get,
     singlecontrolmoduletype_type_guid_get,
     singlecontrolmoduletype_type_guid_set,
+    singlecontrolmoduleinst_type_guid_get,
+    singlecontrolmoduleinst_type_guid_set,
 }
 
 type_path :: proc {
@@ -1221,6 +1277,8 @@ visibility_In_graphics :: proc {
     controlmodule_visibility_in_graphics_set,
     controlmoduletype_embedded_graphiscs_visible_get,
     controlmoduletype_embedded_graphiscs_visible_set,
+    singlecontrolmoduleinst_visibility_in_graphics_get,
+    singlecontrolmoduleinst_visibility_in_graphics_set,
 }
 
 warning_number :: proc {

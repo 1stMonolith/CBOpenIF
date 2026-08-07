@@ -1,11 +1,11 @@
 package cbopenif
 
+factoryif: ^FactoryIF
+
 FactoryIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^FactoryVTable,
 }
-
-factoryif: ^FactoryIF
 
 FactoryVTable :: struct {
     using iunknownvtable: IUnknownVTable,
