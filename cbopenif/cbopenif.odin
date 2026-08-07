@@ -507,6 +507,42 @@ expose_properties_in_parent :: proc {
     controlmodule_expose_properties_in_parent_set,
 }
 
+executioninstance_add :: proc {
+    executiongroup_add_,
+    executiongroup_add_at_index,
+}
+
+executioninstance_by_name :: executiongroup_executioninstance_by_name
+
+executioninstance_by_index :: executiongroup_executioninstance_by_index
+
+executioninstance_index :: executiongroup_executioninstance_index
+
+executioninstance_count :: executiongroup_count
+
+executioninstance_remove :: proc {
+    executiongroup_executioninstance_remove_by_name,
+    executiongroup_executioninstance_remove_by_index,
+}
+
+executiongroup_add :: proc {
+    executionorder_add_,
+    executionorder_add_at_index,
+}
+
+executiongroup_by_name :: executionorder_executiongroup_by_task_name
+
+executiongroup_by_index :: executionorder_executiongroup_by_index
+
+executiongroup_index :: executionorder_executiongroup_index
+
+executiongroup_count :: executionorder_executiongroup_count
+
+executiongroup_remove :: proc {
+    executionorder_executiongroup_remove_by_task_name,
+    executionorder_executiongroup_remove_by_index,
+}
+
 fdport :: proc {
     cmparameter_fdport_get,
     cmparameter_fdport_set,
@@ -950,6 +986,10 @@ name :: proc {
     connectedlibrary_name_set,
     connectedhwlibrary_name_get,
     connectedhwlibrary_name_set,
+    executioninstance_name_get,
+    executioninstance_name_set,
+    executiongroup_task_name_get,
+    executiongroup_task_name_set,
 }
 
 number_of_errors :: proc {
@@ -1218,7 +1258,9 @@ release :: proc {
     connectedlibraries_release,
     connectedhwlibrary_release,
     connectedhwlibraries_release,
-
+    executioninstance_release,
+    executionorder_release,
+    executiongroup_release,
 }
 
 reserved_by_function :: proc {
