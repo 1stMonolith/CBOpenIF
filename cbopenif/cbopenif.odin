@@ -35,6 +35,11 @@ acknowledge_group :: proc {
     commvariable_acknowledge_group_set,
 }
 
+address :: proc {
+    hwchannel_address_get,
+    hwchannel_address_set,
+}
+
 alarm_owner :: proc {
     functionblocktype_alarm_owner_get,
     functionblocktype_alarm_owner_set,
@@ -263,6 +268,11 @@ commvariables :: proc {
     singlecontrolmoduletype_commvariables_set,
 }
 
+con_variable :: proc {
+    hwchannel_con_variable_get,
+    hwchannel_con_variable_set,
+}
+
 controlmodule_add :: proc {
     controlmodules_add_,
     controlmodules_add_at_index,
@@ -345,6 +355,10 @@ description :: proc {
     singlecontrolmoduleinst_description_set,
     commvariable_description_get,
     commvariable_description_set,
+    hwunit_type_description_get,
+    hwunit_type_description_set,
+    hwchannel_io_description_get,
+    hwchannel_io_description_set,
 }
 
 element_name :: proc {
@@ -452,6 +466,11 @@ fou_name :: proc {
     posinfo_fou_name_set,
 }
 
+fraction :: proc {
+    hwchannel_fraction_get,
+    hwchannel_fraction_set,
+}
+
 function_name :: proc {
     extrainfo_function_name_get,
     extrainfo_function_name_set,
@@ -550,6 +569,8 @@ guid :: proc {
     controlmodule_guid_set,
     controlmoduletype_guid_get,
     controlmoduletype_guid_set,
+    hwunit_guid_get,
+    hwunit_guid_set,
 }
 
 hidden :: proc {
@@ -559,6 +580,62 @@ hidden :: proc {
     functionblocktype_hidden_set,
     controlmoduletype_hidden_get,
     controlmoduletype_hidden_set,
+}
+
+hw_simulation :: proc {
+    hwunit_hw_simulation_get,
+    hwunit_hw_simulation_set,
+}
+
+hw_simulation_supported :: proc {
+    hwunit_hw_simulation_supported_get,
+    hwunit_hw_simulation_supported_set,
+}
+
+hwchannel_add :: proc {
+    hwchannels_add_,
+    hwchannels_add_at_index,
+}
+
+hwchannel_by_address :: hwchannels_hwchannel_by_address
+
+hwchannel_by_index :: hwchannels_hwchannel_by_index
+
+hwchannel_index :: hwchannels_hwchannel_index
+
+hwchannel_count :: hwchannels_hwchannel_count
+
+hwchannel_remove :: proc {
+    hwchannels_hwchannel_remove_by_address,
+    hwchannels_hwchannel_remove_by_index,
+}
+
+hwchannels :: proc {
+    hwunit_hwchannels_get,
+    hwunit_hwchannels_set,
+}
+
+hwunit_add :: proc {
+    hwunits_add_,
+    hwunits_add_at_index,
+}
+
+hwunit_by_path :: hwunits_hwunit_by_path
+
+hwunit_by_index :: hwunits_hwunit_by_index
+
+hwunit_index :: hwunits_hwunit_index
+
+hwunit_vount :: hwunits_hwunit_count
+
+hwunit_remove :: proc {
+    hwunits_hwunit_remove_by_path,
+    hwunits_hwunit_remove_by_index,
+}
+
+hwunits :: proc {
+    hwunit_hwunits_get,
+    hwunit_hwunits_set,
 }
 
 id :: proc {
@@ -641,6 +718,11 @@ instance_graphics :: proc {
     singlecontrolmoduleinst_instance_graphics_set,
 }
 
+instance_name :: proc {
+    hwunit_instance_name_get,
+    hwunit_instance_name_set,
+}
+
 ilrow_add :: proc {
     ilrows_add_,
     ilrows_add_at_index,
@@ -684,6 +766,11 @@ latency_percentage :: proc {
     task_latency_percentage_set,
 }
 
+max :: proc {
+    hwchannel_max_get,
+    hwchannel_max_set,
+}
+
 message :: proc {
     errormsg_message_get,
     errormsg_message_set,
@@ -708,6 +795,11 @@ message_remove :: messagebucket_message_remove_by_index
 message_type :: proc {
     posinfo_message_type_get,
     posinfo_message_type_set,
+}
+
+min :: proc {
+    hwchannel_min_get,
+    hwchannel_min_set,
 }
 
 name :: proc {
@@ -777,6 +869,8 @@ name :: proc {
     icontrolmodule_name_set,
     commvariable_name_get,
     commvariable_name_set,
+    hwchannel_name_get,
+    hwchannel_name_set,
 }
 
 number_of_errors :: proc {
@@ -850,9 +944,16 @@ parametersetting_value :: proc {
     parametersetting_parameter_value_set,
 }
 
+parametersettings :: proc {
+    hwunit_parametersettings_get,
+    hwunit_parametersettings_set,
+}
+
 path :: proc {
     signal_path_get,
     signal_path_set,
+    hwunit_path_get,
+    hwunit_path_set,
 }
 
 point :: proc {
@@ -952,6 +1053,11 @@ read_permission :: proc {
     commvariable_read_permission_set,
 }
 
+redundant_pos :: proc {
+    hwunit_redundant_pos_get,
+    hwunit_redundant_pos_set,
+}
+
 release :: proc {
     icodeblock_release,
     codeblocks_release,
@@ -1023,6 +1129,10 @@ release :: proc {
     singlecontrolmoduleinst_release,
     commvariable_release,
     commvariables_release,
+    hwunits_release,
+    hwchannels_release,
+    hwunit_release,
+    hwchannel_release,
 }
 
 reserved_by_function :: proc {
@@ -1034,6 +1144,8 @@ reserved_by_function :: proc {
     controlmoduletype_reserved_by_function_set,
     singlecontrolmoduletype_reserved_by_function_get,
     singlecontrolmoduletype_reserved_by_function_set,
+    hwunit_reserved_by_function_get,
+    hwunit_reserved_by_function_set,
 }
 
 restricted_sil :: proc {
@@ -1045,6 +1157,11 @@ restricted_sil :: proc {
     singlecontrolmoduletype_restricted_sil_set,
     commvariable_restricted_sil_get,
     commvariable_restricted_sil_set,
+}
+
+reversed :: proc {
+    hwchannel_reversed_get,
+    hwchannel_reversed_set,
 }
 
 rotation :: proc {
@@ -1118,6 +1235,7 @@ serialize :: proc {
     controlmodules_serialize,
     singlecontrolmoduleinst_serialize,
     commvariable_serialize,
+    hwunit_serialize,
 }
 
 simulation_mark :: proc {
@@ -1259,6 +1377,13 @@ type_guid :: proc {
     singlecontrolmoduleinst_type_guid_get,
     singlecontrolmoduleinst_type_guid_set,
     commvariable_type_guid_get,
+    hwunit_type_guid_get,
+    hwunit_type_guid_set,
+}
+
+type_id :: proc {
+    hwunit_type_id_get,
+    hwunit_type_id_set,
 }
 
 type_path :: proc {
@@ -1293,6 +1418,11 @@ type_name :: proc {
     functionblock_type_name_set,
     commvariable_type_name_get,
     commvariable_type_name_set,
+}
+
+unit :: proc {
+    hwchannel_unit_get,
+    hwchannel_unit_set,
 }
 
 unique_id :: proc {
