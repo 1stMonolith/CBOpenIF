@@ -93,25 +93,25 @@ messagebucket_number_of_warnings_set :: proc(bucket: MessageBucket, count: i32) 
     return true
 }
 
-messagebucket_message_add :: proc(bucket: MessageBucket, message: Message) -> (ok: bool) {
+messagebucket_message_add :: proc(bucket: MessageBucket, imessage: IMessage) -> (ok: bool) {
     if bucket == nil do return
-    if message == nil do return
+    if imessage == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Add(message)
+    hr := (^MessageBucketIF)(bucket)->Add(imessage)
     if com_failed(hr) do return
 
     return true
 }
 
-messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (message: Message, ok: bool) {
+messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (imessage: IMessage, ok: bool) {
     if bucket == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Item(index, cast(^rawptr)&message)
+    hr := (^MessageBucketIF)(bucket)->Item(index, cast(^rawptr)&imessage)
     if com_failed(hr) do return
 
-    return message, true
+    return imessage, true
 }
 
 messagebucket_message_count :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
