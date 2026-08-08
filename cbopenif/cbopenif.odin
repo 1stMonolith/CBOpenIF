@@ -992,6 +992,14 @@ name :: proc {
     executiongroup_task_name_set,
     ivaprotocol_name_get,
     ivaprotocol_name_set,
+    vaaddressedprotocol_name_get,
+    vaaddressedprotocol_name_set,
+    vaaddressedvariable_name_get,
+    vaaddressedvariable_name_set,
+    vanamedprotocol_name_get,
+    vanamedprotocol_name_set,
+    vanamedvariable_name_get,
+    vanamedvariable_name_set,
 }
 
 number_of_errors :: proc {
@@ -1075,6 +1083,10 @@ path :: proc {
     signal_path_set,
     hwunit_path_get,
     hwunit_path_set,
+    vaaddressedvariable_path_get,
+    vaaddressedvariable_path_set,
+    vanamedvariable_path_get,
+    vanamedvariable_path_set,
 }
 
 point :: proc {
@@ -1318,6 +1330,10 @@ rotation :: proc {
 row :: proc {
     posinfo_row_get,
     posinfo_row_set,
+    vaaddressedvariable_row_get,
+    vaaddressedvariable_row_set,
+    vanamedvariable_row_get,
+    vanamedvariable_row_set,
 }
 
 safety_type :: proc {
@@ -1385,6 +1401,7 @@ serialize :: proc {
     connectedhwlibraries_serialize,
     connectedlibraries_serialize,
     connectedapplications_serialize,
+    accessvariables_serialize,
 }
 
 simulation_mark :: proc {
@@ -1577,6 +1594,59 @@ unit :: proc {
 unique_id :: proc {
     commvariable_unique_id_get,
     commvariable_unique_id_set,
+}
+
+va_attribute :: proc {
+    vanamedvariable_va_attribute_get,
+    vanamedvariable_va_attribute_set,
+}
+
+va_type :: proc {
+    vaaddressedvariable_va_type_get,
+    vaaddressedvariable_va_type_set,
+    vanamedvariable_va_type_get,
+    vanamedvariable_va_type_set,
+}
+
+va_type_path :: proc {
+    vaaddressedvariable_va_type_path_get,
+    vanamedvariable_va_type_path_get,
+}
+
+vaaddressedvariable_add :: proc {
+    vaaddressedprotocol_vaaddressedvariable_add_,
+    vaaddressedprotocol_vaaddressedvariable_add_at_index,
+}
+
+vaaddressedvariable_by_name :: vaaddressedprotocol_vaaddressedvariable_by_name
+
+vaaddressedvariable_by_index :: vaaddressedprotocol_vaaddressedvariable_by_index
+
+vaaddressedvariable_index :: vaaddressedprotocol_vaaddressedvariable_index
+
+vaaddressedvariable_count :: vaaddressedprotocol_vaaddressedvariable_count
+
+vaaddressedvariable_remove :: proc {
+    vaaddressedprotocol_vaaddressedvariable_remove_by_name,
+    vaaddressedprotocol_vaaddressedvariable_remove_by_index,
+}
+
+vanammedvariable_add :: proc {
+    vanamedprotocol_vanammedvariable_add_,
+    vanamedprotocol_vanammedvariable_add_at_index,
+}
+
+vanamedvariable_by_name :: vanamedprotocol_vanamedvariable_by_name
+
+vanamedvariable_by_index :: vanamedprotocol_vanamedvariable_by_index
+
+vanamedvariable_index :: vanamedprotocol_vanamedvariable_index
+
+vanamedvariable_count :: vanamedprotocol_vanamedvariable_count
+
+vanamedvariable_remove :: proc {
+    vanamedprotocol_vanamedvariable_remove_by_name,
+    vanamedprotocol_vanamedvariable_remove_by_index,
 }
 
 vaprotocol_add :: proc {
