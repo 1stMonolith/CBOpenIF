@@ -21,60 +21,60 @@ ConnectedApplicationsVTable :: struct {
     Remove:    proc "system" (this: ^ConnectedApplicationsIF, Index: i32) -> HResult,
 }
 
-connectedapplications_new :: proc() -> (cas: ConnectedApplications, ok: bool) {
+connectedapplications_new :: proc() -> (connectedapplications: ConnectedApplications, ok: bool) {
     if !controlbuilder_connected() do return
 
-    hr := factoryif->NewConnectedApplications(cast(^rawptr)&cas)
+    hr := factoryif->NewConnectedApplications(cast(^rawptr)&connectedapplications)
     if com_failed(hr) do return
 
-    return cas, true
+    return connectedapplications, true
 }
 
-connectedapplications_deserialize :: proc(xml: string) -> (cas: ConnectedApplications, ok: bool) {
+connectedapplications_deserialize :: proc(xml: string) -> (connectedapplications: ConnectedApplications, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
     defer bstr_free(bs)
-    hr := factoryif->DeserializeConnectedApplications(&bs, cast(^rawptr)&cas)
+    hr := factoryif->DeserializeConnectedApplications(&bs, cast(^rawptr)&connectedapplications)
     if com_failed(hr) do return
 
-    return cas, true
+    return connectedapplications, true
 }
 
-connectedapplications_serialize :: proc(cas: ConnectedApplications) -> (xml: string, ok: bool) {
-    if cas == nil do return
+connectedapplications_serialize :: proc(connectedapplications: ConnectedApplications) -> (xml: string, ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ConnectedApplicationsIF)(cas)->Serialize(&bs)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-connectedapplications_add :: proc {
-    connectedapplications_add_,
-    connectedapplications_add_at_index,
+connectedapplications_connectedapplication_add :: proc {
+    connectedapplications_connectedapplication_add_,
+    connectedapplications_connectedapplication_add_at_index,
 }
 
-connectedapplications_add_ :: proc(cas: ConnectedApplications, ca: ConnectedApplication) -> (ok: bool) {
-    if cas == nil do return
-    if ca == nil do return
+connectedapplications_connectedapplication_add_ :: proc(connectedapplications: ConnectedApplications, connectedapplication: ConnectedApplication) -> (ok: bool) {
+    if connectedapplications == nil do return
+    if connectedapplication == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->Add(ca)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Add(connectedapplication)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedapplications_add_at_index :: proc(cas: ConnectedApplications, ca: ConnectedApplication, index: i32) -> (ok: bool) {
-    if cas == nil do return
-    if ca == nil do return
+connectedapplications_connectedapplication_add_at_index :: proc(connectedapplications: ConnectedApplications, connectedapplication: ConnectedApplication, index: i32) -> (ok: bool) {
+    if connectedapplications == nil do return
+    if connectedapplication == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->AddBefore(ca, index)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->AddBefore(connectedapplication, index)
     if com_failed(hr) do return
 
     return true
@@ -85,81 +85,81 @@ connectedapplications_connectedapplication :: proc {
     connectedapplications_connectedapplication_by_index,
 }
 
-connectedapplications_connectedapplication_by_name :: proc(cas: ConnectedApplications, name: string) -> (ca: ConnectedApplication, ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_by_name :: proc(connectedapplications: ConnectedApplications, name: string) -> (connectedapplication: ConnectedApplication, ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ConnectedApplicationsIF)(cas)->Find(bstr_name, cast(^rawptr)&ca)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Find(bstr_name, cast(^rawptr)&connectedapplication)
     if com_failed(hr) do return
 
-    return ca, true
+    return connectedapplication, true
 }
 
-connectedapplications_connectedapplication_by_index :: proc(cas: ConnectedApplications, index: i32) -> (ca: ConnectedApplication, ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_by_index :: proc(connectedapplications: ConnectedApplications, index: i32) -> (connectedapplication: ConnectedApplication, ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->Item(index, cast(^rawptr)&ca)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Item(index, cast(^rawptr)&connectedapplication)
     if com_failed(hr) do return
 
-    return ca, true
+    return connectedapplication, true
 }
 
-connectedapplications_connectedapplication_index :: proc(cas: ConnectedApplications, name: string) -> (index: i32, ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_index :: proc(connectedapplications: ConnectedApplications, name: string) -> (index: i32, ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ConnectedApplicationsIF)(cas)->FindNr(bstr_name, &index)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
     return index, true
 }
 
-connectedapplications_count :: proc(cas: ConnectedApplications) -> (count: i32, ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_count :: proc(connectedapplications: ConnectedApplications) -> (count: i32, ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->Count(&count)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Count(&count)
     if com_failed(hr) do return
 
     return count, true
 }
 
-connectedapplications_remove :: proc {
-    connectedapplications_remove_by_name,
-    connectedapplications_remove_by_index,
+connectedapplications_connectedapplication_remove :: proc {
+    connectedapplications_connectedapplication_remove_by_name,
+    connectedapplications_connectedapplication_remove_by_index,
 }
 
-connectedapplications_remove_by_name :: proc(cas: ConnectedApplications, name: string) -> (ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_remove_by_name :: proc(connectedapplications: ConnectedApplications, name: string) -> (ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = connectedapplications_connectedapplication_index(cas, name)
+    index, ok = connectedapplications_connectedapplication_index(connectedapplications, name)
     if !ok do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->Remove(index)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedapplications_remove_by_index :: proc(cas: ConnectedApplications, index: i32) -> (ok: bool) {
-    if cas == nil do return
+connectedapplications_connectedapplication_remove_by_index :: proc(connectedapplications: ConnectedApplications, index: i32) -> (ok: bool) {
+    if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(cas)->Remove(index)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedapplications_release :: proc(cas: ConnectedApplications) {
-    if cas != nil {
-        (^ConnectedApplicationsIF)(cas)->Release()
+connectedapplications_release :: proc(connectedapplications: ConnectedApplications) {
+    if connectedapplications != nil {
+        (^ConnectedApplicationsIF)(connectedapplications)->Release()
     }
 }

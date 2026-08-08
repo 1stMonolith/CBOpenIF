@@ -20,12 +20,12 @@ CommVariablesVTable :: struct {
     Remove:    proc "system" (this: ^CommVariablesIF, Index: i32) -> HResult,
 }
 
-commvariables_add :: proc {
-    commvariables_add_,
-    commvariables_add_at_index,
+commvariables_commvariable_add :: proc {
+    commvariables_commvariable_add_,
+    commvariables_commvariable_add_at_index,
 }
 
-commvariables_add_ :: proc(commvariables: CommVariables, commvariable: CommVariable) -> (ok: bool) {
+commvariables_commvariable_add_ :: proc(commvariables: CommVariables, commvariable: CommVariable) -> (ok: bool) {
     if commvariables == nil do return
     if commvariable == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ commvariables_add_ :: proc(commvariables: CommVariables, commvariable: CommVaria
     return true
 }
 
-commvariables_add_at_index :: proc(commvariables: CommVariables, commvariable: CommVariable, index: i32) -> (ok: bool) {
+commvariables_commvariable_add_at_index :: proc(commvariables: CommVariables, commvariable: CommVariable, index: i32) -> (ok: bool) {
     if commvariables == nil do return
     if commvariable == nil do return
     if !controlbuilder_connected() do return

@@ -20,60 +20,60 @@ ExecutionOrderVTable :: struct {
     Remove:    proc "system" (this: ^ExecutionOrderIF, Index: i32) -> HResult,
 }
 
-executionorder_new :: proc() -> (eo: ExecutionOrder, ok: bool) {
+executionorder_new :: proc() -> (executionorder: ExecutionOrder, ok: bool) {
     if !controlbuilder_connected() do return
 
-    hr := factoryif->NewExecutionOrder(cast(^rawptr)&eo)
+    hr := factoryif->NewExecutionOrder(cast(^rawptr)&executionorder)
     if com_failed(hr) do return
 
-    return eo, true
+    return executionorder, true
 }
 
-executionorder_deserialize :: proc(xml: string) -> (eo: ExecutionOrder, ok: bool) {
+executionorder_deserialize :: proc(xml: string) -> (executionorder: ExecutionOrder, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
     defer bstr_free(bs)
-    hr := factoryif->DeserializeExecutionOrder(&bs, cast(^rawptr)&eo)
+    hr := factoryif->DeserializeExecutionOrder(&bs, cast(^rawptr)&executionorder)
     if com_failed(hr) do return
 
-    return eo, true
+    return executionorder, true
 }
 
-executionorder_serialize :: proc(eo: ExecutionOrder) -> (xml: string, ok: bool) {
-    if eo == nil do return
+executionorder_serialize :: proc(executionorder: ExecutionOrder) -> (xml: string, ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ExecutionOrderIF)(eo)->Serialize(&bs)
+    hr := (^ExecutionOrderIF)(executionorder)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-executionorder_add :: proc {
-    executionorder_add_,
-    executionorder_add_at_index,
+executionorder_executiongroup_add :: proc {
+    executionorder_executiongroup_add_,
+    executionorder_executiongroup_add_at_index,
 }
 
-executionorder_add_ :: proc(eo: ExecutionOrder, eg: ExecutionGroup) -> (ok: bool) {
-    if eo == nil do return
-    if eg == nil do return
+executionorder_executiongroup_add_ :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup) -> (ok: bool) {
+    if executionorder == nil do return
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(eo)->Add(eg)
+    hr := (^ExecutionOrderIF)(executionorder)->Add(executiongroup)
     if com_failed(hr) do return
 
     return true
 }
 
-executionorder_add_at_index :: proc(eo: ExecutionOrder, eg: ExecutionGroup, index: i32) -> (ok: bool) {
-    if eo == nil do return
-    if eg == nil do return
+executionorder_executiongroup_add_at_index :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
+    if executionorder == nil do return
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(eo)->AddBefore(eg, index)
+    hr := (^ExecutionOrderIF)(executionorder)->AddBefore(executiongroup, index)
     if com_failed(hr) do return
 
     return true
@@ -84,45 +84,45 @@ executionorder_executiongroup :: proc {
     executionorder_executiongroup_by_index,
 }
 
-executionorder_executiongroup_by_task_name :: proc(eo: ExecutionOrder, task_name: string) -> (eg: ExecutionGroup, ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (executiongroup: ExecutionGroup, ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
     bstr_task_name := to_bstr(task_name)
     defer bstr_free(bstr_task_name)
-    hr := (^ExecutionOrderIF)(eo)->Find(bstr_task_name, cast(^rawptr)&eg)
+    hr := (^ExecutionOrderIF)(executionorder)->Find(bstr_task_name, cast(^rawptr)&executiongroup)
     if com_failed(hr) do return
 
-    return eg, true
+    return executiongroup, true
 }
 
-executionorder_executiongroup_by_index :: proc(eo: ExecutionOrder, index: i32) -> (eg: ExecutionGroup, ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (executiongroup: ExecutionGroup, ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(eo)->Item(index, cast(^rawptr)&eg)
+    hr := (^ExecutionOrderIF)(executionorder)->Item(index, cast(^rawptr)&executiongroup)
     if com_failed(hr) do return
 
-    return eg, true
+    return executiongroup, true
 }
 
-executionorder_executiongroup_index :: proc(eo: ExecutionOrder, task_name: string) -> (index: i32, ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task_name: string) -> (index: i32, ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
     bstr_task_name := to_bstr(task_name)
     defer bstr_free(bstr_task_name)
-    hr := (^ExecutionOrderIF)(eo)->FindNr(bstr_task_name, &index)
+    hr := (^ExecutionOrderIF)(executionorder)->FindNr(bstr_task_name, &index)
     if com_failed(hr) do return
 
     return index, true
 }
 
-executionorder_executiongroup_count :: proc(eo: ExecutionOrder) -> (count: i32, ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (count: i32, ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(eo)->Count(&count)
+    hr := (^ExecutionOrderIF)(executionorder)->Count(&count)
     if com_failed(hr) do return
 
     return count, true
@@ -133,32 +133,32 @@ executionorder_executiongroup_remove :: proc {
     executionorder_executiongroup_remove_by_index,
 }
 
-executionorder_executiongroup_remove_by_task_name :: proc(eo: ExecutionOrder, task_name: string) -> (ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_remove_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = executionorder_executiongroup_index(eo, task_name)
+    index, ok = executionorder_executiongroup_index(executionorder, task_name)
     if !ok do return
 
-    hr := (^ExecutionOrderIF)(eo)->Remove(index)
+    hr := (^ExecutionOrderIF)(executionorder)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-executionorder_executiongroup_remove_by_index :: proc(eo: ExecutionOrder, index: i32) -> (ok: bool) {
-    if eo == nil do return
+executionorder_executiongroup_remove_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (ok: bool) {
+    if executionorder == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(eo)->Remove(index)
+    hr := (^ExecutionOrderIF)(executionorder)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-executionorder_release :: proc(eo: ExecutionOrder) {
-    if eo != nil {
-        (^ExecutionOrderIF)(eo)->Release()
+executionorder_release :: proc(executionorder: ExecutionOrder) {
+    if executionorder != nil {
+        (^ExecutionOrderIF)(executionorder)->Release()
     }
 }

@@ -19,12 +19,12 @@ SFCBranchesVTable :: struct {
     Remove:          proc "system" (this: ^SFCBranchesIF, Index: i32) -> HResult,
 }
 
-sfcbranches_add :: proc {
-    sfcbranches_add_,
-    sfcbranches_add_at_index,
+sfcbranches_sfcbranch_add :: proc {
+    sfcbranches_sfcbranch_add_,
+    sfcbranches_sfcbranch_add_at_index,
 }
 
-sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
+sfcbranches_sfcbranch_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
     if sfcbranches == nil do return
     if sfcbranch == nil do return
     if !controlbuilder_connected() do return
@@ -35,7 +35,7 @@ sfcbranches_add_ :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok:
     return true
 }
 
-sfcbranches_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
+sfcbranches_sfcbranch_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
     if sfcbranches == nil do return
     if sfcbranch == nil do return
     if !controlbuilder_connected() do return
@@ -46,11 +46,11 @@ sfcbranches_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch,
     return true
 }
 
-sfcbrachs_brach :: proc {
-    sfcbranches_branch_by_index,
+sfcbrachs_sfcbranch :: proc {
+    sfcbranches_sfcbranch_by_index,
 }
 
-sfcbranches_branch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
+sfcbranches_sfcbranch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
     if sfcbranches == nil do return
     if !controlbuilder_connected() do return
 
@@ -60,7 +60,7 @@ sfcbranches_branch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sf
     return sfcbranch, true
 }
 
-sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
+sfcbranches_sfcbranch_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
     if sfcbranches == nil do return
     if !controlbuilder_connected() do return
 
@@ -70,11 +70,11 @@ sfcbranches_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
     return count, true
 }
 
-sfcbrachs_remove :: proc {
-    sfcbranches_remove_by_index,
+sfcbrachs_sfcbranch_remove :: proc {
+    sfcbranches_sfcbranch_remove_by_index,
 }
 
-sfcbranches_remove_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
+sfcbranches_sfcbranch_remove_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
     if sfcbranches == nil do return
     if !controlbuilder_connected() do return
 

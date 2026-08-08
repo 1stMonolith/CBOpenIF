@@ -20,12 +20,12 @@ HWUnitsVTable :: struct {
     Remove:    proc "system" (this: ^HWUnitsIF, Index: i32) -> HResult,
 }
 
-hwunits_add :: proc {
-    hwunits_add_,
-    hwunits_add_at_index,
+hwunits_hwunit_add :: proc {
+    hwunits_hwunit_add_,
+    hwunits_hwunit_add_at_index,
 }
 
-hwunits_add_ :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
+hwunits_hwunit_add_ :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
     if hwunits == nil do return
     if hwunit == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ hwunits_add_ :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
     return true
 }
 
-hwunits_add_at_index :: proc(hwunits: HWUnits, hwunit: HWUnit, index: i32) -> (ok: bool) {
+hwunits_hwunit_add_at_index :: proc(hwunits: HWUnits, hwunit: HWUnit, index: i32) -> (ok: bool) {
     if hwunits == nil do return
     if hwunit == nil do return
     if !controlbuilder_connected() do return

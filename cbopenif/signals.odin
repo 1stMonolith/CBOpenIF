@@ -19,12 +19,12 @@ SignalsVTable :: struct {
     Remove:    proc "system" (this: ^SignalsIF, Index: i32) -> HResult,
 }
 
-signals_add :: proc {
-    signals_add_,
-    signals_add_at_index,
+signals_signal_add :: proc {
+    signals_signal_add_,
+    signals_signal_add_at_index,
 }
 
-signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
+signals_signal_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
     if signals == nil do return
     if signal == nil do return
     if !controlbuilder_connected() do return
@@ -35,7 +35,7 @@ signals_add_ :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
     return true
 }
 
-signals_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
+signals_signal_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
     if signals == nil do return
     if signal == nil do return
     if !controlbuilder_connected() do return
@@ -85,7 +85,7 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
     return index, true
 }
 
-signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
+signals_signal_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
     if signals == nil do return
     if !controlbuilder_connected() do return
     
@@ -95,12 +95,12 @@ signals_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
     return count, true
 }
 
-signals_remove :: proc {
-    signals_remove_by_name,
-    signals_remove_by_index,
+signals_signal_remove :: proc {
+    signals_signal_remove_by_name,
+    signals_signal_remove_by_index,
 }
 
-signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
+signals_signal_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
     if signals == nil do return
     if !controlbuilder_connected() do return
 
@@ -113,7 +113,7 @@ signals_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
     return true
 }
 
-signals_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
+signals_signal_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
     if signals == nil do return
     if !controlbuilder_connected() do return
     

@@ -19,28 +19,28 @@ ParameterSettingsVTable :: struct {
     Remove:    proc "system" (this: ^ParameterSettingsIF, Index: i32) -> HResult,
 }
 
-parametersettings_add :: proc {
-    parametersettings_add_,
-    parametersettings_add_at_index,
+parametersettings_parametersetting_add :: proc {
+    parametersettings_parametersetting_add_,
+    parametersettings_parametersetting_add_at_index,
 }
 
-parametersettings_add_ :: proc(parameter_settings: ParameterSettings, parameter_setting: ParameterSetting) -> (ok: bool) {
-    if parameter_settings == nil do return
-    if parameter_setting == nil do return
+parametersettings_parametersetting_add_ :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting) -> (ok: bool) {
+    if parametersettings == nil do return
+    if parametersetting == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ParameterSettingsIF)(parameter_settings)->Add(parameter_setting)
+    hr := (^ParameterSettingsIF)(parametersettings)->Add(parametersetting)
     if com_failed(hr) do return
 
     return true
 }
 
-parametersettings_add_at_index :: proc(parameter_settings: ParameterSettings, parameter_setting: ParameterSetting, index: i32) -> (ok: bool) {
-    if parameter_settings == nil do return
-    if parameter_setting == nil do return
+parametersettings_parametersetting_add_at_index :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting, index: i32) -> (ok: bool) {
+    if parametersettings == nil do return
+    if parametersetting == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parameter_settings)->AddBefore(parameter_setting, index)
+    hr := (^ParameterSettingsIF)(parametersettings)->AddBefore(parametersetting, index)
     if com_failed(hr) do return
 
     return true
@@ -51,80 +51,80 @@ parametersettings_parametersetting :: proc {
     parametersettings_parametersetting_by_index,
 }
 
-parametersettings_parametersetting_by_name :: proc(parameter_settings: ParameterSettings, name: string) -> (parameter_setting: ParameterSetting, ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (parametersetting: ParameterSetting, ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ParameterSettingsIF)(parameter_settings)->Find(bstr_name, cast(^rawptr)&parameter_setting)
+    hr := (^ParameterSettingsIF)(parametersettings)->Find(bstr_name, cast(^rawptr)&parametersetting)
     if com_failed(hr) do return
     
-    return parameter_setting, true
+    return parametersetting, true
 }
 
-parametersettings_parametersetting_by_index :: proc(parameter_settings: ParameterSettings, index: i32) -> (parameter_setting: ParameterSetting, ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (parametersetting: ParameterSetting, ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parameter_settings)->Item(index, cast(^rawptr)&parameter_setting)
+    hr := (^ParameterSettingsIF)(parametersettings)->Item(index, cast(^rawptr)&parametersetting)
     if com_failed(hr) do return
     
-    return parameter_setting, true
+    return parametersetting, true
 }
 
-parametersettings_parametersetting_index :: proc(parameter_settings: ParameterSettings, name: string) -> (index: i32, ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_index :: proc(parametersettings: ParameterSettings, name: string) -> (index: i32, ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ParameterSettingsIF)(parameter_settings)->FindNr(bstr_name, &index)
+    hr := (^ParameterSettingsIF)(parametersettings)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
     return index, true
 }
 
-parametersettings_count :: proc(parameter_settings: ParameterSettings) -> (count: i32, ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_count :: proc(parametersettings: ParameterSettings) -> (count: i32, ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parameter_settings)->Count(&count)
+    hr := (^ParameterSettingsIF)(parametersettings)->Count(&count)
     if com_failed(hr) do return
     
     return count, true
 }
 
-parametersettings_remove :: proc {
-    parametersettings_remove_by_name,
-    parametersettings_remove_by_index,
+parametersettings_parametersetting_remove :: proc {
+    parametersettings_parametersetting_remove_by_name,
+    parametersettings_parametersetting_remove_by_index,
 }
 
-parametersettings_remove_by_name :: proc(parameter_settings: ParameterSettings, name: string) -> (ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_remove_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = parametersettings_parametersetting_index(parameter_settings, name)
+    index, ok = parametersettings_parametersetting_index(parametersettings, name)
     
-    hr := (^ParameterSettingsIF)(parameter_settings)->Remove(index)
+    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index)
     if com_failed(hr) do return
     
     return true
 }
 
-parametersettings_remove_by_index :: proc(parameter_settings: ParameterSettings, index: i32) -> (ok: bool) {
-    if parameter_settings == nil do return
+parametersettings_parametersetting_remove_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (ok: bool) {
+    if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parameter_settings)->Remove(index)
+    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index)
     if com_failed(hr) do return
     
     return true
 }
 
-parametersettings_release :: proc(parameter_settings: ParameterSettings) {
-    if parameter_settings != nil {
-        (^ParameterSettingsIF)(parameter_settings)->Release()
+parametersettings_release :: proc(parametersettings: ParameterSettings) {
+    if parametersettings != nil {
+        (^ParameterSettingsIF)(parametersettings)->Release()
     }
 }

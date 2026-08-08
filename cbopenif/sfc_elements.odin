@@ -29,16 +29,16 @@ SFCElementsVTable :: struct {
 }
 
 sfcelements_add :: proc {
-    sfcelements_add_sfcstep,
-    sfcelements_add_sfctransition,
-    sfcelements_add_sfcselection,
-    sfcelements_add_sfcsimultaneous,
-    sfcelements_add_sfcsubsequence,
-    sfcelements_add_,
-    sfcelements_add_at_index,
+    sfcelements_sfcstep_add,
+    sfcelements_sfctransition_add,
+    sfcelements_sfcselection_add,
+    sfcelements_sfcsimultaneous_add,
+    sfcelements_sfcsubsequence_add,
+    sfcelements_sfcelement_add,
+    sfcelements_sfcelement_add_at_index,
 }
 
-sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
+sfcelements_sfcstep_add :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcstep == nil do return
     if !controlbuilder_connected() do return
@@ -49,7 +49,7 @@ sfcelements_add_sfcstep :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (
     return true
 }
 
-sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
+sfcelements_sfctransition_add :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
     if sfcelements == nil do return
     if sfctransition == nil do return
     if !controlbuilder_connected() do return
@@ -60,7 +60,7 @@ sfcelements_add_sfctransition :: proc(sfcelements: SFCElements, sfctransition: S
     return true
 }
 
-sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
+sfcelements_sfcselection_add :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcselection == nil do return
     if !controlbuilder_connected() do return
@@ -71,7 +71,7 @@ sfcelements_add_sfcselection :: proc(sfcelements: SFCElements, sfcselection: SFC
     return true
 }
 
-sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
+sfcelements_sfcsimultaneous_add :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcsimultaneous == nil do return
     if !controlbuilder_connected() do return
@@ -82,7 +82,7 @@ sfcelements_add_sfcsimultaneous :: proc(sfcelements: SFCElements, sfcsimultaneou
     return true
 }
 
-sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
+sfcelements_sfcsubsequence_add :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcsubsequence == nil do return
     if !controlbuilder_connected() do return
@@ -93,7 +93,7 @@ sfcelements_add_sfcsubsequence :: proc(sfcelements: SFCElements, sfcsubsequence:
     return true
 }
 
-sfcelements_add_ :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (ok: bool) {
+sfcelements_sfcelement_add :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcelement == nil do return
     if !controlbuilder_connected() do return
@@ -105,7 +105,7 @@ sfcelements_add_ :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (o
 }
 
 
-sfcelements_add_at_index :: proc(sfcelements: SFCElements, sfcelement: SFCElement, index: i32) -> (ok: bool) {
+sfcelements_sfcelement_add_at_index :: proc(sfcelements: SFCElements, sfcelement: SFCElement, index: i32) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcelement == nil do return
     if !controlbuilder_connected() do return
@@ -130,7 +130,7 @@ sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) ->
     return sfcelement, true
 }
 
-sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
+sfcelements_sfcelement_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
     if sfcelements == nil do return
     if !controlbuilder_connected() do return
 
@@ -140,11 +140,11 @@ sfcelements_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
     return count, true
 }
 
-sfcelements_remove :: proc {
-    sfcelements_remove_by_index,
+sfcelements_sfcelement_remove :: proc {
+    sfcelements_sfcelement_remove_by_index,
 }
 
-sfcelements_remove_by_index :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
+sfcelements_sfcelement_remove_by_index :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
     if sfcelements == nil do return
     if !controlbuilder_connected() do return
 

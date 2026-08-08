@@ -26,12 +26,12 @@ CBOpenIFErrorCodes :: enum u32 {
     Reservation      = 0x80040bd8
 }
 
+cbopenif: ^CBOpenIF
+
 CBOpenIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^CBOpenVTable,
 }
-
-cbopenif: ^CBOpenIF
 
 CBOpenVTable :: struct {
     using iunknownvtable: IUnknownVTable,

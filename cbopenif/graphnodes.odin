@@ -19,12 +19,12 @@ GraphNodesVTable :: struct {
     Remove:    proc "system" (this: ^GraphNodesIF, Index: i32) -> HResult,
 }
 
-graphnodes_add :: proc {
-    graphnodes_add_,
-    graphnodes_add_at_index,
+graphnodes_graphnode_add :: proc {
+    graphnodes_graphnode_add_,
+    graphnodes_graphnode_add_at_index,
 }
 
-graphnodes_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
+graphnodes_graphnode_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
     if graphnodes == nil do return
     if graphnode == nil do return
     if !controlbuilder_connected() do return
@@ -35,7 +35,7 @@ graphnodes_add_ :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bo
     return true
 }
 
-graphnodes_add_at_index :: proc(graphnodes: GraphNodes, graphnode: GraphNode, index: i32) -> (ok: bool) {
+graphnodes_graphnode_add_at_index :: proc(graphnodes: GraphNodes, graphnode: GraphNode, index: i32) -> (ok: bool) {
     if graphnodes == nil do return
     if graphnode == nil do return
     if !controlbuilder_connected() do return
@@ -85,7 +85,7 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
     return index, true
 }
 
-graphnodes_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
+graphnodes_graphnode_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
     if graphnodes == nil do return
     if !controlbuilder_connected() do return
     
@@ -95,12 +95,12 @@ graphnodes_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
     return count, true
 }
 
-graphnodes_remove :: proc {
-    graphnodes_remove_by_name,
-    graphnodes_remove_by_index
+graphnodes_graphnode_remove :: proc {
+    graphnodes_graphnode_remove_by_name,
+    graphnodes_graphnode_remove_by_index
 }
 
-graphnodes_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: bool) {
+graphnodes_graphnode_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: bool) {
     if graphnodes == nil do return
     if !controlbuilder_connected() do return
 
@@ -113,7 +113,7 @@ graphnodes_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: 
     return true
 }
 
-graphnodes_remove_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (ok: bool) {
+graphnodes_graphnode_remove_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (ok: bool) {
     if graphnodes == nil do return
     if !controlbuilder_connected() do return
     

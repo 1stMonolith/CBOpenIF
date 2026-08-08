@@ -113,8 +113,8 @@ batch_property :: proc {
 }
 
 cmconnection_add :: proc {
-    cmconnections_add_,
-    cmconnections_add_at_index,
+    cmconnections_cmconnection_add_,
+    cmconnections_cmconnection_add_at_index,
 }
 
 cmconnection_by_name :: proc {
@@ -124,11 +124,11 @@ cmconnection_by_name :: proc {
 
 cmconnection_index :: cmconnections_cmconnection_index
 
-cmconnection_count :: cmconnections_count
+cmconnection_count :: cmconnections_cmconnection_count
 
 cmconnection_remove :: proc {
-    cmconnections_remove_by_name,
-    cmconnections_remove_by_index,
+    cmconnections_cmconnection_remove_by_name,
+    cmconnections_cmconnection_remove_by_index,
 }
 
 cmconnections :: proc {
@@ -146,8 +146,8 @@ cmgraphics :: proc {
 }
 
 cmparameter_add :: proc {
-    cmparameters_add_,
-    cmparameters_add_at_index,
+    cmparameters_cmparameter_add_,
+    cmparameters_cmparameter_add_at_index,
 }
 
 cmparameter_by_name :: cmparameters_cmparameter_by_name
@@ -156,11 +156,11 @@ cmparameter_by_index :: cmparameters_cmparameter_by_index
 
 cmparameter_index :: cmparameters_cmparameter_index
 
-cmparameter_count :: cmparameters_count
+cmparameter_count :: cmparameters_cmparameter_count
 
 cmparameter_remove :: proc {
-    cmparameters_remove_by_name,
-    cmparameters_remove_by_index,
+    cmparameters_cmparameter_remove_by_name,
+    cmparameters_cmparameter_remove_by_index,
 }
 
 cmparameters :: proc {
@@ -176,21 +176,21 @@ codeblock :: proc {
 }
 
 codeblock_add :: proc {
-    codeblocks_add_,
-    codeblocks_add_at_index,
-    codeblocks_add_st,
-    codeblocks_add_ld,
-    codeblocks_add_fbd,
-    codeblocks_add_il,
-    codeblocks_add_sfc,
-    codeblocks_add_fd,
+    codeblocks_icodeblock_add,
+    codeblocks_icodeblock_add_at_index,
+    codeblocks_stcodeblock_add,
+    codeblocks_ldcodeblock_add,
+    codeblocks_fbdcodeblock_add,
+    codeblocks_ilcodeblock_add,
+    codeblocks_sfccodeblock_add,
+    codeblocks_fdcodeblock_add,
 }
 
 codeblock_index :: codeblocks_codeblock_index
 
-codeblock_count :: codeblocks_count
+codeblock_count :: codeblocks_codeblock_count
 
-codeblock_remove :: codeblocks_remove
+codeblock_remove :: codeblocks_codeblock_remove
 
 codeblocks :: proc {
     functionblocktype_codeblocks_get,
@@ -207,10 +207,10 @@ column :: proc {
 }
 
 component_add :: proc {
-    components_add_,
-    components_add_at_index,
-    datatype_components_add_,
-    datatype_components_add_at_index,
+    components_component_add_,
+    components_component_add_at_index,
+    datatype_component_add_,
+    datatype_component_add_at_index,
 }
 
 component_by_name :: proc {
@@ -229,15 +229,15 @@ component_index :: proc {
 }
 
 component_count :: proc {
-    components_count,
-    datatype_components_count,
+    components_component_count,
+    datatype_component_count,
 }
 
 component_remove :: proc {
-    components_remove_by_name,
-    components_remove_by_index,
-    datatype_components_remove_by_name,
-    datatype_components_remove_by_index,
+    components_component_remove_by_name,
+    components_component_remove_by_index,
+    datatype_component_remove_by_name,
+    datatype_component_remove_by_index,
 }
 
 components :: proc {
@@ -246,8 +246,8 @@ components :: proc {
 }
 
 commvariable_add :: proc {
-    commvariables_add_,
-    commvariables_add_at_index,
+    commvariables_commvariable_add_,
+    commvariables_commvariable_add_at_index,
 }
 
 commvariable_by_name :: commvariables_commvariable_by_name
@@ -274,8 +274,8 @@ con_variable :: proc {
 }
 
 connectedapplication_add :: proc {
-    connectedapplications_add_,
-    connectedapplications_add_at_index,
+    connectedapplications_connectedapplication_add_,
+    connectedapplications_connectedapplication_add_at_index,
 }
 
 connectedapplication_by_name :: connectedapplications_connectedapplication_by_name
@@ -284,16 +284,16 @@ connectedapplication_by_index :: connectedapplications_connectedapplication_by_i
 
 connectedapplication_index :: connectedapplications_connectedapplication_index
 
-connectedapplication_count :: connectedapplications_count
+connectedapplication_count :: connectedapplications_connectedapplication_count
 
 connectedapplication_remove :: proc {
-    connectedapplications_remove_by_name,
-    connectedapplications_remove_by_index,
+    connectedapplications_connectedapplication_remove_by_name,
+    connectedapplications_connectedapplication_remove_by_index,
 }
 
 connectedhwlibrary_add :: proc {
-    connectedhwlibraries_add_,
-    connectedhwlibraries_add_at_index,
+    connectedhwlibraries_connectedhwlibrary_add_,
+    connectedhwlibraries_connectedhwlibrary_add_at_index,
 }
 
 connectedhwlibrary_by_name :: connectedhwlibraries_connectedhwlibrary_by_name
@@ -302,17 +302,17 @@ connectedhwlibrary_by_index :: connectedhwlibraries_connectedhwlibrary_by_index
 
 connectedhwlibrary_index :: connectedhwlibraries_connectedhwlibrary_index
 
-connectedhwlibrary_count :: connectedhwlibraries_count
+connectedhwlibrary_count :: connectedhwlibraries_connectedhwlibrary_count
 
 connectedhwlibrary_remove :: proc {
-    connectedhwlibraries_remove_by_name,
-    connectedhwlibraries_remove_by_index,
+    connectedhwlibraries_connectedhwlibrary_remove_by_name,
+    connectedhwlibraries_connectedhwlibrary_remove_by_index,
 }
 
 
 connectedlibrary_add :: proc {
-    connectedlibraries_add_,
-    connectedlibraries_add_at_index,
+    connectedlibraries_connectedlibrary_add_,
+    connectedlibraries_connectedlibrary_add_at_index,
 }
 
 connectedlibrary_by_name :: connectedlibraries_connectedlibrary_by_name
@@ -321,18 +321,18 @@ connectedlibrary_by_index :: connectedlibraries_connectedlibrary_by_index
 
 connectedlibrary_index :: connectedlibraries_connectedlibrary_index
 
-connectedlibrary_count :: connectedlibraries_count
+connectedlibrary_count :: connectedlibraries_connectedlibrary_count
 
 connectedlibrary_remove :: proc {
-    connectedlibraries_remove_by_name,
-    connectedlibraries_remove_by_index,
+    connectedlibraries_connectedlibrary_remove_by_name,
+    connectedlibraries_connectedlibrary_remove_by_index,
 }
 
 controlmodule_add :: proc {
-    controlmodules_add_,
-    controlmodules_add_at_index,
-    controlmodules_add_controlmodule,
-    controlmodules_add_singlecontrolmodule,
+    controlmodules_icontrolmodule_add,
+    controlmodules_icontrolmodule_add_at_index,
+    controlmodules_controlmodule_add_,
+    controlmodules_singlecontrolmodule_add,
 }
 
 controlmodule_by_name :: proc {
@@ -451,22 +451,22 @@ expected_type :: proc {
 }
 
 extensibleparameter_add :: proc {
-    extensibleparameters_add_,
-    extensibleparameters_add_at_index,
+    extensibleparameters_extensibleparameter_add_,
+    extensibleparameters_extensibleparameter_add_at_index,
 }
 
 extensibleparameter_remove :: proc {
-    extensibleparameters_remove_by_name,
-    extensibleparameters_remove_by_index,
+    extensibleparameters_extensibleparameter_remove_by_name,
+    extensibleparameters_extensibleparameter_remove_by_index,
 }
 
-extensibleparameter_by_name :: extensibleparameters_parameter_by_name
+extensibleparameter_by_name :: extensibleparameters_extensibleparameter_by_name
 
-extensibleparameter_by_index :: extensibleparameters_parameter_by_index
+extensibleparameter_by_index :: extensibleparameters_extensibleparameter_by_index
 
-extensibleparameter_index :: extensibleparameters_parameter_index
+extensibleparameter_index :: extensibleparameters_extensibleparameter_index
 
-extensibleparameter_count :: extensibleparameters_count
+extensibleparameter_count :: extensibleparameters_extensibleparameter_count
 
 extensibleparameters :: proc {
     functionblocktype_extensibleparameters_get,
@@ -474,21 +474,21 @@ extensibleparameters :: proc {
 }
 
 externalvariable_add :: proc {
-    externalvariables_add_,
-    externalvariables_add_at_index,
+    externalvariables_externalvariable_add_,
+    externalvariables_externalvariable_add_at_index,
 }
 
-externalvariable_by_name :: externalvariables_external_by_name
+externalvariable_by_name :: externalvariables_externalvariable_by_name
 
-externalvariable_by_index :: externalvariables_external_by_index
+externalvariable_by_index :: externalvariables_externalvariable_by_index
 
-externalvariable_index :: externalvariables_external_index
+externalvariable_index :: externalvariables_externalvariable_index
 
-externalvariable_count :: externalvariables_count
+externalvariable_count :: externalvariables_externalvariable_count
 
 externalvariable_remove :: proc {
-    externalvariables_remove_by_name,
-    externalvariables_remove_by_index,
+    externalvariables_externalvariable_remove_by_name,
+    externalvariables_externalvariable_remove_by_index,
 }
 
 externalvariables :: proc {
@@ -508,8 +508,8 @@ expose_properties_in_parent :: proc {
 }
 
 executioninstance_add :: proc {
-    executiongroup_add_,
-    executiongroup_add_at_index,
+    executiongroup_executioninstance_add_,
+    executiongroup_executioninstance_add_at_index,
 }
 
 executioninstance_by_name :: executiongroup_executioninstance_by_name
@@ -526,8 +526,8 @@ executioninstance_remove :: proc {
 }
 
 executiongroup_add :: proc {
-    executionorder_add_,
-    executionorder_add_at_index,
+    executionorder_executiongroup_add_,
+    executionorder_executiongroup_add_at_index,
 }
 
 executiongroup_by_name :: executionorder_executiongroup_by_task_name
@@ -577,21 +577,21 @@ functionblocks :: proc {
 }
 
 globalvariable_add :: proc {
-    globalvariables_add_,
-    globalvariables_add_at_index,
+    globalvariables_globalvariable_add_,
+    globalvariables_globalvariable_add_at_index,
 }
 
-globalvariable_by_name :: globalvariables_global_by_name
+globalvariable_by_name :: globalvariables_globalvariable_by_name
 
-globalvariable_by_index :: globalvariables_global_by_index
+globalvariable_by_index :: globalvariables_globalvariable_by_index
 
-globalvariable_index :: globalvariables_global_index
+globalvariable_index :: globalvariables_globalvariable_index
 
-globalvariable_count :: globalvariables_count
+globalvariable_count :: globalvariables_globalvariable_count
 
-globalvariable_remove :: proc {
-    globalvariables_remove_by_name,
-    globalvariables_remove_by_index,
+globalvariable_globalvariable_remove :: proc {
+    globalvariables_globalvariable_remove_by_name,
+    globalvariables_globalvariable_remove_by_index,
 }
 
 globalvariables :: proc {
@@ -600,8 +600,8 @@ globalvariables :: proc {
 }
 
 graphnode_add :: proc {
-    graphnodes_add_,
-    graphnodes_add_at_index,
+    graphnodes_graphnode_add_,
+    graphnodes_graphnode_add_at_index,
 }
 
 graphnode_by_name :: graphnodes_graphnode_by_name
@@ -610,11 +610,11 @@ graphnode_by_index :: graphnodes_graphnode_by_index
 
 graphnode_index :: graphnodes_graphnode_index
 
-graphnode_count :: graphnodes_count
+graphnode_count :: graphnodes_graphnode_count
 
 graphnode_remove :: proc {
-    graphnodes_remove_by_name,
-    graphnodes_remove_by_index,
+    graphnodes_graphnode_remove_by_name,
+    graphnodes_graphnode_remove_by_index,
 }
 
 graphnodes :: proc {
@@ -684,8 +684,8 @@ hw_simulation_supported :: proc {
 }
 
 hwchannel_add :: proc {
-    hwchannels_add_,
-    hwchannels_add_at_index,
+    hwchannels_hwchannel_add_,
+    hwchannels_hwchannel_add_at_index,
 }
 
 hwchannel_by_address :: hwchannels_hwchannel_by_address
@@ -707,8 +707,8 @@ hwchannels :: proc {
 }
 
 hwunit_add :: proc {
-    hwunits_add_,
-    hwunits_add_at_index,
+    hwunits_hwunit_add_,
+    hwunits_hwunit_add_at_index,
 }
 
 hwunit_by_path :: hwunits_hwunit_by_path
@@ -735,21 +735,21 @@ id :: proc {
 }
 
 initvalue_add :: proc {
-    initvalues_add_,
-    initvalues_add_at_index,
+    initvalues_initvalue_add_,
+    initvalues_initvalue_add_at_index,
 }
 
-initvalue_by_name :: initvalues_value_by_name
+initvalue_by_name :: initvalues_initvalue_by_name
 
-initvalue_by_index :: initvalues_value_by_index
+initvalue_by_index :: initvalues_initvalue_by_index
 
-initvalue_index :: initvalues_value_index
+initvalue_index :: initvalues_initvalue_index
 
-initvalue_count :: initvalues_count
+initvalue_count :: initvalues_initvalue_count
 
 initvalue_remove :: proc {
-    initvalues_remove_by_name,
-    initvalues_remove_by_index,
+    initvalues_initvalue_remove_by_name,
+    initvalues_initvalue_remove_by_index,
 }
 
 initvalues :: proc {
@@ -815,15 +815,15 @@ instance_name :: proc {
 }
 
 ilrow_add :: proc {
-    ilrows_add_,
-    ilrows_add_at_index,
+    ilrows_ilrow_add_,
+    ilrows_ilrow_add_at_index,
 }
 
 ilrow_by_index :: ilrows_ilrow_by_index
 
-ilrow_count :: ilrows_count
+ilrow_count :: ilrows_ilrow_count
 
-ilrow_remove :: ilrows_remove
+ilrow_remove :: ilrows_ilrow_remove
 
 ilrows :: proc {
     ilcodeblock_ilrows_get,
@@ -990,6 +990,8 @@ name :: proc {
     executioninstance_name_set,
     executiongroup_task_name_get,
     executiongroup_task_name_set,
+    ivaprotocol_name_get,
+    ivaprotocol_name_set,
 }
 
 number_of_errors :: proc {
@@ -1018,8 +1020,8 @@ page_number :: proc {
 }
 
 parameter_add :: proc {
-    parameters_add_,
-    parameters_add_at_index,
+    parameters_parameter_add_,
+    parameters_parameter_add_at_index,
 }
 
 parameter_by_name :: parameters_parameter_by_name
@@ -1028,11 +1030,11 @@ parameter_by_index :: parameters_parameter_by_index
 
 parameter_index :: parameters_parameter_index
 
-parameter_count :: parameters_count
+parameter_count :: parameters_parameter_count
 
 parameter_remove :: proc {
-    parameters_remove_by_name,
-    parameters_remove_by_index,
+    parameters_parameter_remove_by_name,
+    parameters_parameter_remove_by_index,
 }
 
 parameters :: proc {
@@ -1041,8 +1043,8 @@ parameters :: proc {
 }
 
 parametersetting_add :: proc {
-    parametersettings_add_,
-    parametersettings_add_at_index,
+    parametersettings_parametersetting_add_,
+    parametersettings_parametersetting_add_at_index,
 }
 
 parametersetting_by_name :: parametersettings_parametersetting_by_name
@@ -1051,11 +1053,11 @@ parametersetting_by_index :: parametersettings_parametersetting_by_index
 
 parametersetting_index :: parametersettings_parametersetting_index
 
-parametersetting_count :: parametersettings_count
+parametersetting_count :: parametersettings_parametersetting_count
 
 parametersetting_remove :: proc {
-    parametersettings_remove_by_name,
-    parametersettings_remove_by_index,
+    parametersettings_parametersetting_remove_by_name,
+    parametersettings_parametersetting_remove_by_index,
 }
 
 parametersetting_value :: proc {
@@ -1090,13 +1092,13 @@ point_upper_right :: proc {
 }
 
 point_add :: proc {
-    points_add_,
-    points_add_at_index,
+    points_point_add_,
+    points_point_add_at_index,
 }
 
-point_count :: points_count
+point_count :: points_point_count
 
-point_remove :: points_remove_by_index
+point_remove :: points_point_remove_by_index
 
 points :: proc {
     cmconnection_points_get,
@@ -1133,17 +1135,17 @@ priority :: proc {
     commvariable_priority_set,
 }
 
-projectconstant_by_name :: projectconstants_constant_by_name
+projectconstant_by_name :: projectconstants_projectconstant_by_name
 
-projectconstant_by_index :: projectconstants_constant_by_index
+projectconstant_by_index :: projectconstants_projectconstant_by_index
 
-projectconstant_index :: projectconstants_constant_index
+projectconstant_index :: projectconstants_projectconstant_index
 
-projectconstant_count :: projectconstants_count
+projectconstant_count :: projectconstants_projectconstant_count
 
 projectconstant_remove :: proc {
-    projectconstants_remove_by_name,
-    projectconstants_remove_by_index,
+    projectconstants_projectconstant_remove_by_name,
+    projectconstants_projectconstant_remove_by_index,
 }
 
 protected :: proc {
@@ -1261,6 +1263,13 @@ release :: proc {
     executioninstance_release,
     executionorder_release,
     executiongroup_release,
+    accessvariables_release,
+    ivaprotocol_release,
+    vaprotocols_release,
+    vanamedprotocol_release,
+    vaaddressedprotocol_release,
+    vanamedvariable_release,
+    vaaddressedvariable_release,
 }
 
 reserved_by_function :: proc {
@@ -1416,15 +1425,15 @@ stcode :: proc {
 }
 
 sfcbrach_add :: proc {
-    sfcbranches_add_,
-    sfcbranches_add_at_index,
+    sfcbranches_sfcbranch_add_,
+    sfcbranches_sfcbranch_add_at_index,
 }
 
-sfcbrach_by_index :: sfcbranches_branch_by_index
+sfcbrach_by_index :: sfcbranches_sfcbranch_by_index
 
-sfcbrach_count :: sfcbranches_count
+sfcbrach_count :: sfcbranches_sfcbranch_count
 
-sfcbrach_remove :: sfcbranches_remove_by_index
+sfcbrach_remove :: sfcbranches_sfcbranch_remove_by_index
 
 sfcbranches :: proc {
     sfcselection_branches_get,
@@ -1434,20 +1443,20 @@ sfcbranches :: proc {
 }
 
 sfcelement_add :: proc {
-    sfcelements_add_sfcstep,
-    sfcelements_add_sfctransition,
-    sfcelements_add_sfcselection,
-    sfcelements_add_sfcsimultaneous,
-    sfcelements_add_sfcsubsequence,
-    sfcelements_add_,
-    sfcelements_add_at_index,
+    sfcelements_sfcstep_add,
+    sfcelements_sfctransition_add,
+    sfcelements_sfcselection_add,
+    sfcelements_sfcsimultaneous_add,
+    sfcelements_sfcsubsequence_add,
+    sfcelements_sfcelement_add,
+    sfcelements_sfcelement_add_at_index,
 }
 
 sfcelement_by_index :: sfcelements_sfcelement_by_index
 
-sfcelement_count :: sfcelements_count
+sfcelement_count :: sfcelements_sfcelement_count
 
-sfcelement_remove :: sfcelements_remove
+sfcelement_remove :: sfcelements_sfcelement_remove
 
 sfcelements :: proc {
     sfccodeblock_elements_get,
@@ -1459,8 +1468,8 @@ sfcelements :: proc {
 }
 
 signal_add :: proc {
-    signals_add_,
-    signals_add_at_index,
+    signals_signal_add_,
+    signals_signal_add_at_index,
 }
 
 signal_by_name :: signals_signal_by_name
@@ -1469,11 +1478,11 @@ signal_by_index :: signals_signal_by_index
 
 signal_index :: signals_signal_index
 
-signal_count :: signals_count
+signal_count :: signals_signal_count
 
 signal_remove :: proc {
-    signals_remove_by_name,
-    signals_remove_by_index,
+    signals_signal_remove_by_name,
+    signals_signal_remove_by_index,
 }
 
 signals :: proc {
@@ -1570,14 +1579,39 @@ unique_id :: proc {
     commvariable_unique_id_set,
 }
 
+vaprotocol_add :: proc {
+    vaprotocols_vanammedprotocol_add,
+    vaprotocols_vaaddressedprotocol_add,
+    vaprotocols_ivaprotocol_add,
+    vaprotocols_ivaprotocol_add_at_index,
+}
+
+vaprotocol_by_name :: vaprotocols_vaprotocol_by_name
+
+vaprotocol_by_index :: vaprotocols_vaprotocol_by_index
+
+vaprotocol_index :: vaprotocols_vaprotocol_index
+
+vaprotocol_count :: vaprotocols_vaprotocol_count
+
+vaprotocol_remove :: proc {
+    vaprotocols_vaprotocol_remove_by_name,
+    vaprotocols_vaprotocol_remove_by_index,
+}
+
+vaprotocols :: proc {
+    accessvariables_vaprotocols_get,
+    accessvariables_vaprotocols_set,
+}
+
 var_name :: proc {
     extrainfo_var_name_get,
     extrainfo_var_name_set,
 }
 
 variable_add :: proc {
-    variables_add_,
-    variables_add_at_index,
+    variables_variable_add_,
+    variables_variable_add_at_index,
 }
 
 variable_by_name :: variables_variable_by_name

@@ -20,12 +20,12 @@ CMParametersVTable :: struct {
     Remove:    proc "system" (this: ^CMParametersIF, Index: i32) -> HResult,
 }
 
-cmparameters_add :: proc {
-    cmparameters_add_,
-    cmparameters_add_at_index,
+cmparameters_cmparameter_add :: proc {
+    cmparameters_cmparameter_add_,
+    cmparameters_cmparameter_add_at_index,
 }
 
-cmparameters_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) -> (ok: bool) {
+cmparameters_cmparameter_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) -> (ok: bool) {
     if cmparameters == nil do return
     if cmparameter == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ cmparameters_add_ :: proc(cmparameters: CMParameters, cmparameter: CMParameter) 
     return true
 }
 
-cmparameters_add_at_index :: proc(cmparameters: CMParameters, cmparameter: CMParameter, index: i32) -> (ok: bool) {
+cmparameters_cmparameter_add_at_index :: proc(cmparameters: CMParameters, cmparameter: CMParameter, index: i32) -> (ok: bool) {
     if cmparameters == nil do return
     if cmparameter == nil do return
     if !controlbuilder_connected() do return
@@ -86,7 +86,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
     return index, true
 }
 
-cmparameters_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
+cmparameters_cmparameter_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
     if cmparameters == nil do return
     if !controlbuilder_connected() do return
     
@@ -96,12 +96,12 @@ cmparameters_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool)
     return count, true
 }
 
-cmparameters_remove :: proc {
-    cmparameters_remove_by_name,
-    cmparameters_remove_by_index,
+cmparameters_cmparameter_remove :: proc {
+    cmparameters_cmparameter_remove_by_name,
+    cmparameters_cmparameter_remove_by_index,
 }
 
-cmparameters_remove_by_name :: proc(cmparameters: CMParameters, name: string) -> (ok: bool) {
+cmparameters_cmparameter_remove_by_name :: proc(cmparameters: CMParameters, name: string) -> (ok: bool) {
     if cmparameters == nil do return
     if !controlbuilder_connected() do return
 
@@ -114,7 +114,7 @@ cmparameters_remove_by_name :: proc(cmparameters: CMParameters, name: string) ->
     return true
 }
 
-cmparameters_remove_by_index :: proc(cmparameters: CMParameters, index: i32) -> (ok: bool) {
+cmparameters_cmparameter_remove_by_index :: proc(cmparameters: CMParameters, index: i32) -> (ok: bool) {
     if cmparameters == nil do return
     if !controlbuilder_connected() do return
     

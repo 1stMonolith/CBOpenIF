@@ -20,12 +20,12 @@ ParametersVTable :: struct {
     Remove:    proc "system" (this: ^ParametersIF, Index: i32) -> HResult,
 }
 
-parameters_add :: proc {
-    parameters_add_,
-    parameters_add_at_index,
+parameters_parameter_add :: proc {
+    parameters_parameter_add_,
+    parameters_parameter_add_at_index,
 }
 
-parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bool) {
+parameters_parameter_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bool) {
     if parameters == nil do return
     if parameter == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ parameters_add_ :: proc(parameters: Parameters, parameter: Parameter) -> (ok: bo
     return true
 }
 
-parameters_add_at_index :: proc(parameters: Parameters, parameter: Parameter, index: i32) -> (ok: bool) {
+parameters_parameter_add_at_index :: proc(parameters: Parameters, parameter: Parameter, index: i32) -> (ok: bool) {
     if parameters == nil do return
     if parameter == nil do return
     if !controlbuilder_connected() do return
@@ -86,7 +86,7 @@ parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (ind
     return index, true
 }
 
-parameters_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
+parameters_parameter_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
     if parameters == nil do return
     if !controlbuilder_connected() do return
     
@@ -96,12 +96,12 @@ parameters_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
     return count, true
 }
 
-parameters_remove :: proc {
-    parameters_remove_by_name,
-    parameters_remove_by_index,
+parameters_parameter_remove :: proc {
+    parameters_parameter_remove_by_name,
+    parameters_parameter_remove_by_index,
 }
 
-parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: bool) {
+parameters_parameter_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: bool) {
     if parameters == nil do return
     if !controlbuilder_connected() do return
 
@@ -114,7 +114,7 @@ parameters_remove_by_name :: proc(parameters: Parameters, name: string) -> (ok: 
     return true
 }
 
-parameters_remove_by_index :: proc(parameters: Parameters, index: i32) -> (ok: bool) {
+parameters_parameter_remove_by_index :: proc(parameters: Parameters, index: i32) -> (ok: bool) {
     if parameters == nil do return
     if !controlbuilder_connected() do return
     

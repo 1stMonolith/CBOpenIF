@@ -21,60 +21,60 @@ ConnectedLibrariesVTable :: struct {
     Remove:    proc "system" (this: ^ConnectedLibrariesIF, Index: i32) -> HResult,
 }
 
-connectedlibraries_new :: proc() -> (cls: ConnectedLibraries, ok: bool) {
+connectedlibraries_new :: proc() -> (connectedlibraries: ConnectedLibraries, ok: bool) {
     if !controlbuilder_connected() do return
 
-    hr := factoryif->NewConnectedLibraries(cast(^rawptr)&cls)
+    hr := factoryif->NewConnectedLibraries(cast(^rawptr)&connectedlibraries)
     if com_failed(hr) do return
 
-    return cls, true
+    return connectedlibraries, true
 }
 
-connectedlibraries_deserialize :: proc(xml: string) -> (cls: ConnectedLibraries, ok: bool) {
+connectedlibraries_deserialize :: proc(xml: string) -> (connectedlibraries: ConnectedLibraries, ok: bool) {
     if !controlbuilder_connected() do return
 
     bs := to_bstr(xml)
     defer bstr_free(bs)
-    hr := factoryif->DeserializeConnectedLibraries(&bs, cast(^rawptr)&cls)
+    hr := factoryif->DeserializeConnectedLibraries(&bs, cast(^rawptr)&connectedlibraries)
     if com_failed(hr) do return
 
-    return cls, true
+    return connectedlibraries, true
 }
 
-connectedlibraries_serialize :: proc(cls: ConnectedLibraries) -> (xml: string, ok: bool) {
-    if cls == nil do return
+connectedlibraries_serialize :: proc(connectedlibraries: ConnectedLibraries) -> (xml: string, ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ConnectedLibrariesIF)(cls)->Serialize(&bs)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-connectedlibraries_add :: proc {
-    connectedlibraries_add_,
-    connectedlibraries_add_at_index,
+connectedlibraries_connectedlibrary_add :: proc {
+    connectedlibraries_connectedlibrary_add_,
+    connectedlibraries_connectedlibrary_add_at_index,
 }
 
-connectedlibraries_add_ :: proc(cls: ConnectedLibraries, cl: ConnectedLibrary) -> (ok: bool) {
-    if cls == nil do return
-    if cl == nil do return
+connectedlibraries_connectedlibrary_add_ :: proc(connectedlibraries: ConnectedLibraries, connectedlibrary: ConnectedLibrary) -> (ok: bool) {
+    if connectedlibraries == nil do return
+    if connectedlibrary == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->Add(cl)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Add(connectedlibrary)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedlibraries_add_at_index :: proc(cls: ConnectedLibraries, cl: ConnectedLibrary, index: i32) -> (ok: bool) {
-    if cls == nil do return
-    if cl == nil do return
+connectedlibraries_connectedlibrary_add_at_index :: proc(connectedlibraries: ConnectedLibraries, connectedlibrary: ConnectedLibrary, index: i32) -> (ok: bool) {
+    if connectedlibraries == nil do return
+    if connectedlibrary == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->AddBefore(cl, index)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->AddBefore(connectedlibrary, index)
     if com_failed(hr) do return
 
     return true
@@ -85,81 +85,81 @@ connectedlibraries_connectedlibrary :: proc {
     connectedlibraries_connectedlibrary_by_index,
 }
 
-connectedlibraries_connectedlibrary_by_name :: proc(cls: ConnectedLibraries, name: string) -> (cl: ConnectedLibrary, ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_by_name :: proc(connectedlibraries: ConnectedLibraries, name: string) -> (connectedlibrary: ConnectedLibrary, ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ConnectedLibrariesIF)(cls)->Find(bstr_name, cast(^rawptr)&cl)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Find(bstr_name, cast(^rawptr)&connectedlibrary)
     if com_failed(hr) do return
 
-    return cl, true
+    return connectedlibrary, true
 }
 
-connectedlibraries_connectedlibrary_by_index :: proc(cls: ConnectedLibraries, index: i32) -> (cl: ConnectedLibrary, ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_by_index :: proc(connectedlibraries: ConnectedLibraries, index: i32) -> (connectedlibrary: ConnectedLibrary, ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->Item(index, cast(^rawptr)&cl)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Item(index, cast(^rawptr)&connectedlibrary)
     if com_failed(hr) do return
 
-    return cl, true
+    return connectedlibrary, true
 }
 
-connectedlibraries_connectedlibrary_index :: proc(cls: ConnectedLibraries, name: string) -> (index: i32, ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_index :: proc(connectedlibraries: ConnectedLibraries, name: string) -> (index: i32, ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ConnectedLibrariesIF)(cls)->FindNr(bstr_name, &index)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
     return index, true
 }
 
-connectedlibraries_count :: proc(cls: ConnectedLibraries) -> (count: i32, ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_count :: proc(connectedlibraries: ConnectedLibraries) -> (count: i32, ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->Count(&count)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Count(&count)
     if com_failed(hr) do return
 
     return count, true
 }
 
-connectedlibraries_remove :: proc {
-    connectedlibraries_remove_by_name,
-    connectedlibraries_remove_by_index,
+connectedlibraries_connectedlibrary_remove :: proc {
+    connectedlibraries_connectedlibrary_remove_by_name,
+    connectedlibraries_connectedlibrary_remove_by_index,
 }
 
-connectedlibraries_remove_by_name :: proc(cls: ConnectedLibraries, name: string) -> (ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_remove_by_name :: proc(connectedlibraries: ConnectedLibraries, name: string) -> (ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = connectedlibraries_connectedlibrary_index(cls, name)
+    index, ok = connectedlibraries_connectedlibrary_index(connectedlibraries, name)
     if !ok do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->Remove(index)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedlibraries_remove_by_index :: proc(cls: ConnectedLibraries, index: i32) -> (ok: bool) {
-    if cls == nil do return
+connectedlibraries_connectedlibrary_remove_by_index :: proc(connectedlibraries: ConnectedLibraries, index: i32) -> (ok: bool) {
+    if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(cls)->Remove(index)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-connectedlibraries_release :: proc(cls: ConnectedLibraries) {
-    if cls != nil {
-        (^ConnectedLibrariesIF)(cls)->Release()
+connectedlibraries_release :: proc(connectedlibraries: ConnectedLibraries) {
+    if connectedlibraries != nil {
+        (^ConnectedLibrariesIF)(connectedlibraries)->Release()
     }
 }

@@ -20,12 +20,12 @@ HWChannelsVTable :: struct {
     Remove:    proc "system" (this: ^HWChannelsIF, Index: i32) -> HResult,
 }
 
-hwchannels_add :: proc {
-    hwchannels_add_,
-    hwchannels_add_at_index,
+hwchannels_hwchannel_add :: proc {
+    hwchannels_hwchannel_add_,
+    hwchannels_hwchannel_add_at_index,
 }
 
-hwchannels_add_ :: proc(hwchannels: HWChannels, hwchannel: HWChannel) -> (ok: bool) {
+hwchannels_hwchannel_add_ :: proc(hwchannels: HWChannels, hwchannel: HWChannel) -> (ok: bool) {
     if hwchannels == nil do return
     if hwchannel == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ hwchannels_add_ :: proc(hwchannels: HWChannels, hwchannel: HWChannel) -> (ok: bo
     return true
 }
 
-hwchannels_add_at_index :: proc(hwchannels: HWChannels, hwchannel: HWChannel, index: i32) -> (ok: bool) {
+hwchannels_hwchannel_add_at_index :: proc(hwchannels: HWChannels, hwchannel: HWChannel, index: i32) -> (ok: bool) {
     if hwchannels == nil do return
     if hwchannel == nil do return
     if !controlbuilder_connected() do return

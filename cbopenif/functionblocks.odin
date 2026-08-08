@@ -20,12 +20,12 @@ FunctionBlocksVTable :: struct {
     Remove:    proc "system" (this: ^FunctionBlocksIF, Index: i32) -> HResult,
 }
 
-functionblocks_add :: proc {
-    functionblocks_add_,
-    functionblocks_add_at_index,
+functionblocks_functionblock_add :: proc {
+    functionblocks_functionblock_add_,
+    functionblocks_functionblock_add_at_index,
 }
 
-functionblocks_add_ :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock) -> (ok: bool) {
+functionblocks_functionblock_add_ :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock) -> (ok: bool) {
     if functionblocks == nil do return
     if functionblock == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ functionblocks_add_ :: proc(functionblocks: FunctionBlocks, functionblock: Funct
     return true
 }
 
-functionblocks_add_at_index :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock, index: i32) -> (ok: bool) {
+functionblocks_functionblock_add_at_index :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock, index: i32) -> (ok: bool) {
     if functionblocks == nil do return
     if functionblock == nil do return
     if !controlbuilder_connected() do return
@@ -47,12 +47,12 @@ functionblocks_add_at_index :: proc(functionblocks: FunctionBlocks, functionbloc
     return true
 }
 
-functionblocks_value :: proc {
-    functionblocks_value_by_name,
-    functionblocks_value_by_index,
+functionblocks_functionblock :: proc {
+    functionblocks_functionblock_by_name,
+    functionblocks_functionblock_by_index,
 }
 
-functionblocks_value_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (functionblock: FunctionBlock, ok: bool) {
+functionblocks_functionblock_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (functionblock: FunctionBlock, ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
@@ -64,7 +64,7 @@ functionblocks_value_by_name :: proc(functionblocks: FunctionBlocks, name: strin
     return functionblock, true
 }
 
-functionblocks_value_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (functionblock: FunctionBlock, ok: bool) {
+functionblocks_functionblock_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (functionblock: FunctionBlock, ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
@@ -74,7 +74,7 @@ functionblocks_value_by_index :: proc(functionblocks: FunctionBlocks, index: i32
     return functionblock, true
 }
 
-functionblocks_value_index :: proc(functionblocks: FunctionBlocks, name: string) -> (index: i32, ok: bool) {
+functionblocks_functionblock_index :: proc(functionblocks: FunctionBlocks, name: string) -> (index: i32, ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
@@ -86,7 +86,7 @@ functionblocks_value_index :: proc(functionblocks: FunctionBlocks, name: string)
     return index, true
 }
 
-functionblocks_count :: proc(functionblocks: FunctionBlocks) -> (count: i32, ok: bool) {
+functionblocks_functionblock_count :: proc(functionblocks: FunctionBlocks) -> (count: i32, ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
@@ -96,16 +96,16 @@ functionblocks_count :: proc(functionblocks: FunctionBlocks) -> (count: i32, ok:
     return count, true
 }
 
-functionblocks_remove :: proc {
-    functionblocks_remove_by_name,
-    functionblocks_remove_by_index,
+functionblocks_functionblock_remove :: proc {
+    functionblocks_functionblock_remove_by_name,
+    functionblocks_functionblock_remove_by_index,
 }
 
-functionblocks_remove_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (ok: bool) {
+functionblocks_functionblock_remove_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
-    index, found := functionblocks_value_index(functionblocks, name)
+    index, found := functionblocks_functionblock_index(functionblocks, name)
     if !found do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->Remove(index)
@@ -114,7 +114,7 @@ functionblocks_remove_by_name :: proc(functionblocks: FunctionBlocks, name: stri
     return true
 }
 
-functionblocks_remove_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (ok: bool) {
+functionblocks_functionblock_remove_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (ok: bool) {
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 

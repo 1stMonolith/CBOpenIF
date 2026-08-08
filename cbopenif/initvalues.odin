@@ -19,12 +19,12 @@ InitValuesVTable :: struct {
     Remove:    proc "system" (this: ^InitValuesIF, Index: i32) -> HResult,
 }
 
-initvalues_add :: proc {
-    initvalues_add_,
-    initvalues_add_at_index,
+initvalues_initvalue_add :: proc {
+    initvalues_initvalue_add_,
+    initvalues_initvalue_add_at_index,
 }
 
-initvalues_add_ :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bool) {
+initvalues_initvalue_add_ :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bool) {
     if initvalues == nil do return
     if initvalue == nil do return
     if !controlbuilder_connected() do return
@@ -35,7 +35,7 @@ initvalues_add_ :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bo
     return true
 }
 
-initvalues_add_at_index :: proc(initvalues: InitValues, initvalue: InitValue, index: i32) -> (ok: bool) {
+initvalues_initvalue_add_at_index :: proc(initvalues: InitValues, initvalue: InitValue, index: i32) -> (ok: bool) {
     if initvalues == nil do return
     if initvalue == nil do return
     if !controlbuilder_connected() do return
@@ -46,12 +46,12 @@ initvalues_add_at_index :: proc(initvalues: InitValues, initvalue: InitValue, in
     return true
 }
 
-initvalues_value :: proc {
-    initvalues_value_by_name,
-    initvalues_value_by_index,
+initvalues_initvalue :: proc {
+    initvalues_initvalue_by_name,
+    initvalues_initvalue_by_index,
 }
 
-initvalues_value_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (initvalue: InitValue, ok: bool) {
+initvalues_initvalue_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (initvalue: InitValue, ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
@@ -67,7 +67,7 @@ initvalues_value_by_name :: proc(initvalues: InitValues, pou_path, name: string)
     return initvalue, true
 }
 
-initvalues_value_by_index :: proc(initvalues: InitValues, index: i32) -> (initvalue: InitValue, ok: bool) {
+initvalues_initvalue_by_index :: proc(initvalues: InitValues, index: i32) -> (initvalue: InitValue, ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
@@ -77,7 +77,7 @@ initvalues_value_by_index :: proc(initvalues: InitValues, index: i32) -> (initva
     return initvalue, true
 }
 
-initvalues_value_index :: proc(initvalues: InitValues, pou_path, name: string) -> (index: i32, ok: bool) {
+initvalues_initvalue_index :: proc(initvalues: InitValues, pou_path, name: string) -> (index: i32, ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
@@ -93,7 +93,7 @@ initvalues_value_index :: proc(initvalues: InitValues, pou_path, name: string) -
     return index, true
 }
 
-initvalues_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
+initvalues_initvalue_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
@@ -103,16 +103,16 @@ initvalues_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
     return count, true
 }
 
-initvalues_remove :: proc {
-    initvalues_remove_by_name,
-    initvalues_remove_by_index,
+initvalues_initvalue_remove :: proc {
+    initvalues_initvalue_remove_by_name,
+    initvalues_initvalue_remove_by_index,
 }
 
-initvalues_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (ok: bool) {
+initvalues_initvalue_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
-    index, found := initvalues_value_index(initvalues, pou_path, name)
+    index, found := initvalues_initvalue_index(initvalues, pou_path, name)
     if !found do return
 
     hr := (^InitValuesIF)(initvalues)->Remove(index)
@@ -121,7 +121,7 @@ initvalues_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string
     return true
 }
 
-initvalues_remove_by_index :: proc(initvalues: InitValues, index: i32) -> (ok: bool) {
+initvalues_initvalue_remove_by_index :: proc(initvalues: InitValues, index: i32) -> (ok: bool) {
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 

@@ -18,12 +18,12 @@ ILRowsVTable :: struct {
     Remove:     proc "system" (this: ^ILRowsIF, Index: i32) -> HResult,
 }
 
-ilrows_add :: proc {
-    ilrows_add_,
-    ilrows_add_at_index,
+ilrows_ilrow_add :: proc {
+    ilrows_ilrow_add_,
+    ilrows_ilrow_add_at_index,
 }
 
-ilrows_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
+ilrows_ilrow_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
     if ilrows == nil do return
     if ilrow == nil do return
     if !controlbuilder_connected() do return
@@ -34,7 +34,7 @@ ilrows_add_ :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
     return true
 }
 
-ilrows_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bool) {
+ilrows_ilrow_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bool) {
     if ilrows == nil do return
     if ilrow == nil do return
     if !controlbuilder_connected() do return
@@ -55,7 +55,7 @@ ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: 
     return ilrow, true
 }
 
-ilrows_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
+ilrows_ilrow_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
     if ilrows == nil do return
     if !controlbuilder_connected() do return
     
@@ -65,7 +65,7 @@ ilrows_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
     return count, true
 }
 
-ilrows_remove :: proc(ilrows: ILRows, index: i32) -> (ok: bool) {
+ilrows_ilrow_remove :: proc(ilrows: ILRows, index: i32) -> (ok: bool) {
     if ilrows == nil do return
     if !controlbuilder_connected() do return
     

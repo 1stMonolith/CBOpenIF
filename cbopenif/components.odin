@@ -20,12 +20,12 @@ ComponentsVTable :: struct {
     Remove:    proc "system" (this: ^ComponentsIF, Index: i32) -> HResult,
 }
 
-components_add :: proc {
-    components_add_,
-    components_add_at_index,
+components_component_add :: proc {
+    components_component_add_,
+    components_component_add_at_index,
 }
 
-components_add_ :: proc(components: Components, component: Component) -> (ok: bool) {
+components_component_add_ :: proc(components: Components, component: Component) -> (ok: bool) {
     if components == nil do return
     if component == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ components_add_ :: proc(components: Components, component: Component) -> (ok: bo
     return true
 }
 
-components_add_at_index :: proc(components: Components, component: Component, index: i32) -> (ok: bool) {
+components_component_add_at_index :: proc(components: Components, component: Component, index: i32) -> (ok: bool) {
     if components == nil do return
     if component == nil do return
     if !controlbuilder_connected() do return
@@ -88,7 +88,7 @@ components_component_index :: proc(components: Components, name: string) -> (ind
     return index, true
 }
 
-components_count :: proc(components: Components) -> (count: i32, ok: bool) {
+components_component_count :: proc(components: Components) -> (count: i32, ok: bool) {
     if components == nil do return
     if !controlbuilder_connected() do return
     
@@ -98,12 +98,12 @@ components_count :: proc(components: Components) -> (count: i32, ok: bool) {
     return count, true
 }
 
-components_remove :: proc {
-    components_remove_by_name,
-    components_remove_by_index,
+components_component_remove :: proc {
+    components_component_remove_by_name,
+    components_component_remove_by_index,
 }
 
-components_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {
+components_component_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {
     if components == nil do return
     if !controlbuilder_connected() do return
 
@@ -117,7 +117,7 @@ components_remove_by_name :: proc(components: Components, name: string) -> (ok: 
     return true
 }
 
-components_remove_by_index :: proc(components: Components, index: i32) -> (ok: bool) {
+components_component_remove_by_index :: proc(components: Components, index: i32) -> (ok: bool) {
     if components == nil do return
     if !controlbuilder_connected() do return
     

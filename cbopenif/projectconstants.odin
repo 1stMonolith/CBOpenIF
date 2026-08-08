@@ -54,12 +54,12 @@ projectconstants_serialize :: proc(projectconstants: ProjectConstants) -> (xml: 
     return from_bstr(bs), true
 }
 
-projectconstants_add :: proc {
-    projectconstants_add_,
-    projectconstants_add_at_index,
+projectconstants_projectconstant_add :: proc {
+    projectconstants_projectconstant_add_,
+    projectconstants_projectconstant_add_at_index,
 }
 
-projectconstants_add_ :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant) -> (ok: bool) {
+projectconstants_projectconstant_add_ :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant) -> (ok: bool) {
     if projectconstants == nil do return
     if projectconstant == nil do return
     if !controlbuilder_connected() do return
@@ -70,7 +70,7 @@ projectconstants_add_ :: proc(projectconstants: ProjectConstants, projectconstan
     return true
 }
 
-projectconstants_add_at_index :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant, index: i32) -> (ok: bool) {
+projectconstants_projectconstant_add_at_index :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant, index: i32) -> (ok: bool) {
     if projectconstants == nil do return
     if projectconstant == nil do return
     if !controlbuilder_connected() do return
@@ -81,12 +81,12 @@ projectconstants_add_at_index :: proc(projectconstants: ProjectConstants, projec
     return true
 }
 
-projectconstants_constant :: proc {
-    projectconstants_constant_by_name,
-    projectconstants_constant_by_index,
+projectconstants_projectconstant :: proc {
+    projectconstants_projectconstant_by_name,
+    projectconstants_projectconstant_by_index,
 }
 
-projectconstants_constant_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (projectconstant: ProjectConstant, ok: bool) {
+projectconstants_projectconstant_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (projectconstant: ProjectConstant, ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
@@ -98,7 +98,7 @@ projectconstants_constant_by_name :: proc(projectconstants: ProjectConstants, na
     return projectconstant, true
 }
 
-projectconstants_constant_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (projectconstant: ProjectConstant, ok: bool) {
+projectconstants_projectconstant_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (projectconstant: ProjectConstant, ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
@@ -108,7 +108,7 @@ projectconstants_constant_by_index :: proc(projectconstants: ProjectConstants, i
     return projectconstant, true
 }
 
-projectconstants_constant_index :: proc(projectconstants: ProjectConstants, name: string) -> (index: i32, ok: bool) {
+projectconstants_projectconstant_index :: proc(projectconstants: ProjectConstants, name: string) -> (index: i32, ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
@@ -120,7 +120,7 @@ projectconstants_constant_index :: proc(projectconstants: ProjectConstants, name
     return index, true
 }
 
-projectconstants_count :: proc(projectconstants: ProjectConstants) -> (count: i32, ok: bool) {
+projectconstants_projectconstant_count :: proc(projectconstants: ProjectConstants) -> (count: i32, ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
@@ -130,16 +130,16 @@ projectconstants_count :: proc(projectconstants: ProjectConstants) -> (count: i3
     return count, true
 }
 
-projectconstants_remove :: proc {
-    projectconstants_remove_by_name,
-    projectconstants_remove_by_index,
+projectconstants_projectconstant_remove :: proc {
+    projectconstants_projectconstant_remove_by_name,
+    projectconstants_projectconstant_remove_by_index,
 }
 
-projectconstants_remove_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (ok: bool) {
+projectconstants_projectconstant_remove_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
-    index, found := projectconstants_constant_index(projectconstants, name)
+    index, found := projectconstants_projectconstant_index(projectconstants, name)
     if !found do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Remove(index)
@@ -148,7 +148,7 @@ projectconstants_remove_by_name :: proc(projectconstants: ProjectConstants, name
     return true
 }
 
-projectconstants_remove_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (ok: bool) {
+projectconstants_projectconstant_remove_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (ok: bool) {
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 

@@ -17,12 +17,12 @@ PointsVTable :: struct {
     Remove:    proc "system" (this: ^PointsIF, Index: i32) -> HResult,
 }
 
-points_add :: proc {
-    points_add_,
-    points_add_at_index,
+points_point_add :: proc {
+    points_point_add_,
+    points_point_add_at_index,
 }
 
-points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
+points_point_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
     if points == nil do return
     if point == nil do return
     if !controlbuilder_connected() do return
@@ -33,7 +33,7 @@ points_add_ :: proc(points: Points, point: Point) -> (ok: bool) {
     return true
 }
 
-points_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
+points_point_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
     if points == nil do return
     if point == nil do return
     if !controlbuilder_connected() do return
@@ -54,7 +54,7 @@ points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: 
     return point, true
 }
 
-points_count :: proc(points: Points) -> (count: i32, ok: bool) {
+points_point_count :: proc(points: Points) -> (count: i32, ok: bool) {
     if points == nil do return
     if !controlbuilder_connected() do return
     
@@ -64,7 +64,7 @@ points_count :: proc(points: Points) -> (count: i32, ok: bool) {
     return count, true
 }
 
-points_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
+points_point_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
     if points == nil do return
     if !controlbuilder_connected() do return
     

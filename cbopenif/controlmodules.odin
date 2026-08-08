@@ -55,14 +55,14 @@ controlmodules_deserialize :: proc(xml: string) -> (controlmodules: ControlModul
     return controlmodules, true
 }
 
-controlmodules_add :: proc {
-    controlmodules_add_,
-    controlmodules_add_at_index,
-    controlmodules_add_controlmodule,
-    controlmodules_add_singlecontrolmodule,
+controlmodules_controlmodule_add :: proc {
+    controlmodules_icontrolmodule_add,
+    controlmodules_icontrolmodule_add_at_index,
+    controlmodules_controlmodule_add_,
+    controlmodules_singlecontrolmodule_add,
 }
 
-controlmodules_add_ :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule) -> (ok: bool) {
+controlmodules_icontrolmodule_add :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule) -> (ok: bool) {
     if controlmodules == nil do return
     if icontrolmodule == nil do return
     if !controlbuilder_connected() do return
@@ -73,7 +73,7 @@ controlmodules_add_ :: proc(controlmodules: ControlModules, icontrolmodule: ICon
     return true
 }
 
-controlmodules_add_at_index :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule, index: i32) -> (ok: bool) {
+controlmodules_icontrolmodule_add_at_index :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule, index: i32) -> (ok: bool) {
     if controlmodules == nil do return
     if icontrolmodule == nil do return
     if !controlbuilder_connected() do return
@@ -84,7 +84,7 @@ controlmodules_add_at_index :: proc(controlmodules: ControlModules, icontrolmodu
     return true
 }
 
-controlmodules_add_controlmodule :: proc(controlmodules: ControlModules, name, type_name: string, controlmodule: ControlModule) -> (ok: bool) {
+controlmodules_controlmodule_add_ :: proc(controlmodules: ControlModules, name, type_name: string, controlmodule: ControlModule) -> (ok: bool) {
     if controlmodules == nil do return
     if controlmodule == nil do return
     if !controlbuilder_connected() do return
@@ -101,7 +101,7 @@ controlmodules_add_controlmodule :: proc(controlmodules: ControlModules, name, t
     return true
 }
 
-controlmodules_add_singlecontrolmodule :: proc(controlmodules: ControlModules, name: string, singlecontrolmoduleinst: SingleControlModuleInst) -> (ok: bool) {
+controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, name: string, singlecontrolmoduleinst: SingleControlModuleInst) -> (ok: bool) {
     if controlmodules == nil do return
     if singlecontrolmoduleinst == nil do return
     if !controlbuilder_connected() do return

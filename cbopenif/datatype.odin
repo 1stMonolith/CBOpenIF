@@ -295,12 +295,12 @@ datatype_release :: proc(datatype: DataType) {
 
 // Components Procedures
 
-datatype_components_add :: proc {
-    datatype_components_add_,
-    datatype_components_add_at_index,
+datatype_component_add :: proc {
+    datatype_component_add_,
+    datatype_component_add_at_index,
 }
 
-datatype_components_add_ :: proc(datatype: DataType, component: Component) -> (ok: bool) {
+datatype_component_add_ :: proc(datatype: DataType, component: Component) -> (ok: bool) {
     if datatype == nil do return
     if component == nil do return
     if !controlbuilder_connected() do return
@@ -310,13 +310,13 @@ datatype_components_add_ :: proc(datatype: DataType, component: Component) -> (o
     if !ok do return
     defer components_release(comps)
 
-    ok = components_add_(comps, component)
+    ok = components_component_add_(comps, component)
     if !ok do return
 
     return true
 }
 
-datatype_components_add_at_index :: proc(datatype: DataType, component: Component, index: i32) -> (ok: bool) {
+datatype_component_add_at_index :: proc(datatype: DataType, component: Component, index: i32) -> (ok: bool) {
     if datatype == nil do return
     if component == nil do return
     if !controlbuilder_connected() do return
@@ -326,7 +326,7 @@ datatype_components_add_at_index :: proc(datatype: DataType, component: Componen
     if !ok do return
     defer components_release(comps)
 
-    ok = components_add_at_index(comps, component, index)
+    ok = components_component_add_at_index(comps, component, index)
     if !ok do return
 
     return true
@@ -382,7 +382,7 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     return index, true
 }
 
-datatype_components_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
+datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
@@ -391,18 +391,18 @@ datatype_components_count :: proc(datatype: DataType) -> (count: i32, ok: bool) 
     if !ok do return
     defer components_release(comps)
 
-    count, ok = components_count(comps)
+    count, ok = components_component_count(comps)
     if !ok do return
 
     return count, true
 }
 
-datatype_componentsremove :: proc {
-    datatype_components_remove_by_name,
-    datatype_components_remove_by_index,
+datatype_component_remove :: proc {
+    datatype_component_remove_by_name,
+    datatype_component_remove_by_index,
 }
 
-datatype_components_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
+datatype_component_remove_by_name :: proc(datatype: DataType, name: string) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
@@ -411,13 +411,13 @@ datatype_components_remove_by_name :: proc(datatype: DataType, name: string) -> 
     if !ok do return
     defer components_release(comps)
 
-    ok = components_remove_by_name(comps, name)
+    ok = components_component_remove_by_name(comps, name)
     if !ok do return
 
     return true
 }
 
-datatype_components_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
+datatype_component_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
@@ -426,7 +426,7 @@ datatype_components_remove_by_index :: proc(datatype: DataType, index: i32) -> (
     if !ok do return
     defer components_release(comps)
 
-    ok = components_remove_by_index(comps, index)
+    ok = components_component_remove_by_index(comps, index)
     if !ok do return
 
     return true

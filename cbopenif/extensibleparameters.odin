@@ -20,61 +20,61 @@ ExtensibleParametersVTable :: struct {
     Remove:    proc "system" (this: ^ExtensibleParametersIF, Index: i32) -> HResult,
 }
 
-extensibleparameters_add :: proc {
-    extensibleparameters_add_,
-    extensibleparameters_add_at_index,
+extensibleparameters_extensibleparameter_add :: proc {
+    extensibleparameters_extensibleparameter_add_,
+    extensibleparameters_extensibleparameter_add_at_index,
 }
 
-extensibleparameters_add_ :: proc(extensibleparameters: ExtensibleParameters, externalparameter: ExtensibleParameter) -> (ok: bool) {
+extensibleparameters_extensibleparameter_add_ :: proc(extensibleparameters: ExtensibleParameters, extensibleparameter: ExtensibleParameter) -> (ok: bool) {
     if extensibleparameters == nil do return
-    if externalparameter == nil do return
+    if extensibleparameter == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->Add(externalparameter)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->Add(extensibleparameter)
     if com_failed(hr) do return
 
     return true
 }
 
-extensibleparameters_add_at_index :: proc(extensibleparameters: ExtensibleParameters, externalparameter: ExtensibleParameter, index: i32) -> (ok: bool) {
+extensibleparameters_extensibleparameter_add_at_index :: proc(extensibleparameters: ExtensibleParameters, extensibleparameter: ExtensibleParameter, index: i32) -> (ok: bool) {
     if extensibleparameters == nil do return
-    if externalparameter == nil do return
+    if extensibleparameter == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->AddBefore(externalparameter, index)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->AddBefore(extensibleparameter, index)
     if com_failed(hr) do return
 
     return true
 }
 
-extensibleparameters_parameter :: proc {
-    extensibleparameters_parameter_by_name,
-    extensibleparameters_parameter_by_index,
+extensibleparameters_extensibleparameter :: proc {
+    extensibleparameters_extensibleparameter_by_name,
+    extensibleparameters_extensibleparameter_by_index,
 }
 
-extensibleparameters_parameter_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (externalparameter: ExtensibleParameter, ok: bool) {
+extensibleparameters_extensibleparameter_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->Find(bstr_name, cast(^rawptr)&externalparameter)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->Find(bstr_name, cast(^rawptr)&extensibleparameter)
     if com_failed(hr) do return
 
-    return externalparameter, true
+    return extensibleparameter, true
 }
 
-extensibleparameters_parameter_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (externalparameter: ExtensibleParameter, ok: bool) {
+extensibleparameters_extensibleparameter_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index, cast(^rawptr)&externalparameter)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index, cast(^rawptr)&extensibleparameter)
     if com_failed(hr) do return
 
-    return externalparameter, true
+    return extensibleparameter, true
 }
 
-extensibleparameters_parameter_index :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (index: i32, ok: bool) {
+extensibleparameters_extensibleparameter_index :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (index: i32, ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
@@ -86,7 +86,7 @@ extensibleparameters_parameter_index :: proc(extensibleparameters: ExtensiblePar
     return index, true
 }
 
-extensibleparameters_count :: proc(extensibleparameters: ExtensibleParameters) -> (count: i32, ok: bool) {
+extensibleparameters_extensibleparameter_count :: proc(extensibleparameters: ExtensibleParameters) -> (count: i32, ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
@@ -96,16 +96,16 @@ extensibleparameters_count :: proc(extensibleparameters: ExtensibleParameters) -
     return count, true
 }
 
-extensibleparameters_remove :: proc {
-    extensibleparameters_remove_by_name,
-    extensibleparameters_remove_by_index,
+extensibleparameters_extensibleparameter_remove :: proc {
+    extensibleparameters_extensibleparameter_remove_by_name,
+    extensibleparameters_extensibleparameter_remove_by_index,
 }
 
-extensibleparameters_remove_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (ok: bool) {
+extensibleparameters_extensibleparameter_remove_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
-    index, found := extensibleparameters_parameter_index(extensibleparameters, name)
+    index, found := extensibleparameters_extensibleparameter_index(extensibleparameters, name)
     if !found do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Remove(index)
@@ -114,7 +114,7 @@ extensibleparameters_remove_by_name :: proc(extensibleparameters: ExtensiblePara
     return true
 }
 
-extensibleparameters_remove_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (ok: bool) {
+extensibleparameters_extensibleparameter_remove_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (ok: bool) {
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 

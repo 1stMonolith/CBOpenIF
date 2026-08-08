@@ -20,12 +20,12 @@ VariablesVTable :: struct {
     Remove:    proc "system" (this: ^VariablesIF, Index: i32) -> HResult,
 }
 
-variables_add :: proc {
-    variables_add_,
-    variables_add_at_index,
+variables_variable_add :: proc {
+    variables_variable_add_,
+    variables_variable_add_at_index,
 }
 
-variables_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
+variables_variable_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
     if variables == nil do return
     if variable == nil do return
     if !controlbuilder_connected() do return
@@ -36,7 +36,7 @@ variables_add_ :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
     return true
 }
 
-variables_add_at_index :: proc(variables: Variables, variable: Variable, index: i32) -> (ok: bool) {
+variables_variable_add_at_index :: proc(variables: Variables, variable: Variable, index: i32) -> (ok: bool) {
     if variables == nil do return
     if variable == nil do return
     if !controlbuilder_connected() do return

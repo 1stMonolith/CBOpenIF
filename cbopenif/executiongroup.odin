@@ -27,59 +27,64 @@ executiongroup_task_name :: proc {
     executiongroup_task_name_set,
 }
 
-executiongroup_task_name_get :: proc(eg: ExecutionGroup) -> (task_name: string, ok: bool) {
-    if eg == nil do return
+executiongroup_task_name_get :: proc(executiongroup: ExecutionGroup) -> (task_name: string, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ExecutionGroupIF)(eg)->TaskNameGet(&bs)
+    hr := (^ExecutionGroupIF)(executiongroup)->TaskNameGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-executiongroup_task_name_set :: proc(eg: ExecutionGroup, task_name: string) -> (ok: bool) {
-    if eg == nil do return
+executiongroup_task_name_set :: proc(executiongroup: ExecutionGroup, task_name: string) -> (ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     bs := to_bstr(task_name)
     defer bstr_free(bs)
-    hr := (^ExecutionGroupIF)(eg)->TaskNamePut(bs)
+    hr := (^ExecutionGroupIF)(executiongroup)->TaskNamePut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-executiongroup_serialize :: proc(eg: ExecutionGroup) -> (xml: string, ok: bool) {
-    if eg == nil do return
+executiongroup_serialize :: proc(executiongroup: ExecutionGroup) -> (xml: string, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ExecutionGroupIF)(eg)->Serialize(&bs)
+    hr := (^ExecutionGroupIF)(executiongroup)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-executiongroup_add_ :: proc(eg: ExecutionGroup, ei: ExecutionInstance) -> (ok: bool) {
-    if eg == nil do return
-    if ei == nil do return
+executiongroup_executioninstance_add :: proc {
+    executiongroup_executioninstance_add_,
+    executiongroup_executioninstance_add_at_index,
+}
+
+executiongroup_executioninstance_add_ :: proc(executiongroup: ExecutionGroup, executioninstance: ExecutionInstance) -> (ok: bool) {
+    if executiongroup == nil do return
+    if executioninstance == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(eg)->Add(ei)
+    hr := (^ExecutionGroupIF)(executiongroup)->Add(executioninstance)
     if com_failed(hr) do return
 
     return true
 }
 
-executiongroup_add_at_index :: proc(eg: ExecutionGroup, ei: ExecutionInstance, index: i32) -> (ok: bool) {
-    if eg == nil do return
-    if ei == nil do return
+executiongroup_executioninstance_add_at_index :: proc(executiongroup: ExecutionGroup, executioninstance: ExecutionInstance, index: i32) -> (ok: bool) {
+    if executiongroup == nil do return
+    if executioninstance == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(eg)->AddBefore(ei, index)
+    hr := (^ExecutionGroupIF)(executiongroup)->AddBefore(executioninstance, index)
     if com_failed(hr) do return
 
     return true
@@ -90,45 +95,45 @@ executiongroup_executioninstance :: proc {
     executiongroup_executioninstance_by_index,
 }
 
-executiongroup_executioninstance_by_name :: proc(eg: ExecutionGroup, name: string) -> (ei: ExecutionInstance, ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_by_name :: proc(executiongroup: ExecutionGroup, name: string) -> (executioninstance: ExecutionInstance, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ExecutionGroupIF)(eg)->Find(bstr_name, cast(^rawptr)&ei)
+    hr := (^ExecutionGroupIF)(executiongroup)->Find(bstr_name, cast(^rawptr)&executioninstance)
     if com_failed(hr) do return
 
-    return ei, true
+    return executioninstance, true
 }
 
-executiongroup_executioninstance_by_index :: proc(eg: ExecutionGroup, index: i32) -> (ei: ExecutionInstance, ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_by_index :: proc(executiongroup: ExecutionGroup, index: i32) -> (executioninstance: ExecutionInstance, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(eg)->Item(index, cast(^rawptr)&ei)
+    hr := (^ExecutionGroupIF)(executiongroup)->Item(index, cast(^rawptr)&executioninstance)
     if com_failed(hr) do return
 
-    return ei, true
+    return executioninstance, true
 }
 
-executiongroup_executioninstance_index :: proc(eg: ExecutionGroup, name: string) -> (index: i32, ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_index :: proc(executiongroup: ExecutionGroup, name: string) -> (index: i32, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ExecutionGroupIF)(eg)->FindNr(bstr_name, &index)
+    hr := (^ExecutionGroupIF)(executiongroup)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
     return index, true
 }
 
-executiongroup_executioninstance_count :: proc(eg: ExecutionGroup) -> (count: i32, ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_count :: proc(executiongroup: ExecutionGroup) -> (count: i32, ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(eg)->Count(&count)
+    hr := (^ExecutionGroupIF)(executiongroup)->Count(&count)
     if com_failed(hr) do return
 
     return count, true
@@ -139,32 +144,32 @@ executiongroup_executioninstance_remove :: proc {
     executiongroup_executioninstance_remove_by_index,
 }
 
-executiongroup_executioninstance_remove_by_name :: proc(eg: ExecutionGroup, name: string) -> (ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_remove_by_name :: proc(executiongroup: ExecutionGroup, name: string) -> (ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
     index: i32
-    index, ok = executiongroup_executioninstance_index(eg, name)
+    index, ok = executiongroup_executioninstance_index(executiongroup, name)
     if !ok do return
 
-    hr := (^ExecutionGroupIF)(eg)->Remove(index)
+    hr := (^ExecutionGroupIF)(executiongroup)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-executiongroup_executioninstance_remove_by_index :: proc(eg: ExecutionGroup, index: i32) -> (ok: bool) {
-    if eg == nil do return
+executiongroup_executioninstance_remove_by_index :: proc(executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
+    if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(eg)->Remove(index)
+    hr := (^ExecutionGroupIF)(executiongroup)->Remove(index)
     if com_failed(hr) do return
 
     return true
 }
 
-executiongroup_release :: proc(eg: ExecutionGroup) {
-    if eg != nil {
-        (^ExecutionGroupIF)(eg)->Release()
+executiongroup_release :: proc(executiongroup: ExecutionGroup) {
+    if executiongroup != nil {
+        (^ExecutionGroupIF)(executiongroup)->Release()
     }
 }
