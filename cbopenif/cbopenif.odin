@@ -21,6 +21,12 @@ access_level :: proc {
     controlmodule_access_level_set,
     singlecontrolmoduleinst_access_level_get,
     singlecontrolmoduleinst_access_level_set,
+    program_access_level_get,
+    program_access_level_set,
+    diagram_access_level_get,
+    diagram_access_level_set,
+    diagraminstance_access_level_get,
+    diagraminstance_access_level_set,
 }
 
 actual_parameter :: proc {
@@ -47,13 +53,19 @@ alarm_owner :: proc {
     controlmoduletype_alarm_owner_set,
     singlecontrolmoduletype_alarm_owner_get,
     singlecontrolmoduletype_alarm_owner_set,
+    diagramtype_alarm_owner_get,
+    diagramtype_alarm_owner_set,
 }
+
+application_type :: applicationproperties_application_type_get
 
 aspect_object :: proc {
     functionblock_aspect_object_get,
     functionblock_aspect_object_set,
     controlmodule_aspect_object_get,
     controlmodule_aspect_object_set,
+    diagraminstance_aspect_object_get,
+    diagraminstance_aspect_object_set,
 }
 
 attribute :: proc {
@@ -103,6 +115,10 @@ batch_object :: proc {
     controlmoduletype_batch_object_set,
     singlecontrolmoduletype_batch_object_get,
     singlecontrolmoduletype_batch_object_set,
+    diagram_batch_object_get,
+    diagram_batch_object_set,
+    diagramtype_batch_object_get,
+    diagramtype_batch_object_set,
 }
 
 batch_property :: proc {
@@ -199,6 +215,12 @@ codeblocks :: proc {
     controlmoduletype_codeblocks_set,
     singlecontrolmoduletype_codeblocks_get,
     singlecontrolmoduletype_codeblocks_set,
+    program_codeblocks_get,
+    program_codeblocks_set,
+    diagram_codeblocks_get,
+    diagram_codeblocks_set,
+    diagramtype_codeblocks_get,
+    diagramtype_codeblocks_set,
 }
 
 column :: proc {
@@ -266,6 +288,10 @@ commvariable_remove :: proc {
 commvariables :: proc {
     singlecontrolmoduletype_commvariables_get,
     singlecontrolmoduletype_commvariables_set,
+    program_commvariables_get,
+    program_commvariables_set,
+    diagram_commvariables_get,
+    diagram_commvariables_set,
 }
 
 con_variable :: proc {
@@ -357,6 +383,35 @@ controlmodules :: proc {
     controlmoduletype_controlmodules_set,
     singlecontrolmoduletype_controlmodules_get,
     singlecontrolmoduletype_controlmodules_set,
+    diagram_controlmodules_get,
+    diagram_controlmodules_set,
+    diagramtype_controlmodules_get,
+    diagramtype_controlmodules_set,
+}
+
+diagraminstance_add :: proc {
+    diagraminstances_diagraminstance_add_,
+    diagraminstances_diagraminstance_add_at_index,
+}
+
+diagraminstance_by_name :: diagraminstances_diagraminstance_by_name
+
+diagraminstance_by_index :: diagraminstances_diagraminstance_by_index
+
+diagraminstance_index :: diagraminstances_diagraminstance_index
+
+diagraminstance_count :: diagraminstances_diagraminstance_count
+
+diagraminstance_remove :: proc {
+    diagraminstances_diagraminstance_remove_by_name,
+    diagraminstances_diagraminstance_remove_by_index,
+}
+
+diagraminstances :: proc {
+    diagram_diagraminstances_get,
+    diagram_diagraminstances_set,
+    diagramtype_diagraminstances_get,
+    diagramtype_diagraminstances_set,
 }
 
 direction :: proc {
@@ -414,6 +469,14 @@ description :: proc {
     hwunit_type_description_set,
     hwchannel_io_description_get,
     hwchannel_io_description_set,
+    program_description_get,
+    program_description_set,
+    diagram_description_get,
+    diagram_description_set,
+    diagramtype_description_get,
+    diagramtype_description_set,
+    diagraminstance_description_get,
+    diagraminstance_description_set,
 }
 
 element_name :: proc {
@@ -505,6 +568,8 @@ expose_properties_in_parent :: proc {
     functionblock_expose_properties_in_parent_set,
     controlmodule_expose_properties_in_parent_get,
     controlmodule_expose_properties_in_parent_set,
+    diagraminstance_expose_properties_in_parent_get,
+    diagraminstance_expose_properties_in_parent_set,
 }
 
 executioninstance_add :: proc {
@@ -574,6 +639,12 @@ functionblocks :: proc {
     controlmoduletype_functionblocks_set,
     singlecontrolmoduletype_functionblocks_get,
     singlecontrolmoduletype_functionblocks_set,
+    program_functionblocks_get,
+    program_functionblocks_set,
+    diagram_functionblocks_get,
+    diagram_functionblocks_set,
+    diagramtype_functionblocks_get,
+    diagramtype_functionblocks_set,
 }
 
 globalvariable_add :: proc {
@@ -662,6 +733,10 @@ guid :: proc {
     controlmoduletype_guid_set,
     hwunit_guid_get,
     hwunit_guid_set,
+    diagramtype_guid_get,
+    diagramtype_guid_set,
+    diagraminstance_guid_get,
+    diagraminstance_guid_set,
 }
 
 hidden :: proc {
@@ -671,6 +746,8 @@ hidden :: proc {
     functionblocktype_hidden_set,
     controlmoduletype_hidden_get,
     controlmoduletype_hidden_set,
+    diagramtype_hidden_get,
+    diagramtype_hidden_set,
 }
 
 hw_simulation :: proc {
@@ -755,6 +832,10 @@ initvalue_remove :: proc {
 initvalues :: proc {
     singlecontrolmoduletype_initvalues_get,
     singlecontrolmoduletype_initvalues_set,
+    program_initvalues_get,
+    program_initvalues_set,
+    diagram_initvalues_get,
+    diagram_initvalues_set,
 }
 
 initial_value :: proc {
@@ -777,6 +858,10 @@ initial_value :: proc {
 inst_guid :: proc {
     singlecontrolmoduleinst_inst_guid_get,
     singlecontrolmoduleinst_inst_guid_set,
+    program_inst_guid_get,
+    program_inst_guid_set,
+    diagram_inst_guid_get,
+    diagram_inst_guid_set,
 }
 
 interaction_window :: proc {
@@ -800,6 +885,8 @@ instantiate_as_aspect_object :: proc {
     functionblocktype_instantiate_as_aspect_object_set,
     controlmoduletype_instantiate_as_aspect_object_get,
     controlmoduletype_instantiate_as_aspect_object_set,
+    diagramtype_instantiate_as_aspect_object_get,
+    diagramtype_instantiate_as_aspect_object_set,
 }
 
 instance_graphics :: proc {
@@ -1000,6 +1087,14 @@ name :: proc {
     vanamedprotocol_name_set,
     vanamedvariable_name_get,
     vanamedvariable_name_set,
+    program_name_get,
+    program_name_set,
+    diagram_name_get,
+    diagram_name_set,
+    diagramtype_name_get,
+    diagramtype_name_set,
+    diagraminstance_name_get,
+    diagraminstance_name_set,
 }
 
 number_of_errors :: proc {
@@ -1048,6 +1143,8 @@ parameter_remove :: proc {
 parameters :: proc {
     functionblocktype_parameters_get,
     functionblocktype_parameters_set,
+    diagramtype_parameters_get,
+    diagramtype_parameters_set,
 }
 
 parametersetting_add :: proc {
@@ -1167,6 +1264,8 @@ protected :: proc {
     functionblocktype_protected_set,
     controlmoduletype_protected_get,
     controlmoduletype_protected_set,
+    diagramtype_protected_get,
+    diagramtype_protected_set,
 }
 
 read_permission :: proc {
@@ -1282,6 +1381,12 @@ release :: proc {
     vaaddressedprotocol_release,
     vanamedvariable_release,
     vaaddressedvariable_release,
+    applicationproperties_release,
+    program_release,
+    diagram_release,
+    diagramtype_release,
+    diagraminstance_release,
+    diagraminstances_release,
 }
 
 reserved_by_function :: proc {
@@ -1295,6 +1400,12 @@ reserved_by_function :: proc {
     singlecontrolmoduletype_reserved_by_function_set,
     hwunit_reserved_by_function_get,
     hwunit_reserved_by_function_set,
+    program_reserved_by_function_get,
+    program_reserved_by_function_set,
+    diagram_reserved_by_function_get,
+    diagram_reserved_by_function_set,
+    diagramtype_reserved_by_function_get,
+    diagramtype_reserved_by_function_set,
 }
 
 restricted_sil :: proc {
@@ -1306,6 +1417,10 @@ restricted_sil :: proc {
     singlecontrolmoduletype_restricted_sil_set,
     commvariable_restricted_sil_get,
     commvariable_restricted_sil_set,
+    diagram_restricted_sil_get,
+    diagram_restricted_sil_set,
+    diagramtype_restricted_sil_get,
+    diagramtype_restricted_sil_set,
 }
 
 reversed :: proc {
@@ -1357,6 +1472,12 @@ safety_type :: proc {
     controlmodule_safety_type_set,
     singlecontrolmoduleinst_safety_type_get,
     singlecontrolmoduleinst_safety_type_set,
+    program_safety_type_get,
+    program_safety_type_set,
+    diagram_safety_type_get,
+    diagram_safety_type_set,
+    diagraminstance_safety_type_get,
+    diagraminstance_safety_type_set,
 }
 
 scope :: proc {
@@ -1366,6 +1487,8 @@ scope :: proc {
     functionblocktype_scope_set,
     controlmoduletype_scope_get,
     controlmoduletype_scope_set,
+    diagramtype_scope_get,
+    diagramtype_scope_set,
 }
 
 serialize :: proc {
@@ -1402,6 +1525,11 @@ serialize :: proc {
     connectedlibraries_serialize,
     connectedapplications_serialize,
     accessvariables_serialize,
+    applicationproperties_serialize,
+    program_serialize,
+    diagram_serialize,
+    diagramtype_serialize,
+    diagraminstance_serialize,
 }
 
 simulation_mark :: proc {
@@ -1411,6 +1539,14 @@ simulation_mark :: proc {
     controlmoduletype_simulation_mark_set,
     singlecontrolmoduletype_simulation_mark_get,
     singlecontrolmoduletype_simulation_mark_set,
+    applicationproperties_simulation_mark_get,
+    applicationproperties_simulation_mark_set,
+    program_simulation_mark_get,
+    program_simulation_mark_set,
+    diagram_simulation_mark_get,
+    diagram_simulation_mark_set,
+    diagramtype_simulation_mark_get,
+    diagramtype_simulation_mark_set,
 }
 
 start_position :: proc {
@@ -1427,6 +1563,14 @@ sil_level :: proc {
     controlmoduletype_sil_level_set,
     singlecontrolmoduletype_sil_level_get,
     singlecontrolmoduletype_sil_level_set,
+    applicationproperties_sil_level_get,
+    applicationproperties_sil_level_set,
+    program_sil_level_get,
+    program_sil_level_set,
+    diagram_sil_level_get,
+    diagram_sil_level_set,
+    diagramtype_sil_level_get,
+    diagramtype_sil_level_set,
 }
 
 
@@ -1507,6 +1651,10 @@ signals :: proc {
     applicationvariables_signals_set,
     singlecontrolmoduletype_signals_get,
     singlecontrolmoduletype_signals_set,
+    program_signals_get,
+    program_signals_set,
+    diagram_signals_get,
+    diagram_signals_set,
 }
 
 tab_name :: proc {
@@ -1521,6 +1669,10 @@ task_connection :: proc {
     controlmodule_task_connection_set,
     singlecontrolmoduleinst_task_connection_get,
     singlecontrolmoduleinst_task_connection_set,
+    program_task_connection_get,
+    program_task_connection_set,
+    diagram_task_connection_get,
+    diagram_task_connection_set,
 }
 
 traverse_number :: proc {
@@ -1545,6 +1697,11 @@ type_guid :: proc {
     commvariable_type_guid_get,
     hwunit_type_guid_get,
     hwunit_type_guid_set,
+    program_type_guid_get,
+    program_type_guid_set,
+    diagram_type_guid_get,
+    diagram_type_guid_set,
+    diagraminstance_type_guid_get,
 }
 
 type_id :: proc {
@@ -1563,6 +1720,7 @@ type_path :: proc {
     functionblock_type_path_get,
     controlmodule_type_path_get,
     commvariable_type_path_get,
+    diagraminstance_type_path_get
 }
 
 type_name :: proc {
@@ -1584,6 +1742,8 @@ type_name :: proc {
     functionblock_type_name_set,
     commvariable_type_name_get,
     commvariable_type_name_set,
+    diagraminstance_type_name_get,
+    diagraminstance_type_name_set,
 }
 
 unit :: proc {
@@ -1706,6 +1866,12 @@ variables :: proc {
     controlmoduletype_variables_set,
     singlecontrolmoduletype_variables_get,
     singlecontrolmoduletype_variables_set,
+    program_variables_get,
+    program_variables_set,
+    diagram_variables_get,
+    diagram_variables_set,
+    diagramtype_variables_get,
+    diagramtype_variables_set,
 }
 
 visibility_In_graphics :: proc {
@@ -1717,6 +1883,8 @@ visibility_In_graphics :: proc {
     controlmoduletype_embedded_graphiscs_visible_set,
     singlecontrolmoduleinst_visibility_in_graphics_get,
     singlecontrolmoduleinst_visibility_in_graphics_set,
+    diagramtype_embedded_graphics_visible_get,
+    diagramtype_embedded_graphics_visible_set,
 }
 
 warning_number :: proc {
