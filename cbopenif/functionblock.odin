@@ -1163,10 +1163,7 @@ functionblocktype_codeblock_by_name :: proc(functionblocktype: FunctionBlockType
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    codeblock, ok = codeblocks_codeblock_by_name(codeblocks, name)
-    if !ok do return
-
-    return codeblock, true
+    return codeblocks_codeblock(codeblocks, name)
 }
 
 functionblocktype_codeblock_by_index :: proc(functionblocktype: FunctionBlockType, index: i32) -> (codeblock: CodeBlock, ok: bool) {
@@ -1178,10 +1175,7 @@ functionblocktype_codeblock_by_index :: proc(functionblocktype: FunctionBlockTyp
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    codeblock, ok = codeblocks_codeblock_by_index(codeblocks, index + 1)
-    if !ok do return
-
-    return codeblock, true
+    return codeblocks_codeblock(codeblocks, index + 1)
 }
 
 functionblocktype_codeblock_index :: proc(functionblocktype: FunctionBlockType, name: string) -> (index: i32, ok: bool) {
@@ -1193,10 +1187,7 @@ functionblocktype_codeblock_index :: proc(functionblocktype: FunctionBlockType, 
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    index, ok = codeblocks_codeblock_index(codeblocks, name)
-    if !ok do return
-
-    return index - 1, true
+    return codeblocks_codeblock_index(codeblocks, name)
 }
 
 functionblocktype_codeblock_count :: proc(functionblocktype: FunctionBlockType) -> (count: i32, ok: bool) {
@@ -1208,10 +1199,7 @@ functionblocktype_codeblock_count :: proc(functionblocktype: FunctionBlockType) 
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    count, ok = codeblocks_codeblock_count(codeblocks)
-    if !ok do return
-
-    return count, true
+    return codeblocks_codeblock_count(codeblocks)
 }
 
 functionblocktype_codeblock_remove :: proc {
@@ -1228,10 +1216,7 @@ functionblocktype_codeblock_remove_by_name :: proc(functionblocktype: FunctionBl
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    ok = codeblocks_codeblock_remove_by_name(codeblocks, name)
-    if !ok do return
-
-    return true
+    return codeblocks_codeblock_remove(codeblocks, name)
 }
 
 functionblocktype_codeblock_remove_by_index :: proc(functionblocktype: FunctionBlockType, index: i32) -> (ok: bool) {
@@ -1243,10 +1228,7 @@ functionblocktype_codeblock_remove_by_index :: proc(functionblocktype: FunctionB
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    ok = codeblocks_codeblock_remove_by_index(codeblocks, index)
-    if !ok do return
-
-    return true
+    return codeblocks_codeblock_remove(codeblocks, index)
 }
 
 functionblocktype_instantiate_as_aspect_object :: proc {

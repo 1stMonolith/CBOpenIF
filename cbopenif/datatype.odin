@@ -312,10 +312,7 @@ datatype_component_add_ :: proc(datatype: DataType, component: Component) -> (ok
     if !ok do return
     defer components_release(comps)
 
-    ok = components_component_add_(comps, component)
-    if !ok do return
-
-    return true
+    return components_component_add(comps, component)
 }
 
 datatype_component_add_at_index :: proc(datatype: DataType, component: Component, index: i32) -> (ok: bool) {
@@ -328,10 +325,7 @@ datatype_component_add_at_index :: proc(datatype: DataType, component: Component
     if !ok do return
     defer components_release(comps)
 
-    ok = components_component_add_at_index(comps, component, index)
-    if !ok do return
-
-    return true
+    return components_component_add(comps, component, index)
 }
 
 datatype_component :: proc {
@@ -348,10 +342,7 @@ datatype_component_by_name :: proc(datatype: DataType, name: string) -> (compone
     if !ok do return
     defer components_release(comps)
 
-    component, ok = components_component_by_name(comps, name)
-    if !ok do return
-
-    return component, true
+    return components_component(comps, name)
 }
 
 datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (component: Component, ok: bool) {
@@ -363,10 +354,7 @@ datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (componen
     if !ok do return
     defer components_release(comps)
 
-    component, ok = components_component_by_index(comps, index + 1)
-    if !ok do return
-
-    return component, true
+    return components_component(comps, index)
 }
 
 datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i32, ok: bool) {
@@ -378,10 +366,7 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     if !ok do return
     defer components_release(comps)
 
-    index, ok = components_component_index(comps, name)
-    if !ok do return
-
-    return index - 1, true
+    return components_component_index(comps, name)
 }
 
 datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
@@ -393,10 +378,7 @@ datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {
     if !ok do return
     defer components_release(comps)
 
-    count, ok = components_component_count(comps)
-    if !ok do return
-
-    return count, true
+    return components_component_count(comps)
 }
 
 datatype_component_remove :: proc {
@@ -413,10 +395,7 @@ datatype_component_remove_by_name :: proc(datatype: DataType, name: string) -> (
     if !ok do return
     defer components_release(comps)
 
-    ok = components_component_remove_by_name(comps, name)
-    if !ok do return
-
-    return true
+    return components_component_remove(comps, name)
 }
 
 datatype_component_remove_by_index :: proc(datatype: DataType, index: i32) -> (ok: bool) {
@@ -428,10 +407,7 @@ datatype_component_remove_by_index :: proc(datatype: DataType, index: i32) -> (o
     if !ok do return
     defer components_release(comps)
 
-    ok = components_component_remove_by_index(comps, index)
-    if !ok do return
-
-    return true
+    return components_component_remove(comps, index)
 }
 
 ComponentIF :: struct #raw_union {

@@ -136,7 +136,7 @@ main :: proc() {
 
         count, ok = cb.component_count(datatype)
         for i in 0..< count {
-            component, ok = cb.component_by_index(datatype, i+1)
+            component, ok = cb.component_by_index(datatype, i)
 
             name, ok = cb.name(component)
             type_name, ok = cb.type_name(component)
