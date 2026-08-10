@@ -1,6 +1,7 @@
 package cbopenif
 
-ConnectedLibrary :: distinct rawptr
+ConnectedLibrary   :: distinct rawptr
+ConnectedLibraries :: distinct rawptr
 
 ConnectedLibraryIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
