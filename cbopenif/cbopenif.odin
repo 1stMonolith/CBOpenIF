@@ -192,8 +192,8 @@ codeblock :: proc {
 }
 
 codeblock_add :: proc {
-    codeblocks_icodeblock_add,
-    codeblocks_icodeblock_add_at_index,
+    //codeblocks_icodeblock_add,
+    //codeblocks_icodeblock_add_at_index,
     codeblocks_stcodeblock_add,
     codeblocks_ldcodeblock_add,
     codeblocks_fbdcodeblock_add,
@@ -999,8 +999,8 @@ min :: proc {
 }
 
 name :: proc {
-    icodeblock_name_get,
-    icodeblock_name_set,
+    //icodeblock_name_get,
+    //icodeblock_name_set,
     fbdcodeblock_name_get,
     fbdcodeblock_name_set,
     fdcodeblock_name_get,

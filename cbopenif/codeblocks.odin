@@ -34,8 +34,8 @@ CodeBlocksVTable :: struct {
 }
 
 codeblocks_codeblock_add :: proc {
-    codeblocks_icodeblock_add,
-    codeblocks_icodeblock_add_at_index,
+    //codeblocks_icodeblock_add,
+    //codeblocks_icodeblock_add_at_index,
     codeblocks_stcodeblock_add,
     codeblocks_ldcodeblock_add,
     codeblocks_fbdcodeblock_add,
@@ -44,6 +44,7 @@ codeblocks_codeblock_add :: proc {
     codeblocks_fdcodeblock_add,
 }
 
+/*
 codeblocks_icodeblock_add :: proc(codeblocks: CodeBlocks, icodeblock: ICodeBlock) -> (ok: bool) {
     if codeblocks == nil do return
     if icodeblock == nil do return
@@ -66,6 +67,7 @@ codeblocks_icodeblock_add_at_index :: proc(codeblocks: CodeBlocks, icodeblock: I
 
     return true
 }
+*/
 
 codeblocks_stcodeblock_add :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (ok: bool) {
     if codeblocks == nil do return
@@ -138,26 +140,30 @@ codeblocks_codeblock :: proc {
     codeblocks_codeblock_by_index,
 }
 
-codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (icodeblock: ICodeBlock, ok: bool) {
+codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBLock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&icodeblock)
+    i: ICodeBlock
+    hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&i)
     if com_failed(hr) do return
+    defer icodeblock_release(i)
 
-    return icodeblock, true
+    return icodeblock_resolve(i)
 }
 
-codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (icodeblock: ICodeBlock, ok: bool) {
+codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBLock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&icodeblock)
+    i: ICodeBlock
+    hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&i)
     if com_failed(hr) do return
+    defer icodeblock_release(i)
 
-    return icodeblock, true
+    return icodeblock_resolve(i)
 }
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {

@@ -10,7 +10,42 @@ main :: proc() {
 
     cb.controlbuilder_connect()
 
-    // Application Variables
+    fmt.println("FunctionBlockType...")
+    {
+        functionblocktype, _ := cb.functionblocktype_new("SomeFunctionBlockType", "some function block type description")
+        
+        codeblocks, _ := cb.codeblocks(functionblocktype)
+
+        stcodeblock, _ := cb.stcodeblock_new("SomeSTCodeBlock", "(* hello! *)")
+        cb.codeblock_add(codeblocks, stcodeblock)
+        cb.release(stcodeblock)
+        
+        fbdcodeblock, _ := cb.fbdcodeblock_new("SomeFBDCodeBlock", "")
+        cb.codeblock_add(codeblocks, fbdcodeblock)
+        cb.release(fbdcodeblock)
+
+        codeblock1, _ := cb.codeblock(codeblocks, 1)
+        fmt.println(" kind:", codeblock1.kind)
+        fmt.println("block:", codeblock1.block)
+        
+        // Need a way to do this...
+        //fmt.println("name: ", cb.name(codeblock1))
+        //cb.release(codeblock1)
+
+        codeblock2, _ := cb.codeblock(codeblocks, 2)
+        fmt.println(" kind:", codeblock2.kind)
+        fmt.println("block:", codeblock2.block)
+        
+        // Need a way to do this...
+        //fmt.println("name: ", cb.name(codeblock2))
+        //cb.release(codeblock2)
+
+        xml, _ := cb.serialize(functionblocktype)
+
+        fmt.println("", xml)
+        cb.release(functionblocktype)
+    }
+
     fmt.println("Application Variables...")
     {
         application_variable, ok := cb.applicationvariables_new()
@@ -30,7 +65,6 @@ main :: proc() {
         ok := cb.controlbuilder_setting("ProjectsFolder", "SomeSettingValue")
     }
 
-    // DataType
     fmt.println("DataType...")
     {
         ok: bool
@@ -79,7 +113,6 @@ main :: proc() {
         }
     }
 
-    // signals
     fmt.println("Signals...")
     {
         ok: bool

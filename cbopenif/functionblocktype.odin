@@ -1,5 +1,7 @@
 package cbopenif
 
+import "core:fmt"
+
 FunctionBlockType :: distinct rawptr
 
 FunctionBlockTypeIF :: struct #raw_union {
@@ -61,13 +63,7 @@ FunctionBlockTypeVTable :: struct {
     RestrictedSILPut:             proc "system" (this: ^FunctionBlockTypeIF, RestrictedSIL: VariantBool) -> HResult,
 }
 
-functionblocktype_new :: proc (
-    name: string,
-    description := "",
-    protected := false,
-    hidden := false,
-    scope := ScopeType.Public
-) -> (functionblocktype: FunctionBlockType, ok: bool) {
+functionblocktype_new :: proc (name: string, description := "") -> (functionblocktype: FunctionBlockType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
@@ -76,16 +72,8 @@ functionblocktype_new :: proc (
         bstr_free(bstr_name)
         bstr_free(bstr_description)
     }
-    hr := factoryif->NewFunctionBlockType1(
-        bstr_name,
-        bstr_description,
-        to_variantbool(protected),
-        to_variantbool(hidden),
-        i32(scope),
-        cast(^rawptr)&functionblocktype
-    )
+    hr := factoryif->NewFunctionBlockType(bstr_name, bstr_description, cast(^rawptr)&functionblocktype)
     if com_failed(hr) do return
-    
     return functionblocktype, true
 }
 
@@ -103,12 +91,10 @@ functionblocktype_deserialize :: proc(xml: string) -> (functionblocktype: Functi
 functionblocktype_serialize :: proc(functionblocktype: FunctionBlockType) -> (xml: string, ok: bool) {
     if functionblocktype == nil do return
     if !controlbuilder_connected() do return
-
     bs: BStr
     defer bstr_free(bs)
     hr := (^FunctionBlockTypeIF)(functionblocktype)->Serialize(&bs)
     if com_failed(hr) do return
-
     return from_bstr(bs), true
 }
 
