@@ -12,38 +12,90 @@ main :: proc() {
 
     fmt.println("FunctionBlockType...")
     {
-        functionblocktype, _ := cb.functionblocktype_new("SomeFunctionBlockType", "some function block type description")
-        
-        codeblocks, _ := cb.codeblocks(functionblocktype)
+        ok: bool
+        count: i32
+        type_name, type_description, block_name, stcode, xml: string
+        functionblocktype: cb.FunctionBlockType
+        codeblocks: cb.CodeBlocks
+        stcodeblock: cb.STCodeBlock
+        fbdcodeblock: cb.FBDCodeBlock
+        codeblock: cb.CodeBlock
 
-        stcodeblock, _ := cb.stcodeblock_new("SomeSTCodeBlock", "(* hello! *)")
+        type_name = "SomeFunctionBlockType"
+        type_description = "some function block type description"
+        fmt.printf("creating new functionblocktype with name '%v' and description '%v'... ", type_name, type_description)
+        functionblocktype, ok = cb.functionblocktype_new(type_name, type_description)
+        if !ok {
+            fmt.print("failed\n")
+            return
+        }
+        fmt.print("success\n")
+        defer cb.release(functionblocktype)
+
+        fmt.print("\ngetting codeblocks from functionblocktype... ")
+        codeblocks, ok = cb.codeblocks(functionblocktype)
+        if !ok {
+            fmt.println("failed")
+            return
+        }
+        fmt.print("success")
+        defer cb.release(codeblocks)
+
+        block_name = "SomeSTCodeBlock"
+        stcode = "(* hello! *)"
+        fmt.printf("creating new stcodeblock with name '%v' and stcode '%v'... ", block_name, stcode)
+        stcodeblock, ok = cb.stcodeblock_new(block_name, stcode)
+        if !ok {
+            fmt.println("failed\n")
+            return
+        }
+        fmt.print("success\n")
+        fmt.print("adding codeblock to functionblocktype... ")
         cb.codeblock_add(codeblocks, stcodeblock)
+        if !ok {
+            fmt.print("failed\n")
+            return
+        }
+        fmt.print("success\n")
         cb.release(stcodeblock)
-        
-        fbdcodeblock, _ := cb.fbdcodeblock_new("SomeFBDCodeBlock", "")
+
+        block_name = "SomeFBDCodeBlock"
+        stcode = ""
+        fmt.printf("creating new fbdcodeblock with name '%v' and stcode '%v'... ", block_name, stcode)
+        fbdcodeblock, ok = cb.fbdcodeblock_new(block_name, stcode)
+        if !ok {
+            fmt.println("failed\n")
+            return
+        }
+        fmt.print("success\n")
+        fmt.print("adding codeblock to functionblocktype... ")
         cb.codeblock_add(codeblocks, fbdcodeblock)
+        if !ok {
+            fmt.print("failed\n")
+            return
+        }
+        fmt.print("success\n")
         cb.release(fbdcodeblock)
 
-        codeblock1, _ := cb.codeblock(codeblocks, 1)
-        fmt.println(" kind:", codeblock1.kind)
-        fmt.println("block:", codeblock1.block)
-        
-        // Need a way to do this...
-        //fmt.println("name: ", cb.name(codeblock1))
-        //cb.release(codeblock1)
+        fmt.print("getting functionblocktype's codeblock count... ")
+        count, ok = cb.codeblock_count(codeblocks)
+        if !ok {
+            fmt.print("failed\n")
+            return
+        }
+        fmt.printf("success count=%v\n", count)
 
-        codeblock2, _ := cb.codeblock(codeblocks, 2)
-        fmt.println(" kind:", codeblock2.kind)
-        fmt.println("block:", codeblock2.block)
-        
-        // Need a way to do this...
-        //fmt.println("name: ", cb.name(codeblock2))
-        //cb.release(codeblock2)
+        for i in 0..< count {
+            codeblock, ok = cb.codeblock(codeblocks, i)
+            block_name, ok = cb.name(codeblock)
+            stcode, ok = cb.stcode(codeblock)
+            fmt.printfln("codeblock at index %v and name '%v' and stcode '%v'", i, block_name, stcode)
+            cb.release(codeblock)
+        }
 
-        xml, _ := cb.serialize(functionblocktype)
+        xml, ok = cb.serialize(functionblocktype)
 
-        fmt.println("", xml)
-        cb.release(functionblocktype)
+        fmt.printfln("%v", xml)
     }
 
     fmt.println("Application Variables...")

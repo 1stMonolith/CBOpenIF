@@ -140,7 +140,7 @@ codeblocks_codeblock :: proc {
     codeblocks_codeblock_by_index,
 }
 
-codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBLock, ok: bool) {
+codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
@@ -151,19 +151,19 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
     if com_failed(hr) do return
     defer icodeblock_release(i)
 
-    return icodeblock_resolve(i)
+    return from_icodeblock(i)
 }
 
-codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBLock, ok: bool) {
+codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
     i: ICodeBlock
-    hr := (^CodeBlocksIF)(codeblocks)->Item(index, cast(^rawptr)&i)
+    hr := (^CodeBlocksIF)(codeblocks)->Item(index + 1, cast(^rawptr)&i)
     if com_failed(hr) do return
     defer icodeblock_release(i)
 
-    return icodeblock_resolve(i)
+    return from_icodeblock(i)
 }
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {
@@ -175,7 +175,7 @@ codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (ind
     hr := (^CodeBlocksIF)(codeblocks)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 codeblocks_codeblock_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {

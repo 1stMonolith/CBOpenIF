@@ -18,7 +18,7 @@ CodeBlockUnion :: union {
     FDCodeBlock,
 }
 
-CodeBLock :: struct {
+CodeBlock :: struct {
     kind: CodeBlockType,
     block: CodeBlockUnion,
 }
@@ -223,7 +223,7 @@ icodeblock_release :: proc(icodeblock: ICodeBlock) {
     }
 }
 
-icodeblock_resolve :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBLock, ok: bool) {
+from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bool) {
     if icodeblock == nil do return
 
     if is, ok := icodeblock_is_st(icodeblock); ok && is {
@@ -275,4 +275,80 @@ icodeblock_resolve :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBLock, ok:
     }
 
     return {}, false
+}
+
+codeblock_name :: proc {
+    codeblock_name_get,
+    codeblock_name_set,
+}
+
+codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
+    switch block in codeblock.block {
+        case STCodeBlock:  return stcodeblock_name_get(block)
+        case SFCCodeBlock: return sfccodeblock_name_get(block)
+        case FBDCodeBlock: return fbdcodeblock_name_get(block)
+        case LDCodeBlock:  return ldcodeblock_name_get(block)
+        case ILCodeBlock:  return ilcodeblock_name_get(block)
+        case FDCodeBlock:  return fdcodeblock_name_get(block)
+    }
+    return
+}
+
+codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
+    switch block in codeblock.block {
+        case STCodeBlock:  return stcodeblock_name_set(block, name)
+        case SFCCodeBlock: return sfccodeblock_name_set(block, name)
+        case FBDCodeBlock: return fbdcodeblock_name_set(block, name)
+        case LDCodeBlock:  return ldcodeblock_name_set(block, name)
+        case ILCodeBlock:  return ilcodeblock_name_set(block, name)
+        case FDCodeBlock:  return fdcodeblock_name_set(block, name)
+    }
+    return
+}
+
+codeblock_release :: proc(codeblock: CodeBlock) {
+    switch block in codeblock.block {
+        case STCodeBlock:  stcodeblock_release(block)
+        case SFCCodeBlock: sfccodeblock_release(block)
+        case FBDCodeBlock: fbdcodeblock_release(block)
+        case LDCodeBlock:  ldcodeblock_release(block)
+        case ILCodeBlock:  ilcodeblock_release(block)
+        case FDCodeBlock:  fdcodeblock_release(block)
+    }
+}
+
+codeblock_serialize :: proc(codeblock: CodeBlock) -> (xml: string, ok: bool) {
+    switch block in codeblock.block {
+        case STCodeBlock:  return stcodeblock_serialize(block)
+        case SFCCodeBlock: return sfccodeblock_serialize(block)
+        case FBDCodeBlock: return fbdcodeblock_serialize(block)
+        case LDCodeBlock:  return ldcodeblock_serialize(block)
+        case ILCodeBlock:  return ilcodeblock_serialize(block)
+        case FDCodeBlock:  return fdcodeblock_serialize(block)
+    }
+    return
+}
+
+codeblock_stcode :: proc {
+    codeblock_stcode_get,
+    codeblock_stcode_set,
+}
+
+
+codeblock_stcode_get :: proc(codeblock: CodeBlock) -> (stcode: string, ok: bool) {
+     #partial switch block in codeblock.block {
+        case STCodeBlock:  return stcodeblock_stcode_get(block)
+        case FBDCodeBlock: return fbdcodeblock_stcode_get(block)
+        case LDCodeBlock:  return ldcodeblock_stcode_get(block)
+    }
+    return
+}
+
+codeblock_stcode_set :: proc(codeblock: CodeBlock, stcode: string) -> (ok: bool) {
+    #partial switch block in codeblock.block {
+        case STCodeBlock:  return stcodeblock_stcode_set(block, stcode)
+        case FBDCodeBlock: return fbdcodeblock_stcode_set(block, stcode)
+        case LDCodeBlock:  return ldcodeblock_stcode_set(block, stcode)
+    }
+    return
 }

@@ -1001,6 +1001,8 @@ min :: proc {
 name :: proc {
     //icodeblock_name_get,
     //icodeblock_name_set,
+    codeblock_name_get,
+    codeblock_name_set,
     fbdcodeblock_name_get,
     fbdcodeblock_name_set,
     fdcodeblock_name_get,
@@ -1292,6 +1294,7 @@ redundant_pos :: proc {
 
 release :: proc {
     icodeblock_release,
+    codeblock_release,
     codeblocks_release,
     fbdcodeblock_release,
     fdcodeblock_release,
@@ -1492,6 +1495,7 @@ scope :: proc {
 }
 
 serialize :: proc {
+    codeblock_serialize,
     fbdcodeblock_serialize,
     fdcodeblock_serialize,
     ilcodeblock_serialize,
@@ -1575,6 +1579,8 @@ sil_level :: proc {
 
 
 stcode :: proc {
+    codeblock_stcode_get,
+    codeblock_stcode_set,
     fbdcodeblock_stcode_get,
     fbdcodeblock_stcode_set,
     ldcodeblock_stcode_get,
