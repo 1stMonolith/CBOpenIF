@@ -67,7 +67,7 @@ graphnodes_graphnode_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (gr
     if graphnodes == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^GraphNodesIF)(graphnodes)->Item(index, cast(^rawptr)&graphnode)
+    hr := (^GraphNodesIF)(graphnodes)->Item(index + 1, cast(^rawptr)&graphnode)
     if com_failed(hr) do return
     
     return graphnode, true
@@ -82,7 +82,7 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
     hr := (^GraphNodesIF)(graphnodes)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 graphnodes_graphnode_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
@@ -117,7 +117,7 @@ graphnodes_graphnode_remove_by_index :: proc(graphnodes: GraphNodes, index: i32)
     if graphnodes == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^GraphNodesIF)(graphnodes)->Remove(index)
+    hr := (^GraphNodesIF)(graphnodes)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

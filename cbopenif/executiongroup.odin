@@ -111,7 +111,7 @@ executiongroup_executioninstance_by_index :: proc(executiongroup: ExecutionGroup
     if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(executiongroup)->Item(index, cast(^rawptr)&executioninstance)
+    hr := (^ExecutionGroupIF)(executiongroup)->Item(index + 1, cast(^rawptr)&executioninstance)
     if com_failed(hr) do return
 
     return executioninstance, true
@@ -126,7 +126,7 @@ executiongroup_executioninstance_index :: proc(executiongroup: ExecutionGroup, n
     hr := (^ExecutionGroupIF)(executiongroup)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 executiongroup_executioninstance_count :: proc(executiongroup: ExecutionGroup) -> (count: i32, ok: bool) {
@@ -162,7 +162,7 @@ executiongroup_executioninstance_remove_by_index :: proc(executiongroup: Executi
     if executiongroup == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionGroupIF)(executiongroup)->Remove(index)
+    hr := (^ExecutionGroupIF)(executiongroup)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

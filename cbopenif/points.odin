@@ -48,7 +48,7 @@ points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: 
     if points == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^PointsIF)(points)->Item(index, cast(^rawptr)&point)
+    hr := (^PointsIF)(points)->Item(index + 1, cast(^rawptr)&point)
     if com_failed(hr) do return
     
     return point, true
@@ -68,7 +68,7 @@ points_point_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
     if points == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^PointsIF)(points)->Remove(index)
+    hr := (^PointsIF)(points)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

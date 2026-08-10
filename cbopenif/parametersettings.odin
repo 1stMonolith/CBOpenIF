@@ -67,7 +67,7 @@ parametersettings_parametersetting_by_index :: proc(parametersettings: Parameter
     if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parametersettings)->Item(index, cast(^rawptr)&parametersetting)
+    hr := (^ParameterSettingsIF)(parametersettings)->Item(index + 1, cast(^rawptr)&parametersetting)
     if com_failed(hr) do return
     
     return parametersetting, true
@@ -82,7 +82,7 @@ parametersettings_parametersetting_index :: proc(parametersettings: ParameterSet
     hr := (^ParameterSettingsIF)(parametersettings)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 parametersettings_parametersetting_count :: proc(parametersettings: ParameterSettings) -> (count: i32, ok: bool) {
@@ -117,7 +117,7 @@ parametersettings_parametersetting_remove_by_index :: proc(parametersettings: Pa
     if parametersettings == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index)
+    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

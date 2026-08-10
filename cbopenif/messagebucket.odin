@@ -108,7 +108,7 @@ messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (im
     if bucket == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Item(index, cast(^rawptr)&imessage)
+    hr := (^MessageBucketIF)(bucket)->Item(index + 1, cast(^rawptr)&imessage)
     if com_failed(hr) do return
 
     return imessage, true
@@ -128,7 +128,7 @@ messagebucket_message_remove_by_index :: proc(bucket: MessageBucket, index: i32)
     if bucket == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Remove(index)
+    hr := (^MessageBucketIF)(bucket)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

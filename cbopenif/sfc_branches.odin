@@ -54,7 +54,7 @@ sfcbranches_sfcbranch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> 
     if sfcbranches == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->Item(index, cast(^rawptr)&sfcbranch)
+    hr := (^SFCBranchesIF)(sfcbranches)->Item(index + 1, cast(^rawptr)&sfcbranch)
     if com_failed(hr) do return
 
     return sfcbranch, true
@@ -78,7 +78,7 @@ sfcbranches_sfcbranch_remove_by_index :: proc(sfcbranches: SFCBranches, index: i
     if sfcbranches == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^SFCBranchesIF)(sfcbranches)->Remove(index)
+    hr := (^SFCBranchesIF)(sfcbranches)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

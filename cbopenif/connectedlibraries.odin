@@ -101,7 +101,7 @@ connectedlibraries_connectedlibrary_by_index :: proc(connectedlibraries: Connect
     if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Item(index, cast(^rawptr)&connectedlibrary)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Item(index + 1, cast(^rawptr)&connectedlibrary)
     if com_failed(hr) do return
 
     return connectedlibrary, true
@@ -116,7 +116,7 @@ connectedlibraries_connectedlibrary_index :: proc(connectedlibraries: ConnectedL
     hr := (^ConnectedLibrariesIF)(connectedlibraries)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 connectedlibraries_connectedlibrary_count :: proc(connectedlibraries: ConnectedLibraries) -> (count: i32, ok: bool) {
@@ -152,7 +152,7 @@ connectedlibraries_connectedlibrary_remove_by_index :: proc(connectedlibraries: 
     if connectedlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Remove(index)
+    hr := (^ConnectedLibrariesIF)(connectedlibraries)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

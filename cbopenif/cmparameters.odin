@@ -68,7 +68,7 @@ cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32
     if cmparameters == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CMParametersIF)(cmparameters)->Item(index, cast(^rawptr)&cmparameter)
+    hr := (^CMParametersIF)(cmparameters)->Item(index + 1, cast(^rawptr)&cmparameter)
     if com_failed(hr) do return
     
     return cmparameter, true
@@ -83,7 +83,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
     hr := (^CMParametersIF)(cmparameters)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 cmparameters_cmparameter_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ cmparameters_cmparameter_remove_by_index :: proc(cmparameters: CMParameters, ind
     if cmparameters == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CMParametersIF)(cmparameters)->Remove(index)
+    hr := (^CMParametersIF)(cmparameters)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

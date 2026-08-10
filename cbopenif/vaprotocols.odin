@@ -94,7 +94,7 @@ vaprotocols_vaprotocol_by_index :: proc(vaprotocols: VAProtocols, index: i32) ->
     if vaprotocols == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VAProtocolsIF)(vaprotocols)->Item(index, cast(^rawptr)&iva)
+    hr := (^VAProtocolsIF)(vaprotocols)->Item(index + 1, cast(^rawptr)&iva)
     if com_failed(hr) do return
 
     return iva, true
@@ -109,7 +109,7 @@ vaprotocols_vaprotocol_index :: proc(vaprotocols: VAProtocols, name: string) -> 
     hr := (^VAProtocolsIF)(vaprotocols)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 vaprotocols_vaprotocol_count :: proc(vaprotocols: VAProtocols) -> (count: i32, ok: bool) {
@@ -145,7 +145,7 @@ vaprotocols_vaprotocol_remove_by_index :: proc(vaprotocols: VAProtocols, index: 
     if vaprotocols == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VAProtocolsIF)(vaprotocols)->Remove(index)
+    hr := (^VAProtocolsIF)(vaprotocols)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

@@ -68,7 +68,7 @@ hwchannels_hwchannel_by_index :: proc(hwchannels: HWChannels, index: i32) -> (hw
     if hwchannels == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^HWChannelsIF)(hwchannels)->Item(index, cast(^rawptr)&hwchannel)
+    hr := (^HWChannelsIF)(hwchannels)->Item(index + 1, cast(^rawptr)&hwchannel)
     if com_failed(hr) do return
 
     return hwchannel, true
@@ -83,7 +83,7 @@ hwchannels_hwchannel_index :: proc(hwchannels: HWChannels, address: string) -> (
     hr := (^HWChannelsIF)(hwchannels)->FindNr(bstr_address, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 hwchannels_hwchannel_count :: proc(hwchannels: HWChannels) -> (count: i32, ok: bool) {
@@ -119,7 +119,7 @@ hwchannels_hwchannel_remove_by_index :: proc(hwchannels: HWChannels, index: i32)
     if hwchannels == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^HWChannelsIF)(hwchannels)->Remove(index)
+    hr := (^HWChannelsIF)(hwchannels)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

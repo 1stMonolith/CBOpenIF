@@ -101,7 +101,7 @@ connectedhwlibraries_connectedhwlibrary_by_index :: proc(connectedhwlibraries: C
     if connectedhwlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Item(index, cast(^rawptr)&connectedhwlibrary)
+    hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Item(index + 1, cast(^rawptr)&connectedhwlibrary)
     if com_failed(hr) do return
 
     return connectedhwlibrary, true
@@ -116,7 +116,7 @@ connectedhwlibraries_connectedhwlibrary_index :: proc(connectedhwlibraries: Conn
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 connectedhwlibraries_connectedhwlibrary_count :: proc(connectedhwlibraries: ConnectedHWLibraries) -> (count: i32, ok: bool) {
@@ -152,7 +152,7 @@ connectedhwlibraries_connectedhwlibrary_remove_by_index :: proc(connectedhwlibra
     if connectedhwlibraries == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Remove(index)
+    hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

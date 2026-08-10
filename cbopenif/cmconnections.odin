@@ -67,7 +67,7 @@ cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index:
     if cmconnections == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CMConnectionsIF)(cmconnections)->Item(index, cast(^rawptr)&cmconnection)
+    hr := (^CMConnectionsIF)(cmconnections)->Item(index + 1, cast(^rawptr)&cmconnection)
     if com_failed(hr) do return
     
     return cmconnection, true
@@ -82,7 +82,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
     hr := (^CMConnectionsIF)(cmconnections)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 cmconnections_cmconnection_count :: proc(cmconnections: CMConnections) -> (count: i32, ok: bool) {
@@ -117,7 +117,7 @@ cmconnections_cmconnection_remove_by_index :: proc(cmconnections: CMConnections,
     if cmconnections == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CMConnectionsIF)(cmconnections)->Remove(index)
+    hr := (^CMConnectionsIF)(cmconnections)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

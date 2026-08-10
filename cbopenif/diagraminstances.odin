@@ -68,7 +68,7 @@ diagraminstances_diagraminstance_by_index :: proc(diagraminstances: DiagramInsta
     if diagraminstances == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^DiagramInstancesIF)(diagraminstances)->Item(index, cast(^rawptr)&diagraminstance)
+    hr := (^DiagramInstancesIF)(diagraminstances)->Item(index + 1, cast(^rawptr)&diagraminstance)
     if com_failed(hr) do return
 
     return diagraminstance, true
@@ -83,7 +83,7 @@ diagraminstances_diagraminstance_index :: proc(diagraminstances: DiagramInstance
     hr := (^DiagramInstancesIF)(diagraminstances)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 diagraminstances_diagraminstance_count :: proc(diagraminstances: DiagramInstances) -> (count: i32, ok: bool) {
@@ -119,7 +119,7 @@ diagraminstances_diagraminstance_remove_by_index :: proc(diagraminstances: Diagr
     if diagraminstances == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^DiagramInstancesIF)(diagraminstances)->Remove(index)
+    hr := (^DiagramInstancesIF)(diagraminstances)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

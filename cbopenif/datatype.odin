@@ -361,7 +361,7 @@ datatype_component_by_index :: proc(datatype: DataType, index: i32) -> (componen
     if !ok do return
     defer components_release(comps)
 
-    component, ok = components_component_by_index(comps, index)
+    component, ok = components_component_by_index(comps, index + 1)
     if !ok do return
 
     return component, true
@@ -379,7 +379,7 @@ datatype_component_index :: proc(datatype: DataType, name: string) -> (index: i3
     index, ok = components_component_index(comps, name)
     if !ok do return
 
-    return index, true
+    return index - 1, true
 }
 
 datatype_component_count :: proc(datatype: DataType) -> (count: i32, ok: bool) {

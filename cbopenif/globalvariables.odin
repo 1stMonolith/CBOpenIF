@@ -68,7 +68,7 @@ globalvariables_globalvariable_by_index :: proc(globalvariables: GlobalVariables
     if globalvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^GlobalVariablesIF)(globalvariables)->Item(index, cast(^rawptr)&globalvariable)
+    hr := (^GlobalVariablesIF)(globalvariables)->Item(index + 1, cast(^rawptr)&globalvariable)
     if com_failed(hr) do return
     
     return globalvariable, true
@@ -83,7 +83,7 @@ globalvariables_globalvariable_index :: proc(globalvariables: GlobalVariables, n
     hr := (^GlobalVariablesIF)(globalvariables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 globalvariables_globalvariable_count :: proc(globalvariables: GlobalVariables) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ globalvariables_globalvariable_remove_by_index :: proc(globalvariables: GlobalVa
     if globalvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^GlobalVariablesIF)(globalvariables)->Remove(index)
+    hr := (^GlobalVariablesIF)(globalvariables)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

@@ -68,7 +68,7 @@ variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variab
     if variables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^VariablesIF)(variables)->Item(index, cast(^rawptr)&variable)
+    hr := (^VariablesIF)(variables)->Item(index + 1, cast(^rawptr)&variable)
     if com_failed(hr) do return
     
     return variable, true
@@ -83,7 +83,7 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
     hr := (^VariablesIF)(variables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 variables_variable_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ variables_variable_remove_by_index :: proc(variables: Variables, index: i32) -> 
     if variables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^VariablesIF)(variables)->Remove(index)
+    hr := (^VariablesIF)(variables)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

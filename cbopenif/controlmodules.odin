@@ -135,7 +135,7 @@ controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, in
     if controlmodules == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ControlModulesIF)(controlmodules)->Item(index, cast(^rawptr)&icontrolmodule)
+    hr := (^ControlModulesIF)(controlmodules)->Item(index + 1, cast(^rawptr)&icontrolmodule)
     if com_failed(hr) do return
     
     return icontrolmodule, true
@@ -150,7 +150,7 @@ controlmodules_controlmodule_index :: proc(controlmodules: ControlModules, name:
     hr := (^ControlModulesIF)(controlmodules)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 controlmodules_controlmodule_count :: proc(controlmodules: ControlModules) -> (count: i32, ok: bool) {
@@ -185,7 +185,7 @@ controlmodules_controlmodule_remove_by_index :: proc(controlmodules: ControlModu
     if controlmodules == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ControlModulesIF)(controlmodules)->Remove(index)
+    hr := (^ControlModulesIF)(controlmodules)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

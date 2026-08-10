@@ -68,7 +68,7 @@ commvariables_commvariable_by_index :: proc(commvariables: CommVariables, index:
     if commvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CommVariablesIF)(commvariables)->Item(index, cast(^rawptr)&commvariable)
+    hr := (^CommVariablesIF)(commvariables)->Item(index + 1, cast(^rawptr)&commvariable)
     if com_failed(hr) do return
     
     return commvariable, true
@@ -83,7 +83,7 @@ commvariables_commvariable_index :: proc(commvariables: CommVariables, name: str
     hr := (^CommVariablesIF)(commvariables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 commvariables_commvariable_count :: proc(commvariables: CommVariables) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ commvariables_remove_by_index :: proc(commvariables: CommVariables, index: i32) 
     if commvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^CommVariablesIF)(commvariables)->Remove(index)
+    hr := (^CommVariablesIF)(commvariables)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

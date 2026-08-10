@@ -93,8 +93,6 @@ main :: proc() {
             cb.release(codeblock)
         }
 
-        xml, ok = cb.serialize(functionblocktype)
-
         fmt.printfln("%v", xml)
     }
 

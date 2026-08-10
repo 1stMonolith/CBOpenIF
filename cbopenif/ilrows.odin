@@ -49,7 +49,7 @@ ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: 
     if ilrows == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ILRowsIF)(ilrows)->Item(index, cast(^rawptr)&ilrow)
+    hr := (^ILRowsIF)(ilrows)->Item(index + 1, cast(^rawptr)&ilrow)
     if com_failed(hr) do return
     
     return ilrow, true

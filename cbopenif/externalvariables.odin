@@ -68,7 +68,7 @@ externalvariables_externalvariable_by_index :: proc(externalvariables: ExternalV
     if externalvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ExternalVariablesIF)(externalvariables)->Item(index, cast(^rawptr)&externalvariable)
+    hr := (^ExternalVariablesIF)(externalvariables)->Item(index + 1, cast(^rawptr)&externalvariable)
     if com_failed(hr) do return
     
     return externalvariable, true
@@ -83,7 +83,7 @@ externalvariables_externalvariable_index :: proc(externalvariables: ExternalVari
     hr := (^ExternalVariablesIF)(externalvariables)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 externalvariables_externalvariable_count :: proc(externalvariables: ExternalVariables) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ externalvariables_externalvariable_remove_by_index :: proc(externalvariables: Ex
     if externalvariables == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ExternalVariablesIF)(externalvariables)->Remove(index)
+    hr := (^ExternalVariablesIF)(externalvariables)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

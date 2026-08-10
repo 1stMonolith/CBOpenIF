@@ -68,7 +68,7 @@ hwunits_hwunit_by_index :: proc(hwunits: HWUnits, index: i32) -> (hwunit: HWUnit
     if hwunits == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^HWUnitsIF)(hwunits)->Item(index, cast(^rawptr)&hwunit)
+    hr := (^HWUnitsIF)(hwunits)->Item(index + 1, cast(^rawptr)&hwunit)
     if com_failed(hr) do return
 
     return hwunit, true
@@ -83,7 +83,7 @@ hwunits_hwunit_index :: proc(hwunits: HWUnits, path: string) -> (index: i32, ok:
     hr := (^HWUnitsIF)(hwunits)->FindNr(bstr_path, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 hwunits_hwunit_count :: proc(hwunits: HWUnits) -> (count: i32, ok: bool) {
@@ -119,7 +119,7 @@ hwunits_hwunit_remove_by_index :: proc(hwunits: HWUnits, index: i32) -> (ok: boo
     if hwunits == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^HWUnitsIF)(hwunits)->Remove(index)
+    hr := (^HWUnitsIF)(hwunits)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

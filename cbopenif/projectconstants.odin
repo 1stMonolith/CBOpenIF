@@ -102,7 +102,7 @@ projectconstants_projectconstant_by_index :: proc(projectconstants: ProjectConst
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ProjectConstantsIF)(projectconstants)->Item(index, cast(^rawptr)&projectconstant)
+    hr := (^ProjectConstantsIF)(projectconstants)->Item(index + 1, cast(^rawptr)&projectconstant)
     if com_failed(hr) do return
 
     return projectconstant, true
@@ -117,7 +117,7 @@ projectconstants_projectconstant_index :: proc(projectconstants: ProjectConstant
     hr := (^ProjectConstantsIF)(projectconstants)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 projectconstants_projectconstant_count :: proc(projectconstants: ProjectConstants) -> (count: i32, ok: bool) {
@@ -152,7 +152,7 @@ projectconstants_projectconstant_remove_by_index :: proc(projectconstants: Proje
     if projectconstants == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ProjectConstantsIF)(projectconstants)->Remove(index)
+    hr := (^ProjectConstantsIF)(projectconstants)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

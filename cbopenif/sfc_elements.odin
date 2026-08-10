@@ -124,7 +124,7 @@ sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) ->
     if sfcelements == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^SFCElementsIF)(sfcelements)->Item(index, cast(^rawptr)&sfcelement)
+    hr := (^SFCElementsIF)(sfcelements)->Item(index + 1, cast(^rawptr)&sfcelement)
     if com_failed(hr) do return
 
     return sfcelement, true
@@ -148,7 +148,7 @@ sfcelements_sfcelement_remove_by_index :: proc(sfcelements: SFCElements, index: 
     if sfcelements == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^SFCElementsIF)(sfcelements)->Remove(index)
+    hr := (^SFCElementsIF)(sfcelements)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

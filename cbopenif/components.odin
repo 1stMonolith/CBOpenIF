@@ -70,7 +70,7 @@ components_component_by_index :: proc(components: Components, index: i32) -> (co
     if !controlbuilder_connected() do return
     
     p: rawptr
-    hr := (^ComponentsIF)(components)->Item(index, &p)
+    hr := (^ComponentsIF)(components)->Item(index + 1, &p)
     if com_failed(hr) do return
     
     return Component(p), true
@@ -85,7 +85,7 @@ components_component_index :: proc(components: Components, name: string) -> (ind
     hr := (^ComponentsIF)(components)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 components_component_count :: proc(components: Components) -> (count: i32, ok: bool) {
@@ -121,7 +121,7 @@ components_component_remove_by_index :: proc(components: Components, index: i32)
     if components == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ComponentsIF)(components)->Remove(index)
+    hr := (^ComponentsIF)(components)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

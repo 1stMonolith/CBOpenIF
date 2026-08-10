@@ -68,7 +68,7 @@ parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parame
     if parameters == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParametersIF)(parameters)->Item(index, &parameter)
+    hr := (^ParametersIF)(parameters)->Item(index + 1, &parameter)
     if com_failed(hr) do return
     
     return parameter, true
@@ -83,7 +83,7 @@ parameters_parameter_index :: proc(parameters: Parameters, name: string) -> (ind
     hr := (^ParametersIF)(parameters)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 parameters_parameter_count :: proc(parameters: Parameters) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ parameters_parameter_remove_by_index :: proc(parameters: Parameters, index: i32)
     if parameters == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^ParametersIF)(parameters)->Remove(index)
+    hr := (^ParametersIF)(parameters)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true

@@ -68,7 +68,7 @@ extensibleparameters_extensibleparameter_by_index :: proc(extensibleparameters: 
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index, cast(^rawptr)&extensibleparameter)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index + 1, cast(^rawptr)&extensibleparameter)
     if com_failed(hr) do return
 
     return extensibleparameter, true
@@ -83,7 +83,7 @@ extensibleparameters_extensibleparameter_index :: proc(extensibleparameters: Ext
     hr := (^ExtensibleParametersIF)(extensibleparameters)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 extensibleparameters_extensibleparameter_count :: proc(extensibleparameters: ExtensibleParameters) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ extensibleparameters_extensibleparameter_remove_by_index :: proc(extensibleparam
     if extensibleparameters == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExtensibleParametersIF)(extensibleparameters)->Remove(index)
+    hr := (^ExtensibleParametersIF)(extensibleparameters)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

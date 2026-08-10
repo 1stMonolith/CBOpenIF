@@ -113,7 +113,7 @@ vaaddressedprotocol_vaaddressedvariable_by_index :: proc(vaaddressedprotocol: VA
     if vaaddressedprotocol == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Item(index, cast(^rawptr)&vaaddressedvariable)
+    hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Item(index + 1, cast(^rawptr)&vaaddressedvariable)
     if com_failed(hr) do return
 
     return vaaddressedvariable, true
@@ -128,7 +128,7 @@ vaaddressedprotocol_vaaddressedvariable_index :: proc(vaaddressedprotocol: VAAdd
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 vaaddressedprotocol_vaaddressedvariable_count :: proc(vaaddressedprotocol: VAAddressedProtocol) -> (count: i32, ok: bool) {
@@ -164,7 +164,7 @@ vaaddressedprotocol_vaaddressedvariable_remove_by_index :: proc(vaaddressedproto
     if vaaddressedprotocol == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Remove(index)
+    hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

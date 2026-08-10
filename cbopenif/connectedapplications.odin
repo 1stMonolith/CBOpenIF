@@ -101,7 +101,7 @@ connectedapplications_connectedapplication_by_index :: proc(connectedapplication
     if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(connectedapplications)->Item(index, cast(^rawptr)&connectedapplication)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Item(index + 1, cast(^rawptr)&connectedapplication)
     if com_failed(hr) do return
 
     return connectedapplication, true
@@ -116,7 +116,7 @@ connectedapplications_connectedapplication_index :: proc(connectedapplications: 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 connectedapplications_connectedapplication_count :: proc(connectedapplications: ConnectedApplications) -> (count: i32, ok: bool) {
@@ -152,7 +152,7 @@ connectedapplications_connectedapplication_remove_by_index :: proc(connectedappl
     if connectedapplications == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ConnectedApplicationsIF)(connectedapplications)->Remove(index)
+    hr := (^ConnectedApplicationsIF)(connectedapplications)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

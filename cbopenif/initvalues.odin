@@ -71,7 +71,7 @@ initvalues_initvalue_by_index :: proc(initvalues: InitValues, index: i32) -> (in
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^InitValuesIF)(initvalues)->Item(index, cast(^rawptr)&initvalue)
+    hr := (^InitValuesIF)(initvalues)->Item(index + 1, cast(^rawptr)&initvalue)
     if com_failed(hr) do return
 
     return initvalue, true
@@ -90,7 +90,7 @@ initvalues_initvalue_index :: proc(initvalues: InitValues, pou_path, name: strin
     hr := (^InitValuesIF)(initvalues)->FindNr(bstr_pou, bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 initvalues_initvalue_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
@@ -125,7 +125,7 @@ initvalues_initvalue_remove_by_index :: proc(initvalues: InitValues, index: i32)
     if initvalues == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^InitValuesIF)(initvalues)->Remove(index)
+    hr := (^InitValuesIF)(initvalues)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

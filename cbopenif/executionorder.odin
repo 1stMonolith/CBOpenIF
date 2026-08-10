@@ -100,7 +100,7 @@ executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, i
     if executionorder == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(executionorder)->Item(index, cast(^rawptr)&executiongroup)
+    hr := (^ExecutionOrderIF)(executionorder)->Item(index + 1, cast(^rawptr)&executiongroup)
     if com_failed(hr) do return
 
     return executiongroup, true
@@ -115,7 +115,7 @@ executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task
     hr := (^ExecutionOrderIF)(executionorder)->FindNr(bstr_task_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (count: i32, ok: bool) {
@@ -151,7 +151,7 @@ executionorder_executiongroup_remove_by_index :: proc(executionorder: ExecutionO
     if executionorder == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^ExecutionOrderIF)(executionorder)->Remove(index)
+    hr := (^ExecutionOrderIF)(executionorder)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

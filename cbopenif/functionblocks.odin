@@ -68,7 +68,7 @@ functionblocks_functionblock_by_index :: proc(functionblocks: FunctionBlocks, in
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^FunctionBlocksIF)(functionblocks)->Item(index, cast(^rawptr)&functionblock)
+    hr := (^FunctionBlocksIF)(functionblocks)->Item(index + 1, cast(^rawptr)&functionblock)
     if com_failed(hr) do return
 
     return functionblock, true
@@ -83,7 +83,7 @@ functionblocks_functionblock_index :: proc(functionblocks: FunctionBlocks, name:
     hr := (^FunctionBlocksIF)(functionblocks)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 functionblocks_functionblock_count :: proc(functionblocks: FunctionBlocks) -> (count: i32, ok: bool) {
@@ -118,7 +118,7 @@ functionblocks_functionblock_remove_by_index :: proc(functionblocks: FunctionBlo
     if functionblocks == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^FunctionBlocksIF)(functionblocks)->Remove(index)
+    hr := (^FunctionBlocksIF)(functionblocks)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

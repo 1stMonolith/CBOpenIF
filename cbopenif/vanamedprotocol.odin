@@ -113,7 +113,7 @@ vanamedprotocol_vanamedvariable_by_index :: proc(vanamedprotocol: VANamedProtoco
     if vanamedprotocol == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VANamedProtocolIF)(vanamedprotocol)->Item(index, cast(^rawptr)&vanammedvariable)
+    hr := (^VANamedProtocolIF)(vanamedprotocol)->Item(index + 1, cast(^rawptr)&vanammedvariable)
     if com_failed(hr) do return
 
     return vanammedvariable, true
@@ -128,7 +128,7 @@ vanamedprotocol_vanamedvariable_index :: proc(vanamedprotocol: VANamedProtocol, 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
 
-    return index, true
+    return index - 1, true
 }
 
 vanamedprotocol_vanamedvariable_count :: proc(vanamedprotocol: VANamedProtocol) -> (count: i32, ok: bool) {
@@ -164,7 +164,7 @@ vanamedprotocol_vanamedvariable_remove_by_index :: proc(vanamedprotocol: VANamed
     if vanamedprotocol == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^VANamedProtocolIF)(vanamedprotocol)->Remove(index)
+    hr := (^VANamedProtocolIF)(vanamedprotocol)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

@@ -192,7 +192,7 @@ codeblocks_codeblock_remove :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: 
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->Remove(index)
+    hr := (^CodeBlocksIF)(codeblocks)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true

@@ -67,7 +67,7 @@ signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal
     if signals == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^SignalsIF)(signals)->Item(index, cast(^rawptr)&signal)
+    hr := (^SignalsIF)(signals)->Item(index + 1, cast(^rawptr)&signal)
     if com_failed(hr) do return
     
     return signal, true
@@ -82,7 +82,7 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
     hr := (^SignalsIF)(signals)->FindNr(bstr_name, &index)
     if com_failed(hr) do return
     
-    return index, true
+    return index - 1, true
 }
 
 signals_signal_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
@@ -117,7 +117,7 @@ signals_signal_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: boo
     if signals == nil do return
     if !controlbuilder_connected() do return
     
-    hr := (^SignalsIF)(signals)->Remove(index)
+    hr := (^SignalsIF)(signals)->Remove(index + 1)
     if com_failed(hr) do return
     
     return true
