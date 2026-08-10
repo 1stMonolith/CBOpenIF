@@ -486,8 +486,6 @@ functionblocks_release :: proc(functionblocks: FunctionBlocks) {
     }
 }
 
-FunctionBlockType :: distinct rawptr
-
 FunctionBlockTypeIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^FunctionBlockTypeVTable,
