@@ -1068,6 +1068,187 @@ functionblocktype_codeblocks_set :: proc(functionblocktype: FunctionBlockType, c
     return true
 }
 
+functionblocktype_codeblock_add :: proc {
+    functionblocktype_stcodeblock_add,
+    functionblocktype_ldcodeblock_add,
+    functionblocktype_fbdcodeblock_add,
+    functionblocktype_ilcodeblock_add,
+    functionblocktype_sfccodeblock_add,
+    functionblocktype_fdcodeblock_add,
+}
+
+functionblocktype_stcodeblock_add :: proc(functionblocktype: FunctionBlockType, stcodeblock: STCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_stcodeblock_add(codeblocks, stcodeblock)
+}
+
+functionblocktype_ldcodeblock_add :: proc(functionblocktype: FunctionBlockType, ldcodeblock: LDCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_ldcodeblock_add(codeblocks, ldcodeblock)
+}
+
+functionblocktype_fbdcodeblock_add :: proc(functionblocktype: FunctionBlockType, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_fbdcodeblock_add(codeblocks, fbdcodeblock)
+}
+
+functionblocktype_ilcodeblock_add :: proc(functionblocktype: FunctionBlockType, ilcodeblock: ILCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_ilcodeblock_add(codeblocks, ilcodeblock)
+}
+
+functionblocktype_sfccodeblock_add :: proc(functionblocktype: FunctionBlockType, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_sfccodeblock_add(codeblocks, sfccodeblock)
+}
+
+functionblocktype_fdcodeblock_add :: proc(functionblocktype: FunctionBlockType, fdcodeblock: FDCodeBlock) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    return codeblocks_fdcodeblock_add(codeblocks, fdcodeblock)
+}
+
+functionblocktype_codeblock :: proc {
+    functionblocktype_codeblock_by_name,
+    functionblocktype_codeblock_by_index,
+}
+
+functionblocktype_codeblock_by_name :: proc(functionblocktype: FunctionBlockType, name: string) -> (codeblock: CodeBlock, ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    codeblock, ok = codeblocks_codeblock_by_name(codeblocks, name)
+    if !ok do return
+
+    return codeblock, true
+}
+
+functionblocktype_codeblock_by_index :: proc(functionblocktype: FunctionBlockType, index: i32) -> (codeblock: CodeBlock, ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    codeblock, ok = codeblocks_codeblock_by_index(codeblocks, index + 1)
+    if !ok do return
+
+    return codeblock, true
+}
+
+functionblocktype_codeblock_index :: proc(functionblocktype: FunctionBlockType, name: string) -> (index: i32, ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    index, ok = codeblocks_codeblock_index(codeblocks, name)
+    if !ok do return
+
+    return index - 1, true
+}
+
+functionblocktype_codeblock_count :: proc(functionblocktype: FunctionBlockType) -> (count: i32, ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+    
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    count, ok = codeblocks_codeblock_count(codeblocks)
+    if !ok do return
+
+    return count, true
+}
+
+functionblocktype_codeblock_remove :: proc {
+    functionblocktype_codeblock_remove_by_name,
+    functionblocktype_codeblock_remove_by_index,
+}
+
+functionblocktype_codeblock_remove_by_name :: proc(functionblocktype: FunctionBlockType, name: string) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    ok = codeblocks_codeblock_remove_by_name(codeblocks, name)
+    if !ok do return
+
+    return true
+}
+
+functionblocktype_codeblock_remove_by_index :: proc(functionblocktype: FunctionBlockType, index: i32) -> (ok: bool) {
+    if functionblocktype == nil do return
+    if !controlbuilder_connected() do return
+
+    codeblocks: CodeBlocks
+    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
+    if !ok do return
+    defer codeblocks_release(codeblocks)
+
+    ok = codeblocks_codeblock_remove_by_index(codeblocks, index)
+    if !ok do return
+
+    return true
+}
+
 functionblocktype_instantiate_as_aspect_object :: proc {
     functionblocktype_instantiate_as_aspect_object_get,
     functionblocktype_instantiate_as_aspect_object_set,

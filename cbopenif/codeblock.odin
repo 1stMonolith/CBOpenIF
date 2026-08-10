@@ -477,7 +477,26 @@ codeblocks_codeblock_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: b
     return count, true
 }
 
-codeblocks_codeblock_remove :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
+codeblocks_codeblock_remove :: proc {
+    codeblocks_codeblock_remove_by_name,
+    codeblocks_codeblock_remove_by_index,
+}
+
+codeblocks_codeblock_remove_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    index: i32
+    index, ok = codeblocks_codeblock_index(codeblocks, name)
+    if !ok do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->Remove(index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_codeblock_remove_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
     if codeblocks == nil do return
     if !controlbuilder_connected() do return
 

@@ -16,7 +16,6 @@ main :: proc() {
         count: i32
         type_name, type_description, block_name, stcode, xml: string
         functionblocktype: cb.FunctionBlockType
-        codeblocks: cb.CodeBlocks
         stcodeblock: cb.STCodeBlock
         fbdcodeblock: cb.FBDCodeBlock
         codeblock: cb.CodeBlock
@@ -32,15 +31,6 @@ main :: proc() {
         fmt.print("success\n")
         defer cb.release(functionblocktype)
 
-        fmt.print("\ngetting codeblocks from functionblocktype... ")
-        codeblocks, ok = cb.codeblocks(functionblocktype)
-        if !ok {
-            fmt.println("failed")
-            return
-        }
-        fmt.print("success")
-        defer cb.release(codeblocks)
-
         block_name = "SomeSTCodeBlock"
         stcode = "(* hello! *)"
         fmt.printf("creating new stcodeblock with name '%v' and stcode '%v'... ", block_name, stcode)
@@ -51,7 +41,7 @@ main :: proc() {
         }
         fmt.print("success\n")
         fmt.print("adding codeblock to functionblocktype... ")
-        cb.codeblock_add(codeblocks, stcodeblock)
+        cb.codeblock_add(functionblocktype, stcodeblock)
         if !ok {
             fmt.print("failed\n")
             return
@@ -69,7 +59,7 @@ main :: proc() {
         }
         fmt.print("success\n")
         fmt.print("adding codeblock to functionblocktype... ")
-        cb.codeblock_add(codeblocks, fbdcodeblock)
+        cb.codeblock_add(functionblocktype, fbdcodeblock)
         if !ok {
             fmt.print("failed\n")
             return
@@ -78,7 +68,7 @@ main :: proc() {
         cb.release(fbdcodeblock)
 
         fmt.print("getting functionblocktype's codeblock count... ")
-        count, ok = cb.codeblock_count(codeblocks)
+        count, ok = cb.codeblock_count(functionblocktype)
         if !ok {
             fmt.print("failed\n")
             return
@@ -86,7 +76,7 @@ main :: proc() {
         fmt.printf("success count=%v\n", count)
 
         for i in 0..< count {
-            codeblock, ok = cb.codeblock(codeblocks, i)
+            codeblock, ok = cb.codeblock(functionblocktype, i)
             block_name, ok = cb.name(codeblock)
             stcode, ok = cb.stcode(codeblock)
             fmt.printfln("codeblock at index %v and name '%v' and stcode '%v'", i, block_name, stcode)

@@ -189,24 +189,41 @@ cmparameters :: proc {
 codeblock :: proc {
     codeblocks_codeblock_by_name,
     codeblocks_codeblock_by_index,
+    functionblocktype_codeblock_by_name,
+    functionblocktype_codeblock_by_index,
 }
 
 codeblock_add :: proc {
-    //codeblocks_icodeblock_add,
-    //codeblocks_icodeblock_add_at_index,
     codeblocks_stcodeblock_add,
     codeblocks_ldcodeblock_add,
     codeblocks_fbdcodeblock_add,
     codeblocks_ilcodeblock_add,
     codeblocks_sfccodeblock_add,
     codeblocks_fdcodeblock_add,
+    functionblocktype_stcodeblock_add,
+    functionblocktype_ldcodeblock_add,
+    functionblocktype_fbdcodeblock_add,
+    functionblocktype_ilcodeblock_add,
+    functionblocktype_sfccodeblock_add,
+    functionblocktype_fdcodeblock_add,
 }
 
-codeblock_index :: codeblocks_codeblock_index
+codeblock_index :: proc {
+    codeblocks_codeblock_index,
+    functionblocktype_codeblock_index,
+}
 
-codeblock_count :: codeblocks_codeblock_count
+codeblock_count :: proc {
+    codeblocks_codeblock_count,
+    functionblocktype_codeblock_count
+}
 
-codeblock_remove :: codeblocks_codeblock_remove
+codeblock_remove :: proc {
+    codeblocks_codeblock_remove_by_name,
+    codeblocks_codeblock_remove_by_index,
+    functionblocktype_codeblock_remove_by_name,
+    functionblocktype_codeblock_remove_by_index,
+}
 
 codeblocks :: proc {
     functionblocktype_codeblocks_get,
