@@ -1,13 +1,13 @@
 package cbopenif
 
-CodeBlockType :: enum i32 {
-    ST  = 0,
-    SFC = 1,
-    FBD = 2,
-    LD  = 3,
-    IL  = 4,
-    FD  = 5,
-}
+ICodeBlock   :: distinct rawptr
+CodeBlocks   :: distinct rawptr
+STCodeBlock  :: distinct rawptr
+SFCCodeBlock :: distinct rawptr
+LDCodeBlock  :: distinct rawptr
+ILCodeBlock  :: distinct rawptr
+FDCodeBlock  :: distinct rawptr
+FBDCodeBlock :: distinct rawptr
 
 CodeBlockUnion :: union {
     STCodeBlock,
@@ -16,6 +16,15 @@ CodeBlockUnion :: union {
     LDCodeBlock,
     ILCodeBlock,
     FDCodeBlock,
+}
+
+CodeBlockType :: enum i32 {
+    ST  = 0,
+    SFC = 1,
+    FBD = 2,
+    LD  = 3,
+    IL  = 4,
+    FD  = 5,
 }
 
 CodeBlock :: struct {
@@ -29,8 +38,6 @@ IID_FBDCodeBlock :: GUID{0x97BB6A82, 0xC2E1, 0x401C, {0x9A, 0x72, 0x4A, 0xC7, 0x
 IID_LDCodeBlock  :: GUID{0x76EEDE55, 0x5C23, 0x4461, {0x80, 0xDF, 0xA3, 0x75, 0x4B, 0x4B, 0xE9, 0xDD}}
 IID_ILCodeBlock  :: GUID{0x5D6751B5, 0xA285, 0x4095, {0x9F, 0x08, 0x44, 0x1A, 0xF0, 0x03, 0x11, 0x57}}
 IID_FDCodeBlock  :: GUID{0xF2927D61, 0x5DDD, 0x44A2, {0xAF, 0x02, 0x1B, 0x69, 0xCA, 0x89, 0xB1, 0x52}}
-
-ICodeBlock :: distinct rawptr
 
 ICodeBlockIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
@@ -48,48 +55,6 @@ ICodeBlockVTable :: struct {
     IsLDCodeBlock:  proc "system" (this: ^ICodeBlockIF, IsLDCodeBLock: ^VariantBool) -> HResult,
     IsFDCodeBlock:  proc "system" (this: ^ICodeBlockIF, IsFDCodeBlock: ^VariantBool) -> HResult,
 }
-
-/*
-icodeblock_deserialize :: proc(xml: string) -> (icodeblock: ICodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
-    
-    bs := to_bstr(xml)
-    defer bstr_free(bs)
-    hr := factoryif->DeserializeCodeBlock(&bs, cast(^rawptr)icodeblock)
-    if com_failed(hr) do return
-    
-    return icodeblock, true
-}
-
-icodeblock_name :: proc {
-    icodeblock_name_get,
-    icodeblock_name_set,
-}
-
-icodeblock_name_get :: proc(icodeblock: ICodeBlock) -> (name: string, ok: bool) {
-    if icodeblock == nil do return
-    if !controlbuilder_connected() do return
-    
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^ICodeBlockIF)(icodeblock)->NameGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-icodeblock_name_set :: proc(icodeblock: ICodeBlock, name: string) -> (ok: bool) {
-    if icodeblock == nil do return
-    if !controlbuilder_connected() do return
-    
-    bs := to_bstr(name)
-    defer bstr_free(bs)
-    hr := (^ICodeBlockIF)(icodeblock)->NamePut(bs)
-    if com_failed(hr) do return
-    
-    return true
-}
-*/
 
 icodeblock_is_st :: proc(icodeblock: ICodeBlock) -> (is_st: bool, ok: bool) {
     if icodeblock == nil do return
@@ -351,4 +316,890 @@ codeblock_stcode_set :: proc(codeblock: CodeBlock, stcode: string) -> (ok: bool)
         case LDCodeBlock:  return ldcodeblock_stcode_set(block, stcode)
     }
     return
+}
+
+CodeBlocksIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^CodeBlocksVTable,
+}
+
+CodeBlocksVTable :: struct {
+    using iunknown_vtable: IUnknownVTable,
+    Add:              proc "system" (this: ^CodeBlocksIF, ICodeBlock: rawptr) -> HResult,
+    AddBefore:        proc "system" (this: ^CodeBlocksIF, ICodeBlock: rawptr, BeforeIndex: i32) -> HResult,
+    AddSTCodeBlock:   proc "system" (this: ^CodeBlocksIF, STCodeBlock: rawptr) -> HResult,
+    AddSTCodeBlock1:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCodeBlock: ^rawptr) -> HResult,
+    AddSTCodeBlock2:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCode: ^BStr, STCodeBlock: ^rawptr) -> HResult,
+    AddLDCodeBlock:   proc "system" (this: ^CodeBlocksIF, LDCodeBlock: rawptr) -> HResult,
+    AddLDCodeBlock1:  proc "system" (this: ^CodeBlocksIF, Name: BStr, LDCodeBlock: ^rawptr) -> HResult,
+    AddLDCodeBlock2:  proc "system" (this: ^CodeBlocksIF, Name: BStr, STCode: ^BStr, LDCodeBlock: ^rawptr) -> HResult,
+    AddFBDCodeBlock:  proc "system" (this: ^CodeBlocksIF, FBDCodeBlock: rawptr) -> HResult,
+    AddFBDCodeBlock1: proc "system" (this: ^CodeBlocksIF, Name: BStr, FBDCodeBlock: ^rawptr) -> HResult,
+    AddFBDCodeBlock2: proc "system" (this: ^CodeBlocksIF, Name: BStr, STCode: ^BStr, FBDCodeBlock: ^rawptr) -> HResult,
+    AddILCodeBlock:   proc "system" (this: ^CodeBlocksIF, ILCodeBlock: rawptr) -> HResult,
+    AddILCodeBlock1:  proc "system" (this: ^CodeBlocksIF, Name: BStr, ILCodeBlock: ^rawptr) -> HResult,
+    AddSFCCodeBlock:  proc "system" (this: ^CodeBlocksIF, SFCCodeBlock: rawptr) -> HResult,
+    AddSFCCodeBlock1: proc "system" (this: ^CodeBlocksIF, Name: BStr, SFCCodeBlock: ^rawptr) -> HResult,
+    AddSFCCodeBlock2: proc "system" (this: ^CodeBlocksIF, Name: BStr, SeqControl, StepElapsedTime: VariantBool, SFCCodeBlock: ^rawptr) -> HResult,
+    Find:             proc "system" (this: ^CodeBlocksIF, Name: BStr, ICodeBlock: ^rawptr) -> HResult,
+    FindNr:           proc "system" (this: ^CodeBlocksIF, Name: BStr, Index: ^i32) -> HResult,
+    Item:             proc "system" (this: ^CodeBlocksIF, Index: i32, ICodeBlock: ^rawptr) -> HResult,
+    Count:            proc "system" (this: ^CodeBlocksIF, Count: ^i32) -> HResult,
+    Remove:           proc "system" (this: ^CodeBlocksIF, Index: i32) -> HResult,
+    AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, FDCodeBlock: rawptr) -> HResult,
+}
+
+codeblocks_codeblock_add :: proc {
+    codeblocks_stcodeblock_add,
+    codeblocks_ldcodeblock_add,
+    codeblocks_fbdcodeblock_add,
+    codeblocks_ilcodeblock_add,
+    codeblocks_sfccodeblock_add,
+    codeblocks_fdcodeblock_add,
+}
+
+codeblocks_stcodeblock_add :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddSTCodeBlock(stcodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_ldcodeblock_add :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddLDCodeBlock(ldcodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_fbdcodeblock_add :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddFBDCodeBlock(fbdcodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_ilcodeblock_add :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if ilcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddILCodeBlock(ilcodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_sfccodeblock_add :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddSFCCodeBlock(sfccodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_fdcodeblock_add :: proc(codeblocks: CodeBlocks, fdcodeblock: FDCodeBlock) -> (ok: bool) {
+    if codeblocks == nil do return
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->AddFDCodeBlock(fdcodeblock)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_codeblock :: proc {
+    codeblocks_codeblock_by_name,
+    codeblocks_codeblock_by_index,
+}
+
+codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    i: ICodeBlock
+    hr := (^CodeBlocksIF)(codeblocks)->Find(bstr_name, cast(^rawptr)&i)
+    if com_failed(hr) do return
+    defer icodeblock_release(i)
+
+    return from_icodeblock(i)
+}
+
+codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    i: ICodeBlock
+    hr := (^CodeBlocksIF)(codeblocks)->Item(index + 1, cast(^rawptr)&i)
+    if com_failed(hr) do return
+    defer icodeblock_release(i)
+
+    return from_icodeblock(i)
+}
+
+codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    hr := (^CodeBlocksIF)(codeblocks)->FindNr(bstr_name, &index)
+    if com_failed(hr) do return
+
+    return index - 1, true
+}
+
+codeblocks_codeblock_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->Count(&count)
+    if com_failed(hr) do return
+
+    return count, true
+}
+
+codeblocks_codeblock_remove :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
+    if codeblocks == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^CodeBlocksIF)(codeblocks)->Remove(index + 1)
+    if com_failed(hr) do return
+
+    return true
+}
+
+codeblocks_release :: proc(codeblocks: CodeBlocks) {
+    if codeblocks != nil {
+        (^CodeBlocksIF)(codeblocks)->Release()
+    }
+}
+
+STCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^STCodeBlockVTable,
+}
+
+STCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:   proc "system" (this: ^STCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:   proc "system" (this: ^STCodeBlockIF, Name: BStr) -> HResult,
+    STCodeGet: proc "system" (this: ^STCodeBlockIF, XMLStr: ^BStr) -> HResult,
+    STCodePut: proc "system" (this: ^STCodeBlockIF, XMLStr: BStr) -> HResult,
+    Missing11: proc "system" (this: ^STCodeBlockIF) -> HResult,
+    Missing12: proc "system" (this: ^STCodeBlockIF) -> HResult,
+    Missing13: proc "system" (this: ^STCodeBlockIF) -> HResult,
+    Serialize: proc "system" (this: ^STCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+stcodeblock_new :: proc(name, stcode: string) -> (stcodeblock: STCodeBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    bstr_stcode := to_bstr(stcode)
+    defer {
+        bstr_free(bstr_name)
+        bstr_free(bstr_stcode)
+    }
+    hr := factoryif->NewSTCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&stcodeblock)
+    if com_failed(hr) do return
+
+    return stcodeblock, true
+}
+
+stcodeblock_serialize :: proc(stcodeblock: STCodeBlock) -> (xml: string, ok: bool) {
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^STCodeBlockIF)(stcodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+stcodeblock_name :: proc {
+    stcodeblock_name_get,
+    stcodeblock_name_set,
+}
+
+stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: bool) {
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^STCodeBlockIF)(stcodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: bool) {
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^STCodeBlockIF)(stcodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+stcodeblock_stcode :: proc {
+    stcodeblock_stcode_get,
+    stcodeblock_stcode_set,
+}
+
+stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok: bool) {
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^STCodeBlockIF)(stcodeblock)->STCodeGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+stcodeblock_stcode_set :: proc(stcodeblock: STCodeBlock, stcode: string) -> (ok: bool) {
+    if stcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(stcode)
+    defer bstr_free(bs)
+    hr := (^STCodeBlockIF)(stcodeblock)->STCodePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+stcodeblock_release :: proc(stcodeblock: STCodeBlock) {
+    if stcodeblock != nil {
+        (^STCodeBlockIF)(stcodeblock)->Release()
+    }
+}
+
+SFCCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^SFCCodeBlockVTable,
+}
+
+SFCCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:            proc "system" (this: ^SFCCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:            proc "system" (this: ^SFCCodeBlockIF, Name: BStr) -> HResult,
+    SeqControlGet:      proc "system" (this: ^SFCCodeBlockIF, SeqControl: ^VariantBool) -> HResult,
+    SeqControlPut:      proc "system" (this: ^SFCCodeBlockIF, SeqControl: VariantBool) -> HResult,
+    StepElapsedTimeGet: proc "system" (this: ^SFCCodeBlockIF, StepElapsedTime: ^VariantBool) -> HResult,
+    StepElapsedTimePut: proc "system" (this: ^SFCCodeBlockIF, StepElapsedTime: VariantBool) -> HResult,
+    SFCViewerAspectGet: proc "system" (this: ^SFCCodeBlockIF, SFCViewerAspect: ^VariantBool) -> HResult,
+    SFCViewerAspectPut: proc "system" (this: ^SFCCodeBlockIF, SFCViewerAspect: VariantBool) -> HResult,
+    SFCElementsGet:     proc "system" (this: ^SFCCodeBlockIF, SFCElements: ^rawptr) -> HResult,
+    Missing16:          proc "system" (this: ^SFCCodeBlockIF) -> HResult,
+    SFCElementsPut:     proc "system" (this: ^SFCCodeBlockIF, SFCElements: rawptr) -> HResult,
+    Missing18:          proc "system" (this: ^SFCCodeBlockIF) -> HResult,
+    Missing19:          proc "system" (this: ^SFCCodeBlockIF) -> HResult,
+    Missing20:          proc "system" (this: ^SFCCodeBlockIF) -> HResult,
+    Serialize:          proc "system" (this: ^SFCCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+sfccodeblock_new :: proc(name: string, seq_control := false, step_elapsed_time := false) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    hr := factoryif->NewSFCCodeBlock1(
+        bstr_name,
+        to_variantbool(seq_control),
+        to_variantbool(step_elapsed_time),
+        cast(^rawptr)&sfccodeblock,
+    )
+    if com_failed(hr) do return
+
+    return sfccodeblock, true
+}
+
+sfccodeblock_name :: proc {
+    sfccodeblock_name_get,
+    sfccodeblock_name_set,
+}
+
+sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+sfccodeblock_seq_control :: proc {
+    sfccodeblock_seq_control_get,
+    sfccodeblock_seq_control_set,
+}
+
+sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control: bool, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    vb: VariantBool
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlGet(&vb)
+    if com_failed(hr) do return
+
+    return from_variantbool(vb), true
+}
+
+sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(to_variantbool(seq_control))
+    if com_failed(hr) do return
+
+    return true
+}
+
+sfccodeblock_step_elapsed_time :: proc {
+    sfccodeblock_step_elapsed_time_get,
+    sfccodeblock_step_elapsed_time_set,
+}
+
+sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_elapsed_time: bool, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    vb: VariantBool
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimeGet(&vb)
+    if com_failed(hr) do return
+
+    return from_variantbool(vb), true
+}
+
+sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(to_variantbool(step_elapsed_time))
+    if com_failed(hr) do return
+
+    return true
+}
+
+sfccodeblock_viewer_aspect :: proc {
+    sfccodeblock_viewer_aspect_get,
+    sfccodeblock_viewer_aspect_set,
+}
+
+sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_aspect: bool, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    vb: VariantBool
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectGet(&vb)
+    if com_failed(hr) do return
+
+    return from_variantbool(vb), true
+}
+
+sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(to_variantbool(viewer_aspect))
+    if com_failed(hr) do return
+
+    return true
+}
+
+sfccodeblock_elements :: proc {
+    sfccodeblock_elements_get,
+    sfccodeblock_elements_set,
+}
+
+sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: SFCElements, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsGet(cast(^rawptr)&sfcelements)
+    if com_failed(hr) do return
+
+    return sfcelements, true
+}
+
+sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCElements) -> (ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsPut(sfcelements)
+    if com_failed(hr) do return
+
+    return true
+}
+
+sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: bool) {
+    if sfccodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^SFCCodeBlockIF)(sfccodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+sfccodeblock_release :: proc(sfccodeblock: SFCCodeBlock) {
+    if sfccodeblock != nil {
+        (^SFCCodeBlockIF)(sfccodeblock)->Release()
+    }
+}
+
+LDCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^LDCodeBlockVTable,
+}
+
+LDCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:   proc "system" (this: ^LDCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:   proc "system" (this: ^LDCodeBlockIF, Name: BStr) -> HResult,
+    STCodeGet: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+    STCodePut: proc "system" (this: ^LDCodeBlockIF, XMLStr: BStr) -> HResult,
+    Missing11: proc "system" (this: ^LDCodeBlockIF) -> HResult,
+    Missing12: proc "system" (this: ^LDCodeBlockIF) -> HResult,
+    Missing13: proc "system" (this: ^LDCodeBlockIF) -> HResult,
+    Serialize: proc "system" (this: ^LDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+ldcodeblock_new :: proc(name, stcode: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    bstr_stcode := to_bstr(stcode)
+    defer {
+        bstr_free(bstr_name)
+        bstr_free(bstr_stcode)
+    }
+    hr := factoryif->NewLDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&ldcodeblock)
+    if com_failed(hr) do return
+
+    return ldcodeblock, true
+}
+
+ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: bool) {
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+ldcodeblock_name :: proc {
+    ldcodeblock_name_get,
+    ldcodeblock_name_set,
+}
+
+ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: bool) {
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: bool) {
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+ldcodeblock_stcode :: proc {
+    ldcodeblock_stcode_get,
+    ldcodeblock_stcode_set,
+}
+
+ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok: bool) {
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodeGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+ldcodeblock_stcode_set :: proc(ldcodeblock: LDCodeBlock, stcode: string) -> (ok: bool) {
+    if ldcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(stcode)
+    defer bstr_free(bs)
+    hr := (^LDCodeBlockIF)(ldcodeblock)->STCodePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+ldcodeblock_release :: proc(ldcodeblock: LDCodeBlock) {
+    if ldcodeblock != nil {
+        (^LDCodeBlockIF)(ldcodeblock)->Release()
+    }
+}
+
+ILCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^ILCodeBlockVTable,
+}
+
+ILCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:   proc "system" (this: ^ILCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:   proc "system" (this: ^ILCodeBlockIF, Name: BStr) -> HResult,
+    ILRowsGet: proc "system" (this: ^ILCodeBlockIF, ILRows: ^rawptr) -> HResult,
+    Missing10: proc "system" (this: ^ILCodeBlockIF) -> HResult,
+    ILRowsPut: proc "system" (this: ^ILCodeBlockIF, ILRows: rawptr) -> HResult,
+    Missing12: proc "system" (this: ^ILCodeBlockIF) -> HResult,
+    Missing13: proc "system" (this: ^ILCodeBlockIF) -> HResult,
+    Missing14: proc "system" (this: ^ILCodeBlockIF) -> HResult,
+    Serialize: proc "system" (this: ^ILCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    bstr_free(bstr_name)
+    hr := factoryif->NewILCodeBlock(bstr_name, cast(^rawptr)&ilcodeblock)
+    if com_failed(hr) do return
+
+    return ilcodeblock, true
+}
+
+ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: bool) {
+    if ilcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ILCodeBlockIF)(ilcodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+ilcodeblock_name :: proc {
+    ilcodeblock_name_get,
+    ilcodeblock_name_set,
+}
+
+ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: bool) {
+    if ilcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ILCodeBlockIF)(ilcodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
+    if ilcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^ILCodeBlockIF)(ilcodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+ilcodeblock_ilrows :: proc {
+    ilcodeblock_ilrows_get,
+    ilcodeblock_ilrows_set,
+}
+
+ilcodeblock_ilrows_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: ILRows, ok: bool) {
+    if ilcodeblock == nil do return
+    if !controlbuilder_connected() do return
+
+    p: rawptr
+    hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsGet(&p)
+    if com_failed(hr) do return
+
+    return ILRows(p), true
+}
+
+ilcodeblock_ilrows_set :: proc(ilcodeblock: ILCodeBlock, ilrows: ILRows) -> (ok: bool) {
+    if ilcodeblock == nil do return
+    if ilrows == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsPut(ilrows)
+    if com_failed(hr) do return
+
+    return true
+}
+
+ilcodeblock_release :: proc(ilcodeblock: ILCodeBlock) {
+    if ilcodeblock != nil {
+        (^ILCodeBlockIF)(ilcodeblock)->Release()
+    }
+}
+
+FDCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^FDCodeBlockVTable,
+}
+
+FDCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:    proc "system" (this: ^FDCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:    proc "system" (this: ^FDCodeBlockIF, Name: BStr) -> HResult,
+    Missing9:   proc "system" (this: ^FDCodeBlockIF) -> HResult,
+    Missing10:  proc "system" (this: ^FDCodeBlockIF) -> HResult,
+    Missing11:  proc "system" (this: ^FDCodeBlockIF) -> HResult,
+    FDAsXMLGet: proc "system" (this: ^FDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+    FDAsXMLPut: proc "system" (this: ^FDCodeBlockIF, XMLStr: BStr) -> HResult,
+    Serialize:  proc "system" (this: ^FDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+fdcodeblock_name :: proc {
+    fdcodeblock_name_get,
+    fdcodeblock_name_set,
+}
+
+fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs :=to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+fdcodeblock_xml_string :: proc {
+    fdcodeblock_xml_string_get,
+    fdcodeblock_xml_string_set,
+}
+
+fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
+    if fdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs :=to_bstr(xml_string)
+    defer bstr_free(bs)
+    hr := (^FDCodeBlockIF)(fdcodeblock)->FDAsXMLPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+fdcodeblock_release :: proc(fdcodeblock: FDCodeBlock) {
+    if fdcodeblock != nil {
+        (^FDCodeBlockIF)(fdcodeblock)->Release()
+    }
+}
+
+FBDCodeBlockIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^FBDCodeBlockVTable,
+}
+
+FBDCodeBlockVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:   proc "system" (this: ^FBDCodeBlockIF, Name: ^BStr) -> HResult,
+    NamePut:   proc "system" (this: ^FBDCodeBlockIF, Name: BStr) -> HResult,
+    STCodeGet: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+    STCodePut: proc "system" (this: ^FBDCodeBlockIF, XMLStr: BStr) -> HResult,
+    Missing11: proc "system" (this: ^FBDCodeBlockIF) -> HResult,
+    Missing12: proc "system" (this: ^FBDCodeBlockIF) -> HResult,
+    Missing13: proc "system" (this: ^FBDCodeBlockIF) -> HResult,
+    Serialize: proc "system" (this: ^FBDCodeBlockIF, XMLStr: ^BStr) -> HResult,
+}
+
+fbdcodeblock_new :: proc(name, stcode: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    bstr_name := to_bstr(name)
+    bstr_stcode := to_bstr(stcode)
+    defer {
+        bstr_free(bstr_name)
+        bstr_free(bstr_stcode)
+    }
+    hr := factoryif->NewFBDCodeBlock1(bstr_name, &bstr_stcode, cast(^rawptr)&fbdcodeblock)
+    if com_failed(hr) do return
+
+    return fbdcodeblock, true
+}
+
+fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: bool) {
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->Serialize(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+fbdcodeblock_name :: proc {
+    fbdcodeblock_name_get,
+    fbdcodeblock_name_set,
+}
+
+fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: bool) {
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+
+fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: bool) {
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->NamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+fbdcodeblock_stcode :: proc {
+    fbdcodeblock_stcode_get,
+    fbdcodeblock_stcode_set,
+}
+
+fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, ok: bool) {
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodeGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
+    if fbdcodeblock == nil do return
+    if !controlbuilder_connected() do return
+    
+    bs := to_bstr(stcode)
+    defer bstr_free(bs)
+    hr := (^FBDCodeBlockIF)(fbdcodeblock)->STCodePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+fbdcodeblock_release :: proc(fbdcodeblock: FBDCodeBlock) {
+    if fbdcodeblock != nil {
+        (^FBDCodeBlockIF)(fbdcodeblock)->Release()
+    }
 }
