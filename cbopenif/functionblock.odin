@@ -1068,16 +1068,7 @@ functionblocktype_codeblocks_set :: proc(functionblocktype: FunctionBlockType, c
     return true
 }
 
-functionblocktype_codeblock_add :: proc {
-    functionblocktype_stcodeblock_add,
-    functionblocktype_ldcodeblock_add,
-    functionblocktype_fbdcodeblock_add,
-    functionblocktype_ilcodeblock_add,
-    functionblocktype_sfccodeblock_add,
-    functionblocktype_fdcodeblock_add,
-}
-
-functionblocktype_stcodeblock_add :: proc(functionblocktype: FunctionBlockType, stcodeblock: STCodeBlock) -> (ok: bool) {
+functionblocktype_codeblock_add :: proc(functionblocktype: FunctionBlockType, codeblock: CodeBlockUnion) -> (ok: bool) {
     if functionblocktype == nil do return
     if !controlbuilder_connected() do return
 
@@ -1086,67 +1077,7 @@ functionblocktype_stcodeblock_add :: proc(functionblocktype: FunctionBlockType, 
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    return codeblocks_stcodeblock_add(codeblocks, stcodeblock)
-}
-
-functionblocktype_ldcodeblock_add :: proc(functionblocktype: FunctionBlockType, ldcodeblock: LDCodeBlock) -> (ok: bool) {
-    if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
-
-    codeblocks: CodeBlocks
-    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
-    if !ok do return
-    defer codeblocks_release(codeblocks)
-
-    return codeblocks_ldcodeblock_add(codeblocks, ldcodeblock)
-}
-
-functionblocktype_fbdcodeblock_add :: proc(functionblocktype: FunctionBlockType, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
-    if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
-
-    codeblocks: CodeBlocks
-    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
-    if !ok do return
-    defer codeblocks_release(codeblocks)
-
-    return codeblocks_fbdcodeblock_add(codeblocks, fbdcodeblock)
-}
-
-functionblocktype_ilcodeblock_add :: proc(functionblocktype: FunctionBlockType, ilcodeblock: ILCodeBlock) -> (ok: bool) {
-    if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
-
-    codeblocks: CodeBlocks
-    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
-    if !ok do return
-    defer codeblocks_release(codeblocks)
-
-    return codeblocks_ilcodeblock_add(codeblocks, ilcodeblock)
-}
-
-functionblocktype_sfccodeblock_add :: proc(functionblocktype: FunctionBlockType, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
-    if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
-
-    codeblocks: CodeBlocks
-    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
-    if !ok do return
-    defer codeblocks_release(codeblocks)
-
-    return codeblocks_sfccodeblock_add(codeblocks, sfccodeblock)
-}
-
-functionblocktype_fdcodeblock_add :: proc(functionblocktype: FunctionBlockType, fdcodeblock: FDCodeBlock) -> (ok: bool) {
-    if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
-
-    codeblocks: CodeBlocks
-    codeblocks, ok = functionblocktype_codeblocks(functionblocktype)
-    if !ok do return
-    defer codeblocks_release(codeblocks)
-
-    return codeblocks_fdcodeblock_add(codeblocks, fdcodeblock)
+    return codeblocks_codeblock_add(codeblocks, codeblock)
 }
 
 functionblocktype_codeblock :: proc {
@@ -1175,7 +1106,7 @@ functionblocktype_codeblock_by_index :: proc(functionblocktype: FunctionBlockTyp
     if !ok do return
     defer codeblocks_release(codeblocks)
 
-    return codeblocks_codeblock(codeblocks, index + 1)
+    return codeblocks_codeblock(codeblocks, index)
 }
 
 functionblocktype_codeblock_index :: proc(functionblocktype: FunctionBlockType, name: string) -> (index: i32, ok: bool) {

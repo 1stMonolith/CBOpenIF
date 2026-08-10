@@ -194,18 +194,8 @@ codeblock :: proc {
 }
 
 codeblock_add :: proc {
-    codeblocks_stcodeblock_add,
-    codeblocks_ldcodeblock_add,
-    codeblocks_fbdcodeblock_add,
-    codeblocks_ilcodeblock_add,
-    codeblocks_sfccodeblock_add,
-    codeblocks_fdcodeblock_add,
-    functionblocktype_stcodeblock_add,
-    functionblocktype_ldcodeblock_add,
-    functionblocktype_fbdcodeblock_add,
-    functionblocktype_ilcodeblock_add,
-    functionblocktype_sfccodeblock_add,
-    functionblocktype_fdcodeblock_add,
+    codeblocks_codeblock_add,
+    functionblocktype_codeblock_add,
 }
 
 codeblock_index :: proc {

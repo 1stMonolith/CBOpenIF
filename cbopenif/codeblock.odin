@@ -349,76 +349,20 @@ CodeBlocksVTable :: struct {
     AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, FDCodeBlock: rawptr) -> HResult,
 }
 
-codeblocks_codeblock_add :: proc {
-    codeblocks_stcodeblock_add,
-    codeblocks_ldcodeblock_add,
-    codeblocks_fbdcodeblock_add,
-    codeblocks_ilcodeblock_add,
-    codeblocks_sfccodeblock_add,
-    codeblocks_fdcodeblock_add,
-}
-
-codeblocks_stcodeblock_add :: proc(codeblocks: CodeBlocks, stcodeblock: STCodeBlock) -> (ok: bool) {
+codeblocks_codeblock_add :: proc(codeblocks: CodeBlocks, codeblock: CodeBlockUnion) -> (ok: bool) {
     if codeblocks == nil do return
-    if stcodeblock == nil do return
+    if codeblock == nil do return
     if !controlbuilder_connected() do return
 
-    hr := (^CodeBlocksIF)(codeblocks)->AddSTCodeBlock(stcodeblock)
-    if com_failed(hr) do return
-
-    return true
-}
-
-codeblocks_ldcodeblock_add :: proc(codeblocks: CodeBlocks, ldcodeblock: LDCodeBlock) -> (ok: bool) {
-    if codeblocks == nil do return
-    if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
-
-    hr := (^CodeBlocksIF)(codeblocks)->AddLDCodeBlock(ldcodeblock)
-    if com_failed(hr) do return
-
-    return true
-}
-
-codeblocks_fbdcodeblock_add :: proc(codeblocks: CodeBlocks, fbdcodeblock: FBDCodeBlock) -> (ok: bool) {
-    if codeblocks == nil do return
-    if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
-
-    hr := (^CodeBlocksIF)(codeblocks)->AddFBDCodeBlock(fbdcodeblock)
-    if com_failed(hr) do return
-
-    return true
-}
-
-codeblocks_ilcodeblock_add :: proc(codeblocks: CodeBlocks, ilcodeblock: ILCodeBlock) -> (ok: bool) {
-    if codeblocks == nil do return
-    if ilcodeblock == nil do return
-    if !controlbuilder_connected() do return
-
-    hr := (^CodeBlocksIF)(codeblocks)->AddILCodeBlock(ilcodeblock)
-    if com_failed(hr) do return
-
-    return true
-}
-
-codeblocks_sfccodeblock_add :: proc(codeblocks: CodeBlocks, sfccodeblock: SFCCodeBlock) -> (ok: bool) {
-    if codeblocks == nil do return
-    if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
-
-    hr := (^CodeBlocksIF)(codeblocks)->AddSFCCodeBlock(sfccodeblock)
-    if com_failed(hr) do return
-
-    return true
-}
-
-codeblocks_fdcodeblock_add :: proc(codeblocks: CodeBlocks, fdcodeblock: FDCodeBlock) -> (ok: bool) {
-    if codeblocks == nil do return
-    if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
-
-    hr := (^CodeBlocksIF)(codeblocks)->AddFDCodeBlock(fdcodeblock)
+    hr: HResult
+    switch block in codeblock {
+        case STCodeBlock:  hr = (^CodeBlocksIF)(codeblocks)->AddSTCodeBlock(codeblock.(STCodeBlock))
+        case LDCodeBlock:  hr = (^CodeBlocksIF)(codeblocks)->AddLDCodeBlock(codeblock.(LDCodeBlock))
+        case FBDCodeBlock: hr = (^CodeBlocksIF)(codeblocks)->AddFBDCodeBlock(codeblock.(FBDCodeBlock))
+        case ILCodeBlock:  hr = (^CodeBlocksIF)(codeblocks)->AddILCodeBlock(codeblock.(ILCodeBlock))
+        case SFCCodeBlock: hr = (^CodeBlocksIF)(codeblocks)->AddSFCCodeBlock(codeblock.(SFCCodeBlock))
+        case FDCodeBlock:  hr = (^CodeBlocksIF)(codeblocks)->AddFDCodeBlock(codeblock.(FDCodeBlock))
+    }
     if com_failed(hr) do return
 
     return true
