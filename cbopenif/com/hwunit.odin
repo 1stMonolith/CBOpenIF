@@ -1,0 +1,472 @@
+package com
+
+HWUnit  :: distinct rawptr
+HWUnits :: distinct rawptr
+
+HWUnitIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^HWUnitVTable,
+}
+
+HWUnitVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    PathGet:                  proc "system" (this: ^HWUnitIF, Path: ^BStr) -> HResult,
+    PathPut:                  proc "system" (this: ^HWUnitIF, Path: BStr) -> HResult,
+    TypeIDGet:                proc "system" (this: ^HWUnitIF, TypeID: ^BStr) -> HResult,
+    TypeIDPut:                proc "system" (this: ^HWUnitIF, TypeID: BStr) -> HResult,
+    TypeDescriptionGet:       proc "system" (this: ^HWUnitIF, TypeDescription: ^BStr) -> HResult,
+    TypeDescriptionPut:       proc "system" (this: ^HWUnitIF, TypeDescription: BStr) -> HResult,
+    GuidGet:                  proc "system" (this: ^HWUnitIF, Guid: ^BStr) -> HResult,
+    GuidPut:                  proc "system" (this: ^HWUnitIF, Guid: BStr) -> HResult,
+    RedundantPosGet:          proc "system" (this: ^HWUnitIF, RedundantPos: ^BStr) -> HResult,
+    RedundantPosPut:          proc "system" (this: ^HWUnitIF, RedundantPos: BStr) -> HResult,
+    HWSimulationGet:          proc "system" (this: ^HWUnitIF, HWSimulation: ^VariantBool) -> HResult,
+    HWSimulationPut:          proc "system" (this: ^HWUnitIF, HWSimulation: VariantBool) -> HResult,
+    HWSimulationSupportedGet: proc "system" (this: ^HWUnitIF, HWSimulationSupported: ^VariantBool) -> HResult,
+    HWSimulationSupportedPut: proc "system" (this: ^HWUnitIF, HWSimulationSupported: VariantBool) -> HResult,
+    ReservedByFunctionGet:    proc "system" (this: ^HWUnitIF, ReservedByFunction: ^BStr) -> HResult,
+    ReservedByFunctionPut:    proc "system" (this: ^HWUnitIF, ReservedByFunction: BStr) -> HResult,
+    ParameterSettingsGet:     proc "system" (this: ^HWUnitIF, ParameterSettings: ^rawptr) -> HResult,
+    Missing24:                proc "system" (this: ^HWUnitIF) -> HResult,
+    ParameterSettingsPut:     proc "system" (this: ^HWUnitIF, ParameterSettings: rawptr) -> HResult,
+    HWChannelsGet:            proc "system" (this: ^HWUnitIF, HWChannels: ^rawptr) -> HResult,
+    Missing27:                proc "system" (this: ^HWUnitIF) -> HResult,
+    HWChannelsPut:            proc "system" (this: ^HWUnitIF, HWChannels: rawptr) -> HResult,
+    HWUnitsGet:               proc "system" (this: ^HWUnitIF, HWUnits: ^rawptr) -> HResult,
+    Missing30:                proc "system" (this: ^HWUnitIF) -> HResult,
+    HWUnitsPut:               proc "system" (this: ^HWUnitIF, HWUnits: rawptr) -> HResult,
+    Serialize:                proc "system" (this: ^HWUnitIF, XML: ^BStr) -> HResult,
+    TypeGuidGet:              proc "system" (this: ^HWUnitIF, TypeGuid: ^BStr) -> HResult,
+    TypeGuidPut:              proc "system" (this: ^HWUnitIF, TypeGuid: BStr) -> HResult,
+    InstanceNameGet:          proc "system" (this: ^HWUnitIF, InstanceName: ^BStr) -> HResult,
+    InstanceNamePut:          proc "system" (this: ^HWUnitIF, InstanceName: BStr) -> HResult,
+}
+
+hwunit_serialize :: proc(hwunit: HWUnit) -> (xml: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->Serialize(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_path_get :: proc(hwunit: HWUnit) -> (path: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->PathGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_path_set :: proc(hwunit: HWUnit, path: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(path)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->PathPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_type_id_get :: proc(hwunit: HWUnit) -> (type_id: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeIDGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_type_id_set :: proc(hwunit: HWUnit, type_id: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(type_id)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeIDPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_type_description_get :: proc(hwunit: HWUnit) -> (type_description: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeDescriptionGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_type_description_set :: proc(hwunit: HWUnit, type_description: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(type_description)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeDescriptionPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_guid_get :: proc(hwunit: HWUnit) -> (guid: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->GuidGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_guid_set :: proc(hwunit: HWUnit, guid: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(guid)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->GuidPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_redundant_pos_get :: proc(hwunit: HWUnit) -> (redundant_pos: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->RedundantPosGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_redundant_pos_set :: proc(hwunit: HWUnit, redundant_pos: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(redundant_pos)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->RedundantPosPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_hw_simulation_get :: proc(hwunit: HWUnit) -> (hw_simulation: bool, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    vb: VariantBool
+    hr := (^HWUnitIF)(hwunit)->HWSimulationGet(&vb)
+    if com_failed(hr) do return
+
+    return from_variantbool(vb), true
+}
+
+hwunit_hw_simulation_set :: proc(hwunit: HWUnit, hw_simulation: bool) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitIF)(hwunit)->HWSimulationPut(to_variantbool(hw_simulation))
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_hw_simulation_supported_get :: proc(hwunit: HWUnit) -> (hw_simulation_supported: bool, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    vb: VariantBool
+    hr := (^HWUnitIF)(hwunit)->HWSimulationSupportedGet(&vb)
+    if com_failed(hr) do return
+
+    return from_variantbool(vb), true
+}
+
+hwunit_hw_simulation_supported_set :: proc(hwunit: HWUnit, hw_simulation_supported: bool) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitIF)(hwunit)->HWSimulationSupportedPut(to_variantbool(hw_simulation_supported))
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_reserved_by_function_get :: proc(hwunit: HWUnit) -> (reserved_by_function: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->ReservedByFunctionGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_reserved_by_function_set :: proc(hwunit: HWUnit, reserved_by_function: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(reserved_by_function)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->ReservedByFunctionPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_parametersettings_get :: proc(hwunit: HWUnit) -> (parametersettings: ParameterSettings, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    p: rawptr
+    hr := (^HWUnitIF)(hwunit)->ParameterSettingsGet(&p)
+    if com_failed(hr) do return
+
+    return ParameterSettings(p), true
+}
+
+hwunit_parametersettings_set :: proc(hwunit: HWUnit, parametersettings: ParameterSettings) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitIF)(hwunit)->ParameterSettingsPut(parametersettings)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_hwchannels_get :: proc(hwunit: HWUnit) -> (hwchannels: HWChannels, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    p: rawptr
+    hr := (^HWUnitIF)(hwunit)->HWChannelsGet(&p)
+    if com_failed(hr) do return
+
+    return HWChannels(p), true
+}
+
+hwunit_hwchannels_set :: proc(hwunit: HWUnit, hwchannels: HWChannels) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitIF)(hwunit)->HWChannelsPut(hwchannels)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_hwunits_get :: proc(hwunit: HWUnit) -> (hwunits: HWUnits, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    p: rawptr
+    hr := (^HWUnitIF)(hwunit)->HWUnitsGet(&p)
+    if com_failed(hr) do return
+
+    return HWUnits(p), true
+}
+
+hwunit_hwunits_set :: proc(hwunit: HWUnit, hwunits: HWUnits) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitIF)(hwunit)->HWUnitsPut(hwunits)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_type_guid_get :: proc(hwunit: HWUnit) -> (type_guid: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeGuidGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_type_guid_set :: proc(hwunit: HWUnit, type_guid: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(type_guid)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->TypeGuidPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_instance_name_get :: proc(hwunit: HWUnit) -> (instance_name: string, ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->InstanceNameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+hwunit_instance_name_set :: proc(hwunit: HWUnit, instance_name: string) -> (ok: bool) {
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    bs := to_bstr(instance_name)
+    defer bstr_free(bs)
+    hr := (^HWUnitIF)(hwunit)->InstanceNamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunit_release :: proc(hwunit: HWUnit) {
+    if hwunit != nil {
+        (^HWUnitIF)(hwunit)->Release()
+    }
+}
+
+HWUnitsIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^HWUnitsVTable,
+}
+
+HWUnitsVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    Add:       proc "system" (this: ^HWUnitsIF, HWUnit: rawptr) -> HResult,
+    AddBefore: proc "system" (this: ^HWUnitsIF, HWUnit: rawptr, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^HWUnitsIF, Path: BStr, HWUnit: ^rawptr) -> HResult,
+    Add2:      proc "system" (this: ^HWUnitsIF, Path, TypeID, TypeDescription, Guid: BStr, HWUnit: ^rawptr) -> HResult,
+    Find:      proc "system" (this: ^HWUnitsIF, Path: BStr, HWUnit: ^rawptr) -> HResult,
+    FindNr:    proc "system" (this: ^HWUnitsIF, Path: BStr, Index: ^i32) -> HResult,
+    Item:      proc "system" (this: ^HWUnitsIF, Index: i32, HWUnit: ^rawptr) -> HResult,
+    Count:     proc "system" (this: ^HWUnitsIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^HWUnitsIF, Index: i32) -> HResult,
+}
+
+hwunits_hwunit_add :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
+    if hwunits == nil do return
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitsIF)(hwunits)->Add(hwunit)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunits_hwunit_add_at_index :: proc(hwunits: HWUnits, hwunit: HWUnit, index: i32) -> (ok: bool) {
+    if hwunits == nil do return
+    if hwunit == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitsIF)(hwunits)->AddBefore(hwunit, index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunits_hwunit_by_path :: proc(hwunits: HWUnits, path: string) -> (hwunit: HWUnit, ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    bstr_path := to_bstr(path)
+    defer bstr_free(bstr_path)
+    hr := (^HWUnitsIF)(hwunits)->Find(bstr_path, cast(^rawptr)&hwunit)
+    if com_failed(hr) do return
+
+    return hwunit, true
+}
+
+hwunits_hwunit_by_index :: proc(hwunits: HWUnits, index: i32) -> (hwunit: HWUnit, ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitsIF)(hwunits)->Item(index + 1, cast(^rawptr)&hwunit)
+    if com_failed(hr) do return
+
+    return hwunit, true
+}
+
+hwunits_hwunit_index :: proc(hwunits: HWUnits, path: string) -> (index: i32, ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    bstr_path := to_bstr(path)
+    defer bstr_free(bstr_path)
+    hr := (^HWUnitsIF)(hwunits)->FindNr(bstr_path, &index)
+    if com_failed(hr) do return
+
+    return index - 1, true
+}
+
+hwunits_hwunit_count :: proc(hwunits: HWUnits) -> (count: i32, ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitsIF)(hwunits)->Count(&count)
+    if com_failed(hr) do return
+
+    return count, true
+}
+
+hwunits_hwunit_remove_by_path :: proc(hwunits: HWUnits, path: string) -> (ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    index: i32
+    index, ok = hwunits_hwunit_index(hwunits, path)
+    if !ok do return
+
+    hr := (^HWUnitsIF)(hwunits)->Remove(index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunits_hwunit_remove_by_index :: proc(hwunits: HWUnits, index: i32) -> (ok: bool) {
+    if hwunits == nil do return
+    if !controlbuilder_connected() do return
+
+    hr := (^HWUnitsIF)(hwunits)->Remove(index + 1)
+    if com_failed(hr) do return
+
+    return true
+}
+
+hwunits_release :: proc(hwunits: HWUnits) {
+    if hwunits != nil {
+        (^HWUnitsIF)(hwunits)->Release()
+    }
+}

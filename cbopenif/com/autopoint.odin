@@ -1,0 +1,45 @@
+package com
+
+import cb ".."
+
+AutoPoint :: distinct rawptr
+
+AutoPointIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^AutoPointVTable,
+}
+
+AutoPointVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    AutoPosGet: proc "system" (this: ^AutoPointIF, AutoPos: ^i32) -> HResult,
+    AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
+}
+
+autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: cb.AutoPos, ok: bool) {
+    if autopoint == nil do return
+    if !controlbuilder_connected() do return
+    
+    apt: i32
+    hr := (^AutoPointIF)(autopoint)->AutoPosGet(&apt)
+    if com_failed(hr) do return
+
+    if !ok do return
+    
+    return cb.AutoPos(apt), true
+}
+
+autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: cb.AutoPos) -> (ok: bool) {
+    if autopoint == nil do return
+    if !controlbuilder_connected() do return
+    
+    hr := (^AutoPointIF)(autopoint)->AutoPosPut(i32(autopos))
+    if com_failed(hr) do return
+    
+    return true
+}
+
+autopoint_release :: proc(autopoint: AutoPoint) {
+    if autopoint != nil {
+        (^AutoPointIF)(autopoint)->Release()
+    }
+}
