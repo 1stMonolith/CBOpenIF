@@ -231,9 +231,11 @@ datatype_release :: proc(datatype: DataType) {
     }
 }
 
-datatype_from_com :: proc(datatype: DataType) -> (result: cb.DataType, ok: bool) {
+datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: cb.DataType, ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
+
+    context.allocator = allocator
     
     protected, hidden: bool
     name, description, guid, reserved_by_function: string
@@ -255,6 +257,8 @@ datatype_from_com :: proc(datatype: DataType) -> (result: cb.DataType, ok: bool)
     count: i32
     count, ok = component_count(components)
     if !ok do return
+
+    result.components = make([dynamic]cb.Component, 0, int(count), allocator)
 
     for i in 0..<count {
         component: Component
@@ -284,6 +288,9 @@ datatype_to_com :: proc(src: cb.DataType) -> (result: DataType, ok: bool) {
         src.scope,
     )
     if !ok do return
+
+    ok = datatype_guid_set(datatype, src.guid); if !ok do return
+    ok = datatype_reserved_by_function_set(datatype, src.reserved_by_function); if !ok do return
 
     components: Components
     components, ok = datatype_components_get(datatype)
