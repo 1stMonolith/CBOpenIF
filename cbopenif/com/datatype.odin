@@ -231,6 +231,78 @@ datatype_release :: proc(datatype: DataType) {
     }
 }
 
+datatype_from_com :: proc(datatype: DataType) -> (result: cb.DataType, ok: bool) {
+    if datatype == nil do return
+    if !controlbuilder_connected() do return
+    
+    protected, hidden: bool
+    name, description, guid, reserved_by_function: string
+    scope: cb.Scope
+    
+    if name, ok = datatype_name_get(datatype); ok do result.name = name; else do return
+    if description, ok = datatype_description_get(datatype); ok do result.description = description; else do return
+    if protected, ok = datatype_protected_get(datatype); ok do result.protected = protected; else do return
+    if hidden, ok = datatype_hidden_get(datatype); ok do result.hidden = hidden; else do return
+    if scope, ok = datatype_scope_get(datatype); ok do result.scope = scope; else do return
+    if guid, ok = datatype_guid_get(datatype); ok do result.guid = guid; else do return
+    if reserved_by_function, ok = datatype_reserved_by_function_get(datatype); ok do result.reserved_by_function = reserved_by_function; else do return
+
+    components: Components
+    components, ok = datatype_components_get(datatype)
+    if !ok do return
+    defer components_release(components)
+
+    count: i32
+    count, ok = component_count(components)
+    if !ok do return
+
+    for i in 0..<count {
+        component: Component
+        component, ok = component_by_index(components, i)
+        if !ok do return
+        defer component_release(component)
+
+        component_struct: cb.Component
+        component_struct, ok = component_from_com(component)
+        if !ok do return
+
+        append(&result.components, component_struct)
+    }
+
+    return result, true
+}
+
+datatype_to_com :: proc(src: cb.DataType) -> (result: DataType, ok: bool) {
+    if !controlbuilder_connected() do return
+
+    datatype: DataType
+    datatype, ok = datatype_new1(
+        src.name,
+        src.description,
+        src.protected,
+        src.hidden,
+        src.scope,
+    )
+    if !ok do return
+
+    components: Components
+    components, ok = datatype_components_get(datatype)
+    if !ok do return
+    defer components_release(components)
+
+    for c in src.components {
+        component: Component
+        component, ok = component_to_com(c)
+        if !ok do return
+        defer component_release(component)
+
+        ok = components_component_add(components, component)
+        if !ok do return
+    }
+
+    return datatype, true
+}
+
 ComponentIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ComponentVTable,
@@ -556,6 +628,46 @@ component_release :: proc(component: Component) {
     if component != nil {
         (^ComponentIF)(component)->Release()
     }
+}
+
+component_from_com :: proc(component: Component) -> (result: cb.Component, ok: bool) {
+    if component == nil do return
+    if !controlbuilder_connected() do return
+    if name, ok := component_name_get(component); ok do result.name = name; else do return
+    if type_name, ok := component_type_name_get(component); ok do result.type_name = type_name; else do return
+    if attribute, ok := component_attribute_get(component); ok do result.attribute = attribute; else do return
+    if initial_value, ok := component_initial_value_get(component); ok do result.initial_value = initial_value; else do return
+    if description, ok := component_description_get(component); ok do result.description = description; else do return
+    if read_permission, ok := component_read_permission_get(component); ok do result.read_permission = read_permission; else do return
+    if write_permission, ok := component_write_permission_get(component); ok do result.write_permission = write_permission; else do return
+    if authentication_level, ok := component_authentication_level_get(component); ok do result.authentication_level = authentication_level; else do return
+    if access_level, ok := component_access_level_get(component); ok do result.access_level = access_level; else do return
+    if safety_type, ok := component_safety_type_get(component); ok do result.safety_type = safety_type; else do return
+    if isp_value, ok := component_isp_value_get(component); ok do result.isp_value = isp_value; else do return
+    if type_guid, ok := component_type_guid_get(component); ok do result.type_guid = type_guid; else do return
+    if type_path, ok := component_type_path_get(component); ok do result.type_path = type_path; else do return
+    return result, true
+}
+
+component_to_com :: proc(src: cb.Component) -> (result: Component, ok: bool) {
+    component: Component
+    component, ok = component_new1(
+        src.name,
+        src.type_name,
+        src.attribute,
+        src.initial_value,
+        src.description,
+    )
+    if !ok do return
+
+    ok = component_read_permission_set(component, src.read_permission); if !ok do return
+    ok = component_write_permission_set(component, src.write_permission); if !ok do return
+    ok = component_authentication_level_set(component, src.authentication_level); if !ok do return
+    ok = component_access_level_set(component, src.access_level); if !ok do return
+    ok = component_safety_type_set(component, src.safety_type); if !ok do return
+    ok = component_isp_value_set(component, src.isp_value); if !ok do return
+
+    return component, true
 }
 
 ComponentsIF :: struct #raw_union {
