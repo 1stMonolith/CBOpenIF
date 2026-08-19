@@ -1,4 +1,4 @@
-package cbopenif
+package types
 
 Scope :: enum i32 {
     Public  = 0,
@@ -219,7 +219,7 @@ Component :: struct {
 Parameter :: struct {
     name:                 string,
     type_name:            string,
-    direction:            string,
+    direction:            Direction,
     attribute:            string,
     initial_value:        string,
     description:          string,
@@ -236,7 +236,7 @@ Parameter :: struct {
 ExtensibleParameter :: struct {
     name:                 string,
     type_name:            string,
-    direction:            string,
+    direction:            Direction,
     attribute:            string,
     initial_value:        string,
     description:          string,
@@ -250,7 +250,7 @@ ExtensibleParameter :: struct {
 CMParameter :: struct {
     name:                 string,
     type_name:            string,
-    direction:            string,
+    direction:            Direction,
     attribute:            string,
     initial_value:        string,
     description:          string,
@@ -326,10 +326,10 @@ CommVariable :: struct {
     attribute:         string,
     initial_value:     string,
     description:       string,
-    direction:         string,
+    direction:         Direction,
     acknowledge_group: string,
     expected_sil:      string,
-    restricted_sil:    string,
+    restricted_sil:    bool,
     interval_time:     i32,
     priority:          i32,
     ip_address:        string,
@@ -343,7 +343,7 @@ CommVariable :: struct {
 Signal :: struct {
     name:              string,
     path:              string,
-    direction:         string,
+    direction:         Direction,
     acknowledge_group: string,
     description:       string,
 }
@@ -375,7 +375,7 @@ FunctionBlockType :: struct {
     sil_level:                    string,
     restricted_sil:               string,
     alarm_owner:                  bool,
-    interaction_window:           bool,
+    interaction_window:           string,
     instantiate_as_aspect_object: bool,
     simulation_mark:              bool,
     embedded_graphics_visible:    bool,
@@ -384,7 +384,7 @@ FunctionBlockType :: struct {
     variables:                    [dynamic]Variable,
     external_variables:           [dynamic]ExternalVariable,
     code_blocks:                  [dynamic]CodeBlock,
-    function_blocks:              [dynamic]FunctionBlock, // nested instances
+    function_blocks:              [dynamic]FunctionBlock,
 }
 
 FunctionBlock :: struct {
@@ -409,10 +409,10 @@ ControlModuleType :: struct {
     guid:                         string,
     reserved_by_function:         string,
     sil_level:                    string,
-    restricted_sil:               string,
+    restricted_sil:               bool,
     alarm_owner:                  bool,
     batch_object:                 bool,
-    interaction_window:           bool,
+    interaction_window:           string,
     instantiate_as_aspect_object: bool,
     simulation_mark:              bool,
     embedded_graphics_visible:    bool,
@@ -432,10 +432,10 @@ SingleControlModuleType :: struct {
     guid:                 string,
     reserved_by_function: string,
     sil_level:            string,
-    restricted_sil:       string,
+    restricted_sil:       bool,
     alarm_owner:          bool,
     batch_object:         bool,
-    interaction_window:   bool,
+    interaction_window:   string,
     simulation_mark:      bool,
     cm_graphics:          string,
     graph_size:           GraphSize,
@@ -523,7 +523,7 @@ DiagramType :: struct {
     guid:                         string,
     reserved_by_function:         string,
     sil_level:                    string,
-    restricted_sil:               string,
+    restricted_sil:               bool,
     alarm_owner:                  bool,
     batch_object:                 bool,
     instantiate_as_aspect_object: bool,
@@ -545,7 +545,7 @@ Diagram :: struct {
     task_connection:      string,
     simulation_mark:      bool,
     sil_level:            string,
-    restricted_sil:       string,
+    restricted_sil:       bool,
     batch_object:         bool,
     inst_guid:            string,
     type_guid:            string,

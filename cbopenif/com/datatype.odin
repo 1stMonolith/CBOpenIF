@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 DataType   :: distinct rawptr
 Component  :: distinct rawptr
@@ -111,7 +111,7 @@ datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     return true
 }
 
-datatype_scope_get :: proc(datatype: DataType) -> (scope: cb.Scope, ok: bool) {
+datatype_scope_get :: proc(datatype: DataType) -> (scope: t.Scope, ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
@@ -119,10 +119,10 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: cb.Scope, ok: bool) {
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com_failed(hr) do return
 
-    return cb.Scope(s), true
+    return t.Scope(s), true
 }
 
-datatype_scope_set :: proc(datatype: DataType, scope: cb.Scope) -> (ok: bool) {
+datatype_scope_set :: proc(datatype: DataType, scope: t.Scope) -> (ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
     
@@ -231,7 +231,7 @@ datatype_release :: proc(datatype: DataType) {
     }
 }
 
-datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: cb.DataType, ok: bool) {
+datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: t.DataType, ok: bool) {
     if datatype == nil do return
     if !controlbuilder_connected() do return
 
@@ -239,7 +239,7 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
     
     protected, hidden: bool
     name, description, guid, reserved_by_function: string
-    scope: cb.Scope
+    scope: t.Scope
     
     if name, ok = datatype_name_get(datatype); ok do result.name = name; else do return
     if description, ok = datatype_description_get(datatype); ok do result.description = description; else do return
@@ -258,7 +258,7 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
     count, ok = component_count(components)
     if !ok do return
 
-    result.components = make([dynamic]cb.Component, 0, int(count), allocator)
+    result.components = make([dynamic]t.Component, 0, int(count), allocator)
 
     for i in 0..<count {
         component: Component
@@ -266,7 +266,7 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
         if !ok do return
         defer component_release(component)
 
-        component_struct: cb.Component
+        component_struct: t.Component
         component_struct, ok = component_from_com(component)
         if !ok do return
 
@@ -276,7 +276,7 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
     return result, true
 }
 
-datatype_to_com :: proc(src: cb.DataType) -> (result: DataType, ok: bool) {
+datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
     if !controlbuilder_connected() do return
 
     datatype: DataType
@@ -637,7 +637,7 @@ component_release :: proc(component: Component) {
     }
 }
 
-component_from_com :: proc(component: Component) -> (result: cb.Component, ok: bool) {
+component_from_com :: proc(component: Component) -> (result: t.Component, ok: bool) {
     if component == nil do return
     if !controlbuilder_connected() do return
     if name, ok := component_name_get(component); ok do result.name = name; else do return
@@ -656,7 +656,7 @@ component_from_com :: proc(component: Component) -> (result: cb.Component, ok: b
     return result, true
 }
 
-component_to_com :: proc(src: cb.Component) -> (result: Component, ok: bool) {
+component_to_com :: proc(src: t.Component) -> (result: Component, ok: bool) {
     component: Component
     component, ok = component_new1(
         src.name,

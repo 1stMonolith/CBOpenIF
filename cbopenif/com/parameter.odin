@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 Parameter  :: distinct rawptr
 Parameters :: distinct rawptr
@@ -125,7 +125,7 @@ parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok:
     return true
 }
 
-parameter_direction_get :: proc(parameter: Parameter) -> (direction: cb.Direction, ok: bool) {
+parameter_direction_get :: proc(parameter: Parameter) -> (direction: t.Direction, ok: bool) {
     if parameter == nil do return
     if !controlbuilder_connected() do return
 
@@ -133,10 +133,10 @@ parameter_direction_get :: proc(parameter: Parameter) -> (direction: cb.Directio
     hr := (^ParameterIF)(parameter)->DirectionGet(&d)
     if com_failed(hr) do return
     
-    return cb.Direction(d), true
+    return t.Direction(d), true
 }
 
-parameter_direction_set :: proc(parameter: Parameter, direction: cb.Direction) -> (ok: bool) {
+parameter_direction_set :: proc(parameter: Parameter, direction: t.Direction) -> (ok: bool) {
     if parameter == nil do return
     if !controlbuilder_connected() do return
 

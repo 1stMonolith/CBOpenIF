@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 PosInfo :: distinct rawptr
 
@@ -211,7 +211,7 @@ posinfo_tab_name_set :: proc(posinfo: PosInfo, tab_name: string) -> (ok: bool) {
     return true
 }
 
-posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: cb.Message, ok: bool) {
+posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.Message, ok: bool) {
     if posinfo == nil do return
     if !controlbuilder_connected() do return
 
@@ -219,10 +219,10 @@ posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: cb.Message,
     hr := (^PosInfoIF)(posinfo)->MessageTypeGet(&mt)
     if com_failed(hr) do return
 
-    return cb.Message(mt), true
+    return t.Message(mt), true
 }
 
-posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: cb.Message) -> (ok: bool) {
+posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: t.Message) -> (ok: bool) {
     if posinfo == nil do return
     if !controlbuilder_connected() do return
 

@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 CBOpenIFErrorCodes :: enum u32 {
     NotSupported     = 0x80040bc2,
@@ -666,6 +666,8 @@ cbopen_set_system_identity :: proc(controller_name, system_identity: string) -> 
 
     return true
 }
+
+import "core:fmt"
 
 cbopen_new_data_type :: proc(name, app_or_library_name, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
@@ -1624,7 +1626,7 @@ cbopen_set_application_control_modules :: proc(application_name, content: string
     return messages, true
 }
 
-cbopen_new_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
+cbopen_new_parameter :: proc(parameter_kind: t.ParameterKind, parameter_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name    := to_bstr(parameter_name)
@@ -1650,7 +1652,7 @@ cbopen_new_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_name, d
     return messages, true
 }
 
-cbopen_get_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path: string) -> (content: string, ok: bool) {
+cbopen_get_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path: string) -> (content: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(parameter_path)
@@ -1668,7 +1670,7 @@ cbopen_get_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path: s
     return content, true
 }
 
-cbopen_set_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path, content: string) -> (messages: string, ok: bool) {
+cbopen_set_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path    := to_bstr(parameter_path)
@@ -1690,7 +1692,7 @@ cbopen_set_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path, c
     return messages, true
 }
 
-cbopen_delete_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path: string) -> (ok: bool) {
+cbopen_delete_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(parameter_path)
@@ -1701,7 +1703,7 @@ cbopen_delete_parameter :: proc(parameter_kind: cb.ParameterKind, parameter_path
     return true
 }
 
-cbopen_new_variable :: proc(variable_kind: cb.VariableKind, variable_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
+cbopen_new_variable :: proc(variable_kind: t.VariableKind, variable_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name    := to_bstr(variable_name)
@@ -1727,7 +1729,7 @@ cbopen_new_variable :: proc(variable_kind: cb.VariableKind, variable_name, data_
     return messages, true
 }
 
-cbopen_get_variable :: proc(variable_kind: cb.VariableKind, variable_path: string) -> (content: string, ok: bool) {
+cbopen_get_variable :: proc(variable_kind: t.VariableKind, variable_path: string) -> (content: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(variable_path)
@@ -1745,7 +1747,7 @@ cbopen_get_variable :: proc(variable_kind: cb.VariableKind, variable_path: strin
     return content, true
 }
 
-cbopen_set_variable :: proc(variable_kind: cb.VariableKind, variable_path, content: string) -> (messages: string, ok: bool) {
+cbopen_set_variable :: proc(variable_kind: t.VariableKind, variable_path, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path    := to_bstr(variable_path)
@@ -1767,7 +1769,7 @@ cbopen_set_variable :: proc(variable_kind: cb.VariableKind, variable_path, conte
     return messages, true
 }
 
-cbopen_delete_variable :: proc(variable_kind: cb.VariableKind, variable_path: string) -> (ok: bool) {
+cbopen_delete_variable :: proc(variable_kind: t.VariableKind, variable_path: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(variable_path)
@@ -1818,7 +1820,7 @@ cbopen_set_cm_connection :: proc(connection_path, content: string) -> (messages:
     return messages, true
 }
 
-cbopen_new_code_block :: proc(codeblock_kind: cb.CodeBlockKind, code_block_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
+cbopen_new_code_block :: proc(codeblock_kind: t.CodeBlockKind, code_block_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name    := to_bstr(code_block_name)
@@ -2787,7 +2789,7 @@ cbopen_replace_connected_hardware_library :: proc(controller_name, connected_nam
     return true
 }
 
-cbopen_add_hardware_type_file :: proc(libstr_name, type_guid: string, file_type: cb.HardwareFile, file_path, version, build_version, build_date, fw_name: string) -> (ok: bool) {
+cbopen_add_hardware_type_file :: proc(libstr_name, type_guid: string, file_type: t.HardwareFile, file_path, version, build_version, build_date, fw_name: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_lib   := to_bstr(libstr_name)
@@ -2966,7 +2968,7 @@ cbopen_write_error :: proc(message: string) -> (ok: bool) {
     return true
 }
 
-cbopen_new_folder :: proc(folder_kind: cb.Folder, folder_name, path_to_parent, guid: string) -> (ok: bool) {
+cbopen_new_folder :: proc(folder_kind: t.Folder, folder_name, path_to_parent, guid: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name   := to_bstr(folder_name)
@@ -2983,7 +2985,7 @@ cbopen_new_folder :: proc(folder_kind: cb.Folder, folder_name, path_to_parent, g
     return true
 }
 
-cbopen_rename_folder :: proc(folder_kind: cb.Folder, folder_path, new_name: string) -> (ok: bool) {
+cbopen_rename_folder :: proc(folder_kind: t.Folder, folder_path, new_name: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(folder_path)
@@ -2998,7 +3000,7 @@ cbopen_rename_folder :: proc(folder_kind: cb.Folder, folder_path, new_name: stri
     return true
 }
 
-cbopen_delete_folder :: proc(folder_kind: cb.Folder, folder_path: string) -> (ok: bool) {
+cbopen_delete_folder :: proc(folder_kind: t.Folder, folder_path: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(folder_path)
@@ -3009,7 +3011,7 @@ cbopen_delete_folder :: proc(folder_kind: cb.Folder, folder_path: string) -> (ok
     return true
 }
 
-cbopen_move_folder :: proc(folder_kind: cb.Folder, folder_path, destination_path: string) -> (ok: bool) {
+cbopen_move_folder :: proc(folder_kind: t.Folder, folder_path, destination_path: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_path := to_bstr(folder_path)
@@ -3024,7 +3026,7 @@ cbopen_move_folder :: proc(folder_kind: cb.Folder, folder_path, destination_path
     return true
 }
 
-cbopen_move_folder_object :: proc(folder_kind: cb.Folder, object_name, destination_path: string) -> (ok: bool) {
+cbopen_move_folder_object :: proc(folder_kind: t.Folder, object_name, destination_path: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_obj  := to_bstr(object_name)
@@ -3170,7 +3172,7 @@ cbopen_insert_hardware_definition_file :: proc(hardware_library_name, file_path:
     return file_added, messages, true
 }
 
-cbopen_get_execution_order :: proc(executioninstance_kind: cb.ExecutionInstanceKind, application_name: string) -> (content: string, ok: bool) {
+cbopen_get_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKind, application_name: string) -> (content: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_app_or_library_name := to_bstr(application_name)
@@ -3188,7 +3190,7 @@ cbopen_get_execution_order :: proc(executioninstance_kind: cb.ExecutionInstanceK
     return content, true
 }
 
-cbopen_set_execution_order :: proc(executioninstance_kind: cb.ExecutionInstanceKind, application_name, content: string) -> (messages: string, ok: bool) {
+cbopen_set_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKind, application_name, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_app_or_library_name     := to_bstr(application_name)
@@ -3409,7 +3411,7 @@ cbopen_rename_diagram_instance :: proc(path, new_name: string) -> (ok: bool) {
     return true
 }
 
-cbopen_new_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
+cbopen_new_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name    := to_bstr(signal_name)
@@ -3433,7 +3435,7 @@ cbopen_new_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_paren
     return messages, true
 }
 
-cbopen_get_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_parent: string) -> (content: string, ok: bool) {
+cbopen_get_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent: string) -> (content: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name   := to_bstr(signal_name)
@@ -3455,7 +3457,7 @@ cbopen_get_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_paren
     return content, true
 }
 
-cbopen_set_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
+cbopen_set_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name    := to_bstr(signal_name)
@@ -3479,7 +3481,7 @@ cbopen_set_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_paren
     return messages, true
 }
 
-cbopen_delete_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_parent: string) -> (ok: bool) {
+cbopen_delete_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_name   := to_bstr(signal_name)
@@ -3494,7 +3496,7 @@ cbopen_delete_signal :: proc(signal_kind: cb.SignalKind, signal_name, path_to_pa
     return true
 }
 
-cbopen_add_hardware_library_file :: proc(libstr_name: string, file_kind: cb.HardwareLibraryFile, file_path, version: string) -> (ok: bool) {
+cbopen_add_hardware_library_file :: proc(libstr_name: string, file_kind: t.HardwareLibraryFile, file_path, version: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)
@@ -3529,7 +3531,7 @@ cbopen_get_hardware_library_files :: proc(libstr_name: string) -> (files: string
     return files, true
 }
 
-cbopen_delete_hardware_library_file :: proc(libstr_name: string, file_kind: cb.HardwareLibraryFile, file_name: string) -> (ok: bool) {
+cbopen_delete_hardware_library_file :: proc(libstr_name: string, file_kind: t.HardwareLibraryFile, file_name: string) -> (ok: bool) {
     if !controlbuilder_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)

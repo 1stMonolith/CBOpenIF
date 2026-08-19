@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 objectfactory: ^ObjectFactoryIF
 
@@ -562,7 +562,7 @@ datatype_new :: proc(name, description: string) -> (datatype: DataType, ok: bool
     return datatype, true
 }
 
-datatype_new1 :: proc(name, description: string, protected, hidden: bool, scope: cb.Scope) -> (datatype: DataType, ok: bool) {
+datatype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope) -> (datatype: DataType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name        := to_bstr(name)
@@ -603,7 +603,7 @@ functionblocktype_new :: proc(name, description: string) -> (functionblocktype: 
     return functionblocktype, true
 }
 
-functionblocktype_new1 :: proc(name, description: string, protected, hidden: bool, scope: cb.Scope, interaction_window: string, alarm_owner: bool, guid: string) -> (functionblocktype: FunctionBlockType, ok: bool) {
+functionblocktype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, interaction_window: string, alarm_owner: bool, guid: string) -> (functionblocktype: FunctionBlockType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name        := to_bstr(name)
@@ -673,7 +673,7 @@ controlmoduletype_new :: proc(name, description: string) -> (controlmoduletype: 
     return controlmoduletype, true
 }
 
-controlmoduletype_new1 :: proc(name, description: string, protected, hidden: bool, scope: cb.Scope, interaction_window: string, alarm_owner: bool, guid: string, graph_size: GraphSize) -> (controlmoduletype: ControlModuleType, ok: bool) {
+controlmoduletype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, interaction_window: string, alarm_owner: bool, guid: string, graph_size: GraphSize) -> (controlmoduletype: ControlModuleType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name        := to_bstr(name)
@@ -837,7 +837,7 @@ singlecontrolmoduleinst_new1 :: proc(name, task: string, visibility: i32, type_g
     return singlecontrolmoduleinst, true
 }
 
-task_new :: proc(name: string, interval_time: i32, priority: cb.TaskPriority) -> (task: Task, ok: bool) {
+task_new :: proc(name: string, interval_time: i32, priority: t.TaskPriority) -> (task: Task, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
@@ -848,7 +848,7 @@ task_new :: proc(name: string, interval_time: i32, priority: cb.TaskPriority) ->
     return task, true
 }
 
-task_new1 :: proc(name: string, interval_time: i32, priority: cb.TaskPriority, offset: i32, output_update: cb.TaskOutputUpdate) -> (task: Task, ok: bool) {
+task_new1 :: proc(name: string, interval_time: i32, priority: t.TaskPriority, offset: i32, output_update: t.TaskOutputUpdate) -> (task: Task, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name := to_bstr(name)
@@ -1905,7 +1905,7 @@ diagramtype_new :: proc(name, description: string) -> (diagramtype: DiagramType,
     return diagramtype, true
 }
 
-diagramtype_new1 :: proc(name, description: string, protected, hidden: bool, scope: cb.Scope, alarm_owner: bool, guid: string) -> (diagramtype: DiagramType, ok: bool) {
+diagramtype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, alarm_owner: bool, guid: string) -> (diagramtype: DiagramType, ok: bool) {
     if !controlbuilder_connected() do return
     
     bstr_name        := to_bstr(name)

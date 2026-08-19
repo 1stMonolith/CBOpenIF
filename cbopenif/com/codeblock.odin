@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 ICodeBlock   :: distinct rawptr
 CodeBlocks   :: distinct rawptr
@@ -21,7 +21,7 @@ CodeBlockUnion :: union {
 }
 
 CodeBlock :: struct {
-    kind: cb.CodeBlockKind,
+    kind: t.CodeBlockKind,
     block: CodeBlockUnion,
 }
 
@@ -187,7 +187,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_st(icodeblock); ok && is {
         st, ok := icodeblock_as_st(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.ST
+        codeblock.kind = t.CodeBlockKind.ST
         codeblock.block = st
         return codeblock, true 
     }
@@ -195,7 +195,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_sfc(icodeblock); ok && is {
         sfc, ok := icodeblock_as_sfc(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.SFC
+        codeblock.kind = t.CodeBlockKind.SFC
         codeblock.block = sfc
         return codeblock, true 
     }
@@ -203,7 +203,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_fbd(icodeblock); ok && is {
         fbd, ok := icodeblock_as_fbd(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.FBD
+        codeblock.kind = t.CodeBlockKind.FBD
         codeblock.block = fbd
         return codeblock, true 
     }
@@ -211,7 +211,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_ld(icodeblock); ok && is {
         ld, ok := icodeblock_as_ld(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.LD
+        codeblock.kind = t.CodeBlockKind.LD
         codeblock.block = ld
         return codeblock, true 
     }
@@ -219,7 +219,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_il(icodeblock); ok && is {
         il, ok := icodeblock_as_il(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.IL
+        codeblock.kind = t.CodeBlockKind.IL
         codeblock.block = il
         return codeblock, true 
     }
@@ -227,7 +227,7 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if is, ok := icodeblock_is_fd(icodeblock); ok && is {
         fd, ok := icodeblock_as_fd(icodeblock)
         if !ok do return
-        codeblock.kind = cb.CodeBlockKind.FD
+        codeblock.kind = t.CodeBlockKind.FD
         codeblock.block = fd
         return codeblock, true 
     }

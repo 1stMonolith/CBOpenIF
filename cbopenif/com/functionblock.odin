@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 FunctionBlock     :: distinct rawptr
 FunctionBlocks    :: distinct rawptr
@@ -537,7 +537,7 @@ functionblocktype_hidden_set :: proc(functionblocktype: FunctionBlockType, hidde
     return true
 }
 
-functionblocktype_scope_get :: proc(functionblocktype: FunctionBlockType) -> (scope: cb.Scope, ok: bool) {
+functionblocktype_scope_get :: proc(functionblocktype: FunctionBlockType) -> (scope: t.Scope, ok: bool) {
     if functionblocktype == nil do return
     if !controlbuilder_connected() do return
     
@@ -545,10 +545,10 @@ functionblocktype_scope_get :: proc(functionblocktype: FunctionBlockType) -> (sc
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ScopeGet(&s)
     if com_failed(hr) do return
 
-    return cb.Scope(s), true
+    return t.Scope(s), true
 }
 
-functionblocktype_scope_set :: proc(functionblocktype: FunctionBlockType, scope: cb.Scope) -> (ok: bool) {
+functionblocktype_scope_set :: proc(functionblocktype: FunctionBlockType, scope: t.Scope) -> (ok: bool) {
     if functionblocktype == nil do return
     if !controlbuilder_connected() do return
     

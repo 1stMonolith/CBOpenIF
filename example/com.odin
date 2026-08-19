@@ -5,9 +5,6 @@ import "core:fmt"
 import cb "../cbopenif"
 import com "../cbopenif/com"
 
-// odin run com.odin -file -target:windows_i386
-
-
 // using the com interface directly
 main :: proc() {
 

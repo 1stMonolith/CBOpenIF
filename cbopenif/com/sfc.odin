@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 SFCBranch       :: distinct rawptr
 SFCBranches     :: distinct rawptr
@@ -26,7 +26,7 @@ SFCBranchVTable :: struct {
     ElementsPut: proc "system" (this: ^SFCBranchIF, SFCElements: rawptr) -> HResult,
 }
 
-sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: cb.SFCPriority, ok: bool) {
+sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: t.SFCPriority, ok: bool) {
     if sfcbranch == nil do return
     if !controlbuilder_connected() do return
 
@@ -34,10 +34,10 @@ sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: cb.SFCPriorit
     hr := (^SFCBranchIF)(sfcbranch)->PriorityGet(&p)
     if com_failed(hr) do return
 
-    return cb.SFCPriority(priority), true
+    return t.SFCPriority(priority), true
 }
 
-sfcbranch_priority_set :: proc(sfcbranch: SFCBranch, priority: cb.SFCPriority) -> (ok: bool) {
+sfcbranch_priority_set :: proc(sfcbranch: SFCBranch, priority: t.SFCPriority) -> (ok: bool) {
     if sfcbranch == nil do return
     if !controlbuilder_connected() do return
 

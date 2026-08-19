@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 ExtensibleParameter  :: distinct rawptr
 ExtensibleParameters :: distinct rawptr
@@ -119,7 +119,7 @@ extensibleparameter_attribute_set :: proc(extensibleparameter: ExtensibleParamet
     return true
 }
 
-extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: cb.Direction, ok: bool) {
+extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: t.Direction, ok: bool) {
     if extensibleparameter == nil do return
     if !controlbuilder_connected() do return
 
@@ -127,10 +127,10 @@ extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParamet
     hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionGet(&d)
     if com_failed(hr) do return
 
-    return cb.Direction(d), true
+    return t.Direction(d), true
 }
 
-extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: cb.Direction) -> (ok: bool) {
+extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: t.Direction) -> (ok: bool) {
     if extensibleparameter == nil do return
     if !controlbuilder_connected() do return
 

@@ -8,8 +8,6 @@ import "core:strings"
 
 import file "../cbopenif/file"
 
-// odin run main.odin -file
-
 find_checksum :: proc(data: string) -> (tag_pos, value_pos, end_pos: int, ok: bool) {
     needle := `<CheckSum Value="`
     idx := strings.index(data, needle)

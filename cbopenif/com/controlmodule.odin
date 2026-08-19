@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 IControlModule          :: distinct rawptr
 ControlModule           :: distinct rawptr
@@ -755,7 +755,7 @@ controlmoduletype_hidden_set :: proc(controlmoduletype: ControlModuleType, hidde
     return true
 }
 
-controlmoduletype_scope_get :: proc(controlmoduletype: ControlModuleType) -> (scope: cb.Scope, ok: bool) {
+controlmoduletype_scope_get :: proc(controlmoduletype: ControlModuleType) -> (scope: t.Scope, ok: bool) {
     if controlmoduletype == nil do return
     if !controlbuilder_connected() do return
     
@@ -763,10 +763,10 @@ controlmoduletype_scope_get :: proc(controlmoduletype: ControlModuleType) -> (sc
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ScopeGet(&s)
     if com_failed(hr) do return
 
-    return cb.Scope(s), true
+    return t.Scope(s), true
 }
 
-controlmoduletype_scope_set :: proc(controlmoduletype: ControlModuleType, scope: cb.Scope) -> (ok: bool) {
+controlmoduletype_scope_set :: proc(controlmoduletype: ControlModuleType, scope: t.Scope) -> (ok: bool) {
     if controlmoduletype == nil do return
     if !controlbuilder_connected() do return
     

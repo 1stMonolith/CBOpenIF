@@ -1,6 +1,6 @@
 package com
 
-import cb ".."
+import t "../types"
 
 AutoPoint :: distinct rawptr
 
@@ -15,7 +15,7 @@ AutoPointVTable :: struct {
     AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
 }
 
-autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: cb.AutoPos, ok: bool) {
+autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: t.AutoPos, ok: bool) {
     if autopoint == nil do return
     if !controlbuilder_connected() do return
     
@@ -25,10 +25,10 @@ autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: cb.AutoPos, ok:
 
     if !ok do return
     
-    return cb.AutoPos(apt), true
+    return t.AutoPos(apt), true
 }
 
-autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: cb.AutoPos) -> (ok: bool) {
+autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: t.AutoPos) -> (ok: bool) {
     if autopoint == nil do return
     if !controlbuilder_connected() do return
     
