@@ -39,7 +39,7 @@ registry_key_create :: proc(key_path: string) -> (ok: bool, key: win.HKEY) {
             win.utf8_to_wstring(key_path),
             0,
             nil,
-            win.REG_OPTION_NON_VOLATILE,
+            win.REG_OPTION_NON_VOLATILE | win.KEY_WOW64_32KEY,
             win.KEY_ALL_ACCESS,
             nil,
             &key,
@@ -66,8 +66,11 @@ registry_value_exists :: proc(key: win.HKEY, value_name: string) -> (exists: boo
 
 registry_value_set :: proc(key: win.HKEY, name, value: string) -> (ok: bool) {
 
-    name_w := win.utf8_to_wstring(name)
-    value_w := win.utf8_to_wstring(value)
+    name_w := win.utf8_to_wstring(name, context.allocator)
+    defer delete(name_w)
+
+    value_w := win.utf8_to_wstring(value, context.allocator)
+    defer delete(value_w)
 
     status := win.RegSetValueExW(
         key,
@@ -89,7 +92,7 @@ register_surrogate :: proc() -> bool {
         dllpath  := "C:\\Windows\\SysWOW64\\" + CBHELPER_DLL
         args := fmt.tprintf("/s \"%s\"", dllpath)
         
-        cmd := win.utf8_to_wstring(fmt.tprintf( "\"%s\" %s", regsvr32, args))
+        cmd := win.utf8_to_wstring(fmt.tprintf( "\"%s\" %s", regsvr32, args), context.allocator)
         defer delete(cmd)
 
         si: win.STARTUPINFOW
@@ -108,7 +111,10 @@ register_surrogate :: proc() -> bool {
     }
 
     {
-        key_path := fmt.tprintf("Wow6432Node\\CLSID\\%s", CBHELPER_CLISID_STRING)
+        ok: bool
+        key: win.HKEY
+        key_path := fmt.aprintf("Wow6432Node\\CLSID\\%s", CBHELPER_CLISID_STRING)
+        defer delete(key_path)
         
         fmt.printf("Looking for key %v ... ", key_path)
         if !registry_key_exists(key_path) {
@@ -118,7 +124,7 @@ register_surrogate :: proc() -> bool {
         fmt.println("Found")
 
         fmt.printf("Getting key %v ... ", key_path)
-        ok, key := registry_key_get(key_path)
+        ok, key = registry_key_get(key_path)
         if !ok {
             fmt.println("Failed")
             return false
@@ -139,28 +145,19 @@ register_surrogate :: proc() -> bool {
     {
         ok: bool
         key: win.HKEY
-        key_path := fmt.tprintf("Wow6432Node\\AppID\\%s", CBHELPER_CLISID_STRING)
+        key_path := fmt.aprintf("Wow6432Node\\AppID\\%s", CBHELPER_CLISID_STRING)
+        defer delete(key_path)
 
         fmt.printf("Looking for key %v ... ", key_path)
-        found := registry_key_exists(key_path)
-        if !found {
+        if registry_key_exists(key_path) {
+            fmt.println("Found")
+            fmt.printf("Getting key %v ... ", key_path)
+            ok, key = registry_key_get(key_path)
+        } else {
             fmt.println("Not Found")
-            
             fmt.printf("Creating key %v ... ", key_path)
             ok, key = registry_key_create(key_path)
-            if !ok {
-                fmt.println("Failed")
-                return false
-            }
-            fmt.println("Success")
-            defer win.RegCloseKey(key)
         }
-        if found {
-            fmt.println("Found")
-        }
-
-        fmt.printf("Getting key %v ... ", key_path)
-        ok, key = registry_key_get(key_path)
         if !ok {
             fmt.println("Failed")
             return false
@@ -169,9 +166,7 @@ register_surrogate :: proc() -> bool {
         defer win.RegCloseKey(key)
 
         fmt.printf("creating DllSurrogate value... ")
-        ok = registry_value_set(key, "DllSurrogate", "")
-
-        if !ok {
+        if !registry_value_set(key, "DllSurrogate", "") {
             fmt.println("Failed")
             return false
         }
