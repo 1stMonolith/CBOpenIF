@@ -39,7 +39,7 @@ AccessVariablesVTable :: struct {
 
 accessvariables_serialize :: proc(av: AccessVariables) -> (xml: string, ok: bool) {
     if av == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -51,7 +51,7 @@ accessvariables_serialize :: proc(av: AccessVariables) -> (xml: string, ok: bool
 
 accessvariables_vaprotocols_get :: proc(av: AccessVariables) -> (vaprotocols: VAProtocols, ok: bool) {
     if av == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^AccessVariablesIF)(av)->VAProtocolsGet(&p)
@@ -62,7 +62,7 @@ accessvariables_vaprotocols_get :: proc(av: AccessVariables) -> (vaprotocols: VA
 
 accessvariables_vaprotocols_set :: proc(av: AccessVariables, vaprotocols: VAProtocols) -> (ok: bool) {
     if av == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^AccessVariablesIF)(av)->VAProtocolsPut(vaprotocols)
     if com_failed(hr) do return
@@ -91,7 +91,7 @@ IVAProtocolVTable :: struct {
 
 ivaprotocol_name_get :: proc(iva: IVAProtocol) -> (name: string, ok: bool) {
     if iva == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -103,7 +103,7 @@ ivaprotocol_name_get :: proc(iva: IVAProtocol) -> (name: string, ok: bool) {
 
 ivaprotocol_name_set :: proc(iva: IVAProtocol, name: string) -> (ok: bool) {
     if iva == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -115,7 +115,7 @@ ivaprotocol_name_set :: proc(iva: IVAProtocol, name: string) -> (ok: bool) {
 
 ivaprotocol_is_vanamed_protocol_get :: proc(iva: IVAProtocol) -> (is_vanamed: bool, ok: bool) {
     if iva == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IVAProtocolIF)(iva)->IsVANamedProtocolGet(&vb)
@@ -126,7 +126,7 @@ ivaprotocol_is_vanamed_protocol_get :: proc(iva: IVAProtocol) -> (is_vanamed: bo
 
 ivaprotocol_is_vaaddressed_protocol_get :: proc(iva: IVAProtocol) -> (is_vaaddressed: bool, ok: bool) {
     if iva == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IVAProtocolIF)(iva)->IsVAAddressedProtocolGet(&vb)
@@ -166,7 +166,7 @@ VAAddressedProtocolVTable :: struct {
 
 vaaddressedprotocol_name_get :: proc(vaaddressedprotocol: VAAddressedProtocol) -> (name: string, ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -178,7 +178,7 @@ vaaddressedprotocol_name_get :: proc(vaaddressedprotocol: VAAddressedProtocol) -
 
 vaaddressedprotocol_name_set :: proc(vaaddressedprotocol: VAAddressedProtocol, name: string) -> (ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -191,7 +191,7 @@ vaaddressedprotocol_name_set :: proc(vaaddressedprotocol: VAAddressedProtocol, n
 vaaddressedprotocol_vaaddressedvariable_add :: proc(vaaddressedprotocol: VAAddressedProtocol, vaaddressedvariable: VAAddressedVariable) -> (ok: bool) {
     if vaaddressedprotocol == nil do return
     if vaaddressedvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Add(vaaddressedvariable)
     if com_failed(hr) do return
@@ -202,7 +202,7 @@ vaaddressedprotocol_vaaddressedvariable_add :: proc(vaaddressedprotocol: VAAddre
 vaaddressedprotocol_vaaddressedvariable_add_at_index :: proc(vaaddressedprotocol: VAAddressedProtocol, vaaddressedvariable: VAAddressedVariable, index: i32) -> (ok: bool) {
     if vaaddressedprotocol == nil do return
     if vaaddressedvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->AddBefore(vaaddressedvariable, index)
     if com_failed(hr) do return
@@ -212,7 +212,7 @@ vaaddressedprotocol_vaaddressedvariable_add_at_index :: proc(vaaddressedprotocol
 
 vaaddressedprotocol_vaaddressedvariable_by_name :: proc(vaaddressedprotocol: VAAddressedProtocol, name: string) -> (vaaddressedvariable: VAAddressedVariable, ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -224,7 +224,7 @@ vaaddressedprotocol_vaaddressedvariable_by_name :: proc(vaaddressedprotocol: VAA
 
 vaaddressedprotocol_vaaddressedvariable_by_index :: proc(vaaddressedprotocol: VAAddressedProtocol, index: i32) -> (vaaddressedvariable: VAAddressedVariable, ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Item(index + 1, cast(^rawptr)&vaaddressedvariable)
     if com_failed(hr) do return
@@ -234,7 +234,7 @@ vaaddressedprotocol_vaaddressedvariable_by_index :: proc(vaaddressedprotocol: VA
 
 vaaddressedprotocol_vaaddressedvariable_index :: proc(vaaddressedprotocol: VAAddressedProtocol, name: string) -> (index: i32, ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -246,7 +246,7 @@ vaaddressedprotocol_vaaddressedvariable_index :: proc(vaaddressedprotocol: VAAdd
 
 vaaddressedprotocol_vaaddressedvariable_count :: proc(vaaddressedprotocol: VAAddressedProtocol) -> (count: i32, ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Count(&count)
     if com_failed(hr) do return
@@ -256,7 +256,7 @@ vaaddressedprotocol_vaaddressedvariable_count :: proc(vaaddressedprotocol: VAAdd
 
 vaaddressedprotocol_vaaddressedvariable_remove_by_name :: proc(vaaddressedprotocol: VAAddressedProtocol, name: string) -> (ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = vaaddressedprotocol_vaaddressedvariable_index(vaaddressedprotocol, name)
@@ -270,7 +270,7 @@ vaaddressedprotocol_vaaddressedvariable_remove_by_name :: proc(vaaddressedprotoc
 
 vaaddressedprotocol_vaaddressedvariable_remove_by_index :: proc(vaaddressedprotocol: VAAddressedProtocol, index: i32) -> (ok: bool) {
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedProtocolIF)(vaaddressedprotocol)->Remove(index + 1)
     if com_failed(hr) do return
@@ -309,7 +309,7 @@ VANamedProtocolVTable :: struct {
 
 vanamedprotocol_name_get :: proc(vanamedprotocol: VANamedProtocol) -> (name: string, ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -321,7 +321,7 @@ vanamedprotocol_name_get :: proc(vanamedprotocol: VANamedProtocol) -> (name: str
 
 vanamedprotocol_name_set :: proc(vanamedprotocol: VANamedProtocol, name: string) -> (ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -334,7 +334,7 @@ vanamedprotocol_name_set :: proc(vanamedprotocol: VANamedProtocol, name: string)
 vanamedprotocol_vanammedvariable_add :: proc(vanamedprotocol: VANamedProtocol, vanammedvariable: VANamedVariable) -> (ok: bool) {
     if vanamedprotocol == nil do return
     if vanammedvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->Add(vanammedvariable)
     if com_failed(hr) do return
@@ -345,7 +345,7 @@ vanamedprotocol_vanammedvariable_add :: proc(vanamedprotocol: VANamedProtocol, v
 vanamedprotocol_vanammedvariable_add_at_index :: proc(vanamedprotocol: VANamedProtocol, vanammedvariable: VANamedVariable, index: i32) -> (ok: bool) {
     if vanamedprotocol == nil do return
     if vanammedvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->AddBefore(vanammedvariable, index)
     if com_failed(hr) do return
@@ -355,7 +355,7 @@ vanamedprotocol_vanammedvariable_add_at_index :: proc(vanamedprotocol: VANamedPr
 
 vanamedprotocol_vanamedvariable_by_name :: proc(vanamedprotocol: VANamedProtocol, name: string) -> (vanammedvariable: VANamedVariable, ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -367,7 +367,7 @@ vanamedprotocol_vanamedvariable_by_name :: proc(vanamedprotocol: VANamedProtocol
 
 vanamedprotocol_vanamedvariable_by_index :: proc(vanamedprotocol: VANamedProtocol, index: i32) -> (vanammedvariable: VANamedVariable, ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->Item(index + 1, cast(^rawptr)&vanammedvariable)
     if com_failed(hr) do return
@@ -377,7 +377,7 @@ vanamedprotocol_vanamedvariable_by_index :: proc(vanamedprotocol: VANamedProtoco
 
 vanamedprotocol_vanamedvariable_index :: proc(vanamedprotocol: VANamedProtocol, name: string) -> (index: i32, ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -389,7 +389,7 @@ vanamedprotocol_vanamedvariable_index :: proc(vanamedprotocol: VANamedProtocol, 
 
 vanamedprotocol_vanamedvariable_count :: proc(vanamedprotocol: VANamedProtocol) -> (count: i32, ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->Count(&count)
     if com_failed(hr) do return
@@ -399,7 +399,7 @@ vanamedprotocol_vanamedvariable_count :: proc(vanamedprotocol: VANamedProtocol) 
 
 vanamedprotocol_vanamedvariable_remove_by_name :: proc(vanamedprotocol: VANamedProtocol, name: string) -> (ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = vanamedprotocol_vanamedvariable_index(vanamedprotocol, name)
@@ -413,7 +413,7 @@ vanamedprotocol_vanamedvariable_remove_by_name :: proc(vanamedprotocol: VANamedP
 
 vanamedprotocol_vanamedvariable_remove_by_index :: proc(vanamedprotocol: VANamedProtocol, index: i32) -> (ok: bool) {
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedProtocolIF)(vanamedprotocol)->Remove(index + 1)
     if com_failed(hr) do return
@@ -450,7 +450,7 @@ VAProtocolsVTable :: struct {
 vaprotocols_vanammedprotocol_add :: proc(vaprotocols: VAProtocols, vanamedprotocol: VANamedProtocol) -> (ok: bool) {
     if vaprotocols == nil do return
     if vanamedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->AddVANamedProtocol(vanamedprotocol)
     if com_failed(hr) do return
@@ -461,7 +461,7 @@ vaprotocols_vanammedprotocol_add :: proc(vaprotocols: VAProtocols, vanamedprotoc
 vaprotocols_vaaddressedprotocol_add :: proc(vaprotocols: VAProtocols, vaaddressedprotocol: VAAddressedProtocol) -> (ok: bool) {
     if vaprotocols == nil do return
     if vaaddressedprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->AddVAAddressedProtocol(vaaddressedprotocol)
     if com_failed(hr) do return
@@ -472,7 +472,7 @@ vaprotocols_vaaddressedprotocol_add :: proc(vaprotocols: VAProtocols, vaaddresse
 vaprotocols_ivaprotocol_add :: proc(vaprotocols: VAProtocols, ivaprotocol: IVAProtocol) -> (ok: bool) {
     if vaprotocols == nil do return
     if ivaprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->Add(ivaprotocol)
     if com_failed(hr) do return
@@ -483,7 +483,7 @@ vaprotocols_ivaprotocol_add :: proc(vaprotocols: VAProtocols, ivaprotocol: IVAPr
 vaprotocols_ivaprotocol_add_at_index :: proc(vaprotocols: VAProtocols, ivaprotocol: IVAProtocol, index: i32) -> (ok: bool) {
     if vaprotocols == nil do return
     if ivaprotocol == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->AddBefore(ivaprotocol, index)
     if com_failed(hr) do return
@@ -493,7 +493,7 @@ vaprotocols_ivaprotocol_add_at_index :: proc(vaprotocols: VAProtocols, ivaprotoc
 
 vaprotocols_vaprotocol_by_name :: proc(vaprotocols: VAProtocols, name: string) -> (iva: IVAProtocol, ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -505,7 +505,7 @@ vaprotocols_vaprotocol_by_name :: proc(vaprotocols: VAProtocols, name: string) -
 
 vaprotocols_vaprotocol_by_index :: proc(vaprotocols: VAProtocols, index: i32) -> (iva: IVAProtocol, ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->Item(index + 1, cast(^rawptr)&iva)
     if com_failed(hr) do return
@@ -515,7 +515,7 @@ vaprotocols_vaprotocol_by_index :: proc(vaprotocols: VAProtocols, index: i32) ->
 
 vaprotocols_vaprotocol_index :: proc(vaprotocols: VAProtocols, name: string) -> (index: i32, ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -527,7 +527,7 @@ vaprotocols_vaprotocol_index :: proc(vaprotocols: VAProtocols, name: string) -> 
 
 vaprotocols_vaprotocol_count :: proc(vaprotocols: VAProtocols) -> (count: i32, ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->Count(&count)
     if com_failed(hr) do return
@@ -537,7 +537,7 @@ vaprotocols_vaprotocol_count :: proc(vaprotocols: VAProtocols) -> (count: i32, o
 
 vaprotocols_vaprotocol_remove_by_name :: proc(vaprotocols: VAProtocols, name: string) -> (ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = vaprotocols_vaprotocol_index(vaprotocols, name)
@@ -551,7 +551,7 @@ vaprotocols_vaprotocol_remove_by_name :: proc(vaprotocols: VAProtocols, name: st
 
 vaprotocols_vaprotocol_remove_by_index :: proc(vaprotocols: VAProtocols, index: i32) -> (ok: bool) {
     if vaprotocols == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAProtocolsIF)(vaprotocols)->Remove(index + 1)
     if com_failed(hr) do return
@@ -587,7 +587,7 @@ VANamedVariableVTable :: struct {
 
 vanamedvariable_name_get :: proc(vanv: VANamedVariable) -> (name: string, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -599,7 +599,7 @@ vanamedvariable_name_get :: proc(vanv: VANamedVariable) -> (name: string, ok: bo
 
 vanamedvariable_name_set :: proc(vanv: VANamedVariable, name: string) -> (ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -611,7 +611,7 @@ vanamedvariable_name_set :: proc(vanv: VANamedVariable, name: string) -> (ok: bo
 
 vanamedvariable_path_get :: proc(vanv: VANamedVariable) -> (path: string, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -623,7 +623,7 @@ vanamedvariable_path_get :: proc(vanv: VANamedVariable) -> (path: string, ok: bo
 
 vanamedvariable_path_set :: proc(vanv: VANamedVariable, path: string) -> (ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(path)
     defer bstr_free(bs)
@@ -635,7 +635,7 @@ vanamedvariable_path_set :: proc(vanv: VANamedVariable, path: string) -> (ok: bo
 
 vanamedvariable_va_attribute_get :: proc(vanv: VANamedVariable) -> (va_attribute: string, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -647,7 +647,7 @@ vanamedvariable_va_attribute_get :: proc(vanv: VANamedVariable) -> (va_attribute
 
 vanamedvariable_va_attribute_set :: proc(vanv: VANamedVariable, va_attribute: string) -> (ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(va_attribute)
     defer bstr_free(bs)
@@ -659,7 +659,7 @@ vanamedvariable_va_attribute_set :: proc(vanv: VANamedVariable, va_attribute: st
 
 vanamedvariable_va_type_get :: proc(vanv: VANamedVariable) -> (va_type: string, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -671,7 +671,7 @@ vanamedvariable_va_type_get :: proc(vanv: VANamedVariable) -> (va_type: string, 
 
 vanamedvariable_va_type_set :: proc(vanv: VANamedVariable, va_type: string) -> (ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(va_type)
     defer bstr_free(bs)
@@ -683,7 +683,7 @@ vanamedvariable_va_type_set :: proc(vanv: VANamedVariable, va_type: string) -> (
 
 vanamedvariable_row_get :: proc(vanv: VANamedVariable) -> (row: i32, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedVariableIF)(vanv)->RowGet(&row)
     if com_failed(hr) do return
@@ -693,7 +693,7 @@ vanamedvariable_row_get :: proc(vanv: VANamedVariable) -> (row: i32, ok: bool) {
 
 vanamedvariable_row_set :: proc(vanv: VANamedVariable, row: i32) -> (ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VANamedVariableIF)(vanv)->RowPut(row)
     if com_failed(hr) do return
@@ -703,7 +703,7 @@ vanamedvariable_row_set :: proc(vanv: VANamedVariable, row: i32) -> (ok: bool) {
 
 vanamedvariable_va_type_path_get :: proc(vanv: VANamedVariable) -> (va_type_path: string, ok: bool) {
     if vanv == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -739,7 +739,7 @@ VAAddressedVariableVTable :: struct {
 
 vaaddressedvariable_name_get :: proc(vaav: VAAddressedVariable) -> (name: string, ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -751,7 +751,7 @@ vaaddressedvariable_name_get :: proc(vaav: VAAddressedVariable) -> (name: string
 
 vaaddressedvariable_name_set :: proc(vaav: VAAddressedVariable, name: string) -> (ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -763,7 +763,7 @@ vaaddressedvariable_name_set :: proc(vaav: VAAddressedVariable, name: string) ->
 
 vaaddressedvariable_path_get :: proc(vaav: VAAddressedVariable) -> (path: string, ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -775,7 +775,7 @@ vaaddressedvariable_path_get :: proc(vaav: VAAddressedVariable) -> (path: string
 
 vaaddressedvariable_path_set :: proc(vaav: VAAddressedVariable, path: string) -> (ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(path)
     defer bstr_free(bs)
@@ -787,7 +787,7 @@ vaaddressedvariable_path_set :: proc(vaav: VAAddressedVariable, path: string) ->
 
 vaaddressedvariable_va_type_get :: proc(vaav: VAAddressedVariable) -> (va_type: string, ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -799,7 +799,7 @@ vaaddressedvariable_va_type_get :: proc(vaav: VAAddressedVariable) -> (va_type: 
 
 vaaddressedvariable_va_type_set :: proc(vaav: VAAddressedVariable, va_type: string) -> (ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(va_type)
     defer bstr_free(bs)
@@ -811,7 +811,7 @@ vaaddressedvariable_va_type_set :: proc(vaav: VAAddressedVariable, va_type: stri
 
 vaaddressedvariable_row_get :: proc(vaav: VAAddressedVariable) -> (row: i32, ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedVariableIF)(vaav)->RowGet(&row)
     if com_failed(hr) do return
@@ -821,7 +821,7 @@ vaaddressedvariable_row_get :: proc(vaav: VAAddressedVariable) -> (row: i32, ok:
 
 vaaddressedvariable_row_set :: proc(vaav: VAAddressedVariable, row: i32) -> (ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VAAddressedVariableIF)(vaav)->RowPut(row)
     if com_failed(hr) do return
@@ -831,7 +831,7 @@ vaaddressedvariable_row_set :: proc(vaav: VAAddressedVariable, row: i32) -> (ok:
 
 vaaddressedvariable_va_type_path_get :: proc(vaav: VAAddressedVariable) -> (va_type_path: string, ok: bool) {
     if vaav == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)

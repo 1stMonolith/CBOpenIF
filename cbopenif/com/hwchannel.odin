@@ -35,7 +35,7 @@ HWChannelVTable :: struct {
 
 hwchannel_name_get :: proc(hwchannel: HWChannel) -> (name: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -47,7 +47,7 @@ hwchannel_name_get :: proc(hwchannel: HWChannel) -> (name: string, ok: bool) {
 
 hwchannel_name_set :: proc(hwchannel: HWChannel, name: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -59,7 +59,7 @@ hwchannel_name_set :: proc(hwchannel: HWChannel, name: string) -> (ok: bool) {
 
 hwchannel_address_get :: proc(hwchannel: HWChannel) -> (address: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -71,7 +71,7 @@ hwchannel_address_get :: proc(hwchannel: HWChannel) -> (address: string, ok: boo
 
 hwchannel_address_set :: proc(hwchannel: HWChannel, address: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(address)
     defer bstr_free(bs)
@@ -83,7 +83,7 @@ hwchannel_address_set :: proc(hwchannel: HWChannel, address: string) -> (ok: boo
 
 hwchannel_min_get :: proc(hwchannel: HWChannel) -> (min: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -95,7 +95,7 @@ hwchannel_min_get :: proc(hwchannel: HWChannel) -> (min: string, ok: bool) {
 
 hwchannel_min_set :: proc(hwchannel: HWChannel, min: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(min)
     defer bstr_free(bs)
@@ -107,7 +107,7 @@ hwchannel_min_set :: proc(hwchannel: HWChannel, min: string) -> (ok: bool) {
 
 hwchannel_max_get :: proc(hwchannel: HWChannel) -> (max: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -119,7 +119,7 @@ hwchannel_max_get :: proc(hwchannel: HWChannel) -> (max: string, ok: bool) {
 
 hwchannel_max_set :: proc(hwchannel: HWChannel, max: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(max)
     defer bstr_free(bs)
@@ -131,7 +131,7 @@ hwchannel_max_set :: proc(hwchannel: HWChannel, max: string) -> (ok: bool) {
 
 hwchannel_unit_get :: proc(hwchannel: HWChannel) -> (unit: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -143,7 +143,7 @@ hwchannel_unit_get :: proc(hwchannel: HWChannel) -> (unit: string, ok: bool) {
 
 hwchannel_unit_set :: proc(hwchannel: HWChannel, unit: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(unit)
     defer bstr_free(bs)
@@ -155,7 +155,7 @@ hwchannel_unit_set :: proc(hwchannel: HWChannel, unit: string) -> (ok: bool) {
 
 hwchannel_fraction_get :: proc(hwchannel: HWChannel) -> (fraction: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -167,7 +167,7 @@ hwchannel_fraction_get :: proc(hwchannel: HWChannel) -> (fraction: string, ok: b
 
 hwchannel_fraction_set :: proc(hwchannel: HWChannel, fraction: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(fraction)
     defer bstr_free(bs)
@@ -179,7 +179,7 @@ hwchannel_fraction_set :: proc(hwchannel: HWChannel, fraction: string) -> (ok: b
 
 hwchannel_reversed_get :: proc(hwchannel: HWChannel) -> (reversed: bool, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^HWChannelIF)(hwchannel)->ReversedGet(&vb)
@@ -190,7 +190,7 @@ hwchannel_reversed_get :: proc(hwchannel: HWChannel) -> (reversed: bool, ok: boo
 
 hwchannel_reversed_set :: proc(hwchannel: HWChannel, reversed: bool) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelIF)(hwchannel)->ReversedPut(to_variantbool(reversed))
     if com_failed(hr) do return
@@ -200,7 +200,7 @@ hwchannel_reversed_set :: proc(hwchannel: HWChannel, reversed: bool) -> (ok: boo
 
 hwchannel_con_variable_get :: proc(hwchannel: HWChannel) -> (con_variable: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -212,7 +212,7 @@ hwchannel_con_variable_get :: proc(hwchannel: HWChannel) -> (con_variable: strin
 
 hwchannel_con_variable_set :: proc(hwchannel: HWChannel, con_variable: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(con_variable)
     defer bstr_free(bs)
@@ -224,7 +224,7 @@ hwchannel_con_variable_set :: proc(hwchannel: HWChannel, con_variable: string) -
 
 hwchannel_io_description_get :: proc(hwchannel: HWChannel) -> (io_description: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -236,7 +236,7 @@ hwchannel_io_description_get :: proc(hwchannel: HWChannel) -> (io_description: s
 
 hwchannel_io_description_set :: proc(hwchannel: HWChannel, io_description: string) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(io_description)
     defer bstr_free(bs)
@@ -248,7 +248,7 @@ hwchannel_io_description_set :: proc(hwchannel: HWChannel, io_description: strin
 
 hwchannel_channel_type_get :: proc(hwchannel: HWChannel) -> (channel_type: string, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -260,7 +260,7 @@ hwchannel_channel_type_get :: proc(hwchannel: HWChannel) -> (channel_type: strin
 
 hwchannel_is_signal_get :: proc(hwchannel: HWChannel) -> (is_signal: bool, ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^HWChannelIF)(hwchannel)->IsSignalGet(&vb)
@@ -271,7 +271,7 @@ hwchannel_is_signal_get :: proc(hwchannel: HWChannel) -> (is_signal: bool, ok: b
 
 hwchannel_is_signal_set :: proc(hwchannel: HWChannel, is_signal: bool) -> (ok: bool) {
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelIF)(hwchannel)->IsSignalPut(to_variantbool(is_signal))
     if com_failed(hr) do return
@@ -306,7 +306,7 @@ HWChannelsVTable :: struct {
 hwchannels_hwchannel_add :: proc(hwchannels: HWChannels, hwchannel: HWChannel) -> (ok: bool) {
     if hwchannels == nil do return
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelsIF)(hwchannels)->Add(hwchannel)
     if com_failed(hr) do return
@@ -317,7 +317,7 @@ hwchannels_hwchannel_add :: proc(hwchannels: HWChannels, hwchannel: HWChannel) -
 hwchannels_hwchannel_add_at_index :: proc(hwchannels: HWChannels, hwchannel: HWChannel, index: i32) -> (ok: bool) {
     if hwchannels == nil do return
     if hwchannel == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelsIF)(hwchannels)->AddBefore(hwchannel, index)
     if com_failed(hr) do return
@@ -327,7 +327,7 @@ hwchannels_hwchannel_add_at_index :: proc(hwchannels: HWChannels, hwchannel: HWC
 
 hwchannels_hwchannel_by_address :: proc(hwchannels: HWChannels, address: string) -> (hwchannel: HWChannel, ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_address := to_bstr(address)
     defer bstr_free(bstr_address)
@@ -339,7 +339,7 @@ hwchannels_hwchannel_by_address :: proc(hwchannels: HWChannels, address: string)
 
 hwchannels_hwchannel_by_index :: proc(hwchannels: HWChannels, index: i32) -> (hwchannel: HWChannel, ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelsIF)(hwchannels)->Item(index + 1, cast(^rawptr)&hwchannel)
     if com_failed(hr) do return
@@ -349,7 +349,7 @@ hwchannels_hwchannel_by_index :: proc(hwchannels: HWChannels, index: i32) -> (hw
 
 hwchannels_hwchannel_index :: proc(hwchannels: HWChannels, address: string) -> (index: i32, ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_address := to_bstr(address)
     defer bstr_free(bstr_address)
@@ -361,7 +361,7 @@ hwchannels_hwchannel_index :: proc(hwchannels: HWChannels, address: string) -> (
 
 hwchannels_hwchannel_count :: proc(hwchannels: HWChannels) -> (count: i32, ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelsIF)(hwchannels)->Count(&count)
     if com_failed(hr) do return
@@ -371,7 +371,7 @@ hwchannels_hwchannel_count :: proc(hwchannels: HWChannels) -> (count: i32, ok: b
 
 hwchannels_hwchannel_remove_by_address :: proc(hwchannels: HWChannels, address: string) -> (ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = hwchannels_hwchannel_index(hwchannels, address)
@@ -385,7 +385,7 @@ hwchannels_hwchannel_remove_by_address :: proc(hwchannels: HWChannels, address: 
 
 hwchannels_hwchannel_remove_by_index :: proc(hwchannels: HWChannels, index: i32) -> (ok: bool) {
     if hwchannels == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWChannelsIF)(hwchannels)->Remove(index + 1)
     if com_failed(hr) do return

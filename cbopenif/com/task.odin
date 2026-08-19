@@ -34,7 +34,7 @@ TaskVTable :: struct {
 
 task_serialize :: proc(task: Task) -> (xml: string, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -46,7 +46,7 @@ task_serialize :: proc(task: Task) -> (xml: string, ok: bool) {
 
 task_name_get :: proc(task: Task) -> (name: string, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -58,7 +58,7 @@ task_name_get :: proc(task: Task) -> (name: string, ok: bool) {
 
 task_name_set :: proc(task: Task, name: string) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -70,7 +70,7 @@ task_name_set :: proc(task: Task, name: string) -> (ok: bool) {
 
 task_interval_time_get :: proc(task: Task) -> (interval_time: i32, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->IntervalTimeGet(&interval_time)
     if com_failed(hr) do return
@@ -80,7 +80,7 @@ task_interval_time_get :: proc(task: Task) -> (interval_time: i32, ok: bool) {
 
 task_interval_time_set :: proc(task: Task, interval_time: i32) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->IntervalTimePut(interval_time)
     if com_failed(hr) do return
@@ -90,7 +90,7 @@ task_interval_time_set :: proc(task: Task, interval_time: i32) -> (ok: bool) {
 
 task_priority_get :: proc(task: Task) -> (priority: t.TaskPriority, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: i32
     hr := (^TaskIF)(task)->PriorityGet(&p)
@@ -101,7 +101,7 @@ task_priority_get :: proc(task: Task) -> (priority: t.TaskPriority, ok: bool) {
 
 task_priority_set :: proc(task: Task, priority: t.TaskPriority) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->PriorityPut(i32(priority))
     if com_failed(hr) do return
@@ -111,7 +111,7 @@ task_priority_set :: proc(task: Task, priority: t.TaskPriority) -> (ok: bool) {
 
 task_offset_get :: proc(task: Task) -> (offset: i32, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->OffsetGet(&offset)
     if com_failed(hr) do return
@@ -121,7 +121,7 @@ task_offset_get :: proc(task: Task) -> (offset: i32, ok: bool) {
 
 task_offset_set :: proc(task: Task, offset: i32) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->OffsetPut(offset)
     if com_failed(hr) do return
@@ -131,7 +131,7 @@ task_offset_set :: proc(task: Task, offset: i32) -> (ok: bool) {
 
 task_output_update_get :: proc(task: Task) -> (output_update: t.TaskOutputUpdate, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     ou: i32
     hr := (^TaskIF)(task)->OutputUpdateGet(&ou)
@@ -142,7 +142,7 @@ task_output_update_get :: proc(task: Task) -> (output_update: t.TaskOutputUpdate
 
 task_output_update_set :: proc(task: Task, output_update: t.TaskOutputUpdate) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->OutputUpdatePut(i32(output_update))
     if com_failed(hr) do return
@@ -152,7 +152,7 @@ task_output_update_set :: proc(task: Task, output_update: t.TaskOutputUpdate) ->
 
 task_latency_supervision_get :: proc(task: Task) -> (enabled: bool, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^TaskIF)(task)->LatencySupervisionGet(&vb)
@@ -163,7 +163,7 @@ task_latency_supervision_get :: proc(task: Task) -> (enabled: bool, ok: bool) {
 
 task_latency_supervision_set :: proc(task: Task, enabled: bool) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool = VariantBoolFalse
     if enabled do vb = VariantBoolTrue
@@ -175,7 +175,7 @@ task_latency_supervision_set :: proc(task: Task, enabled: bool) -> (ok: bool) {
 
 task_latency_percentage_get :: proc(task: Task) -> (percentage: i32, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->LatencyPercentageGet(&percentage)
     if com_failed(hr) do return
@@ -185,7 +185,7 @@ task_latency_percentage_get :: proc(task: Task) -> (percentage: i32, ok: bool) {
 
 task_latency_percentage_set :: proc(task: Task, percentage: i32) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->LatencyPercentagePut(percentage)
     if com_failed(hr) do return
@@ -195,7 +195,7 @@ task_latency_percentage_set :: proc(task: Task, percentage: i32) -> (ok: bool) {
 
 task_sil_level_get :: proc(task: Task) -> (sil_level: t.TaskSILLevel, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     s: i32
     hr := (^TaskIF)(task)->TaskSILLevelGet(&s)
@@ -206,7 +206,7 @@ task_sil_level_get :: proc(task: Task) -> (sil_level: t.TaskSILLevel, ok: bool) 
 
 task_sil_level_set :: proc(task: Task, sil_level: t.TaskSILLevel) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^TaskIF)(task)->TaskSILLevelPut(i32(sil_level))
     if com_failed(hr) do return
@@ -216,7 +216,7 @@ task_sil_level_set :: proc(task: Task, sil_level: t.TaskSILLevel) -> (ok: bool) 
 
 task_guid_get :: proc(task: Task) -> (guid: string, ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -228,7 +228,7 @@ task_guid_get :: proc(task: Task) -> (guid: string, ok: bool) {
 
 task_guid_set :: proc(task: Task, guid: string) -> (ok: bool) {
     if task == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)

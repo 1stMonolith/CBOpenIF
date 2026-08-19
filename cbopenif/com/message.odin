@@ -25,7 +25,7 @@ IMessageVTable :: struct {
 
 imessage_get :: proc(imessage: IMessage) -> (msg: string, ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -37,7 +37,7 @@ imessage_get :: proc(imessage: IMessage) -> (msg: string, ok: bool) {
 
 imessage_set :: proc(imessage: IMessage, msg: string) -> (ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(msg)
     defer bstr_free(bs)
@@ -49,7 +49,7 @@ imessage_set :: proc(imessage: IMessage, msg: string) -> (ok: bool) {
 
 imessage_is_error :: proc(imessage: IMessage) -> (is_error: bool, ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IMessageIF)(imessage)->IsErrorMessage(&vb)
@@ -60,7 +60,7 @@ imessage_is_error :: proc(imessage: IMessage) -> (is_error: bool, ok: bool) {
 
 imessage_is_warning :: proc(imessage: IMessage) -> (is_warning: bool, ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IMessageIF)(imessage)->IsWarningMessage(&vb)
@@ -71,7 +71,7 @@ imessage_is_warning :: proc(imessage: IMessage) -> (is_warning: bool, ok: bool) 
 
 imessage_is_info :: proc(imessage: IMessage) -> (is_info: bool, ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IMessageIF)(imessage)->IsInfoMessage(&vb)
@@ -82,7 +82,7 @@ imessage_is_info :: proc(imessage: IMessage) -> (is_info: bool, ok: bool) {
 
 imessage_is_find :: proc(imessage: IMessage) -> (is_find: bool, ok: bool) {
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^IMessageIF)(imessage)->IsFindMessage(&vb)
@@ -117,7 +117,7 @@ MessageBucketVTable :: struct {
 
 messagebucket_serialize :: proc(bucket: MessageBucket) -> (xml: string, ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -129,7 +129,7 @@ messagebucket_serialize :: proc(bucket: MessageBucket) -> (xml: string, ok: bool
 
 messagebucket_number_of_errors_get :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->NoOfErrorsGet(&count)
     if com_failed(hr) do return
@@ -139,7 +139,7 @@ messagebucket_number_of_errors_get :: proc(bucket: MessageBucket) -> (count: i32
 
 messagebucket_number_of_errors_set :: proc(bucket: MessageBucket, count: i32) -> (ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->NoOfErrorsPut(count)
     if com_failed(hr) do return
@@ -149,7 +149,7 @@ messagebucket_number_of_errors_set :: proc(bucket: MessageBucket, count: i32) ->
 
 messagebucket_number_of_warnings_get :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->NoOfWarningsGet(&count)
     if com_failed(hr) do return
@@ -159,7 +159,7 @@ messagebucket_number_of_warnings_get :: proc(bucket: MessageBucket) -> (count: i
 
 messagebucket_number_of_warnings_set :: proc(bucket: MessageBucket, count: i32) -> (ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->NoOfWarningsPut(count)
     if com_failed(hr) do return
@@ -170,7 +170,7 @@ messagebucket_number_of_warnings_set :: proc(bucket: MessageBucket, count: i32) 
 messagebucket_message_add :: proc(bucket: MessageBucket, imessage: IMessage) -> (ok: bool) {
     if bucket == nil do return
     if imessage == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->Add(imessage)
     if com_failed(hr) do return
@@ -180,7 +180,7 @@ messagebucket_message_add :: proc(bucket: MessageBucket, imessage: IMessage) -> 
 
 messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (imessage: IMessage, ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->Item(index + 1, cast(^rawptr)&imessage)
     if com_failed(hr) do return
@@ -190,7 +190,7 @@ messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (im
 
 messagebucket_message_count :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->Count(&count)
     if com_failed(hr) do return
@@ -200,7 +200,7 @@ messagebucket_message_count :: proc(bucket: MessageBucket) -> (count: i32, ok: b
 
 messagebucket_message_remove_by_index :: proc(bucket: MessageBucket, index: i32) -> (ok: bool) {
     if bucket == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^MessageBucketIF)(bucket)->Remove(index + 1)
     if com_failed(hr) do return
@@ -235,7 +235,7 @@ WarningMsgVTable :: struct {
 
 warningmsg_warning_number_get :: proc(warningmsg: WarningMsg) -> (warning_number: i32, ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->WarningNoGet(&warning_number)
     if com_failed(hr) do return
@@ -245,7 +245,7 @@ warningmsg_warning_number_get :: proc(warningmsg: WarningMsg) -> (warning_number
 
 warningmsg_warning_number_set :: proc(warningmsg: WarningMsg, warning_number: i32) -> (ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->WarningNoPut(warning_number)
     if com_failed(hr) do return
@@ -255,7 +255,7 @@ warningmsg_warning_number_set :: proc(warningmsg: WarningMsg, warning_number: i3
 
 warningmsg_message_get :: proc(warningmsg: WarningMsg) -> (message: string, ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -267,7 +267,7 @@ warningmsg_message_get :: proc(warningmsg: WarningMsg) -> (message: string, ok: 
 
 warningmsg_message_set :: proc(warningmsg: WarningMsg, message: string) -> (ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(message)
     defer bstr_free(bs)
@@ -279,7 +279,7 @@ warningmsg_message_set :: proc(warningmsg: WarningMsg, message: string) -> (ok: 
 
 warningmsg_posinfo_get :: proc(warningmsg: WarningMsg) -> (posinfo: PosInfo, ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->PosInfoGet(cast(^rawptr)&posinfo)
     if com_failed(hr) do return
@@ -289,7 +289,7 @@ warningmsg_posinfo_get :: proc(warningmsg: WarningMsg) -> (posinfo: PosInfo, ok:
 
 warningmsg_posinfo_set :: proc(warningmsg: WarningMsg, posinfo: PosInfo) -> (ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->PosInfoPut(posinfo)
     if com_failed(hr) do return
@@ -299,7 +299,7 @@ warningmsg_posinfo_set :: proc(warningmsg: WarningMsg, posinfo: PosInfo) -> (ok:
 
 warningmsg_extra_info_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
     if com_failed(hr) do return
@@ -309,7 +309,7 @@ warningmsg_extra_info_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraI
 
 warningmsg_extra_info_set :: proc(warningmsg: WarningMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if warningmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^WarningMsgIF)(warningmsg)->ExtraInfoPut(extra_info)
     if com_failed(hr) do return
@@ -342,7 +342,7 @@ InfoMsgVTable :: struct {
 
 infomsg_message_get :: proc(infomsg: InfoMsg) -> (message: string, ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -354,7 +354,7 @@ infomsg_message_get :: proc(infomsg: InfoMsg) -> (message: string, ok: bool) {
 
 infomsg_message_set :: proc(infomsg: InfoMsg, message: string) -> (ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(message)
     defer bstr_free(bs)
@@ -366,7 +366,7 @@ infomsg_message_set :: proc(infomsg: InfoMsg, message: string) -> (ok: bool) {
 
 infomsg_posinfo_get :: proc(infomsg: InfoMsg) -> (posinfo: PosInfo, ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InfoMsgIF)(infomsg)->PosInfoGet(cast(^rawptr)&posinfo)
     if com_failed(hr) do return
@@ -376,7 +376,7 @@ infomsg_posinfo_get :: proc(infomsg: InfoMsg) -> (posinfo: PosInfo, ok: bool) {
 
 infomsg_posinfo_set :: proc(infomsg: InfoMsg, posinfo: PosInfo) -> (ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InfoMsgIF)(infomsg)->PosInfoPut(posinfo)
     if com_failed(hr) do return
@@ -386,7 +386,7 @@ infomsg_posinfo_set :: proc(infomsg: InfoMsg, posinfo: PosInfo) -> (ok: bool) {
 
 infomsg_extra_info_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InfoMsgIF)(infomsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
     if com_failed(hr) do return
@@ -396,7 +396,7 @@ infomsg_extra_info_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: 
 
 infomsg_extra_info_set :: proc(infomsg: InfoMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if infomsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InfoMsgIF)(infomsg)->ExtraInfoPut(extra_info)
     if com_failed(hr) do return
@@ -426,7 +426,7 @@ FindMsgVTable :: struct {
 
 findmsg_message_get :: proc(findmsg: FindMsg) -> (message: string, ok: bool) {
     if findmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -438,7 +438,7 @@ findmsg_message_get :: proc(findmsg: FindMsg) -> (message: string, ok: bool) {
 
 findmsg_message_set :: proc(findmsg: FindMsg, message: string) -> (ok: bool) {
     if findmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(message)
     defer bstr_free(bs)
@@ -450,7 +450,7 @@ findmsg_message_set :: proc(findmsg: FindMsg, message: string) -> (ok: bool) {
 
 findmsg_posinfo_get :: proc(findmsg: FindMsg) -> (posinfo: PosInfo, ok: bool) {
     if findmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FindMsgIF)(findmsg)->PosInfoGet(cast(^rawptr)&posinfo)
     if com_failed(hr) do return
@@ -460,7 +460,7 @@ findmsg_posinfo_get :: proc(findmsg: FindMsg) -> (posinfo: PosInfo, ok: bool) {
 
 findmsg_posinfo_set :: proc(findmsg: FindMsg, posinfo: PosInfo) -> (ok: bool) {
     if findmsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FindMsgIF)(findmsg)->PosInfoPut(posinfo)
     if com_failed(hr) do return
@@ -495,7 +495,7 @@ ErrorMsgVTable :: struct {
 
 errormsg_error_number_get :: proc(errormsg: ErrorMsg) -> (error_no: i32, ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->ErrorNoGet(&error_no)
     if com_failed(hr) do return
@@ -505,7 +505,7 @@ errormsg_error_number_get :: proc(errormsg: ErrorMsg) -> (error_no: i32, ok: boo
 
 errormsg_error_number_set :: proc(errormsg: ErrorMsg, error_no: i32) -> (ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->ErrorNoPut(error_no)
     if com_failed(hr) do return
@@ -515,7 +515,7 @@ errormsg_error_number_set :: proc(errormsg: ErrorMsg, error_no: i32) -> (ok: boo
 
 errormsg_message_get :: proc(errormsg: ErrorMsg) -> (message: string, ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -527,7 +527,7 @@ errormsg_message_get :: proc(errormsg: ErrorMsg) -> (message: string, ok: bool) 
 
 errormsg_message_set :: proc(errormsg: ErrorMsg, message: string) -> (ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(message)
     defer bstr_free(bs)
@@ -539,7 +539,7 @@ errormsg_message_set :: proc(errormsg: ErrorMsg, message: string) -> (ok: bool) 
 
 errormsg_posinfo_get :: proc(errormsg: ErrorMsg) -> (posinfo: PosInfo, ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->PosInfoGet(cast(^rawptr)&posinfo)
     if com_failed(hr) do return
@@ -549,7 +549,7 @@ errormsg_posinfo_get :: proc(errormsg: ErrorMsg) -> (posinfo: PosInfo, ok: bool)
 
 errormsg_posinfo_set :: proc(errormsg: ErrorMsg, posinfo: PosInfo) -> (ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->PosInfoPut(posinfo)
     if com_failed(hr) do return
@@ -559,7 +559,7 @@ errormsg_posinfo_set :: proc(errormsg: ErrorMsg, posinfo: PosInfo) -> (ok: bool)
 
 errormsg_extra_info_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
     if com_failed(hr) do return
@@ -569,7 +569,7 @@ errormsg_extra_info_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, o
 
 errormsg_extra_info_set :: proc(errormsg: ErrorMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if errormsg == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ErrorMsgIF)(errormsg)->ExtraInfoPut(extra_info)
     if com_failed(hr) do return
@@ -604,7 +604,7 @@ ExtraInfoVTable :: struct {
 
 extrainfo_jump_destination_get :: proc(extrainfo: ExtraInfo) -> (jump_destination: string, ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -616,7 +616,7 @@ extrainfo_jump_destination_get :: proc(extrainfo: ExtraInfo) -> (jump_destinatio
 
 extrainfo_jump_destination_set :: proc(extrainfo: ExtraInfo, jump_destination: string) -> (ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(jump_destination)
     defer bstr_free(bs)
@@ -628,7 +628,7 @@ extrainfo_jump_destination_set :: proc(extrainfo: ExtraInfo, jump_destination: s
 
 extrainfo_var_name_get :: proc(extrainfo: ExtraInfo) -> (var_name: string, ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -640,7 +640,7 @@ extrainfo_var_name_get :: proc(extrainfo: ExtraInfo) -> (var_name: string, ok: b
 
 extrainfo_var_name_set :: proc(extrainfo: ExtraInfo, var_name: string) -> (ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(var_name)
     defer bstr_free(bs)
@@ -652,7 +652,7 @@ extrainfo_var_name_set :: proc(extrainfo: ExtraInfo, var_name: string) -> (ok: b
 
 extrainfo_function_name_get :: proc(extrainfo: ExtraInfo) -> (function_name: string, ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -664,7 +664,7 @@ extrainfo_function_name_get :: proc(extrainfo: ExtraInfo) -> (function_name: str
 
 extrainfo_function_name_set :: proc(extrainfo: ExtraInfo, function_name: string) -> (ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(function_name)
     defer bstr_free(bs)
@@ -676,7 +676,7 @@ extrainfo_function_name_set :: proc(extrainfo: ExtraInfo, function_name: string)
 
 extrainfo_expected_type_get :: proc(extrainfo: ExtraInfo) -> (expected_type: string, ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -688,7 +688,7 @@ extrainfo_expected_type_get :: proc(extrainfo: ExtraInfo) -> (expected_type: str
 
 extrainfo_expected_type_set :: proc(extrainfo: ExtraInfo, expected_type: string) -> (ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(expected_type)
     defer bstr_free(bs)
@@ -700,7 +700,7 @@ extrainfo_expected_type_set :: proc(extrainfo: ExtraInfo, expected_type: string)
 
 extrainfo_traverse_number_get :: proc(extrainfo: ExtraInfo) -> (traverse_number: i32, ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtraInfoIF)(extrainfo)->TraverseNoGet(&traverse_number)
     if com_failed(hr) do return
@@ -710,7 +710,7 @@ extrainfo_traverse_number_get :: proc(extrainfo: ExtraInfo) -> (traverse_number:
 
 extrainfo_traverse_number_set :: proc(extrainfo: ExtraInfo, traverse_number: i32) -> (ok: bool) {
     if extrainfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtraInfoIF)(extrainfo)->TraverseNoPut(traverse_number)
     if com_failed(hr) do return

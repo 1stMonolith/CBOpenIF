@@ -25,7 +25,7 @@ SignalVTable :: struct {
 
 signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -37,7 +37,7 @@ signal_serialize :: proc(signal: Signal) -> (xml: string, ok: bool) {
 
 signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -49,7 +49,7 @@ signal_name_get :: proc(signal: Signal) -> (name: string, ok: bool) {
 
 signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -61,7 +61,7 @@ signal_name_set :: proc(signal: Signal, name: string) -> (ok: bool) {
 
 signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -73,7 +73,7 @@ signal_path_get :: proc(signal: Signal) -> (path: string, ok: bool) {
 
 signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(path)
     defer bstr_free(bs)
@@ -85,7 +85,7 @@ signal_path_set :: proc(signal: Signal, path: string) -> (ok: bool) {
 
 signal_direction_get :: proc(signal: Signal) -> (direction: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -97,7 +97,7 @@ signal_direction_get :: proc(signal: Signal) -> (direction: string, ok: bool) {
 
 signal_direction_set :: proc(signal: Signal, direction: string) -> (ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(direction)
     defer bstr_free(bs)
@@ -109,7 +109,7 @@ signal_direction_set :: proc(signal: Signal, direction: string) -> (ok: bool) {
 
 signal_acknowledge_group_get :: proc(signal: Signal) -> (acknowledge_group: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -121,7 +121,7 @@ signal_acknowledge_group_get :: proc(signal: Signal) -> (acknowledge_group: stri
 
 signal_acknowledge_group_set :: proc(signal: Signal, acknowledge_group: string) -> (ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(acknowledge_group)
     defer bstr_free(bs)
@@ -133,7 +133,7 @@ signal_acknowledge_group_set :: proc(signal: Signal, acknowledge_group: string) 
 
 signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -145,7 +145,7 @@ signal_description_get :: proc(signal: Signal) -> (description: string, ok: bool
 
 signal_description_set :: proc(signal: Signal, description: string) -> (ok: bool) {
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -181,7 +181,7 @@ SignalsVTable :: struct {
 signals_signal_add :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
     if signals == nil do return
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SignalsIF)(signals)->Add(signal)
     if com_failed(hr) do return
@@ -192,7 +192,7 @@ signals_signal_add :: proc(signals: Signals, signal: Signal) -> (ok: bool) {
 signals_signal_add_at_index :: proc(signals: Signals, signal: Signal, index: i32) -> (ok: bool) {
     if signals == nil do return
     if signal == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SignalsIF)(signals)->AddBefore(signal, index)
     if com_failed(hr) do return
@@ -202,7 +202,7 @@ signals_signal_add_at_index :: proc(signals: Signals, signal: Signal, index: i32
 
 signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signal, ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -214,7 +214,7 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
 
 signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SignalsIF)(signals)->Item(index + 1, cast(^rawptr)&signal)
     if com_failed(hr) do return
@@ -224,7 +224,7 @@ signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal
 
 signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -236,7 +236,7 @@ signals_signal_index :: proc(signals: Signals, name: string) -> (index: i32, ok:
 
 signals_signal_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SignalsIF)(signals)->Count(&count)
     if com_failed(hr) do return
@@ -246,7 +246,7 @@ signals_signal_count :: proc(signals: Signals) -> (count: i32, ok: bool) {
 
 signals_signal_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = signals_signal_index(signals, name)
@@ -259,7 +259,7 @@ signals_signal_remove_by_name :: proc(signals: Signals, name: string) -> (ok: bo
 
 signals_signal_remove_by_index :: proc(signals: Signals, index: i32) -> (ok: bool) {
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SignalsIF)(signals)->Remove(index + 1)
     if com_failed(hr) do return

@@ -40,7 +40,7 @@ GlobalVariableVTable :: struct {
 
 globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -52,7 +52,7 @@ globalvariable_serialize :: proc(global_variable: GlobalVariable) -> (xml: strin
 
 globalvariable_name_get :: proc(global_variable: GlobalVariable) -> (name: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -64,7 +64,7 @@ globalvariable_name_get :: proc(global_variable: GlobalVariable) -> (name: strin
 
 globalvariable_name_set :: proc(global_variable: GlobalVariable, name: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -76,7 +76,7 @@ globalvariable_name_set :: proc(global_variable: GlobalVariable, name: string) -
 
 globalvariable_type_name_get :: proc(global_variable: GlobalVariable) -> (type_name: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -88,7 +88,7 @@ globalvariable_type_name_get :: proc(global_variable: GlobalVariable) -> (type_n
 
 globalvariable_type_name_set :: proc(global_variable: GlobalVariable, type_name: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -100,7 +100,7 @@ globalvariable_type_name_set :: proc(global_variable: GlobalVariable, type_name:
 
 globalvariable_attribute_get :: proc(global_variable: GlobalVariable) -> (attribute: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -112,7 +112,7 @@ globalvariable_attribute_get :: proc(global_variable: GlobalVariable) -> (attrib
 
 globalvariable_attribute_set :: proc(global_variable: GlobalVariable, attribute: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(attribute)
     defer bstr_free(bs)
@@ -124,7 +124,7 @@ globalvariable_attribute_set :: proc(global_variable: GlobalVariable, attribute:
 
 globalvariable_initial_value_get :: proc(global_variable: GlobalVariable) -> (inital_value: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -136,7 +136,7 @@ globalvariable_initial_value_get :: proc(global_variable: GlobalVariable) -> (in
 
 globalvariable_initial_value_set :: proc(global_variable: GlobalVariable, inital_value: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(inital_value)
     defer bstr_free(bs)
@@ -148,7 +148,7 @@ globalvariable_initial_value_set :: proc(global_variable: GlobalVariable, inital
 
 globalvariable_description_get :: proc(global_variable: GlobalVariable) -> (description: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -160,7 +160,7 @@ globalvariable_description_get :: proc(global_variable: GlobalVariable) -> (desc
 
 globalvariable_description_set :: proc(global_variable: GlobalVariable, description: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -172,7 +172,7 @@ globalvariable_description_set :: proc(global_variable: GlobalVariable, descript
 
 globalvariable_read_permission_get :: proc(global_variable: GlobalVariable) -> (read_permission: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -184,7 +184,7 @@ globalvariable_read_permission_get :: proc(global_variable: GlobalVariable) -> (
 
 globalvariable_read_permission_set :: proc(global_variable: GlobalVariable, read_permission: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(read_permission)
     defer bstr_free(bs)
@@ -196,7 +196,7 @@ globalvariable_read_permission_set :: proc(global_variable: GlobalVariable, read
 
 globalvariable_write_permission_get :: proc(global_variable: GlobalVariable) -> (write_permission: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -208,7 +208,7 @@ globalvariable_write_permission_get :: proc(global_variable: GlobalVariable) -> 
 
 globalvariable_write_permission_set :: proc(global_variable: GlobalVariable, write_permission: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(write_permission)
     defer bstr_free(bs)
@@ -220,7 +220,7 @@ globalvariable_write_permission_set :: proc(global_variable: GlobalVariable, wri
 
 globalvariable_authentication_level_get :: proc(global_variable: GlobalVariable) -> (authentication_level: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -232,7 +232,7 @@ globalvariable_authentication_level_get :: proc(global_variable: GlobalVariable)
 
 globalvariable_authentication_level_set :: proc(global_variable: GlobalVariable, authentication_level: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(authentication_level)
     defer bstr_free(bs)
@@ -244,7 +244,7 @@ globalvariable_authentication_level_set :: proc(global_variable: GlobalVariable,
 
 globalvariable_graph_nodes_get :: proc(global_variable: GlobalVariable) -> (graph_nodes: GraphNodes, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariableIF)(global_variable)->GraphNodesGet(cast(^rawptr)&graph_nodes)
     if com_failed(hr) do return
@@ -254,7 +254,7 @@ globalvariable_graph_nodes_get :: proc(global_variable: GlobalVariable) -> (grap
 
 globalvariable_graph_nodes_set :: proc(global_variable: GlobalVariable, graph_nodes: GraphNodes) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariableIF)(global_variable)->GraphNodesPut(graph_nodes)
     if com_failed(hr) do return
@@ -264,7 +264,7 @@ globalvariable_graph_nodes_set :: proc(global_variable: GlobalVariable, graph_no
 
 globalvariable_type_guid_get :: proc(global_variable: GlobalVariable) -> (guid: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -276,7 +276,7 @@ globalvariable_type_guid_get :: proc(global_variable: GlobalVariable) -> (guid: 
 
 globalvariable_type_path_get :: proc(global_variable: GlobalVariable) -> (path: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -288,7 +288,7 @@ globalvariable_type_path_get :: proc(global_variable: GlobalVariable) -> (path: 
 
 globalvariable_access_level_get :: proc(global_variable: GlobalVariable) -> (access_level: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -300,7 +300,7 @@ globalvariable_access_level_get :: proc(global_variable: GlobalVariable) -> (acc
 
 globalvariable_access_level_set :: proc(global_variable: GlobalVariable, access_level: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -312,7 +312,7 @@ globalvariable_access_level_set :: proc(global_variable: GlobalVariable, access_
 
 globalvariable_safety_type_get :: proc(global_variable: GlobalVariable) -> (safety_type: string, ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -324,7 +324,7 @@ globalvariable_safety_type_get :: proc(global_variable: GlobalVariable) -> (safe
 
 globalvariable_safety_type_set :: proc(global_variable: GlobalVariable, safety_type: string) -> (ok: bool) {
     if global_variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -361,7 +361,7 @@ GlobalVariablesVTable :: struct {
 globalvariables_globalvariable_add :: proc(globalvariables: GlobalVariables, globalvariable: GlobalVariable) -> (ok: bool) {
     if globalvariables == nil do return
     if globalvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^GlobalVariablesIF)(globalvariables)->Add(globalvariable)
     if com_failed(hr) do return
@@ -372,7 +372,7 @@ globalvariables_globalvariable_add :: proc(globalvariables: GlobalVariables, glo
 globalvariables_globalvariable_add_at_index :: proc(globalvariables: GlobalVariables, globalvariable: GlobalVariable, index: i32) -> (ok: bool) {
     if globalvariables == nil do return
     if globalvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariablesIF)(globalvariables)->AddBefore(globalvariable, index)
     if com_failed(hr) do return
@@ -382,7 +382,7 @@ globalvariables_globalvariable_add_at_index :: proc(globalvariables: GlobalVaria
 
 globalvariables_globalvariable_by_name :: proc(globalvariables: GlobalVariables, name: string) -> (globalvariable: GlobalVariable, ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -394,7 +394,7 @@ globalvariables_globalvariable_by_name :: proc(globalvariables: GlobalVariables,
 
 globalvariables_globalvariable_by_index :: proc(globalvariables: GlobalVariables, index: i32) -> (globalvariable: GlobalVariable, ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariablesIF)(globalvariables)->Item(index + 1, cast(^rawptr)&globalvariable)
     if com_failed(hr) do return
@@ -404,7 +404,7 @@ globalvariables_globalvariable_by_index :: proc(globalvariables: GlobalVariables
 
 globalvariables_globalvariable_index :: proc(globalvariables: GlobalVariables, name: string) -> (index: i32, ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -416,7 +416,7 @@ globalvariables_globalvariable_index :: proc(globalvariables: GlobalVariables, n
 
 globalvariables_globalvariable_count :: proc(globalvariables: GlobalVariables) -> (count: i32, ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariablesIF)(globalvariables)->Count(&count)
     if com_failed(hr) do return
@@ -426,7 +426,7 @@ globalvariables_globalvariable_count :: proc(globalvariables: GlobalVariables) -
 
 globalvariables_globalvariable_remove_by_name :: proc(globalvariables: GlobalVariables, name: string) -> (ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = globalvariables_globalvariable_index(globalvariables, name)
@@ -439,7 +439,7 @@ globalvariables_globalvariable_remove_by_name :: proc(globalvariables: GlobalVar
 
 globalvariables_globalvariable_remove_by_index :: proc(globalvariables: GlobalVariables, index: i32) -> (ok: bool) {
     if globalvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GlobalVariablesIF)(globalvariables)->Remove(index + 1)
     if com_failed(hr) do return

@@ -17,7 +17,7 @@ AutoPointVTable :: struct {
 
 autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: t.AutoPos, ok: bool) {
     if autopoint == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     apt: i32
     hr := (^AutoPointIF)(autopoint)->AutoPosGet(&apt)
@@ -30,7 +30,7 @@ autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (autopos: t.AutoPos, ok: 
 
 autopoint_autopos_set :: proc(autopoint: AutoPoint, autopos: t.AutoPos) -> (ok: bool) {
     if autopoint == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^AutoPointIF)(autopoint)->AutoPosPut(i32(autopos))
     if com_failed(hr) do return

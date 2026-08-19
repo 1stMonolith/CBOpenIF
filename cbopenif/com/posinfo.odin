@@ -37,7 +37,7 @@ PosInfoVTable :: struct {
 
 posinfo_row_get :: proc(posinfo: PosInfo) -> (row: i32, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->RowGet(&row)
     if com_failed(hr) do return
@@ -47,7 +47,7 @@ posinfo_row_get :: proc(posinfo: PosInfo) -> (row: i32, ok: bool) {
 
 posinfo_row_set :: proc(posinfo: PosInfo, row: i32) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->RowPut(row)
     if com_failed(hr) do return
@@ -57,7 +57,7 @@ posinfo_row_set :: proc(posinfo: PosInfo, row: i32) -> (ok: bool) {
 
 posinfo_column_get :: proc(posinfo: PosInfo) -> (column: i32, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->ColGet(&column)
     if com_failed(hr) do return
@@ -67,7 +67,7 @@ posinfo_column_get :: proc(posinfo: PosInfo) -> (column: i32, ok: bool) {
 
 posinfo_column_set :: proc(posinfo: PosInfo, column: i32) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->ColPut(column)
     if com_failed(hr) do return
@@ -77,7 +77,7 @@ posinfo_column_set :: proc(posinfo: PosInfo, column: i32) -> (ok: bool) {
 
 posinfo_start_position_get :: proc(posinfo: PosInfo) -> (start_position: i32, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->StartPosGet(&start_position)
     if com_failed(hr) do return
@@ -87,7 +87,7 @@ posinfo_start_position_get :: proc(posinfo: PosInfo) -> (start_position: i32, ok
 
 posinfo_start_position_set :: proc(posinfo: PosInfo, start_position: i32) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->StartPosPut(start_position)
     if com_failed(hr) do return
@@ -97,7 +97,7 @@ posinfo_start_position_set :: proc(posinfo: PosInfo, start_position: i32) -> (ok
 
 posinfo_end_position_get :: proc(posinfo: PosInfo) -> (end_position: i32, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->EndPosGet(&end_position)
     if com_failed(hr) do return
@@ -107,7 +107,7 @@ posinfo_end_position_get :: proc(posinfo: PosInfo) -> (end_position: i32, ok: bo
 
 posinfo_end_position_set :: proc(posinfo: PosInfo, end_position: i32) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->EndPosPut(end_position)
     if com_failed(hr) do return
@@ -117,7 +117,7 @@ posinfo_end_position_set :: proc(posinfo: PosInfo, end_position: i32) -> (ok: bo
 
 posinfo_element_name_get :: proc(posinfo: PosInfo) -> (element_name: string, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -129,7 +129,7 @@ posinfo_element_name_get :: proc(posinfo: PosInfo) -> (element_name: string, ok:
 
 posinfo_element_name_set :: proc(posinfo: PosInfo, element_name: string) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(element_name)
     defer bstr_free(bs)
@@ -141,7 +141,7 @@ posinfo_element_name_set :: proc(posinfo: PosInfo, element_name: string) -> (ok:
 
 posinfo_fou_name_get :: proc(posinfo: PosInfo) -> (fou_name: string, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -153,7 +153,7 @@ posinfo_fou_name_get :: proc(posinfo: PosInfo) -> (fou_name: string, ok: bool) {
 
 posinfo_fou_name_set :: proc(posinfo: PosInfo, fou_name: string) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(fou_name)
     defer bstr_free(bs)
@@ -165,7 +165,7 @@ posinfo_fou_name_set :: proc(posinfo: PosInfo, fou_name: string) -> (ok: bool) {
 
 posinfo_pou_name_get :: proc(posinfo: PosInfo) -> (pou_name: string, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -177,7 +177,7 @@ posinfo_pou_name_get :: proc(posinfo: PosInfo) -> (pou_name: string, ok: bool) {
 
 posinfo_pou_name_set :: proc(posinfo: PosInfo, pou_name: string) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(pou_name)
     defer bstr_free(bs)
@@ -189,7 +189,7 @@ posinfo_pou_name_set :: proc(posinfo: PosInfo, pou_name: string) -> (ok: bool) {
 
 posinfo_tab_name_get :: proc(posinfo: PosInfo) -> (tab_name: string, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -201,7 +201,7 @@ posinfo_tab_name_get :: proc(posinfo: PosInfo) -> (tab_name: string, ok: bool) {
 
 posinfo_tab_name_set :: proc(posinfo: PosInfo, tab_name: string) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(tab_name)
     defer bstr_free(bs)
@@ -213,7 +213,7 @@ posinfo_tab_name_set :: proc(posinfo: PosInfo, tab_name: string) -> (ok: bool) {
 
 posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.Message, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     mt: i32
     hr := (^PosInfoIF)(posinfo)->MessageTypeGet(&mt)
@@ -224,7 +224,7 @@ posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.Message, 
 
 posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: t.Message) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->MessageTypePut(i32(message_type))
     if com_failed(hr) do return
@@ -234,7 +234,7 @@ posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: t.Message) -> (
 
 posinfo_page_number_get :: proc(posinfo: PosInfo) -> (page_number: i32, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->PageNoGet(&page_number)
     if com_failed(hr) do return
@@ -244,7 +244,7 @@ posinfo_page_number_get :: proc(posinfo: PosInfo) -> (page_number: i32, ok: bool
 
 posinfo_page_number_set :: proc(posinfo: PosInfo, page_number: i32) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^PosInfoIF)(posinfo)->PageNoPut(page_number)
     if com_failed(hr) do return
@@ -254,7 +254,7 @@ posinfo_page_number_set :: proc(posinfo: PosInfo, page_number: i32) -> (ok: bool
 
 posinfo_id_get :: proc(posinfo: PosInfo) -> (id: string, ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -266,7 +266,7 @@ posinfo_id_get :: proc(posinfo: PosInfo) -> (id: string, ok: bool) {
 
 posinfo_id_set :: proc(posinfo: PosInfo, id: string) -> (ok: bool) {
     if posinfo == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(id)
     defer bstr_free(bs)

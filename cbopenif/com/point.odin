@@ -18,7 +18,7 @@ PointVTable :: struct {
 
 point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointIF)(point)->XGet(&x)
     if com_failed(hr) do return
@@ -28,7 +28,7 @@ point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
 
 point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointIF)(point)->XPut(x)
     if com_failed(hr) do return
@@ -38,7 +38,7 @@ point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
 
 point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointIF)(point)->YGet(&y)
     if com_failed(hr) do return
@@ -48,7 +48,7 @@ point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
 
 point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointIF)(point)->YPut(y)
     if com_failed(hr) do return
@@ -80,7 +80,7 @@ PointsVTable :: struct {
 points_point_add :: proc(points: Points, point: Point) -> (ok: bool) {
     if points == nil do return
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointsIF)(points)->Add(point)
     if com_failed(hr) do return
@@ -91,7 +91,7 @@ points_point_add :: proc(points: Points, point: Point) -> (ok: bool) {
 points_point_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
     if points == nil do return
     if point == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointsIF)(points)->AddBefore(point, index)
     if com_failed(hr) do return
@@ -101,7 +101,7 @@ points_point_add_at_index :: proc(points: Points, point: Point, index: i32) -> (
 
 points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: bool) {
     if points == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointsIF)(points)->Item(index + 1, cast(^rawptr)&point)
     if com_failed(hr) do return
@@ -111,7 +111,7 @@ points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: 
 
 points_point_count :: proc(points: Points) -> (count: i32, ok: bool) {
     if points == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointsIF)(points)->Count(&count)
     if com_failed(hr) do return
@@ -121,7 +121,7 @@ points_point_count :: proc(points: Points) -> (count: i32, ok: bool) {
 
 points_point_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
     if points == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^PointsIF)(points)->Remove(index + 1)
     if com_failed(hr) do return

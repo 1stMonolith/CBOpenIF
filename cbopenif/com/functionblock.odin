@@ -38,7 +38,7 @@ FunctionBlockVTable :: struct {
 
 functionblock_serialize :: proc(functionblock: FunctionBlock) -> (xml: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -50,7 +50,7 @@ functionblock_serialize :: proc(functionblock: FunctionBlock) -> (xml: string, o
 
 functionblock_name_get :: proc(functionblock: FunctionBlock) -> (name: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -62,7 +62,7 @@ functionblock_name_get :: proc(functionblock: FunctionBlock) -> (name: string, o
 
 functionblock_name_set :: proc(functionblock: FunctionBlock, name: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -74,7 +74,7 @@ functionblock_name_set :: proc(functionblock: FunctionBlock, name: string) -> (o
 
 functionblock_type_name_get :: proc(functionblock: FunctionBlock) -> (type_name: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -86,7 +86,7 @@ functionblock_type_name_get :: proc(functionblock: FunctionBlock) -> (type_name:
 
 functionblock_type_name_set :: proc(functionblock: FunctionBlock, type_name: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -98,7 +98,7 @@ functionblock_type_name_set :: proc(functionblock: FunctionBlock, type_name: str
 
 functionblock_task_connection_get :: proc(functionblock: FunctionBlock) -> (task_connection: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -110,7 +110,7 @@ functionblock_task_connection_get :: proc(functionblock: FunctionBlock) -> (task
 
 functionblock_task_connection_set :: proc(functionblock: FunctionBlock, task_connection: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
@@ -122,7 +122,7 @@ functionblock_task_connection_set :: proc(functionblock: FunctionBlock, task_con
 
 functionblock_guid_get :: proc(functionblock: FunctionBlock) -> (guid: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -134,7 +134,7 @@ functionblock_guid_get :: proc(functionblock: FunctionBlock) -> (guid: string, o
 
 functionblock_guid_set :: proc(functionblock: FunctionBlock, guid: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -146,7 +146,7 @@ functionblock_guid_set :: proc(functionblock: FunctionBlock, guid: string) -> (o
 
 functionblock_description_get :: proc(functionblock: FunctionBlock) -> (description: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -158,7 +158,7 @@ functionblock_description_get :: proc(functionblock: FunctionBlock) -> (descript
 
 functionblock_description_set :: proc(functionblock: FunctionBlock, description: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -170,7 +170,7 @@ functionblock_description_set :: proc(functionblock: FunctionBlock, description:
 
 functionblock_type_guid_get :: proc(functionblock: FunctionBlock) -> (type_guid: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -182,7 +182,7 @@ functionblock_type_guid_get :: proc(functionblock: FunctionBlock) -> (type_guid:
 
 functionblock_type_path_get :: proc(functionblock: FunctionBlock) -> (type_path: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -194,7 +194,7 @@ functionblock_type_path_get :: proc(functionblock: FunctionBlock) -> (type_path:
 
 functionblock_aspect_object_get :: proc(functionblock: FunctionBlock) -> (aspect_object: bool, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockIF)(functionblock)->AspectObjectGet(&vb)
@@ -205,7 +205,7 @@ functionblock_aspect_object_get :: proc(functionblock: FunctionBlock) -> (aspect
 
 functionblock_aspect_object_set :: proc(functionblock: FunctionBlock, aspect_object: bool) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockIF)(functionblock)->AspectObjectPut(to_variantbool(aspect_object))
     if com_failed(hr) do return
@@ -215,7 +215,7 @@ functionblock_aspect_object_set :: proc(functionblock: FunctionBlock, aspect_obj
 
 functionblock_access_level_get :: proc(functionblock: FunctionBlock) -> (access_level: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -227,7 +227,7 @@ functionblock_access_level_get :: proc(functionblock: FunctionBlock) -> (access_
 
 functionblock_access_level_set :: proc(functionblock: FunctionBlock, access_level: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -239,7 +239,7 @@ functionblock_access_level_set :: proc(functionblock: FunctionBlock, access_leve
 
 functionblock_safety_type_get :: proc(functionblock: FunctionBlock) -> (safety_type: string, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -251,7 +251,7 @@ functionblock_safety_type_get :: proc(functionblock: FunctionBlock) -> (safety_t
 
 functionblock_safety_type_set :: proc(functionblock: FunctionBlock, safety_type: string) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -263,7 +263,7 @@ functionblock_safety_type_set :: proc(functionblock: FunctionBlock, safety_type:
 
 functionblock_expose_properties_in_parent_get :: proc(functionblock: FunctionBlock) -> (expose_properties_in_parent: bool, ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockIF)(functionblock)->ExposePropertiesInParentGet(&vb)
@@ -274,7 +274,7 @@ functionblock_expose_properties_in_parent_get :: proc(functionblock: FunctionBlo
 
 functionblock_expose_properties_in_parent_set :: proc(functionblock: FunctionBlock, expose_properties_in_parent: bool) -> (ok: bool) {
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb := to_variantbool(expose_properties_in_parent)
     hr := (^FunctionBlockIF)(functionblock)->ExposePropertiesInParentPut(vb)
@@ -310,7 +310,7 @@ FunctionBlocksVTable :: struct {
 functionblocks_functionblock_add :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock) -> (ok: bool) {
     if functionblocks == nil do return
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->Add(functionblock)
     if com_failed(hr) do return
@@ -321,7 +321,7 @@ functionblocks_functionblock_add :: proc(functionblocks: FunctionBlocks, functio
 functionblocks_functionblock_add_at_index :: proc(functionblocks: FunctionBlocks, functionblock: FunctionBlock, index: i32) -> (ok: bool) {
     if functionblocks == nil do return
     if functionblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->AddBefore(functionblock, index)
     if com_failed(hr) do return
@@ -331,7 +331,7 @@ functionblocks_functionblock_add_at_index :: proc(functionblocks: FunctionBlocks
 
 functionblocks_functionblock_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (functionblock: FunctionBlock, ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -343,7 +343,7 @@ functionblocks_functionblock_by_name :: proc(functionblocks: FunctionBlocks, nam
 
 functionblocks_functionblock_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (functionblock: FunctionBlock, ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->Item(index + 1, cast(^rawptr)&functionblock)
     if com_failed(hr) do return
@@ -353,7 +353,7 @@ functionblocks_functionblock_by_index :: proc(functionblocks: FunctionBlocks, in
 
 functionblocks_functionblock_index :: proc(functionblocks: FunctionBlocks, name: string) -> (index: i32, ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -365,7 +365,7 @@ functionblocks_functionblock_index :: proc(functionblocks: FunctionBlocks, name:
 
 functionblocks_functionblock_count :: proc(functionblocks: FunctionBlocks) -> (count: i32, ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->Count(&count)
     if com_failed(hr) do return
@@ -375,7 +375,7 @@ functionblocks_functionblock_count :: proc(functionblocks: FunctionBlocks) -> (c
 
 functionblocks_functionblock_remove_by_name :: proc(functionblocks: FunctionBlocks, name: string) -> (ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index, found := functionblocks_functionblock_index(functionblocks, name)
     if !found do return
@@ -388,7 +388,7 @@ functionblocks_functionblock_remove_by_name :: proc(functionblocks: FunctionBloc
 
 functionblocks_functionblock_remove_by_index :: proc(functionblocks: FunctionBlocks, index: i32) -> (ok: bool) {
     if functionblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^FunctionBlocksIF)(functionblocks)->Remove(index + 1)
     if com_failed(hr) do return
@@ -463,7 +463,7 @@ FunctionBlockTypeVTable :: struct {
 
 functionblocktype_serialize :: proc(functionblocktype: FunctionBlockType) -> (xml: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     bs: BStr
     defer bstr_free(bs)
     hr := (^FunctionBlockTypeIF)(functionblocktype)->Serialize(&bs)
@@ -473,7 +473,7 @@ functionblocktype_serialize :: proc(functionblocktype: FunctionBlockType) -> (xm
 
 functionblocktype_name_get :: proc(functionblocktype: FunctionBlockType) -> (name: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -485,7 +485,7 @@ functionblocktype_name_get :: proc(functionblocktype: FunctionBlockType) -> (nam
 
 functionblocktype_name_set :: proc(functionblocktype: FunctionBlockType, name: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -497,7 +497,7 @@ functionblocktype_name_set :: proc(functionblocktype: FunctionBlockType, name: s
 
 functionblocktype_protected_get :: proc(functionblocktype: FunctionBlockType) -> (protected: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ProtectedGet(&vb)
@@ -508,7 +508,7 @@ functionblocktype_protected_get :: proc(functionblocktype: FunctionBlockType) ->
 
 functionblocktype_protected_set :: proc(functionblocktype: FunctionBlockType, protected: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ProtectedPut(to_variantbool(protected))
     if com_failed(hr) do return
@@ -518,7 +518,7 @@ functionblocktype_protected_set :: proc(functionblocktype: FunctionBlockType, pr
 
 functionblocktype_hidden_get :: proc(functionblocktype: FunctionBlockType) -> (hidden: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->HiddenGet(&vb)
@@ -529,7 +529,7 @@ functionblocktype_hidden_get :: proc(functionblocktype: FunctionBlockType) -> (h
 
 functionblocktype_hidden_set :: proc(functionblocktype: FunctionBlockType, hidden: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->HiddenPut(to_variantbool(hidden))
     if com_failed(hr) do return
@@ -539,7 +539,7 @@ functionblocktype_hidden_set :: proc(functionblocktype: FunctionBlockType, hidde
 
 functionblocktype_scope_get :: proc(functionblocktype: FunctionBlockType) -> (scope: t.Scope, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     s: i32
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ScopeGet(&s)
@@ -550,7 +550,7 @@ functionblocktype_scope_get :: proc(functionblocktype: FunctionBlockType) -> (sc
 
 functionblocktype_scope_set :: proc(functionblocktype: FunctionBlockType, scope: t.Scope) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ScopePut(i32(scope))
     if com_failed(hr) do return
@@ -560,7 +560,7 @@ functionblocktype_scope_set :: proc(functionblocktype: FunctionBlockType, scope:
 
 functionblocktype_interaction_window_get :: proc(functionblocktype: FunctionBlockType) -> (interaction_window: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -572,7 +572,7 @@ functionblocktype_interaction_window_get :: proc(functionblocktype: FunctionBloc
 
 functionblocktype_interaction_window_set :: proc(functionblocktype: FunctionBlockType, interaction_window: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(interaction_window)
     defer bstr_free(bs)
@@ -584,7 +584,7 @@ functionblocktype_interaction_window_set :: proc(functionblocktype: FunctionBloc
 
 functionblocktype_alarm_owner_get :: proc(functionblocktype: FunctionBlockType) -> (alarm_owner: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->AlarmOwnerGet(&vb)
@@ -595,7 +595,7 @@ functionblocktype_alarm_owner_get :: proc(functionblocktype: FunctionBlockType) 
 
 functionblocktype_alarm_owner_set :: proc(functionblocktype: FunctionBlockType, alarm_owner: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->AlarmOwnerPut(to_variantbool(alarm_owner))
     if com_failed(hr) do return
@@ -605,7 +605,7 @@ functionblocktype_alarm_owner_set :: proc(functionblocktype: FunctionBlockType, 
 
 functionblocktype_guid_get :: proc(functionblocktype: FunctionBlockType) -> (guid: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -617,7 +617,7 @@ functionblocktype_guid_get :: proc(functionblocktype: FunctionBlockType) -> (gui
 
 functionblocktype_guid_set :: proc(functionblocktype: FunctionBlockType, guid: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -629,7 +629,7 @@ functionblocktype_guid_set :: proc(functionblocktype: FunctionBlockType, guid: s
 
 functionblocktype_sil_level_get :: proc(functionblocktype: FunctionBlockType) -> (sil_level: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -641,7 +641,7 @@ functionblocktype_sil_level_get :: proc(functionblocktype: FunctionBlockType) ->
 
 functionblocktype_sil_level_set :: proc(functionblocktype: FunctionBlockType, sil_level: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -653,7 +653,7 @@ functionblocktype_sil_level_set :: proc(functionblocktype: FunctionBlockType, si
 
 functionblocktype_simulation_mark_get :: proc(functionblocktype: FunctionBlockType) -> (simulation_mark: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->SimulationMarkGet(&vb)
@@ -664,7 +664,7 @@ functionblocktype_simulation_mark_get :: proc(functionblocktype: FunctionBlockTy
 
 functionblocktype_simulation_mark_set :: proc(functionblocktype: FunctionBlockType, simulation_mark: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -674,7 +674,7 @@ functionblocktype_simulation_mark_set :: proc(functionblocktype: FunctionBlockTy
 
 functionblocktype_reserved_by_function_get :: proc(functionblocktype: FunctionBlockType) -> (reserved_by_function: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -686,7 +686,7 @@ functionblocktype_reserved_by_function_get :: proc(functionblocktype: FunctionBl
 
 functionblocktype_reserved_by_function_set :: proc(functionblocktype: FunctionBlockType, reserved_by_function: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -698,7 +698,7 @@ functionblocktype_reserved_by_function_set :: proc(functionblocktype: FunctionBl
 
 functionblocktype_description_get :: proc(functionblocktype: FunctionBlockType) -> (description: string, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -710,7 +710,7 @@ functionblocktype_description_get :: proc(functionblocktype: FunctionBlockType) 
 
 functionblocktype_description_set :: proc(functionblocktype: FunctionBlockType, description: string) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -722,7 +722,7 @@ functionblocktype_description_set :: proc(functionblocktype: FunctionBlockType, 
 
 functionblocktype_parameters_get :: proc(functionblocktype: FunctionBlockType) -> (parameters: Parameters, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ParametersGet(&p)
@@ -733,7 +733,7 @@ functionblocktype_parameters_get :: proc(functionblocktype: FunctionBlockType) -
 
 functionblocktype_parameters_set :: proc(functionblocktype: FunctionBlockType, parameters: Parameters) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ParametersPut(parameters)
     if com_failed(hr) do return
@@ -743,7 +743,7 @@ functionblocktype_parameters_set :: proc(functionblocktype: FunctionBlockType, p
 
 functionblocktype_extensibleparameters_get :: proc(functionblocktype: FunctionBlockType) -> (extensibleparameters: ExtensibleParameters, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ExtensibleParametersGet(&p)
@@ -754,7 +754,7 @@ functionblocktype_extensibleparameters_get :: proc(functionblocktype: FunctionBl
 
 functionblocktype_extensibleparameters_set :: proc(functionblocktype: FunctionBlockType, extensibleparameters: ExtensibleParameters) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ExtensibleParametersPut(extensibleparameters)
     if com_failed(hr) do return
@@ -764,7 +764,7 @@ functionblocktype_extensibleparameters_set :: proc(functionblocktype: FunctionBl
 
 functionblocktype_variables_get :: proc(functionblocktype: FunctionBlockType) -> (variables: Variables, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->VariablesGet(&p)
@@ -775,7 +775,7 @@ functionblocktype_variables_get :: proc(functionblocktype: FunctionBlockType) ->
 
 functionblocktype_variables_set :: proc(functionblocktype: FunctionBlockType, variables: Variables) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -785,7 +785,7 @@ functionblocktype_variables_set :: proc(functionblocktype: FunctionBlockType, va
 
 functionblocktype_externalvariables_get :: proc(functionblocktype: FunctionBlockType) -> (externalvariables: ExternalVariables, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ExternalVariablesGet(&p)
@@ -796,7 +796,7 @@ functionblocktype_externalvariables_get :: proc(functionblocktype: FunctionBlock
 
 functionblocktype_externalvariables_set :: proc(functionblocktype: FunctionBlockType, externalvariables: ExternalVariables) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ExternalVariablesPut(externalvariables)
     if com_failed(hr) do return
@@ -806,7 +806,7 @@ functionblocktype_externalvariables_set :: proc(functionblocktype: FunctionBlock
 
 functionblocktype_functionblocks_get :: proc(functionblocktype: FunctionBlockType) -> (functionblocks: FunctionBlocks, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->FunctionBlocksGet(&p)
@@ -817,7 +817,7 @@ functionblocktype_functionblocks_get :: proc(functionblocktype: FunctionBlockTyp
 
 functionblocktype_functionblocks_set :: proc(functionblocktype: FunctionBlockType, functionblocks: FunctionBlocks) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -828,7 +828,7 @@ functionblocktype_functionblocks_set :: proc(functionblocktype: FunctionBlockTyp
 // I do not think function blocks have control modules...
 functionblocktype_controlmodules_get :: proc(functionblocktype: FunctionBlockType) -> (controlmodules: ControlModules, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ControlModulesGet(&p)
@@ -840,7 +840,7 @@ functionblocktype_controlmodules_get :: proc(functionblocktype: FunctionBlockTyp
 // I do not think function blocks have control modules...
 functionblocktype_controlmodules_set :: proc(functionblocktype: FunctionBlockType, controlmodules: ControlModules) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->ControlModulesPut(controlmodules)
     if com_failed(hr) do return
@@ -850,7 +850,7 @@ functionblocktype_controlmodules_set :: proc(functionblocktype: FunctionBlockTyp
 
 functionblocktype_codeblocks_get :: proc(functionblocktype: FunctionBlockType) -> (codeblocks: CodeBlocks, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^FunctionBlockTypeIF)(functionblocktype)->CodeBlocksGet(&p)
@@ -861,7 +861,7 @@ functionblocktype_codeblocks_get :: proc(functionblocktype: FunctionBlockType) -
 
 functionblocktype_codeblocks_set :: proc(functionblocktype: FunctionBlockType, codeblocks: CodeBlocks) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -871,7 +871,7 @@ functionblocktype_codeblocks_set :: proc(functionblocktype: FunctionBlockType, c
 
 functionblocktype_instantiate_as_aspect_object_get :: proc(functionblocktype: FunctionBlockType) -> (instantiate_as_aspect_object: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->InstantiateAsAspectObjectGet(&vb)
@@ -882,7 +882,7 @@ functionblocktype_instantiate_as_aspect_object_get :: proc(functionblocktype: Fu
 
 functionblocktype_instantiate_as_aspect_object_set :: proc(functionblocktype: FunctionBlockType, instantiate_as_aspect_object: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->InstantiateAsAspectObjectPut(to_variantbool(instantiate_as_aspect_object))
     if com_failed(hr) do return
@@ -892,7 +892,7 @@ functionblocktype_instantiate_as_aspect_object_set :: proc(functionblocktype: Fu
 
 functionblocktype_embedded_graphiscs_visible_get :: proc(functionblocktype: FunctionBlockType) -> (embedded_graphiscs_visible: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->EmbeddedGraphicsVisibleGet(&vb)
@@ -903,7 +903,7 @@ functionblocktype_embedded_graphiscs_visible_get :: proc(functionblocktype: Func
 
 functionblocktype_embedded_graphiscs_visible_set :: proc(functionblocktype: FunctionBlockType, embedded_graphiscs_visible: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->EmbeddedGraphicsVisiblePut(to_variantbool(embedded_graphiscs_visible))
     if com_failed(hr) do return
@@ -913,7 +913,7 @@ functionblocktype_embedded_graphiscs_visible_set :: proc(functionblocktype: Func
 
 functionblocktype_restricted_sil_get :: proc(functionblocktype: FunctionBlockType) -> (restricted_sil: bool, ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^FunctionBlockTypeIF)(functionblocktype)->RestrictedSILGet(&vb)
@@ -924,7 +924,7 @@ functionblocktype_restricted_sil_get :: proc(functionblocktype: FunctionBlockTyp
 
 functionblocktype_restricted_sil_set :: proc(functionblocktype: FunctionBlockType, restricted_sil: bool) -> (ok: bool) {
     if functionblocktype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^FunctionBlockTypeIF)(functionblocktype)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return

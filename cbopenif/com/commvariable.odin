@@ -47,7 +47,7 @@ CommVariableVTable :: struct {
 
 commvariable_serialize :: proc(commvariable: CommVariable) -> (xml: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -59,7 +59,7 @@ commvariable_serialize :: proc(commvariable: CommVariable) -> (xml: string, ok: 
 
 commvariable_name_get :: proc(commvariable: CommVariable) -> (name: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -71,7 +71,7 @@ commvariable_name_get :: proc(commvariable: CommVariable) -> (name: string, ok: 
 
 commvariable_name_set :: proc(commvariable: CommVariable, name: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -83,7 +83,7 @@ commvariable_name_set :: proc(commvariable: CommVariable, name: string) -> (ok: 
 
 commvariable_type_name_get :: proc(commvariable: CommVariable) -> (type_name: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -95,7 +95,7 @@ commvariable_type_name_get :: proc(commvariable: CommVariable) -> (type_name: st
 
 commvariable_type_name_set :: proc(commvariable: CommVariable, type_name: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -107,7 +107,7 @@ commvariable_type_name_set :: proc(commvariable: CommVariable, type_name: string
 
 commvariable_attribute_get :: proc(commvariable: CommVariable) -> (attribute: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -119,7 +119,7 @@ commvariable_attribute_get :: proc(commvariable: CommVariable) -> (attribute: st
 
 commvariable_attribute_set :: proc(commvariable: CommVariable, attribute: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(attribute)
     defer bstr_free(bs)
@@ -131,7 +131,7 @@ commvariable_attribute_set :: proc(commvariable: CommVariable, attribute: string
 
 commvariable_initial_value_get :: proc(commvariable: CommVariable) -> (inital_value: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -143,7 +143,7 @@ commvariable_initial_value_get :: proc(commvariable: CommVariable) -> (inital_va
 
 commvariable_initial_value_set :: proc(commvariable: CommVariable, inital_value: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(inital_value)
     defer bstr_free(bs)
@@ -155,7 +155,7 @@ commvariable_initial_value_set :: proc(commvariable: CommVariable, inital_value:
 
 commvariable_direction_get :: proc(commvariable: CommVariable) -> (direction: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -167,7 +167,7 @@ commvariable_direction_get :: proc(commvariable: CommVariable) -> (direction: st
 
 commvariable_direction_set :: proc(commvariable: CommVariable, direction: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(direction)
     defer bstr_free(bs)
@@ -179,7 +179,7 @@ commvariable_direction_set :: proc(commvariable: CommVariable, direction: string
 
 commvariable_ipaddress_get :: proc(commvariable: CommVariable) -> (ipaddress: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -191,7 +191,7 @@ commvariable_ipaddress_get :: proc(commvariable: CommVariable) -> (ipaddress: st
 
 commvariable_ipaddress_set :: proc(commvariable: CommVariable, ipaddress: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(ipaddress)
     defer bstr_free(bs)
@@ -203,7 +203,7 @@ commvariable_ipaddress_set :: proc(commvariable: CommVariable, ipaddress: string
 
 commvariable_interval_time_get :: proc(commvariable: CommVariable) -> (interval_time: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -215,7 +215,7 @@ commvariable_interval_time_get :: proc(commvariable: CommVariable) -> (interval_
 
 commvariable_interval_time_set :: proc(commvariable: CommVariable, interval_time: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(interval_time)
     defer bstr_free(bs)
@@ -227,7 +227,7 @@ commvariable_interval_time_set :: proc(commvariable: CommVariable, interval_time
 
 commvariable_priority_get :: proc(commvariable: CommVariable) -> (priority: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -239,7 +239,7 @@ commvariable_priority_get :: proc(commvariable: CommVariable) -> (priority: stri
 
 commvariable_priority_set :: proc(commvariable: CommVariable, priority: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(priority)
     defer bstr_free(bs)
@@ -251,7 +251,7 @@ commvariable_priority_set :: proc(commvariable: CommVariable, priority: string) 
 
 commvariable_isp_value_get :: proc(commvariable: CommVariable) -> (isp_value: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -263,7 +263,7 @@ commvariable_isp_value_get :: proc(commvariable: CommVariable) -> (isp_value: st
 
 commvariable_isp_value_set :: proc(commvariable: CommVariable, isp_value: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(isp_value)
     defer bstr_free(bs)
@@ -275,7 +275,7 @@ commvariable_isp_value_set :: proc(commvariable: CommVariable, isp_value: string
 
 commvariable_read_permission_get :: proc(commvariable: CommVariable) -> (read_permission: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -287,7 +287,7 @@ commvariable_read_permission_get :: proc(commvariable: CommVariable) -> (read_pe
 
 commvariable_read_permission_set :: proc(commvariable: CommVariable, read_permission: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(read_permission)
     defer bstr_free(bs)
@@ -299,7 +299,7 @@ commvariable_read_permission_set :: proc(commvariable: CommVariable, read_permis
 
 commvariable_description_get :: proc(commvariable: CommVariable) -> (description: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -311,7 +311,7 @@ commvariable_description_get :: proc(commvariable: CommVariable) -> (description
 
 commvariable_description_set :: proc(commvariable: CommVariable, description: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -323,7 +323,7 @@ commvariable_description_set :: proc(commvariable: CommVariable, description: st
 
 commvariable_type_guid_get :: proc(commvariable: CommVariable) -> (guid: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -335,7 +335,7 @@ commvariable_type_guid_get :: proc(commvariable: CommVariable) -> (guid: string,
 
 commvariable_type_path_get :: proc(commvariable: CommVariable) -> (path: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -347,7 +347,7 @@ commvariable_type_path_get :: proc(commvariable: CommVariable) -> (path: string,
 
 commvariable_expected_sil_get :: proc(commvariable: CommVariable) -> (expected_sil: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -359,7 +359,7 @@ commvariable_expected_sil_get :: proc(commvariable: CommVariable) -> (expected_s
 
 commvariable_expected_sil_set :: proc(commvariable: CommVariable, expected_sil: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(expected_sil)
     defer bstr_free(bs)
@@ -371,7 +371,7 @@ commvariable_expected_sil_set :: proc(commvariable: CommVariable, expected_sil: 
 
 commvariable_unique_id_get :: proc(commvariable: CommVariable) -> (unique_id: i32, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     id: i32
     hr := (^CommVariableIF)(commvariable)->UniqueIDGet(&id)
@@ -382,7 +382,7 @@ commvariable_unique_id_get :: proc(commvariable: CommVariable) -> (unique_id: i3
 
 commvariable_unique_id_set :: proc(commvariable: CommVariable, unique_id: i32) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariableIF)(commvariable)->UniqueIDPut(unique_id)
     if com_failed(hr) do return
@@ -392,7 +392,7 @@ commvariable_unique_id_set :: proc(commvariable: CommVariable, unique_id: i32) -
 
 commvariable_restricted_sil_get :: proc(commvariable: CommVariable) -> (restricted_sil: bool, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^CommVariableIF)(commvariable)->RestrictedSILGet(&vb)
@@ -403,7 +403,7 @@ commvariable_restricted_sil_get :: proc(commvariable: CommVariable) -> (restrict
 
 commvariable_restricted_sil_set :: proc(commvariable: CommVariable, restricted_sil: bool) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariableIF)(commvariable)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return
@@ -413,7 +413,7 @@ commvariable_restricted_sil_set :: proc(commvariable: CommVariable, restricted_s
 
 commvariable_acknowledge_group_get :: proc(commvariable: CommVariable) -> (acknowledge_group: string, ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -425,7 +425,7 @@ commvariable_acknowledge_group_get :: proc(commvariable: CommVariable) -> (ackno
 
 commvariable_acknowledge_group_set :: proc(commvariable: CommVariable, acknowledge_group: string) -> (ok: bool) {
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(acknowledge_group)
     defer bstr_free(bs)
@@ -462,7 +462,7 @@ CommVariablesVTable :: struct {
 commvariables_commvariable_add :: proc(commvariables: CommVariables, commvariable: CommVariable) -> (ok: bool) {
     if commvariables == nil do return
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CommVariablesIF)(commvariables)->Add(commvariable)
     if com_failed(hr) do return
@@ -473,7 +473,7 @@ commvariables_commvariable_add :: proc(commvariables: CommVariables, commvariabl
 commvariables_commvariable_add_at_index :: proc(commvariables: CommVariables, commvariable: CommVariable, index: i32) -> (ok: bool) {
     if commvariables == nil do return
     if commvariable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariablesIF)(commvariables)->AddBefore(commvariable, index)
     if com_failed(hr) do return
@@ -483,7 +483,7 @@ commvariables_commvariable_add_at_index :: proc(commvariables: CommVariables, co
 
 commvariables_commvariable_by_name :: proc(commvariables: CommVariables, name: string) -> (commvariable: CommVariable, ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -495,7 +495,7 @@ commvariables_commvariable_by_name :: proc(commvariables: CommVariables, name: s
 
 commvariables_commvariable_by_index :: proc(commvariables: CommVariables, index: i32) -> (commvariable: CommVariable, ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariablesIF)(commvariables)->Item(index + 1, cast(^rawptr)&commvariable)
     if com_failed(hr) do return
@@ -505,7 +505,7 @@ commvariables_commvariable_by_index :: proc(commvariables: CommVariables, index:
 
 commvariables_commvariable_index :: proc(commvariables: CommVariables, name: string) -> (index: i32, ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -517,7 +517,7 @@ commvariables_commvariable_index :: proc(commvariables: CommVariables, name: str
 
 commvariables_commvariable_count :: proc(commvariables: CommVariables) -> (count: i32, ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariablesIF)(commvariables)->Count(&count)
     if com_failed(hr) do return
@@ -527,7 +527,7 @@ commvariables_commvariable_count :: proc(commvariables: CommVariables) -> (count
 
 commvariables_remove_by_name :: proc(commvariables: CommVariables, name: string) -> (ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = commvariables_commvariable_index(commvariables, name)
@@ -540,7 +540,7 @@ commvariables_remove_by_name :: proc(commvariables: CommVariables, name: string)
 
 commvariables_remove_by_index :: proc(commvariables: CommVariables, index: i32) -> (ok: bool) {
     if commvariables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CommVariablesIF)(commvariables)->Remove(index + 1)
     if com_failed(hr) do return

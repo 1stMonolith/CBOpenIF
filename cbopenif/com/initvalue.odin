@@ -21,7 +21,7 @@ InitValueVTable :: struct {
 
 initvalue_serialize :: proc(initvalue: InitValue) -> (xml: string, ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -33,7 +33,7 @@ initvalue_serialize :: proc(initvalue: InitValue) -> (xml: string, ok: bool) {
 
 initvalue_pou_path_get :: proc(initvalue: InitValue) -> (pou_path: string, ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -45,7 +45,7 @@ initvalue_pou_path_get :: proc(initvalue: InitValue) -> (pou_path: string, ok: b
 
 initvalue_pou_path_set :: proc(initvalue: InitValue, pou_path: string) -> (ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(pou_path)
     defer bstr_free(bs)
@@ -57,7 +57,7 @@ initvalue_pou_path_set :: proc(initvalue: InitValue, pou_path: string) -> (ok: b
 
 initvalue_name_get :: proc(initvalue: InitValue) -> (name: string, ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -69,7 +69,7 @@ initvalue_name_get :: proc(initvalue: InitValue) -> (name: string, ok: bool) {
 
 initvalue_name_set :: proc(initvalue: InitValue, name: string) -> (ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -81,7 +81,7 @@ initvalue_name_set :: proc(initvalue: InitValue, name: string) -> (ok: bool) {
 
 initvalue_value_get :: proc(initvalue: InitValue) -> (value: string, ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -93,7 +93,7 @@ initvalue_value_get :: proc(initvalue: InitValue) -> (value: string, ok: bool) {
 
 initvalue_value_set :: proc(initvalue: InitValue, value: string) -> (ok: bool) {
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(value)
     defer bstr_free(bs)
@@ -129,7 +129,7 @@ InitValuesVTable :: struct {
 initvalues_initvalue_add :: proc(initvalues: InitValues, initvalue: InitValue) -> (ok: bool) {
     if initvalues == nil do return
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Add(initvalue)
     if com_failed(hr) do return
@@ -140,7 +140,7 @@ initvalues_initvalue_add :: proc(initvalues: InitValues, initvalue: InitValue) -
 initvalues_initvalue_add_at_index :: proc(initvalues: InitValues, initvalue: InitValue, index: i32) -> (ok: bool) {
     if initvalues == nil do return
     if initvalue == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->AddBefore(initvalue, index)
     if com_failed(hr) do return
@@ -150,7 +150,7 @@ initvalues_initvalue_add_at_index :: proc(initvalues: InitValues, initvalue: Ini
 
 initvalues_initvalue_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (initvalue: InitValue, ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_pou  := to_bstr(pou_path)
     bstr_name := to_bstr(name)
@@ -166,7 +166,7 @@ initvalues_initvalue_by_name :: proc(initvalues: InitValues, pou_path, name: str
 
 initvalues_initvalue_by_index :: proc(initvalues: InitValues, index: i32) -> (initvalue: InitValue, ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Item(index + 1, cast(^rawptr)&initvalue)
     if com_failed(hr) do return
@@ -176,7 +176,7 @@ initvalues_initvalue_by_index :: proc(initvalues: InitValues, index: i32) -> (in
 
 initvalues_initvalue_index :: proc(initvalues: InitValues, pou_path, name: string) -> (index: i32, ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_pou  := to_bstr(pou_path)
     bstr_name := to_bstr(name)
@@ -192,7 +192,7 @@ initvalues_initvalue_index :: proc(initvalues: InitValues, pou_path, name: strin
 
 initvalues_initvalue_count :: proc(initvalues: InitValues) -> (count: i32, ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Count(&count)
     if com_failed(hr) do return
@@ -202,7 +202,7 @@ initvalues_initvalue_count :: proc(initvalues: InitValues) -> (count: i32, ok: b
 
 initvalues_initvalue_remove_by_name :: proc(initvalues: InitValues, pou_path, name: string) -> (ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index, found := initvalues_initvalue_index(initvalues, pou_path, name)
     if !found do return
@@ -215,7 +215,7 @@ initvalues_initvalue_remove_by_name :: proc(initvalues: InitValues, pou_path, na
 
 initvalues_initvalue_remove_by_index :: proc(initvalues: InitValues, index: i32) -> (ok: bool) {
     if initvalues == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^InitValuesIF)(initvalues)->Remove(index + 1)
     if com_failed(hr) do return

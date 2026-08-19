@@ -35,7 +35,7 @@ DataTypeVTable :: struct {
 
 datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -47,7 +47,7 @@ datatype_serialize :: proc(datatype: DataType) -> (xml: string, ok: bool) {
 
 datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -59,7 +59,7 @@ datatype_name_get :: proc(datatype: DataType) -> (name: string, ok: bool) {
 
 datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -71,7 +71,7 @@ datatype_name_set :: proc(datatype: DataType, name: string) -> (ok: bool) {
 
 datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^DataTypeIF)(datatype)->ProtectedGet(&vb)
@@ -82,7 +82,7 @@ datatype_protected_get :: proc(datatype: DataType) -> (protected: bool, ok: bool
 
 datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^DataTypeIF)(datatype)->ProtectedPut(to_variantbool(protected))
     if com_failed(hr) do return
@@ -92,7 +92,7 @@ datatype_protected_set :: proc(datatype: DataType, protected: bool) -> (ok: bool
 
 datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^DataTypeIF)(datatype)->HiddenGet(&vb)
@@ -103,7 +103,7 @@ datatype_hidden_get :: proc(datatype: DataType) -> (hidden: bool, ok: bool) {
 
 datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^DataTypeIF)(datatype)->HiddenPut(to_variantbool(hidden))
     if com_failed(hr) do return
@@ -113,7 +113,7 @@ datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
 
 datatype_scope_get :: proc(datatype: DataType) -> (scope: t.Scope, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     s: i32
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
@@ -124,7 +124,7 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: t.Scope, ok: bool) {
 
 datatype_scope_set :: proc(datatype: DataType, scope: t.Scope) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^DataTypeIF)(datatype)->ScopePut(i32(scope))
     if com_failed(hr) do return
@@ -134,7 +134,7 @@ datatype_scope_set :: proc(datatype: DataType, scope: t.Scope) -> (ok: bool) {
 
 datatype_description_get :: proc(datatype: DataType) -> (description: string, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -146,7 +146,7 @@ datatype_description_get :: proc(datatype: DataType) -> (description: string, ok
 
 datatype_description_set :: proc(datatype: DataType, description: string) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -158,7 +158,7 @@ datatype_description_set :: proc(datatype: DataType, description: string) -> (ok
 
 datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -170,7 +170,7 @@ datatype_guid_get :: proc(datatype: DataType) -> (guid: string, ok: bool) {
 
 datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -182,7 +182,7 @@ datatype_guid_set :: proc(datatype: DataType, guid: string) -> (ok: bool) {
 
 datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_function: string, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -194,7 +194,7 @@ datatype_reserved_by_function_get :: proc(datatype: DataType) -> (reserved_by_fu
 
 datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_function: string) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -206,7 +206,7 @@ datatype_reserved_by_function_set :: proc(datatype: DataType, reserved_by_functi
 
 datatype_components_get :: proc(datatype: DataType) -> (components: Components, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^DataTypeIF)(datatype)->ComponentsGet(&p)
@@ -217,7 +217,7 @@ datatype_components_get :: proc(datatype: DataType) -> (components: Components, 
 
 datatype_components_set :: proc(datatype: DataType, components: Components) -> (ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^DataTypeIF)(datatype)->ComponentsPut(components)
     if com_failed(hr) do return
@@ -233,7 +233,7 @@ datatype_release :: proc(datatype: DataType) {
 
 datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: t.DataType, ok: bool) {
     if datatype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     context.allocator = allocator
     
@@ -277,7 +277,7 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
 }
 
 datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     datatype: DataType
     datatype, ok = datatype_new1(
@@ -345,7 +345,7 @@ ComponentVTable :: struct {
 
 component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -357,7 +357,7 @@ component_name_get :: proc(component: Component) -> (name: string, ok: bool) {
 
 component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -369,7 +369,7 @@ component_name_set :: proc(component: Component, name: string) -> (ok: bool) {
 
 component_type_name_get :: proc(component: Component) -> (type_name: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -381,7 +381,7 @@ component_type_name_get :: proc(component: Component) -> (type_name: string, ok:
 
 component_type_name_set :: proc(component: Component, type_name: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -393,7 +393,7 @@ component_type_name_set :: proc(component: Component, type_name: string) -> (ok:
 
 component_attribute_get :: proc(component: Component) -> (attribute: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -405,7 +405,7 @@ component_attribute_get :: proc(component: Component) -> (attribute: string, ok:
 
 component_attribute_set :: proc(component: Component, attribute: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(attribute)
     defer bstr_free(bs)
@@ -417,7 +417,7 @@ component_attribute_set :: proc(component: Component, attribute: string) -> (ok:
 
 component_initial_value_get :: proc(component: Component) -> (inital_value: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -429,7 +429,7 @@ component_initial_value_get :: proc(component: Component) -> (inital_value: stri
 
 component_initial_value_set :: proc(component: Component, inital_value: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(inital_value)
     defer bstr_free(bs)
@@ -441,7 +441,7 @@ component_initial_value_set :: proc(component: Component, inital_value: string) 
 
 component_read_permission_get :: proc(component: Component) -> (read_permission: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -453,7 +453,7 @@ component_read_permission_get :: proc(component: Component) -> (read_permission:
 
 component_read_permission_set :: proc(component: Component, read_permission: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(read_permission)
     defer bstr_free(bs)
@@ -465,7 +465,7 @@ component_read_permission_set :: proc(component: Component, read_permission: str
 
 component_write_permission_get :: proc(component: Component) -> (write_permission: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -477,7 +477,7 @@ component_write_permission_get :: proc(component: Component) -> (write_permissio
 
 component_write_permission_set :: proc(component: Component, write_permission: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(write_permission)
     defer bstr_free(bs)
@@ -489,7 +489,7 @@ component_write_permission_set :: proc(component: Component, write_permission: s
 
 component_authentication_level_get :: proc(component: Component) -> (authentication_level: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -501,7 +501,7 @@ component_authentication_level_get :: proc(component: Component) -> (authenticat
 
 component_authentication_level_set :: proc(component: Component, authentication_level: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(authentication_level)
     defer bstr_free(bs)
@@ -513,7 +513,7 @@ component_authentication_level_set :: proc(component: Component, authentication_
 
 component_description_get :: proc(component: Component) -> (description: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -525,7 +525,7 @@ component_description_get :: proc(component: Component) -> (description: string,
 
 component_description_set :: proc(component: Component, description: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -537,7 +537,7 @@ component_description_set :: proc(component: Component, description: string) -> 
 
 component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -549,7 +549,7 @@ component_type_guid_get :: proc(component: Component) -> (type_guid: string, ok:
 
 component_type_path_get :: proc(component: Component) -> (type_path: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -561,7 +561,7 @@ component_type_path_get :: proc(component: Component) -> (type_path: string, ok:
 
 component_access_level_get :: proc(component: Component) -> (access_level: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -573,7 +573,7 @@ component_access_level_get :: proc(component: Component) -> (access_level: strin
 
 component_access_level_set :: proc(component: Component, access_level: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -585,7 +585,7 @@ component_access_level_set :: proc(component: Component, access_level: string) -
 
 component_safety_type_get :: proc(component: Component) -> (safety_type: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -597,7 +597,7 @@ component_safety_type_get :: proc(component: Component) -> (safety_type: string,
 
 component_safety_type_set :: proc(component: Component, safety_type: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -609,7 +609,7 @@ component_safety_type_set :: proc(component: Component, safety_type: string) -> 
 
 component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -621,7 +621,7 @@ component_isp_value_get :: proc(component: Component) -> (isp_value: string, ok:
 
 component_isp_value_set :: proc(component: Component, isp_value: string) -> (ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(isp_value)
     defer bstr_free(bs)
@@ -639,7 +639,7 @@ component_release :: proc(component: Component) {
 
 component_from_com :: proc(component: Component) -> (result: t.Component, ok: bool) {
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     if name, ok := component_name_get(component); ok do result.name = name; else do return
     if type_name, ok := component_type_name_get(component); ok do result.type_name = type_name; else do return
     if attribute, ok := component_attribute_get(component); ok do result.attribute = attribute; else do return
@@ -698,7 +698,7 @@ ComponentsVTable :: struct {
 components_component_add :: proc(components: Components, component: Component) -> (ok: bool) {
     if components == nil do return
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ComponentsIF)(components)->Add(component)
     if com_failed(hr) do return
@@ -709,7 +709,7 @@ components_component_add :: proc(components: Components, component: Component) -
 components_component_add_at_index :: proc(components: Components, component: Component, index: i32) -> (ok: bool) {
     if components == nil do return
     if component == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ComponentsIF)(components)->AddBefore(component, index)
     if com_failed(hr) do return
@@ -719,7 +719,7 @@ components_component_add_at_index :: proc(components: Components, component: Com
 
 components_component_by_name :: proc(components: Components, name: string) -> (component: Component, ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     p: rawptr
@@ -732,7 +732,7 @@ components_component_by_name :: proc(components: Components, name: string) -> (c
 
 components_component_by_index :: proc(components: Components, index: i32) -> (component: Component, ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ComponentsIF)(components)->Item(index + 1, &p)
@@ -743,7 +743,7 @@ components_component_by_index :: proc(components: Components, index: i32) -> (co
 
 components_component_index :: proc(components: Components, name: string) -> (index: i32, ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -755,7 +755,7 @@ components_component_index :: proc(components: Components, name: string) -> (ind
 
 components_component_count :: proc(components: Components) -> (count: i32, ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ComponentsIF)(components)->Count(&count)
     if com_failed(hr) do return
@@ -765,7 +765,7 @@ components_component_count :: proc(components: Components) -> (count: i32, ok: b
 
 components_component_remove_by_name :: proc(components: Components, name: string) -> (ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = components_component_index(components, name)
@@ -779,7 +779,7 @@ components_component_remove_by_name :: proc(components: Components, name: string
 
 components_component_remove_by_index :: proc(components: Components, index: i32) -> (ok: bool) {
     if components == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ComponentsIF)(components)->Remove(index + 1)
     if com_failed(hr) do return

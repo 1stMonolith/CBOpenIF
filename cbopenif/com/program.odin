@@ -52,7 +52,7 @@ ProgramVTable :: struct {
 
 program_serialize :: proc(program: Program) -> (xml: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -64,7 +64,7 @@ program_serialize :: proc(program: Program) -> (xml: string, ok: bool) {
 
 program_name_get :: proc(program: Program) -> (name: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -76,7 +76,7 @@ program_name_get :: proc(program: Program) -> (name: string, ok: bool) {
 
 program_name_set :: proc(program: Program, name: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -88,7 +88,7 @@ program_name_set :: proc(program: Program, name: string) -> (ok: bool) {
 
 program_task_connection_get :: proc(program: Program) -> (task_connection: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -100,7 +100,7 @@ program_task_connection_get :: proc(program: Program) -> (task_connection: strin
 
 program_task_connection_set :: proc(program: Program, task_connection: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
@@ -112,7 +112,7 @@ program_task_connection_set :: proc(program: Program, task_connection: string) -
 
 program_type_guid_get :: proc(program: Program) -> (type_guid: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -124,7 +124,7 @@ program_type_guid_get :: proc(program: Program) -> (type_guid: string, ok: bool)
 
 program_type_guid_set :: proc(program: Program, type_guid: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
@@ -136,7 +136,7 @@ program_type_guid_set :: proc(program: Program, type_guid: string) -> (ok: bool)
 
 program_inst_guid_get :: proc(program: Program) -> (inst_guid: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -148,7 +148,7 @@ program_inst_guid_get :: proc(program: Program) -> (inst_guid: string, ok: bool)
 
 program_inst_guid_set :: proc(program: Program, inst_guid: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(inst_guid)
     defer bstr_free(bs)
@@ -160,7 +160,7 @@ program_inst_guid_set :: proc(program: Program, inst_guid: string) -> (ok: bool)
 
 program_description_get :: proc(program: Program) -> (description: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -172,7 +172,7 @@ program_description_get :: proc(program: Program) -> (description: string, ok: b
 
 program_description_set :: proc(program: Program, description: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -184,7 +184,7 @@ program_description_set :: proc(program: Program, description: string) -> (ok: b
 
 program_sil_level_get :: proc(program: Program) -> (sil_level: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -196,7 +196,7 @@ program_sil_level_get :: proc(program: Program) -> (sil_level: string, ok: bool)
 
 program_sil_level_set :: proc(program: Program, sil_level: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -208,7 +208,7 @@ program_sil_level_set :: proc(program: Program, sil_level: string) -> (ok: bool)
 
 program_simulation_mark_get :: proc(program: Program) -> (simulation_mark: bool, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^ProgramIF)(program)->SimulationMarkGet(&vb)
@@ -219,7 +219,7 @@ program_simulation_mark_get :: proc(program: Program) -> (simulation_mark: bool,
 
 program_simulation_mark_set :: proc(program: Program, simulation_mark: bool) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -229,7 +229,7 @@ program_simulation_mark_set :: proc(program: Program, simulation_mark: bool) -> 
 
 program_reserved_by_function_get :: proc(program: Program) -> (reserved_by_function: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -241,7 +241,7 @@ program_reserved_by_function_get :: proc(program: Program) -> (reserved_by_funct
 
 program_reserved_by_function_set :: proc(program: Program, reserved_by_function: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -253,7 +253,7 @@ program_reserved_by_function_set :: proc(program: Program, reserved_by_function:
 
 program_variables_get :: proc(program: Program) -> (variables: Variables, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->VariablesGet(&p)
@@ -264,7 +264,7 @@ program_variables_get :: proc(program: Program) -> (variables: Variables, ok: bo
 
 program_variables_set :: proc(program: Program, variables: Variables) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -274,7 +274,7 @@ program_variables_set :: proc(program: Program, variables: Variables) -> (ok: bo
 
 program_functionblocks_get :: proc(program: Program) -> (functionblocks: FunctionBlocks, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->FunctionBlocksGet(&p)
@@ -285,7 +285,7 @@ program_functionblocks_get :: proc(program: Program) -> (functionblocks: Functio
 
 program_functionblocks_set :: proc(program: Program, functionblocks: FunctionBlocks) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -295,7 +295,7 @@ program_functionblocks_set :: proc(program: Program, functionblocks: FunctionBlo
 
 program_codeblocks_get :: proc(program: Program) -> (codeblocks: CodeBlocks, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->CodeBlocksGet(&p)
@@ -306,7 +306,7 @@ program_codeblocks_get :: proc(program: Program) -> (codeblocks: CodeBlocks, ok:
 
 program_codeblocks_set :: proc(program: Program, codeblocks: CodeBlocks) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -316,7 +316,7 @@ program_codeblocks_set :: proc(program: Program, codeblocks: CodeBlocks) -> (ok:
 
 program_access_level_get :: proc(program: Program) -> (access_level: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -328,7 +328,7 @@ program_access_level_get :: proc(program: Program) -> (access_level: string, ok:
 
 program_access_level_set :: proc(program: Program, access_level: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -340,7 +340,7 @@ program_access_level_set :: proc(program: Program, access_level: string) -> (ok:
 
 program_safety_type_get :: proc(program: Program) -> (safety_type: string, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -352,7 +352,7 @@ program_safety_type_get :: proc(program: Program) -> (safety_type: string, ok: b
 
 program_safety_type_set :: proc(program: Program, safety_type: string) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -364,7 +364,7 @@ program_safety_type_set :: proc(program: Program, safety_type: string) -> (ok: b
 
 program_commvariables_get :: proc(program: Program) -> (commvariables: CommVariables, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->CommVariablesGet(&p)
@@ -375,7 +375,7 @@ program_commvariables_get :: proc(program: Program) -> (commvariables: CommVaria
 
 program_commvariables_set :: proc(program: Program, commvariables: CommVariables) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->CommVariablesPut(commvariables)
     if com_failed(hr) do return
@@ -385,7 +385,7 @@ program_commvariables_set :: proc(program: Program, commvariables: CommVariables
 
 program_initvalues_get :: proc(program: Program) -> (initvalues: InitValues, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->InitValuesGet(&p)
@@ -396,7 +396,7 @@ program_initvalues_get :: proc(program: Program) -> (initvalues: InitValues, ok:
 
 program_initvalues_set :: proc(program: Program, initvalues: InitValues) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->InitValuesPut(initvalues)
     if com_failed(hr) do return
@@ -406,7 +406,7 @@ program_initvalues_set :: proc(program: Program, initvalues: InitValues) -> (ok:
 
 program_signals_get :: proc(program: Program) -> (signals: Signals, ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ProgramIF)(program)->SignalsGet(&p)
@@ -417,7 +417,7 @@ program_signals_get :: proc(program: Program) -> (signals: Signals, ok: bool) {
 
 program_signals_set :: proc(program: Program, signals: Signals) -> (ok: bool) {
     if program == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProgramIF)(program)->SignalsPut(signals)
     if com_failed(hr) do return

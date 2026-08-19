@@ -20,7 +20,7 @@ ProjectConstantVTable :: struct {
 
 projectconstant_name_get :: proc(projectconstant: ProjectConstant) -> (name: string, ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -32,7 +32,7 @@ projectconstant_name_get :: proc(projectconstant: ProjectConstant) -> (name: str
 
 projectconstant_name_set :: proc(projectconstant: ProjectConstant, name: string) -> (ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -44,7 +44,7 @@ projectconstant_name_set :: proc(projectconstant: ProjectConstant, name: string)
 
 projectconstant_type_get :: proc(projectconstant: ProjectConstant) -> (projectconstant_type: string, ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -56,7 +56,7 @@ projectconstant_type_get :: proc(projectconstant: ProjectConstant) -> (projectco
 
 projectconstant_type_set :: proc(projectconstant: ProjectConstant, projectconstant_type: string) -> (ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(projectconstant_type)
     defer bstr_free(bs)
@@ -68,7 +68,7 @@ projectconstant_type_set :: proc(projectconstant: ProjectConstant, projectconsta
 
 projectconstant_value_get :: proc(projectconstant: ProjectConstant) -> (value: string, ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -80,7 +80,7 @@ projectconstant_value_get :: proc(projectconstant: ProjectConstant) -> (value: s
 
 projectconstant_value_set :: proc(projectconstant: ProjectConstant, value: string) -> (ok: bool) {
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(value)
     defer bstr_free(bs)
@@ -116,7 +116,7 @@ ProjectConstantsVTable :: struct {
 
 projectconstants_serialize :: proc(projectconstants: ProjectConstants) -> (xml: string, ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -129,7 +129,7 @@ projectconstants_serialize :: proc(projectconstants: ProjectConstants) -> (xml: 
 projectconstants_projectconstant_add :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant) -> (ok: bool) {
     if projectconstants == nil do return
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Add(projectconstant)
     if com_failed(hr) do return
@@ -140,7 +140,7 @@ projectconstants_projectconstant_add :: proc(projectconstants: ProjectConstants,
 projectconstants_projectconstant_add_at_index :: proc(projectconstants: ProjectConstants, projectconstant: ProjectConstant, index: i32) -> (ok: bool) {
     if projectconstants == nil do return
     if projectconstant == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->AddBefore(projectconstant, index)
     if com_failed(hr) do return
@@ -150,7 +150,7 @@ projectconstants_projectconstant_add_at_index :: proc(projectconstants: ProjectC
 
 projectconstants_projectconstant_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (projectconstant: ProjectConstant, ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -162,7 +162,7 @@ projectconstants_projectconstant_by_name :: proc(projectconstants: ProjectConsta
 
 projectconstants_projectconstant_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (projectconstant: ProjectConstant, ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Item(index + 1, cast(^rawptr)&projectconstant)
     if com_failed(hr) do return
@@ -172,7 +172,7 @@ projectconstants_projectconstant_by_index :: proc(projectconstants: ProjectConst
 
 projectconstants_projectconstant_index :: proc(projectconstants: ProjectConstants, name: string) -> (index: i32, ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -184,7 +184,7 @@ projectconstants_projectconstant_index :: proc(projectconstants: ProjectConstant
 
 projectconstants_projectconstant_count :: proc(projectconstants: ProjectConstants) -> (count: i32, ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Count(&count)
     if com_failed(hr) do return
@@ -194,7 +194,7 @@ projectconstants_projectconstant_count :: proc(projectconstants: ProjectConstant
 
 projectconstants_projectconstant_remove_by_name :: proc(projectconstants: ProjectConstants, name: string) -> (ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index, found := projectconstants_projectconstant_index(projectconstants, name)
     if !found do return
@@ -207,7 +207,7 @@ projectconstants_projectconstant_remove_by_name :: proc(projectconstants: Projec
 
 projectconstants_projectconstant_remove_by_index :: proc(projectconstants: ProjectConstants, index: i32) -> (ok: bool) {
     if projectconstants == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ProjectConstantsIF)(projectconstants)->Remove(index + 1)
     if com_failed(hr) do return

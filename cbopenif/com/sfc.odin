@@ -28,7 +28,7 @@ SFCBranchVTable :: struct {
 
 sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: t.SFCPriority, ok: bool) {
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: i32
     hr := (^SFCBranchIF)(sfcbranch)->PriorityGet(&p)
@@ -39,7 +39,7 @@ sfcbranch_priority_get :: proc(sfcbranch: SFCBranch) -> (priority: t.SFCPriority
 
 sfcbranch_priority_set :: proc(sfcbranch: SFCBranch, priority: t.SFCPriority) -> (ok: bool) {
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchIF)(sfcbranch)->PriorityPut(i32(priority))
     if com_failed(hr) do return
@@ -49,7 +49,7 @@ sfcbranch_priority_set :: proc(sfcbranch: SFCBranch, priority: t.SFCPriority) ->
 
 sfcbranch_elements_get :: proc(sfcbranch: SFCBranch) -> (sfcelements: SFCElements, ok: bool) {
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchIF)(sfcbranch)->ElementsGet(cast(^rawptr)&sfcelements)
     if com_failed(hr) do return
@@ -59,7 +59,7 @@ sfcbranch_elements_get :: proc(sfcbranch: SFCBranch) -> (sfcelements: SFCElement
 
 sfcbranch_elements_set :: proc(sfcbranch: SFCBranch, sfcelements: SFCElements) -> (ok: bool) {
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchIF)(sfcbranch)->ElementsPut(sfcelements)
     if com_failed(hr) do return
@@ -93,7 +93,7 @@ SFCBranchesVTable :: struct {
 sfcbranches_sfcbranch_add :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch) -> (ok: bool) {
     if sfcbranches == nil do return
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Add(sfcbranch)
     if com_failed(hr) do return
@@ -104,7 +104,7 @@ sfcbranches_sfcbranch_add :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch
 sfcbranches_sfcbranch_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: SFCBranch, index: i32) -> (ok: bool) {
     if sfcbranches == nil do return
     if sfcbranch == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->AddBefore(sfcbranch, index)
     if com_failed(hr) do return
@@ -114,7 +114,7 @@ sfcbranches_sfcbranch_add_at_index :: proc(sfcbranches: SFCBranches, sfcbranch: 
 
 sfcbranches_sfcbranch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (sfcbranch: SFCBranch, ok: bool) {
     if sfcbranches == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Item(index + 1, cast(^rawptr)&sfcbranch)
     if com_failed(hr) do return
@@ -124,7 +124,7 @@ sfcbranches_sfcbranch_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> 
 
 sfcbranches_sfcbranch_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok: bool) {
     if sfcbranches == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Count(&count)
     if com_failed(hr) do return
@@ -134,7 +134,7 @@ sfcbranches_sfcbranch_count :: proc(sfcbranches: SFCBranches) -> (count: i32, ok
 
 sfcbranches_sfcbranch_remove_by_index :: proc(sfcbranches: SFCBranches, index: i32) -> (ok: bool) {
     if sfcbranches == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCBranchesIF)(sfcbranches)->Remove(index + 1)
     if com_failed(hr) do return
@@ -164,7 +164,7 @@ SFCElementVTable :: struct {
 
 sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) {
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCElementIF)(sfcelement)->IsSFCStepGet(&vb)
@@ -175,7 +175,7 @@ sfcelement_is_step :: proc(sfcelement: SFCElement) -> (is_step: bool, ok: bool) 
 
 sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool, ok: bool) {
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCElementIF)(sfcelement)->IsSFCTransitionGet(&vb)
@@ -186,7 +186,7 @@ sfcelement_is_transition :: proc(sfcelement: SFCElement) -> (is_transition: bool
 
 sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bool, ok: bool) {
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCElementIF)(sfcelement)->IsSFCSubSequenceGet(&vb)
@@ -197,7 +197,7 @@ sfcelement_is_subsequence :: proc(sfcelement: SFCElement) -> (is_subsequence: bo
 
 sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, ok: bool) {
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCElementIF)(sfcelement)->IsSFCSelectionGet(&vb)
@@ -208,7 +208,7 @@ sfcelement_is_selection :: proc(sfcelement: SFCElement) -> (is_selection: bool, 
 
 sfcelement_is_simultaneous :: proc(sfcelement: SFCElement) -> (is_simultaneous: bool, ok: bool) {
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCElementIF)(sfcelement)->IsSFCSimultaneousGet(&vb)
@@ -252,7 +252,7 @@ SFCElementsVTable :: struct {
 sfcelements_sfcstep_add :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddStep(sfcstep)
     if com_failed(hr) do return
@@ -263,7 +263,7 @@ sfcelements_sfcstep_add :: proc(sfcelements: SFCElements, sfcstep: SFCStep) -> (
 sfcelements_sfctransition_add :: proc(sfcelements: SFCElements, sfctransition: SFCTransition) -> (ok: bool) {
     if sfcelements == nil do return
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddTransition(sfctransition)
     if com_failed(hr) do return
@@ -274,7 +274,7 @@ sfcelements_sfctransition_add :: proc(sfcelements: SFCElements, sfctransition: S
 sfcelements_sfcselection_add :: proc(sfcelements: SFCElements, sfcselection: SFCSelection) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcselection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddSelection(sfcselection)
     if com_failed(hr) do return
@@ -285,7 +285,7 @@ sfcelements_sfcselection_add :: proc(sfcelements: SFCElements, sfcselection: SFC
 sfcelements_sfcsimultaneous_add :: proc(sfcelements: SFCElements, sfcsimultaneous: SFCSimultaneous) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcsimultaneous == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddSimultaneous(sfcsimultaneous)
     if com_failed(hr) do return
@@ -296,7 +296,7 @@ sfcelements_sfcsimultaneous_add :: proc(sfcelements: SFCElements, sfcsimultaneou
 sfcelements_sfcsubsequence_add :: proc(sfcelements: SFCElements, sfcsubsequence: SFCSubSequence) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcsubsequence == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddSubSequence(sfcsubsequence)
     if com_failed(hr) do return
@@ -307,7 +307,7 @@ sfcelements_sfcsubsequence_add :: proc(sfcelements: SFCElements, sfcsubsequence:
 sfcelements_sfcelement_add :: proc(sfcelements: SFCElements, sfcelement: SFCElement) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->Add(sfcelement)
     if com_failed(hr) do return
@@ -319,7 +319,7 @@ sfcelements_sfcelement_add :: proc(sfcelements: SFCElements, sfcelement: SFCElem
 sfcelements_sfcelement_add_at_index :: proc(sfcelements: SFCElements, sfcelement: SFCElement, index: i32) -> (ok: bool) {
     if sfcelements == nil do return
     if sfcelement == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->AddBefore(sfcelement, index)
     if com_failed(hr) do return
@@ -329,7 +329,7 @@ sfcelements_sfcelement_add_at_index :: proc(sfcelements: SFCElements, sfcelement
 
 sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) -> (sfcelement: SFCElement, ok: bool) {
     if sfcelements == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->Item(index + 1, cast(^rawptr)&sfcelement)
     if com_failed(hr) do return
@@ -339,7 +339,7 @@ sfcelements_sfcelement_by_index :: proc(sfcelements: SFCElements, index: i32) ->
 
 sfcelements_sfcelement_count :: proc(sfcelements: SFCElements) -> (count: i32, ok: bool) {
     if sfcelements == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->Count(&count)
     if com_failed(hr) do return
@@ -349,7 +349,7 @@ sfcelements_sfcelement_count :: proc(sfcelements: SFCElements) -> (count: i32, o
 
 sfcelements_sfcelement_remove_by_index :: proc(sfcelements: SFCElements, index: i32) -> (ok: bool) {
     if sfcelements == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCElementsIF)(sfcelements)->Remove(index + 1)
     if com_failed(hr) do return
@@ -377,7 +377,7 @@ SFCSelectionVTable :: struct {
 
 sfcselection_branches_get :: proc(sfcselection: SFCSelection) -> (sfcbranches: SFCBranches, ok: bool) {
     if sfcselection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesGet(cast(^rawptr)&sfcbranches)
     if com_failed(hr) do return
@@ -387,7 +387,7 @@ sfcselection_branches_get :: proc(sfcselection: SFCSelection) -> (sfcbranches: S
 
 sfcselection_branches_set :: proc(sfcselection: SFCSelection, sfcbranches: SFCBranches) -> (ok: bool) {
     if sfcselection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSelectionIF)(sfcselection)->SFCBranchesPut(sfcbranches)
     if com_failed(hr) do return
@@ -415,7 +415,7 @@ SFCSimultaneousVTable :: struct {
 
 sfcsimultaneous_branches_get :: proc(sfcsimultaneous: SFCSimultaneous) -> (sfcbranches: SFCBranches, ok: bool) {
     if sfcsimultaneous == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSimultaneousIF)(sfcsimultaneous)->SFCBranchesGet(cast(^rawptr)&sfcbranches)
     if com_failed(hr) do return
@@ -425,7 +425,7 @@ sfcsimultaneous_branches_get :: proc(sfcsimultaneous: SFCSimultaneous) -> (sfcbr
 
 sfcsimultaneous_branches_set :: proc(sfcsimultaneous: SFCSimultaneous, sfcbranches: SFCBranches) -> (ok: bool) {
     if sfcsimultaneous == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSimultaneousIF)(sfcsimultaneous)->SFCBranchesPut(sfcbranches)
     if com_failed(hr) do return
@@ -460,7 +460,7 @@ SFCStepVTable :: struct {
 
 sfcstep_name_get :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -472,7 +472,7 @@ sfcstep_name_get :: proc(sfcstep: SFCStep) -> (name: string, ok: bool) {
 
 sfcstep_name_set :: proc(sfcstep: SFCStep, name: string) -> (ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -484,7 +484,7 @@ sfcstep_name_set :: proc(sfcstep: SFCStep, name: string) -> (ok: bool) {
 
 sfcstep_initial_step_get :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCStepIF)(sfcstep)->InitialStepGet(&vb)
@@ -495,7 +495,7 @@ sfcstep_initial_step_get :: proc(sfcstep: SFCStep) -> (initial_step: bool, ok: b
 
 sfcstep_initial_step_set :: proc(sfcstep: SFCStep, initial_step: bool) -> (ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCStepIF)(sfcstep)->InitialStepPut(to_variantbool(initial_step))
     if com_failed(hr) do return
@@ -505,7 +505,7 @@ sfcstep_initial_step_set :: proc(sfcstep: SFCStep, initial_step: bool) -> (ok: b
 
 sfcstep_p1_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -517,7 +517,7 @@ sfcstep_p1_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: b
 
 sfcstep_p1_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(stcode)
     defer bstr_free(bs)
@@ -529,7 +529,7 @@ sfcstep_p1_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: b
 
 sfcstep_p0_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -541,7 +541,7 @@ sfcstep_p0_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: b
 
 sfcstep_p0_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(stcode)
     defer bstr_free(bs)
@@ -553,7 +553,7 @@ sfcstep_p0_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: b
 
 sfcstep_n_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -565,7 +565,7 @@ sfcstep_n_action_stcode_get :: proc(sfcstep: SFCStep) -> (stcode: string, ok: bo
 
 sfcstep_n_action_stcode_set :: proc(sfcstep: SFCStep, stcode: string) -> (ok: bool) {
     if sfcstep == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(stcode)
     defer bstr_free(bs)
@@ -597,7 +597,7 @@ SFCSubSequenceVTable :: struct {
 
 sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string, ok: bool) {
     if sfcsubsequence == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -609,7 +609,7 @@ sfcsubsequence_name_get :: proc(sfcsubsequence: SFCSubSequence) -> (name: string
 
 sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) -> (ok: bool) {
     if sfcsubsequence == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -621,7 +621,7 @@ sfcsubsequence_name_set :: proc(sfcsubsequence: SFCSubSequence, name: string) ->
 
 sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfcelements: SFCElements, ok: bool) {
     if sfcsubsequence == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsGet(cast(^rawptr)&sfcelements)
     if com_failed(hr) do return
@@ -631,7 +631,7 @@ sfcsubsequence_elements_get :: proc(sfcsubsequence: SFCSubSequence) -> (sfceleme
 
 sfcsubsequence_elements_set :: proc(sfcsubsequence: SFCSubSequence, sfcelements: SFCElements) -> (ok: bool) {
     if sfcsubsequence == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCSubSequenceIF)(sfcsubsequence)->ElementsPut(sfcelements)
     if com_failed(hr) do return
@@ -662,7 +662,7 @@ SFCTransitionVTable :: struct {
 
 sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -674,7 +674,7 @@ sfctransition_name_get :: proc(sfctransition: SFCTransition) -> (name: string, o
 
 sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -686,7 +686,7 @@ sfctransition_name_set :: proc(sfctransition: SFCTransition, name: string) -> (o
 
 sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -698,7 +698,7 @@ sfctransition_dest_get :: proc(sfctransition: SFCTransition) -> (dest: string, o
 
 sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(dest)
     defer bstr_free(bs)
@@ -710,7 +710,7 @@ sfctransition_dest_set :: proc(sfctransition: SFCTransition, dest: string) -> (o
 
 sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: string, ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -722,7 +722,7 @@ sfctransition_stcode_get :: proc(sfctransition: SFCTransition) -> (stcode: strin
 
 sfctransition_stcode_set :: proc(sfctransition: SFCTransition, stcode: string) -> (ok: bool) {
     if sfctransition == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(stcode)
     defer bstr_free(bs)

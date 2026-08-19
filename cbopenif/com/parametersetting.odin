@@ -19,7 +19,7 @@ ParameterSettingVTable :: struct {
 
 parametersetting_name_get :: proc(parametersetting: ParameterSetting) -> (name: string, ok: bool) {
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -31,7 +31,7 @@ parametersetting_name_get :: proc(parametersetting: ParameterSetting) -> (name: 
 
 parametersetting_name_set :: proc(parametersetting: ParameterSetting, name: string) -> (ok: bool) {
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -43,7 +43,7 @@ parametersetting_name_set :: proc(parametersetting: ParameterSetting, name: stri
 
 parametersetting_parameter_value_get :: proc(parametersetting: ParameterSetting) -> (type_name: string, ok: bool) {
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -55,7 +55,7 @@ parametersetting_parameter_value_get :: proc(parametersetting: ParameterSetting)
 
 parametersetting_parameter_value_set :: proc(parametersetting: ParameterSetting, type_name: string) -> (ok: bool) {
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -67,7 +67,7 @@ parametersetting_parameter_value_set :: proc(parametersetting: ParameterSetting,
 
 parametersetting_description_get :: proc(parametersetting: ParameterSetting) -> (description: string, ok: bool) {
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -103,7 +103,7 @@ ParameterSettingsVTable :: struct {
 parametersettings_parametersetting_add :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting) -> (ok: bool) {
     if parametersettings == nil do return
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ParameterSettingsIF)(parametersettings)->Add(parametersetting)
     if com_failed(hr) do return
@@ -114,7 +114,7 @@ parametersettings_parametersetting_add :: proc(parametersettings: ParameterSetti
 parametersettings_parametersetting_add_at_index :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting, index: i32) -> (ok: bool) {
     if parametersettings == nil do return
     if parametersetting == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ParameterSettingsIF)(parametersettings)->AddBefore(parametersetting, index)
     if com_failed(hr) do return
@@ -124,7 +124,7 @@ parametersettings_parametersetting_add_at_index :: proc(parametersettings: Param
 
 parametersettings_parametersetting_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (parametersetting: ParameterSetting, ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -136,7 +136,7 @@ parametersettings_parametersetting_by_name :: proc(parametersettings: ParameterS
 
 parametersettings_parametersetting_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (parametersetting: ParameterSetting, ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ParameterSettingsIF)(parametersettings)->Item(index + 1, cast(^rawptr)&parametersetting)
     if com_failed(hr) do return
@@ -146,7 +146,7 @@ parametersettings_parametersetting_by_index :: proc(parametersettings: Parameter
 
 parametersettings_parametersetting_index :: proc(parametersettings: ParameterSettings, name: string) -> (index: i32, ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -158,7 +158,7 @@ parametersettings_parametersetting_index :: proc(parametersettings: ParameterSet
 
 parametersettings_parametersetting_count :: proc(parametersettings: ParameterSettings) -> (count: i32, ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ParameterSettingsIF)(parametersettings)->Count(&count)
     if com_failed(hr) do return
@@ -168,7 +168,7 @@ parametersettings_parametersetting_count :: proc(parametersettings: ParameterSet
 
 parametersettings_parametersetting_remove_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = parametersettings_parametersetting_index(parametersettings, name)
@@ -181,7 +181,7 @@ parametersettings_parametersetting_remove_by_name :: proc(parametersettings: Par
 
 parametersettings_parametersetting_remove_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (ok: bool) {
     if parametersettings == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ParameterSettingsIF)(parametersettings)->Remove(index + 1)
     if com_failed(hr) do return

@@ -37,7 +37,7 @@ ExtensibleParameterVTable :: struct {
 
 extensibleparameter_serialize :: proc(extensibleparameter: ExtensibleParameter) -> (xml: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -49,7 +49,7 @@ extensibleparameter_serialize :: proc(extensibleparameter: ExtensibleParameter) 
 
 extensibleparameter_name_get :: proc(extensibleparameter: ExtensibleParameter) -> (name: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -61,7 +61,7 @@ extensibleparameter_name_get :: proc(extensibleparameter: ExtensibleParameter) -
 
 extensibleparameter_name_set :: proc(extensibleparameter: ExtensibleParameter, name: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -73,7 +73,7 @@ extensibleparameter_name_set :: proc(extensibleparameter: ExtensibleParameter, n
 
 extensibleparameter_type_name_get :: proc(extensibleparameter: ExtensibleParameter) -> (type_name: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -85,7 +85,7 @@ extensibleparameter_type_name_get :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_type_name_set :: proc(extensibleparameter: ExtensibleParameter, type_name: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -97,7 +97,7 @@ extensibleparameter_type_name_set :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_attribute_get :: proc(extensibleparameter: ExtensibleParameter) -> (attribute: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -109,7 +109,7 @@ extensibleparameter_attribute_get :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_attribute_set :: proc(extensibleparameter: ExtensibleParameter, attribute: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(attribute)
     defer bstr_free(bs)
@@ -121,7 +121,7 @@ extensibleparameter_attribute_set :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: t.Direction, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     d: i32
     hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionGet(&d)
@@ -132,7 +132,7 @@ extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: t.Direction) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionPut(i32(direction))
     if com_failed(hr) do return
@@ -142,7 +142,7 @@ extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_initial_value_get :: proc(extensibleparameter: ExtensibleParameter) -> (initial_value: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -154,7 +154,7 @@ extensibleparameter_initial_value_get :: proc(extensibleparameter: ExtensiblePar
 
 extensibleparameter_initial_value_set :: proc(extensibleparameter: ExtensibleParameter, initial_value: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(initial_value)
     defer bstr_free(bs)
@@ -166,7 +166,7 @@ extensibleparameter_initial_value_set :: proc(extensibleparameter: ExtensiblePar
 
 extensibleparameter_description_get :: proc(extensibleparameter: ExtensibleParameter) -> (description: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -178,7 +178,7 @@ extensibleparameter_description_get :: proc(extensibleparameter: ExtensibleParam
 
 extensibleparameter_description_set :: proc(extensibleparameter: ExtensibleParameter, description: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -190,7 +190,7 @@ extensibleparameter_description_set :: proc(extensibleparameter: ExtensibleParam
 
 extensibleparameter_access_level_get :: proc(extensibleparameter: ExtensibleParameter) -> (access_level: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -202,7 +202,7 @@ extensibleparameter_access_level_get :: proc(extensibleparameter: ExtensiblePara
 
 extensibleparameter_access_level_set :: proc(extensibleparameter: ExtensibleParameter, access_level: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -214,7 +214,7 @@ extensibleparameter_access_level_set :: proc(extensibleparameter: ExtensiblePara
 
 extensibleparameter_safety_type_get :: proc(extensibleparameter: ExtensibleParameter) -> (safety_type: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -226,7 +226,7 @@ extensibleparameter_safety_type_get :: proc(extensibleparameter: ExtensibleParam
 
 extensibleparameter_safety_type_set :: proc(extensibleparameter: ExtensibleParameter, safety_type: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -238,7 +238,7 @@ extensibleparameter_safety_type_set :: proc(extensibleparameter: ExtensibleParam
 
 extensibleparameter_type_guid_get :: proc(extensibleparameter: ExtensibleParameter) -> (guid: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -250,7 +250,7 @@ extensibleparameter_type_guid_get :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_type_path_get :: proc(extensibleparameter: ExtensibleParameter) -> (path: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -262,7 +262,7 @@ extensibleparameter_type_path_get :: proc(extensibleparameter: ExtensibleParamet
 
 extensibleparameter_fdport_get :: proc(extensibleparameter: ExtensibleParameter) -> (fdport: string, ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -274,7 +274,7 @@ extensibleparameter_fdport_get :: proc(extensibleparameter: ExtensibleParameter)
 
 extensibleparameter_fdport_set :: proc(extensibleparameter: ExtensibleParameter, fdport: string) -> (ok: bool) {
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(fdport)
     defer bstr_free(bs)
@@ -311,7 +311,7 @@ ExtensibleParametersVTable :: struct {
 extensibleparameters_extensibleparameter_add :: proc(extensibleparameters: ExtensibleParameters, extensibleparameter: ExtensibleParameter) -> (ok: bool) {
     if extensibleparameters == nil do return
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Add(extensibleparameter)
     if com_failed(hr) do return
@@ -322,7 +322,7 @@ extensibleparameters_extensibleparameter_add :: proc(extensibleparameters: Exten
 extensibleparameters_extensibleparameter_add_at_index :: proc(extensibleparameters: ExtensibleParameters, extensibleparameter: ExtensibleParameter, index: i32) -> (ok: bool) {
     if extensibleparameters == nil do return
     if extensibleparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->AddBefore(extensibleparameter, index)
     if com_failed(hr) do return
@@ -332,7 +332,7 @@ extensibleparameters_extensibleparameter_add_at_index :: proc(extensibleparamete
 
 extensibleparameters_extensibleparameter_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -344,7 +344,7 @@ extensibleparameters_extensibleparameter_by_name :: proc(extensibleparameters: E
 
 extensibleparameters_extensibleparameter_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Item(index + 1, cast(^rawptr)&extensibleparameter)
     if com_failed(hr) do return
@@ -354,7 +354,7 @@ extensibleparameters_extensibleparameter_by_index :: proc(extensibleparameters: 
 
 extensibleparameters_extensibleparameter_index :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (index: i32, ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -366,7 +366,7 @@ extensibleparameters_extensibleparameter_index :: proc(extensibleparameters: Ext
 
 extensibleparameters_extensibleparameter_count :: proc(extensibleparameters: ExtensibleParameters) -> (count: i32, ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Count(&count)
     if com_failed(hr) do return
@@ -376,7 +376,7 @@ extensibleparameters_extensibleparameter_count :: proc(extensibleparameters: Ext
 
 extensibleparameters_extensibleparameter_remove_by_name :: proc(extensibleparameters: ExtensibleParameters, name: string) -> (ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index, found := extensibleparameters_extensibleparameter_index(extensibleparameters, name)
     if !found do return
@@ -389,7 +389,7 @@ extensibleparameters_extensibleparameter_remove_by_name :: proc(extensibleparame
 
 extensibleparameters_extensibleparameter_remove_by_index :: proc(extensibleparameters: ExtensibleParameters, index: i32) -> (ok: bool) {
     if extensibleparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExtensibleParametersIF)(extensibleparameters)->Remove(index + 1)
     if com_failed(hr) do return

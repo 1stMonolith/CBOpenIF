@@ -20,7 +20,7 @@ ApplicationPropertiesVTable :: struct {
 
 applicationproperties_serialize :: proc(applicationproperties: ApplicationProperties) -> (xml: string, ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -32,7 +32,7 @@ applicationproperties_serialize :: proc(applicationproperties: ApplicationProper
 
 applicationproperties_sil_level_get :: proc(applicationproperties: ApplicationProperties) -> (sil_level: string, ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -44,7 +44,7 @@ applicationproperties_sil_level_get :: proc(applicationproperties: ApplicationPr
 
 applicationproperties_sil_level_set :: proc(applicationproperties: ApplicationProperties, sil_level: string) -> (ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -56,7 +56,7 @@ applicationproperties_sil_level_set :: proc(applicationproperties: ApplicationPr
 
 applicationproperties_simulation_mark_get :: proc(applicationproperties: ApplicationProperties) -> (simulation_mark: bool, ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^ApplicationPropertiesIF)(applicationproperties)->SimulationMarkGet(&vb)
@@ -67,7 +67,7 @@ applicationproperties_simulation_mark_get :: proc(applicationproperties: Applica
 
 applicationproperties_simulation_mark_set :: proc(applicationproperties: ApplicationProperties, simulation_mark: bool) -> (ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ApplicationPropertiesIF)(applicationproperties)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -77,7 +77,7 @@ applicationproperties_simulation_mark_set :: proc(applicationproperties: Applica
 
 applicationproperties_application_type_get :: proc(applicationproperties: ApplicationProperties) -> (application_type: string, ok: bool) {
     if applicationproperties == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -116,7 +116,7 @@ ApplicationVariablesVTable :: struct {
 
 applicationvariables_serialize :: proc(application_variables: ApplicationVariables) -> (xml: string, ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -128,7 +128,7 @@ applicationvariables_serialize :: proc(application_variables: ApplicationVariabl
 
 applicationvariables_description_get :: proc(application_variables: ApplicationVariables) -> (description: string, ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -140,7 +140,7 @@ applicationvariables_description_get :: proc(application_variables: ApplicationV
 
 applicationvariables_description_set :: proc(application_variables: ApplicationVariables, description: string) -> (ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -152,7 +152,7 @@ applicationvariables_description_set :: proc(application_variables: ApplicationV
 
 applicationvariables_globals_get :: proc(application_variables: ApplicationVariables) -> (global_variables: GlobalVariables, ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesGet(cast(^rawptr)&global_variables)
     if com_failed(hr) do return
@@ -163,7 +163,7 @@ applicationvariables_globals_get :: proc(application_variables: ApplicationVaria
 applicationvariables_globals_set :: proc(application_variables: ApplicationVariables, global_variables: GlobalVariables) -> (ok: bool) {
     if application_variables == nil do return
     if global_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->GlobalVariablesPut(global_variables)
     if com_failed(hr) do return
@@ -173,7 +173,7 @@ applicationvariables_globals_set :: proc(application_variables: ApplicationVaria
 
 applicationvariables_variables_get :: proc(application_variables: ApplicationVariables) -> (variables: Variables, ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesGet(cast(^rawptr)&variables)
     if com_failed(hr) do return
@@ -184,7 +184,7 @@ applicationvariables_variables_get :: proc(application_variables: ApplicationVar
 applicationvariables_variables_set :: proc(application_variables: ApplicationVariables, variables: Variables) -> (ok: bool) {
     if application_variables == nil do return
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -194,7 +194,7 @@ applicationvariables_variables_set :: proc(application_variables: ApplicationVar
 
 applicationvariables_signals_get :: proc(application_variables: ApplicationVariables) -> (signals: Signals, ok: bool) {
     if application_variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsGet(cast(^rawptr)&signals)
     if com_failed(hr) do return
@@ -205,7 +205,7 @@ applicationvariables_signals_get :: proc(application_variables: ApplicationVaria
 applicationvariables_signals_set :: proc(application_variables: ApplicationVariables, signals: Signals) -> (ok: bool) {
     if application_variables == nil do return
     if signals == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ApplicationVariablesIF)(application_variables)->SignalsPut(signals)
     if com_failed(hr) do return

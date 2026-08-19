@@ -28,7 +28,7 @@ IControlModuleVTable :: struct {
 
 icontrolmodule_name_get :: proc(icontrolmodule: IControlModule) -> (name: string, ok: bool) {
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -40,7 +40,7 @@ icontrolmodule_name_get :: proc(icontrolmodule: IControlModule) -> (name: string
 
 icontrolmodule_name_set :: proc(icontrolmodule: IControlModule, name: string) -> (ok: bool) {
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -52,7 +52,7 @@ icontrolmodule_name_set :: proc(icontrolmodule: IControlModule, name: string) ->
 
 icontrolmodule_is_controlmodule :: proc(icontrolmodule: IControlModule) -> (is_controlmodule: bool, ok: bool) {
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^IControlModuleIF)(icontrolmodule)->IsControlModule(&vb)
@@ -63,7 +63,7 @@ icontrolmodule_is_controlmodule :: proc(icontrolmodule: IControlModule) -> (is_c
 
 icontrolmodule_is_singlecontrolmodule :: proc(icontrolmodule: IControlModule) -> (is_singlecontrolmodule: bool, ok: bool) {
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^IControlModuleIF)(icontrolmodule)->IsSingleControlModule(&vb)
@@ -117,7 +117,7 @@ ControlModuleVTable :: struct {
 
 controlmodule_serialize :: proc(controlmodule: ControlModule) -> (xml: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -129,7 +129,7 @@ controlmodule_serialize :: proc(controlmodule: ControlModule) -> (xml: string, o
 
 controlmodule_name_get :: proc(controlmodule: ControlModule) -> (name: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -141,7 +141,7 @@ controlmodule_name_get :: proc(controlmodule: ControlModule) -> (name: string, o
 
 controlmodule_name_set :: proc(controlmodule: ControlModule, name: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -153,7 +153,7 @@ controlmodule_name_set :: proc(controlmodule: ControlModule, name: string) -> (o
 
 controlmodule_type_name_get :: proc(controlmodule: ControlModule) -> (type_name: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -165,7 +165,7 @@ controlmodule_type_name_get :: proc(controlmodule: ControlModule) -> (type_name:
 
 controlmodule_type_name_set :: proc(controlmodule: ControlModule, type_name: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -177,7 +177,7 @@ controlmodule_type_name_set :: proc(controlmodule: ControlModule, type_name: str
 
 controlmodule_task_connection_get :: proc(controlmodule: ControlModule) -> (task_connection: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -189,7 +189,7 @@ controlmodule_task_connection_get :: proc(controlmodule: ControlModule) -> (task
 
 controlmodule_task_connection_set :: proc(controlmodule: ControlModule, task_connection: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
@@ -201,7 +201,7 @@ controlmodule_task_connection_set :: proc(controlmodule: ControlModule, task_con
 
 controlmodule_visibility_in_graphics_get :: proc(controlmodule: ControlModule) -> (visibility_in_graphics: bool, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentGet(&vb)
@@ -212,7 +212,7 @@ controlmodule_visibility_in_graphics_get :: proc(controlmodule: ControlModule) -
 
 controlmodule_visibility_in_graphics_set :: proc(controlmodule: ControlModule, visibility_in_graphics: bool) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb := to_variantbool(visibility_in_graphics)
     hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentPut(vb)
@@ -223,7 +223,7 @@ controlmodule_visibility_in_graphics_set :: proc(controlmodule: ControlModule, v
 
 controlmodule_guid_get :: proc(controlmodule: ControlModule) -> (guid: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -235,7 +235,7 @@ controlmodule_guid_get :: proc(controlmodule: ControlModule) -> (guid: string, o
 
 controlmodule_guid_set :: proc(controlmodule: ControlModule, guid: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -247,7 +247,7 @@ controlmodule_guid_set :: proc(controlmodule: ControlModule, guid: string) -> (o
 
 controlmodule_description_get :: proc(controlmodule: ControlModule) -> (description: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -259,7 +259,7 @@ controlmodule_description_get :: proc(controlmodule: ControlModule) -> (descript
 
 controlmodule_description_set :: proc(controlmodule: ControlModule, description: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -271,7 +271,7 @@ controlmodule_description_set :: proc(controlmodule: ControlModule, description:
 
 controlmodule_cmconnections_get :: proc(controlmodule: ControlModule) -> (cmconnections: Parameters, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleIF)(controlmodule)->CMConnectionsGet(&p)
@@ -282,7 +282,7 @@ controlmodule_cmconnections_get :: proc(controlmodule: ControlModule) -> (cmconn
 
 controlmodule_cmconnections_set :: proc(controlmodule: ControlModule, cmconnections: Parameters) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleIF)(controlmodule)->CMConnectionsPut(cmconnections)
     if com_failed(hr) do return
@@ -292,7 +292,7 @@ controlmodule_cmconnections_set :: proc(controlmodule: ControlModule, cmconnecti
 
 controlmodule_graphpos_get :: proc(controlmodule: ControlModule) -> (graphpos: GraphPos, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleIF)(controlmodule)->GraphPosGet(&p)
@@ -303,7 +303,7 @@ controlmodule_graphpos_get :: proc(controlmodule: ControlModule) -> (graphpos: G
 
 controlmodule_graphpos_set :: proc(controlmodule: ControlModule, graphpos: GraphPos) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleIF)(controlmodule)->GraphPosPut(graphpos)
     if com_failed(hr) do return
@@ -313,7 +313,7 @@ controlmodule_graphpos_set :: proc(controlmodule: ControlModule, graphpos: Graph
 
 controlmodule_instance_graphics_get :: proc(controlmodule: ControlModule) -> (instance_graphics: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -325,7 +325,7 @@ controlmodule_instance_graphics_get :: proc(controlmodule: ControlModule) -> (in
 
 controlmodule_instance_graphics_set :: proc(controlmodule: ControlModule, instance_graphics: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(instance_graphics)
     defer bstr_free(bs)
@@ -337,7 +337,7 @@ controlmodule_instance_graphics_set :: proc(controlmodule: ControlModule, instan
 
 controlmodule_type_guid_get :: proc(controlmodule: ControlModule) -> (type_guid: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -349,7 +349,7 @@ controlmodule_type_guid_get :: proc(controlmodule: ControlModule) -> (type_guid:
 
 controlmodule_type_path_get :: proc(controlmodule: ControlModule) -> (type_path: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -361,7 +361,7 @@ controlmodule_type_path_get :: proc(controlmodule: ControlModule) -> (type_path:
 
 controlmodule_aspect_object_get :: proc(controlmodule: ControlModule) -> (aspect_object: bool, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleIF)(controlmodule)->AspectObjectGet(&vb)
@@ -372,7 +372,7 @@ controlmodule_aspect_object_get :: proc(controlmodule: ControlModule) -> (aspect
 
 controlmodule_aspect_object_set :: proc(controlmodule: ControlModule, aspect_object: bool) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleIF)(controlmodule)->AspectObjectPut(to_variantbool(aspect_object))
     if com_failed(hr) do return
@@ -382,7 +382,7 @@ controlmodule_aspect_object_set :: proc(controlmodule: ControlModule, aspect_obj
 
 controlmodule_access_level_get :: proc(controlmodule: ControlModule) -> (access_level: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -394,7 +394,7 @@ controlmodule_access_level_get :: proc(controlmodule: ControlModule) -> (access_
 
 controlmodule_access_level_set :: proc(controlmodule: ControlModule, access_level: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -406,7 +406,7 @@ controlmodule_access_level_set :: proc(controlmodule: ControlModule, access_leve
 
 controlmodule_safety_type_get :: proc(controlmodule: ControlModule) -> (safety_type: string, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -418,7 +418,7 @@ controlmodule_safety_type_get :: proc(controlmodule: ControlModule) -> (safety_t
 
 controlmodule_safety_type_set :: proc(controlmodule: ControlModule, safety_type: string) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -430,7 +430,7 @@ controlmodule_safety_type_set :: proc(controlmodule: ControlModule, safety_type:
 
 controlmodule_expose_properties_in_parent_get :: proc(controlmodule: ControlModule) -> (expose_properties_in_parent: bool, ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentGet(&vb)
@@ -441,7 +441,7 @@ controlmodule_expose_properties_in_parent_get :: proc(controlmodule: ControlModu
 
 controlmodule_expose_properties_in_parent_set :: proc(controlmodule: ControlModule, expose_properties_in_parent: bool) -> (ok: bool) {
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb := to_variantbool(expose_properties_in_parent)
     hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentPut(vb)
@@ -479,7 +479,7 @@ ControlModulesVTable :: struct {
 
 controlmodules_serialize :: proc(controlmodules: ControlModules) -> (xml: string, ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -492,7 +492,7 @@ controlmodules_serialize :: proc(controlmodules: ControlModules) -> (xml: string
 controlmodules_icontrolmodule_add :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule) -> (ok: bool) {
     if controlmodules == nil do return
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExternalVariablesIF)(controlmodules)->Add(icontrolmodule)
     if com_failed(hr) do return
@@ -503,7 +503,7 @@ controlmodules_icontrolmodule_add :: proc(controlmodules: ControlModules, icontr
 controlmodules_icontrolmodule_add_at_index :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule, index: i32) -> (ok: bool) {
     if controlmodules == nil do return
     if icontrolmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ExternalVariablesIF)(controlmodules)->AddBefore(icontrolmodule, index)
     if com_failed(hr) do return
@@ -514,7 +514,7 @@ controlmodules_icontrolmodule_add_at_index :: proc(controlmodules: ControlModule
 controlmodules_controlmodule_add :: proc(controlmodules: ControlModules, name, type_name: string, controlmodule: ControlModule) -> (ok: bool) {
     if controlmodules == nil do return
     if controlmodule == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -531,7 +531,7 @@ controlmodules_controlmodule_add :: proc(controlmodules: ControlModules, name, t
 controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, name: string, singlecontrolmoduleinst: SingleControlModuleInst) -> (ok: bool) {
     if controlmodules == nil do return
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -543,7 +543,7 @@ controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, n
 
 controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, name: string) -> (icontrolmodule: IControlModule, ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -555,7 +555,7 @@ controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, nam
 
 controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (icontrolmodule: IControlModule, ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModulesIF)(controlmodules)->Item(index + 1, cast(^rawptr)&icontrolmodule)
     if com_failed(hr) do return
@@ -565,7 +565,7 @@ controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, in
 
 controlmodules_controlmodule_index :: proc(controlmodules: ControlModules, name: string) -> (index: i32, ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -577,7 +577,7 @@ controlmodules_controlmodule_index :: proc(controlmodules: ControlModules, name:
 
 controlmodules_controlmodule_count :: proc(controlmodules: ControlModules) -> (count: i32, ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModulesIF)(controlmodules)->Count(&count)
     if com_failed(hr) do return
@@ -587,7 +587,7 @@ controlmodules_controlmodule_count :: proc(controlmodules: ControlModules) -> (c
 
 controlmodules_controlmodule_remove_by_name :: proc(controlmodules: ControlModules, name: string) -> (ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = controlmodules_controlmodule_index(controlmodules, name)
@@ -600,7 +600,7 @@ controlmodules_controlmodule_remove_by_name :: proc(controlmodules: ControlModul
 
 controlmodules_controlmodule_remove_by_index :: proc(controlmodules: ControlModules, index: i32) -> (ok: bool) {
     if controlmodules == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModulesIF)(controlmodules)->Remove(index + 1)
     if com_failed(hr) do return
@@ -679,7 +679,7 @@ ControlModuleTypeVTable :: struct {
 
 controlmoduletype_serialize :: proc(controlmoduletype: ControlModuleType) -> (xml: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -691,7 +691,7 @@ controlmoduletype_serialize :: proc(controlmoduletype: ControlModuleType) -> (xm
 
 controlmoduletype_name_get :: proc(controlmoduletype: ControlModuleType) -> (name: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -703,7 +703,7 @@ controlmoduletype_name_get :: proc(controlmoduletype: ControlModuleType) -> (nam
 
 controlmoduletype_name_set :: proc(controlmoduletype: ControlModuleType, name: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -715,7 +715,7 @@ controlmoduletype_name_set :: proc(controlmoduletype: ControlModuleType, name: s
 
 controlmoduletype_protected_get :: proc(controlmoduletype: ControlModuleType) -> (protected: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ProtectedGet(&vb)
@@ -726,7 +726,7 @@ controlmoduletype_protected_get :: proc(controlmoduletype: ControlModuleType) ->
 
 controlmoduletype_protected_set :: proc(controlmoduletype: ControlModuleType, protected: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ProtectedPut(to_variantbool(protected))
     if com_failed(hr) do return
@@ -736,7 +736,7 @@ controlmoduletype_protected_set :: proc(controlmoduletype: ControlModuleType, pr
 
 controlmoduletype_hidden_get :: proc(controlmoduletype: ControlModuleType) -> (hidden: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->HiddenGet(&vb)
@@ -747,7 +747,7 @@ controlmoduletype_hidden_get :: proc(controlmoduletype: ControlModuleType) -> (h
 
 controlmoduletype_hidden_set :: proc(controlmoduletype: ControlModuleType, hidden: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->HiddenPut(to_variantbool(hidden))
     if com_failed(hr) do return
@@ -757,7 +757,7 @@ controlmoduletype_hidden_set :: proc(controlmoduletype: ControlModuleType, hidde
 
 controlmoduletype_scope_get :: proc(controlmoduletype: ControlModuleType) -> (scope: t.Scope, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     s: i32
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ScopeGet(&s)
@@ -768,7 +768,7 @@ controlmoduletype_scope_get :: proc(controlmoduletype: ControlModuleType) -> (sc
 
 controlmoduletype_scope_set :: proc(controlmoduletype: ControlModuleType, scope: t.Scope) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ScopePut(i32(scope))
     if com_failed(hr) do return
@@ -778,7 +778,7 @@ controlmoduletype_scope_set :: proc(controlmoduletype: ControlModuleType, scope:
 
 controlmoduletype_interaction_window_get :: proc(controlmoduletype: ControlModuleType) -> (interaction_window: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -790,7 +790,7 @@ controlmoduletype_interaction_window_get :: proc(controlmoduletype: ControlModul
 
 controlmoduletype_interaction_window_set :: proc(controlmoduletype: ControlModuleType, interaction_window: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(interaction_window)
     defer bstr_free(bs)
@@ -802,7 +802,7 @@ controlmoduletype_interaction_window_set :: proc(controlmoduletype: ControlModul
 
 controlmoduletype_alarm_owner_get :: proc(controlmoduletype: ControlModuleType) -> (alarm_owner: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->AlarmOwnerGet(&vb)
@@ -813,7 +813,7 @@ controlmoduletype_alarm_owner_get :: proc(controlmoduletype: ControlModuleType) 
 
 controlmoduletype_alarm_owner_set :: proc(controlmoduletype: ControlModuleType, alarm_owner: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->AlarmOwnerPut(to_variantbool(alarm_owner))
     if com_failed(hr) do return
@@ -823,7 +823,7 @@ controlmoduletype_alarm_owner_set :: proc(controlmoduletype: ControlModuleType, 
 
 controlmoduletype_guid_get :: proc(controlmoduletype: ControlModuleType) -> (guid: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -835,7 +835,7 @@ controlmoduletype_guid_get :: proc(controlmoduletype: ControlModuleType) -> (gui
 
 controlmoduletype_guid_set :: proc(controlmoduletype: ControlModuleType, guid: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -847,7 +847,7 @@ controlmoduletype_guid_set :: proc(controlmoduletype: ControlModuleType, guid: s
 
 controlmoduletype_batch_object_get :: proc(controlmoduletype: ControlModuleType) -> (batch_object: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -859,7 +859,7 @@ controlmoduletype_batch_object_get :: proc(controlmoduletype: ControlModuleType)
 
 controlmoduletype_batch_object_set :: proc(controlmoduletype: ControlModuleType, batch_object: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(batch_object)
     defer bstr_free(bs)
@@ -871,7 +871,7 @@ controlmoduletype_batch_object_set :: proc(controlmoduletype: ControlModuleType,
 
 controlmoduletype_sil_level_get :: proc(controlmoduletype: ControlModuleType) -> (sil_level: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -883,7 +883,7 @@ controlmoduletype_sil_level_get :: proc(controlmoduletype: ControlModuleType) ->
 
 controlmoduletype_sil_level_set :: proc(controlmoduletype: ControlModuleType, sil_level: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -895,7 +895,7 @@ controlmoduletype_sil_level_set :: proc(controlmoduletype: ControlModuleType, si
 
 controlmoduletype_simulation_mark_get :: proc(controlmoduletype: ControlModuleType) -> (simulation_mark: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->SimulationMarkGet(&vb)
@@ -906,7 +906,7 @@ controlmoduletype_simulation_mark_get :: proc(controlmoduletype: ControlModuleTy
 
 controlmoduletype_simulation_mark_set :: proc(controlmoduletype: ControlModuleType, simulation_mark: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -916,7 +916,7 @@ controlmoduletype_simulation_mark_set :: proc(controlmoduletype: ControlModuleTy
 
 controlmoduletype_reserved_by_function_get :: proc(controlmoduletype: ControlModuleType) -> (reserved_by_function: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -928,7 +928,7 @@ controlmoduletype_reserved_by_function_get :: proc(controlmoduletype: ControlMod
 
 controlmoduletype_reserved_by_function_set :: proc(controlmoduletype: ControlModuleType, reserved_by_function: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -940,7 +940,7 @@ controlmoduletype_reserved_by_function_set :: proc(controlmoduletype: ControlMod
 
 controlmoduletype_description_get :: proc(controlmoduletype: ControlModuleType) -> (description: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -952,7 +952,7 @@ controlmoduletype_description_get :: proc(controlmoduletype: ControlModuleType) 
 
 controlmoduletype_description_set :: proc(controlmoduletype: ControlModuleType, description: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -964,7 +964,7 @@ controlmoduletype_description_set :: proc(controlmoduletype: ControlModuleType, 
 
 controlmoduletype_cmgraphics_get :: proc(controlmoduletype: ControlModuleType) -> (cmgraphics: string, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -976,7 +976,7 @@ controlmoduletype_cmgraphics_get :: proc(controlmoduletype: ControlModuleType) -
 
 controlmoduletype_cmgraphics_set :: proc(controlmoduletype: ControlModuleType, cmgraphics: string) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(cmgraphics)
     defer bstr_free(bs)
@@ -988,7 +988,7 @@ controlmoduletype_cmgraphics_set :: proc(controlmoduletype: ControlModuleType, c
 
 controlmoduletype_cmparameters_get :: proc(controlmoduletype: ControlModuleType) -> (cmparameters: CMParameters, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->CMParametersGet(&p)
@@ -999,7 +999,7 @@ controlmoduletype_cmparameters_get :: proc(controlmoduletype: ControlModuleType)
 
 controlmoduletype_cmparameters_set :: proc(controlmoduletype: ControlModuleType, cmparameters: CMParameters) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->CMParametersPut(cmparameters)
     if com_failed(hr) do return
@@ -1009,7 +1009,7 @@ controlmoduletype_cmparameters_set :: proc(controlmoduletype: ControlModuleType,
 
 controlmoduletype_variables_get :: proc(controlmoduletype: ControlModuleType) -> (variables: Variables, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->VariablesGet(&p)
@@ -1020,7 +1020,7 @@ controlmoduletype_variables_get :: proc(controlmoduletype: ControlModuleType) ->
 
 controlmoduletype_variables_set :: proc(controlmoduletype: ControlModuleType, variables: Variables) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -1030,7 +1030,7 @@ controlmoduletype_variables_set :: proc(controlmoduletype: ControlModuleType, va
 
 controlmoduletype_externalvariables_get :: proc(controlmoduletype: ControlModuleType) -> (externalvariables: ExternalVariables, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ExternalVariablesGet(&p)
@@ -1041,7 +1041,7 @@ controlmoduletype_externalvariables_get :: proc(controlmoduletype: ControlModule
 
 controlmoduletype_externalvariables_set :: proc(controlmoduletype: ControlModuleType, externalvariables: ExternalVariables) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ExternalVariablesPut(externalvariables)
     if com_failed(hr) do return
@@ -1051,7 +1051,7 @@ controlmoduletype_externalvariables_set :: proc(controlmoduletype: ControlModule
 
 controlmoduletype_functionblocks_get :: proc(controlmoduletype: ControlModuleType) -> (functionblocks: FunctionBlocks, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->FunctionBlocksGet(&p)
@@ -1062,7 +1062,7 @@ controlmoduletype_functionblocks_get :: proc(controlmoduletype: ControlModuleTyp
 
 controlmoduletype_functionblocks_set :: proc(controlmoduletype: ControlModuleType, functionblocks: FunctionBlocks) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -1072,7 +1072,7 @@ controlmoduletype_functionblocks_set :: proc(controlmoduletype: ControlModuleTyp
 
 controlmoduletype_controlmodules_get :: proc(controlmoduletype: ControlModuleType) -> (controlmodules: ControlModules, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ControlModulesGet(&p)
@@ -1083,7 +1083,7 @@ controlmoduletype_controlmodules_get :: proc(controlmoduletype: ControlModuleTyp
 
 controlmoduletype_controlmodules_set :: proc(controlmoduletype: ControlModuleType, controlmodules: ControlModules) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->ControlModulesPut(controlmodules)
     if com_failed(hr) do return
@@ -1093,7 +1093,7 @@ controlmoduletype_controlmodules_set :: proc(controlmoduletype: ControlModuleTyp
 
 controlmoduletype_codeblocks_get :: proc(controlmoduletype: ControlModuleType) -> (codeblocks: CodeBlocks, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->CodeBlocksGet(&p)
@@ -1104,7 +1104,7 @@ controlmoduletype_codeblocks_get :: proc(controlmoduletype: ControlModuleType) -
 
 controlmoduletype_codeblocks_set :: proc(controlmoduletype: ControlModuleType, codeblocks: CodeBlocks) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -1114,7 +1114,7 @@ controlmoduletype_codeblocks_set :: proc(controlmoduletype: ControlModuleType, c
 
 controlmoduletype_graphsize_get :: proc(controlmoduletype: ControlModuleType) -> (graphsize: GraphSize, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^ControlModuleTypeIF)(controlmoduletype)->GraphSizeGet(&p)
@@ -1125,7 +1125,7 @@ controlmoduletype_graphsize_get :: proc(controlmoduletype: ControlModuleType) ->
 
 controlmoduletype_graphsize_set :: proc(controlmoduletype: ControlModuleType, graphsize: GraphSize) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->GraphSizePut(graphsize)
     if com_failed(hr) do return
@@ -1135,7 +1135,7 @@ controlmoduletype_graphsize_set :: proc(controlmoduletype: ControlModuleType, gr
 
 controlmoduletype_instantiate_as_aspect_object_get :: proc(controlmoduletype: ControlModuleType) -> (instantiate_as_aspect_object: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->InstantiateAsAspectObjectGet(&vb)
@@ -1146,7 +1146,7 @@ controlmoduletype_instantiate_as_aspect_object_get :: proc(controlmoduletype: Co
 
 controlmoduletype_instantiate_as_aspect_object_set :: proc(controlmoduletype: ControlModuleType, instantiate_as_aspect_object: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->InstantiateAsAspectObjectPut(to_variantbool(instantiate_as_aspect_object))
     if com_failed(hr) do return
@@ -1156,7 +1156,7 @@ controlmoduletype_instantiate_as_aspect_object_set :: proc(controlmoduletype: Co
 
 controlmoduletype_embedded_graphiscs_visible_get :: proc(controlmoduletype: ControlModuleType) -> (embedded_graphiscs_visible: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->EmbeddedGraphicsVisibleGet(&vb)
@@ -1167,7 +1167,7 @@ controlmoduletype_embedded_graphiscs_visible_get :: proc(controlmoduletype: Cont
 
 controlmoduletype_embedded_graphiscs_visible_set :: proc(controlmoduletype: ControlModuleType, embedded_graphiscs_visible: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->EmbeddedGraphicsVisiblePut(to_variantbool(embedded_graphiscs_visible))
     if com_failed(hr) do return
@@ -1177,7 +1177,7 @@ controlmoduletype_embedded_graphiscs_visible_set :: proc(controlmoduletype: Cont
 
 controlmoduletype_restricted_sil_get :: proc(controlmoduletype: ControlModuleType) -> (restricted_sil: bool, ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ControlModuleTypeIF)(controlmoduletype)->RestrictedSILGet(&vb)
@@ -1188,7 +1188,7 @@ controlmoduletype_restricted_sil_get :: proc(controlmoduletype: ControlModuleTyp
 
 controlmoduletype_restricted_sil_set :: proc(controlmoduletype: ControlModuleType, restricted_sil: bool) -> (ok: bool) {
     if controlmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ControlModuleTypeIF)(controlmoduletype)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return
@@ -1266,7 +1266,7 @@ SingleControlModuleTypeVTable :: struct {
 
 singlecontrolmoduletype_serialize :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (xml: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1278,7 +1278,7 @@ singlecontrolmoduletype_serialize :: proc(singlecontrolmoduletype: SingleControl
 
 singlecontrolmoduletype_name_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (name: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1290,7 +1290,7 @@ singlecontrolmoduletype_name_get :: proc(singlecontrolmoduletype: SingleControlM
 
 singlecontrolmoduletype_name_set :: proc(singlecontrolmoduletype: SingleControlModuleType, name: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -1302,7 +1302,7 @@ singlecontrolmoduletype_name_set :: proc(singlecontrolmoduletype: SingleControlM
 
 singlecontrolmoduletype_interaction_window_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (interaction_window: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1314,7 +1314,7 @@ singlecontrolmoduletype_interaction_window_get :: proc(singlecontrolmoduletype: 
 
 singlecontrolmoduletype_interaction_window_set :: proc(singlecontrolmoduletype: SingleControlModuleType, interaction_window: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(interaction_window)
     defer bstr_free(bs)
@@ -1326,7 +1326,7 @@ singlecontrolmoduletype_interaction_window_set :: proc(singlecontrolmoduletype: 
 
 singlecontrolmoduletype_alarm_owner_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (alarm_owner: bool, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->AlarmOwnerGet(&vb)
@@ -1337,7 +1337,7 @@ singlecontrolmoduletype_alarm_owner_get :: proc(singlecontrolmoduletype: SingleC
 
 singlecontrolmoduletype_alarm_owner_set :: proc(singlecontrolmoduletype: SingleControlModuleType, alarm_owner: bool) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->AlarmOwnerPut(to_variantbool(alarm_owner))
     if com_failed(hr) do return
@@ -1347,7 +1347,7 @@ singlecontrolmoduletype_alarm_owner_set :: proc(singlecontrolmoduletype: SingleC
 
 singlecontrolmoduletype_type_guid_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (type_guid: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1359,7 +1359,7 @@ singlecontrolmoduletype_type_guid_get :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_type_guid_set :: proc(singlecontrolmoduletype: SingleControlModuleType, type_guid: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
@@ -1371,7 +1371,7 @@ singlecontrolmoduletype_type_guid_set :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_batch_object_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (batch_object: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1383,7 +1383,7 @@ singlecontrolmoduletype_batch_object_get :: proc(singlecontrolmoduletype: Single
 
 singlecontrolmoduletype_batch_object_set :: proc(singlecontrolmoduletype: SingleControlModuleType, batch_object: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(batch_object)
     defer bstr_free(bs)
@@ -1395,7 +1395,7 @@ singlecontrolmoduletype_batch_object_set :: proc(singlecontrolmoduletype: Single
 
 singlecontrolmoduletype_sil_level_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (sil_level: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1407,7 +1407,7 @@ singlecontrolmoduletype_sil_level_get :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_sil_level_set :: proc(singlecontrolmoduletype: SingleControlModuleType, sil_level: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -1419,7 +1419,7 @@ singlecontrolmoduletype_sil_level_set :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_simulation_mark_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (simulation_mark: bool, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SimulationMarkGet(&vb)
@@ -1430,7 +1430,7 @@ singlecontrolmoduletype_simulation_mark_get :: proc(singlecontrolmoduletype: Sin
 
 singlecontrolmoduletype_simulation_mark_set :: proc(singlecontrolmoduletype: SingleControlModuleType, simulation_mark: bool) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -1440,7 +1440,7 @@ singlecontrolmoduletype_simulation_mark_set :: proc(singlecontrolmoduletype: Sin
 
 singlecontrolmoduletype_reserved_by_function_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (reserved_by_function: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1452,7 +1452,7 @@ singlecontrolmoduletype_reserved_by_function_get :: proc(singlecontrolmoduletype
 
 singlecontrolmoduletype_reserved_by_function_set :: proc(singlecontrolmoduletype: SingleControlModuleType, reserved_by_function: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -1464,7 +1464,7 @@ singlecontrolmoduletype_reserved_by_function_set :: proc(singlecontrolmoduletype
 
 singlecontrolmoduletype_description_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (description: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1476,7 +1476,7 @@ singlecontrolmoduletype_description_get :: proc(singlecontrolmoduletype: SingleC
 
 singlecontrolmoduletype_description_set :: proc(singlecontrolmoduletype: SingleControlModuleType, description: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -1488,7 +1488,7 @@ singlecontrolmoduletype_description_set :: proc(singlecontrolmoduletype: SingleC
 
 singlecontrolmoduletype_cmgraphics_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (cmgraphics: string, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1500,7 +1500,7 @@ singlecontrolmoduletype_cmgraphics_get :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_cmgraphics_set :: proc(singlecontrolmoduletype: SingleControlModuleType, cmgraphics: string) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(cmgraphics)
     defer bstr_free(bs)
@@ -1512,7 +1512,7 @@ singlecontrolmoduletype_cmgraphics_set :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_cmparameters_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (cmparameters: CMParameters, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMParametersGet(&p)
@@ -1523,7 +1523,7 @@ singlecontrolmoduletype_cmparameters_get :: proc(singlecontrolmoduletype: Single
 
 singlecontrolmoduletype_cmparameters_set :: proc(singlecontrolmoduletype: SingleControlModuleType, cmparameters: CMParameters) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMParametersPut(cmparameters)
     if com_failed(hr) do return
@@ -1533,7 +1533,7 @@ singlecontrolmoduletype_cmparameters_set :: proc(singlecontrolmoduletype: Single
 
 singlecontrolmoduletype_variables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (variables: Variables, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->VariablesGet(&p)
@@ -1544,7 +1544,7 @@ singlecontrolmoduletype_variables_get :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_variables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, variables: Variables) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -1554,7 +1554,7 @@ singlecontrolmoduletype_variables_set :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_externalvariables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (externalvariables: ExternalVariables, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ExternalVariablesGet(&p)
@@ -1565,7 +1565,7 @@ singlecontrolmoduletype_externalvariables_get :: proc(singlecontrolmoduletype: S
 
 singlecontrolmoduletype_externalvariables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, externalvariables: ExternalVariables) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ExternalVariablesPut(externalvariables)
     if com_failed(hr) do return
@@ -1575,7 +1575,7 @@ singlecontrolmoduletype_externalvariables_set :: proc(singlecontrolmoduletype: S
 
 singlecontrolmoduletype_functionblocks_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (functionblocks: FunctionBlocks, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->FunctionBlocksGet(&p)
@@ -1586,7 +1586,7 @@ singlecontrolmoduletype_functionblocks_get :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_functionblocks_set :: proc(singlecontrolmoduletype: SingleControlModuleType, functionblocks: FunctionBlocks) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -1596,7 +1596,7 @@ singlecontrolmoduletype_functionblocks_set :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_controlmodules_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (controlmodules: ControlModules, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ControlModulesGet(&p)
@@ -1607,7 +1607,7 @@ singlecontrolmoduletype_controlmodules_get :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_controlmodules_set :: proc(singlecontrolmoduletype: SingleControlModuleType, controlmodules: ControlModules) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ControlModulesPut(controlmodules)
     if com_failed(hr) do return
@@ -1617,7 +1617,7 @@ singlecontrolmoduletype_controlmodules_set :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_codeblocks_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (codeblocks: CodeBlocks, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CodeBlocksGet(&p)
@@ -1628,7 +1628,7 @@ singlecontrolmoduletype_codeblocks_get :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_codeblocks_set :: proc(singlecontrolmoduletype: SingleControlModuleType, codeblocks: CodeBlocks) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -1638,7 +1638,7 @@ singlecontrolmoduletype_codeblocks_set :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_graphsize_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (graphsize: GraphSize, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->GraphSizeGet(&p)
@@ -1649,7 +1649,7 @@ singlecontrolmoduletype_graphsize_get :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_graphsize_set :: proc(singlecontrolmoduletype: SingleControlModuleType, graphsize: GraphSize) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->GraphSizePut(graphsize)
     if com_failed(hr) do return
@@ -1659,7 +1659,7 @@ singlecontrolmoduletype_graphsize_set :: proc(singlecontrolmoduletype: SingleCon
 
 singlecontrolmoduletype_restricted_sil_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (restricted_sil: bool, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->RestrictedSILGet(&vb)
@@ -1670,7 +1670,7 @@ singlecontrolmoduletype_restricted_sil_get :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_restricted_sil_set :: proc(singlecontrolmoduletype: SingleControlModuleType, restricted_sil: bool) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return
@@ -1680,7 +1680,7 @@ singlecontrolmoduletype_restricted_sil_set :: proc(singlecontrolmoduletype: Sing
 
 singlecontrolmoduletype_commvariables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (commvariables: CommVariables, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CommVariablesGet(&p)
@@ -1691,7 +1691,7 @@ singlecontrolmoduletype_commvariables_get :: proc(singlecontrolmoduletype: Singl
 
 singlecontrolmoduletype_commvariables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, commvariables: CommVariables) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CommVariablesPut(commvariables)
     if com_failed(hr) do return
@@ -1701,7 +1701,7 @@ singlecontrolmoduletype_commvariables_set :: proc(singlecontrolmoduletype: Singl
 
 singlecontrolmoduletype_initvalues_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (initvalues: InitValues, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InitValuesGet(&p)
@@ -1712,7 +1712,7 @@ singlecontrolmoduletype_initvalues_get :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_initvalues_set :: proc(singlecontrolmoduletype: SingleControlModuleType, initvalues: InitValues) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InitValuesPut(initvalues)
     if com_failed(hr) do return
@@ -1722,7 +1722,7 @@ singlecontrolmoduletype_initvalues_set :: proc(singlecontrolmoduletype: SingleCo
 
 singlecontrolmoduletype_signals_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (signals: Signals, ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SignalsGet(&p)
@@ -1733,7 +1733,7 @@ singlecontrolmoduletype_signals_get :: proc(singlecontrolmoduletype: SingleContr
 
 singlecontrolmoduletype_signals_set :: proc(singlecontrolmoduletype: SingleControlModuleType, signals: Signals) -> (ok: bool) {
     if singlecontrolmoduletype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SignalsPut(signals)
     if com_failed(hr) do return
@@ -1786,7 +1786,7 @@ SingleControlModuleInstVTable :: struct {
 
 singlecontrolmoduleinst_serialize :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (xml: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1798,7 +1798,7 @@ singlecontrolmoduleinst_serialize :: proc(singlecontrolmoduleinst: SingleControl
 
 singlecontrolmoduleinst_name_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (name: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1810,7 +1810,7 @@ singlecontrolmoduleinst_name_get :: proc(singlecontrolmoduleinst: SingleControlM
 
 singlecontrolmoduleinst_name_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, name: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -1822,7 +1822,7 @@ singlecontrolmoduleinst_name_set :: proc(singlecontrolmoduleinst: SingleControlM
 
 singlecontrolmoduleinst_task_connection_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (task_connection: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1834,7 +1834,7 @@ singlecontrolmoduleinst_task_connection_get :: proc(singlecontrolmoduleinst: Sin
 
 singlecontrolmoduleinst_task_connection_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, task_connection: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
@@ -1846,7 +1846,7 @@ singlecontrolmoduleinst_task_connection_set :: proc(singlecontrolmoduleinst: Sin
 
 singlecontrolmoduleinst_visibility_in_graphics_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (visibility_in_graphics: bool, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsGet(&vb)
@@ -1857,7 +1857,7 @@ singlecontrolmoduleinst_visibility_in_graphics_get :: proc(singlecontrolmodulein
 
 singlecontrolmoduleinst_visibility_in_graphics_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, visibility_in_graphics: bool) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb := to_variantbool(visibility_in_graphics)
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsPut(vb)
@@ -1868,7 +1868,7 @@ singlecontrolmoduleinst_visibility_in_graphics_set :: proc(singlecontrolmodulein
 
 singlecontrolmoduleinst_type_guid_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (type_guid: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1880,7 +1880,7 @@ singlecontrolmoduleinst_type_guid_get :: proc(singlecontrolmoduleinst: SingleCon
 
 singlecontrolmoduleinst_type_guid_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, type_guid: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
@@ -1892,7 +1892,7 @@ singlecontrolmoduleinst_type_guid_set :: proc(singlecontrolmoduleinst: SingleCon
 
 singlecontrolmoduleinst_inst_guid_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (inst_guid: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1904,7 +1904,7 @@ singlecontrolmoduleinst_inst_guid_get :: proc(singlecontrolmoduleinst: SingleCon
 
 singlecontrolmoduleinst_inst_guid_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, inst_guid: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(inst_guid)
     defer bstr_free(bs)
@@ -1916,7 +1916,7 @@ singlecontrolmoduleinst_inst_guid_set :: proc(singlecontrolmoduleinst: SingleCon
 
 singlecontrolmoduleinst_description_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (description: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1928,7 +1928,7 @@ singlecontrolmoduleinst_description_get :: proc(singlecontrolmoduleinst: SingleC
 
 singlecontrolmoduleinst_description_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, description: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -1940,7 +1940,7 @@ singlecontrolmoduleinst_description_set :: proc(singlecontrolmoduleinst: SingleC
 
 singlecontrolmoduleinst_cmconnections_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (cmconnections: Parameters, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMConnectionsGet(&p)
@@ -1951,7 +1951,7 @@ singlecontrolmoduleinst_cmconnections_get :: proc(singlecontrolmoduleinst: Singl
 
 singlecontrolmoduleinst_cmconnections_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, cmconnections: Parameters) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMConnectionsPut(cmconnections)
     if com_failed(hr) do return
@@ -1961,7 +1961,7 @@ singlecontrolmoduleinst_cmconnections_set :: proc(singlecontrolmoduleinst: Singl
 
 singlecontrolmoduleinst_graphpos_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (graphpos: GraphPos, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     p: rawptr
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->GraphPosGet(&p)
@@ -1972,7 +1972,7 @@ singlecontrolmoduleinst_graphpos_get :: proc(singlecontrolmoduleinst: SingleCont
 
 singlecontrolmoduleinst_graphpos_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, graphpos: GraphPos) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->GraphPosPut(graphpos)
     if com_failed(hr) do return
@@ -1982,7 +1982,7 @@ singlecontrolmoduleinst_graphpos_set :: proc(singlecontrolmoduleinst: SingleCont
 
 singlecontrolmoduleinst_instance_graphics_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (instance_graphics: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -1994,7 +1994,7 @@ singlecontrolmoduleinst_instance_graphics_get :: proc(singlecontrolmoduleinst: S
 
 singlecontrolmoduleinst_instance_graphics_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, instance_graphics: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(instance_graphics)
     defer bstr_free(bs)
@@ -2006,7 +2006,7 @@ singlecontrolmoduleinst_instance_graphics_set :: proc(singlecontrolmoduleinst: S
 
 singlecontrolmoduleinst_access_level_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (access_level: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -2018,7 +2018,7 @@ singlecontrolmoduleinst_access_level_get :: proc(singlecontrolmoduleinst: Single
 
 singlecontrolmoduleinst_access_level_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, access_level: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -2030,7 +2030,7 @@ singlecontrolmoduleinst_access_level_set :: proc(singlecontrolmoduleinst: Single
 
 singlecontrolmoduleinst_safety_type_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (safety_type: string, ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -2042,7 +2042,7 @@ singlecontrolmoduleinst_safety_type_get :: proc(singlecontrolmoduleinst: SingleC
 
 singlecontrolmoduleinst_safety_type_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, safety_type: string) -> (ok: bool) {
     if singlecontrolmoduleinst == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -2079,7 +2079,7 @@ CMConnectionVTable :: struct {
 
 cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2091,7 +2091,7 @@ cmconnection_serialize :: proc(cmconnection: CMConnection) -> (xml: string, ok: 
 
 cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2103,7 +2103,7 @@ cmconnection_name_get :: proc(cmconnection: CMConnection) -> (name: string, ok: 
 
 cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -2115,7 +2115,7 @@ cmconnection_name_set :: proc(cmconnection: CMConnection, name: string) -> (ok: 
 
 cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual_parameter: string, ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2127,7 +2127,7 @@ cmconnection_actual_parameter_get :: proc(cmconnection: CMConnection) -> (actual
 
 cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_parameter: string) -> (ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(actual_parameter)
     defer bstr_free(bs)
@@ -2139,7 +2139,7 @@ cmconnection_actual_parameter_set :: proc(cmconnection: CMConnection, actual_par
 
 cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (graphical_connection: bool, ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionGet(&vb)
@@ -2150,7 +2150,7 @@ cmconnection_graphical_connection_get :: proc(cmconnection: CMConnection) -> (gr
 
 cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphical_connection: bool) -> (ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CMConnectionIF)(cmconnection)->GraphicalConnectionPut(to_variantbool(graphical_connection))
     if com_failed(hr) do return
@@ -2160,7 +2160,7 @@ cmconnection_graphical_connection_set :: proc(cmconnection: CMConnection, graphi
 
 cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^CMConnectionIF)(cmconnection)->PointsGet(&p)
@@ -2171,7 +2171,7 @@ cmconnection_points_get :: proc(cmconnection: CMConnection) -> (points: Points, 
 
 cmconnection_points_set :: proc(cmconnection: CMConnection, points: Points) -> (ok: bool) {
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CMConnectionIF)(cmconnection)->PointsPut(points)
     if com_failed(hr) do return
@@ -2205,7 +2205,7 @@ CMConnectionsVTable :: struct {
 cmconnections_cmconnection_add :: proc(cmconnections: CMConnections, cmconnection: CMConnection) -> (ok: bool) {
     if cmconnections == nil do return
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CMConnectionsIF)(cmconnections)->Add(cmconnection)
     if com_failed(hr) do return
@@ -2216,7 +2216,7 @@ cmconnections_cmconnection_add :: proc(cmconnections: CMConnections, cmconnectio
 cmconnections_cmconnection_add_at_index :: proc(cmconnections: CMConnections, cmconnection: CMConnection, index: i32) -> (ok: bool) {
     if cmconnections == nil do return
     if cmconnection == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMConnectionsIF)(cmconnections)->AddBefore(cmconnection, index)
     if com_failed(hr) do return
@@ -2226,7 +2226,7 @@ cmconnections_cmconnection_add_at_index :: proc(cmconnections: CMConnections, cm
 
 cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: string) -> (cmconnection: CMConnection, ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2238,7 +2238,7 @@ cmconnections_cmconnection_by_name :: proc(cmconnections: CMConnections, name: s
 
 cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index: i32) -> (cmconnection: CMConnection, ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Item(index + 1, cast(^rawptr)&cmconnection)
     if com_failed(hr) do return
@@ -2248,7 +2248,7 @@ cmconnections_cmconnection_by_index :: proc(cmconnections: CMConnections, index:
 
 cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: string) -> (index: i32, ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2260,7 +2260,7 @@ cmconnections_cmconnection_index :: proc(cmconnections: CMConnections, name: str
 
 cmconnections_cmconnection_count :: proc(cmconnections: CMConnections) -> (count: i32, ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Count(&count)
     if com_failed(hr) do return
@@ -2270,7 +2270,7 @@ cmconnections_cmconnection_count :: proc(cmconnections: CMConnections) -> (count
 
 cmconnections_cmconnection_remove_by_name :: proc(cmconnections: CMConnections, name: string) -> (ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = cmconnections_cmconnection_index(cmconnections, name)
@@ -2283,7 +2283,7 @@ cmconnections_cmconnection_remove_by_name :: proc(cmconnections: CMConnections, 
 
 cmconnections_cmconnection_remove_by_index :: proc(cmconnections: CMConnections, index: i32) -> (ok: bool) {
     if cmconnections == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMConnectionsIF)(cmconnections)->Remove(index + 1)
     if com_failed(hr) do return
@@ -2341,7 +2341,7 @@ CMParameterVTable :: struct {
 
 cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2353,7 +2353,7 @@ cmparameter_serialize :: proc(cmparameter: CMParameter) -> (xml: string, ok: boo
 
 cmparameter_name_get :: proc(cmparameter: CMParameter) -> (name: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2365,7 +2365,7 @@ cmparameter_name_get :: proc(cmparameter: CMParameter) -> (name: string, ok: boo
 
 cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -2377,7 +2377,7 @@ cmparameter_name_set :: proc(cmparameter: CMParameter, name: string) -> (ok: boo
 
 cmparameter_type_name_get :: proc(cmparameter: CMParameter) -> (type_name: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2389,7 +2389,7 @@ cmparameter_type_name_get :: proc(cmparameter: CMParameter) -> (type_name: strin
 
 cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -2401,7 +2401,7 @@ cmparameter_type_name_set :: proc(cmparameter: CMParameter, type_name: string) -
 
 cmparameter_initial_value_get :: proc(cmparameter: CMParameter) -> (inital_value: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2413,7 +2413,7 @@ cmparameter_initial_value_get :: proc(cmparameter: CMParameter) -> (inital_value
 
 cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(inital_value)
     defer bstr_free(bs)
@@ -2425,7 +2425,7 @@ cmparameter_initial_value_set :: proc(cmparameter: CMParameter, inital_value: st
 
 cmparameter_description_get :: proc(cmparameter: CMParameter) -> (description: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2437,7 +2437,7 @@ cmparameter_description_get :: proc(cmparameter: CMParameter) -> (description: s
 
 cmparameter_description_set :: proc(cmparameter: CMParameter, description: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -2449,7 +2449,7 @@ cmparameter_description_set :: proc(cmparameter: CMParameter, description: strin
 
 cmparameter_read_permission_get :: proc(cmparameter: CMParameter) -> (read_permission: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2461,7 +2461,7 @@ cmparameter_read_permission_get :: proc(cmparameter: CMParameter) -> (read_permi
 
 cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permission: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(read_permission)
     defer bstr_free(bs)
@@ -2473,7 +2473,7 @@ cmparameter_read_permission_set :: proc(cmparameter: CMParameter, read_permissio
 
 cmparameter_write_permission_get :: proc(cmparameter: CMParameter) -> (write_permission: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2485,7 +2485,7 @@ cmparameter_write_permission_get :: proc(cmparameter: CMParameter) -> (write_per
 
 cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permission: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(write_permission)
     defer bstr_free(bs)
@@ -2497,7 +2497,7 @@ cmparameter_write_permission_set :: proc(cmparameter: CMParameter, write_permiss
 
 cmparameter_authentication_level_get :: proc(cmparameter: CMParameter) -> (authentication_level: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2509,7 +2509,7 @@ cmparameter_authentication_level_get :: proc(cmparameter: CMParameter) -> (authe
 
 cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentication_level: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(authentication_level)
     defer bstr_free(bs)
@@ -2521,7 +2521,7 @@ cmparameter_authentication_level_set :: proc(cmparameter: CMParameter, authentic
 
 cmparameter_batch_property_get :: proc(cmparameter: CMParameter) -> (batch_property: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2533,7 +2533,7 @@ cmparameter_batch_property_get :: proc(cmparameter: CMParameter) -> (batch_prope
 
 cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(batch_property)
     defer bstr_free(bs)
@@ -2545,7 +2545,7 @@ cmparameter_batch_property_set :: proc(cmparameter: CMParameter, batch_property:
 
 cmparameter_auto_point_get :: proc(cmparameter: CMParameter) -> (auto_point: AutoPoint, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->AutoPointGet(cast(^rawptr)&auto_point)
     if com_failed(hr) do return
@@ -2555,7 +2555,7 @@ cmparameter_auto_point_get :: proc(cmparameter: CMParameter) -> (auto_point: Aut
 
 cmparameter_auto_point_set :: proc(cmparameter: CMParameter, auto_point: AutoPoint) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->AutoPointPut(auto_point)
     if com_failed(hr) do return
@@ -2565,7 +2565,7 @@ cmparameter_auto_point_set :: proc(cmparameter: CMParameter, auto_point: AutoPoi
 
 cmparameter_graph_nodes_get :: proc(cmparameter: CMParameter) -> (graph_nodes: GraphNodes, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->GraphNodesGet(cast(^rawptr)&graph_nodes)
     if com_failed(hr) do return
@@ -2575,7 +2575,7 @@ cmparameter_graph_nodes_get :: proc(cmparameter: CMParameter) -> (graph_nodes: G
 
 cmparameter_graph_nodes_set :: proc(cmparameter: CMParameter, graph_nodes: GraphNodes) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParameterIF)(cmparameter)->GraphNodesPut(graph_nodes)
     if com_failed(hr) do return
@@ -2585,7 +2585,7 @@ cmparameter_graph_nodes_set :: proc(cmparameter: CMParameter, graph_nodes: Graph
 
 cmparameter_type_guid_get :: proc(cmparameter: CMParameter) -> (guid: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2597,7 +2597,7 @@ cmparameter_type_guid_get :: proc(cmparameter: CMParameter) -> (guid: string, ok
 
 cmparameter_type_path_get :: proc(cmparameter: CMParameter) -> (path: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2609,7 +2609,7 @@ cmparameter_type_path_get :: proc(cmparameter: CMParameter) -> (path: string, ok
 
 cmparameter_access_level_get :: proc(cmparameter: CMParameter) -> (access_level: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2621,7 +2621,7 @@ cmparameter_access_level_get :: proc(cmparameter: CMParameter) -> (access_level:
 
 cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -2633,7 +2633,7 @@ cmparameter_access_level_set :: proc(cmparameter: CMParameter, access_level: str
 
 cmparameter_safety_type_get :: proc(cmparameter: CMParameter) -> (safety_type: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2645,7 +2645,7 @@ cmparameter_safety_type_get :: proc(cmparameter: CMParameter) -> (safety_type: s
 
 cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -2657,7 +2657,7 @@ cmparameter_safety_type_set :: proc(cmparameter: CMParameter, safety_type: strin
 
 cmparameter_direction_get :: proc(cmparameter: CMParameter) -> (direction: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2669,7 +2669,7 @@ cmparameter_direction_get :: proc(cmparameter: CMParameter) -> (direction: strin
 
 cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(direction)
     defer bstr_free(bs)
@@ -2681,7 +2681,7 @@ cmparameter_direction_set :: proc(cmparameter: CMParameter, direction: string) -
 
 cmparameter_fdport_get :: proc(cmparameter: CMParameter) -> (fdport: string, ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -2693,7 +2693,7 @@ cmparameter_fdport_get :: proc(cmparameter: CMParameter) -> (fdport: string, ok:
 
 cmparameter_fdport_set :: proc(cmparameter: CMParameter, fdport: string) -> (ok: bool) {
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(fdport)
     defer bstr_free(bs)
@@ -2730,7 +2730,7 @@ CMParametersVTable :: struct {
 cmparameters_cmparameter_add :: proc(cmparameters: CMParameters, cmparameter: CMParameter) -> (ok: bool) {
     if cmparameters == nil do return
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CMParametersIF)(cmparameters)->Add(cmparameter)
     if com_failed(hr) do return
@@ -2741,7 +2741,7 @@ cmparameters_cmparameter_add :: proc(cmparameters: CMParameters, cmparameter: CM
 cmparameters_cmparameter_add_at_index :: proc(cmparameters: CMParameters, cmparameter: CMParameter, index: i32) -> (ok: bool) {
     if cmparameters == nil do return
     if cmparameter == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParametersIF)(cmparameters)->AddBefore(cmparameter, index)
     if com_failed(hr) do return
@@ -2751,7 +2751,7 @@ cmparameters_cmparameter_add_at_index :: proc(cmparameters: CMParameters, cmpara
 
 cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: string) -> (cmparameter: CMParameter, ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2763,7 +2763,7 @@ cmparameters_cmparameter_by_name :: proc(cmparameters: CMParameters, name: strin
 
 cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32) -> (cmparameter: CMParameter, ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParametersIF)(cmparameters)->Item(index + 1, cast(^rawptr)&cmparameter)
     if com_failed(hr) do return
@@ -2773,7 +2773,7 @@ cmparameters_cmparameter_by_index :: proc(cmparameters: CMParameters, index: i32
 
 cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string) -> (index: i32, ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2785,7 +2785,7 @@ cmparameters_cmparameter_index :: proc(cmparameters: CMParameters, name: string)
 
 cmparameters_cmparameter_count :: proc(cmparameters: CMParameters) -> (count: i32, ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParametersIF)(cmparameters)->Count(&count)
     if com_failed(hr) do return
@@ -2795,7 +2795,7 @@ cmparameters_cmparameter_count :: proc(cmparameters: CMParameters) -> (count: i3
 
 cmparameters_cmparameter_remove_by_name :: proc(cmparameters: CMParameters, name: string) -> (ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = cmparameters_cmparameter_index(cmparameters, name)
@@ -2808,7 +2808,7 @@ cmparameters_cmparameter_remove_by_name :: proc(cmparameters: CMParameters, name
 
 cmparameters_cmparameter_remove_by_index :: proc(cmparameters: CMParameters, index: i32) -> (ok: bool) {
     if cmparameters == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^CMParametersIF)(cmparameters)->Remove(index + 1)
     if com_failed(hr) do return

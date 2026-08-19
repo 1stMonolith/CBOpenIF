@@ -26,7 +26,7 @@ ILRowVTable :: struct {
 
 ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -38,7 +38,7 @@ ilrow_label_get :: proc(ilrow: ILRow) -> (label: string, ok: bool) {
 
 ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(label)
     defer bstr_free(bs)
@@ -50,7 +50,7 @@ ilrow_label_set :: proc(ilrow: ILRow, label: string) -> (ok: bool) {
 
 ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -62,7 +62,7 @@ ilrow_instruction_get :: proc(ilrow: ILRow) -> (instruction: string, ok: bool) {
 
 ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(instruction)
     defer bstr_free(bs)
@@ -74,7 +74,7 @@ ilrow_instruction_set :: proc(ilrow: ILRow, instruction: string) -> (ok: bool) {
 
 ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -86,7 +86,7 @@ ilrow_operand_get :: proc(ilrow: ILRow) -> (operand: string, ok: bool) {
 
 ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(operand)
     defer bstr_free(bs)
@@ -98,7 +98,7 @@ ilrow_operand_set :: proc(ilrow: ILRow, operand: string) -> (ok: bool) {
 
 ilrow_description_get :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -110,7 +110,7 @@ ilrow_description_get :: proc(ilrow: ILRow) -> (description: string, ok: bool) {
 
 ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -122,7 +122,7 @@ ilrow_description_set :: proc(ilrow: ILRow, description: string) -> (ok: bool) {
 
 ilrow_row_comment_get :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -134,7 +134,7 @@ ilrow_row_comment_get :: proc(ilrow: ILRow) -> (row_comment: string, ok: bool) {
 
 ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(row_comment)
     defer bstr_free(bs)
@@ -146,7 +146,7 @@ ilrow_row_comment_set :: proc(ilrow: ILRow, row_comment: string) -> (ok: bool) {
 
 ilrow_is_row_comment_get :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ILRowIF)(ilrow)->IsRowCommentGet(&vb)
@@ -157,7 +157,7 @@ ilrow_is_row_comment_get :: proc(ilrow: ILRow) -> (is_row_comment: bool, ok: boo
 
 ilrow_is_row_comment_set :: proc(ilrow: ILRow, is_row_comment: bool) -> (ok: bool) {
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ILRowIF)(ilrow)->IsRowCommentPut(to_variantbool(is_row_comment))
     if com_failed(hr) do return
@@ -190,7 +190,7 @@ ILRowsVTable :: struct {
 ilrows_ilrow_add :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
     if ilrows == nil do return
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ILRowsIF)(ilrows)->Add(ilrow)
     if com_failed(hr) do return
@@ -201,7 +201,7 @@ ilrows_ilrow_add :: proc(ilrows: ILRows, ilrow: ILRow) -> (ok: bool) {
 ilrows_ilrow_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (ok: bool) {
     if ilrows == nil do return
     if ilrow == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->AddBefore(ilrow, index)
     if com_failed(hr) do return
@@ -211,7 +211,7 @@ ilrows_ilrow_add_at_index :: proc(ilrows: ILRows, ilrow: ILRow, index: i32) -> (
 
 ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: bool) {
     if ilrows == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Item(index + 1, cast(^rawptr)&ilrow)
     if com_failed(hr) do return
@@ -221,7 +221,7 @@ ilrows_ilrow_by_index :: proc(ilrows: ILRows, index: i32) -> (ilrow: ILRow, ok: 
 
 ilrows_ilrow_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
     if ilrows == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Count(&count)
     if com_failed(hr) do return
@@ -231,7 +231,7 @@ ilrows_ilrow_count :: proc(ilrows: ILRows) -> (count: i32, ok: bool) {
 
 ilrows_ilrow_remove :: proc(ilrows: ILRows, index: i32) -> (ok: bool) {
     if ilrows == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^ILRowsIF)(ilrows)->Remove(index)
     if com_failed(hr) do return

@@ -51,7 +51,7 @@ ICodeBlockVTable :: struct {
 
 icodeblock_is_st :: proc(icodeblock: ICodeBlock) -> (is_st: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsSTCodeBlock(&vb)
@@ -72,7 +72,7 @@ icodeblock_as_st :: proc(icodeblock: ICodeBlock) -> (stcodeblock: STCodeBlock, o
 
 icodeblock_is_sfc :: proc(icodeblock: ICodeBlock) -> (is_sfc: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsSFCCodeBlock(&vb)
@@ -93,7 +93,7 @@ icodeblock_as_sfc :: proc(icodeblock: ICodeBlock) -> (sfccodeblock: SFCCodeBlock
 
 icodeblock_is_il :: proc(icodeblock: ICodeBlock) -> (is_il: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsILCodeBlock(&vb)
@@ -114,7 +114,7 @@ icodeblock_as_il :: proc(icodeblock: ICodeBlock) -> (ilcodeblock: ILCodeBlock, o
 
 icodeblock_is_fbd :: proc(icodeblock: ICodeBlock) -> (is_fbd: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsFBDCodeBlock(&vb)
@@ -135,7 +135,7 @@ icodeblock_as_fbd :: proc(icodeblock: ICodeBlock) -> (fbdcodeblock: ILCodeBlock,
 
 icodeblock_is_ld :: proc(icodeblock: ICodeBlock) -> (is_ld: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsLDCodeBlock(&vb)
@@ -156,7 +156,7 @@ icodeblock_as_ld :: proc(icodeblock: ICodeBlock) -> (ldcodeblock: ILCodeBlock, o
 
 icodeblock_is_fd :: proc(icodeblock: ICodeBlock) -> (is_fd: bool, ok: bool) {
     if icodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     vb: VariantBool
     hr := (^ICodeBlockIF)(icodeblock)->IsFDCodeBlock(&vb)
@@ -334,7 +334,7 @@ CodeBlocksVTable :: struct {
 codeblocks_codeblock_add :: proc(codeblocks: CodeBlocks, codeblock: CodeBlockUnion) -> (ok: bool) {
     if codeblocks == nil do return
     if codeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr: HResult
     switch block in codeblock {
@@ -352,7 +352,7 @@ codeblocks_codeblock_add :: proc(codeblocks: CodeBlocks, codeblock: CodeBlockUni
 
 codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (codeblock: CodeBlock, ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -366,7 +366,7 @@ codeblocks_codeblock_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (c
 
 codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (codeblock: CodeBlock, ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     i: ICodeBlock
     hr := (^CodeBlocksIF)(codeblocks)->Item(index + 1, cast(^rawptr)&i)
@@ -378,7 +378,7 @@ codeblocks_codeblock_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (co
 
 codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (index: i32, ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -390,7 +390,7 @@ codeblocks_codeblock_index :: proc(codeblocks: CodeBlocks, name: string) -> (ind
 
 codeblocks_codeblock_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Count(&count)
     if com_failed(hr) do return
@@ -400,7 +400,7 @@ codeblocks_codeblock_count :: proc(codeblocks: CodeBlocks) -> (count: i32, ok: b
 
 codeblocks_codeblock_remove_by_name :: proc(codeblocks: CodeBlocks, name: string) -> (ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = codeblocks_codeblock_index(codeblocks, name)
@@ -414,7 +414,7 @@ codeblocks_codeblock_remove_by_name :: proc(codeblocks: CodeBlocks, name: string
 
 codeblocks_codeblock_remove_by_index :: proc(codeblocks: CodeBlocks, index: i32) -> (ok: bool) {
     if codeblocks == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^CodeBlocksIF)(codeblocks)->Remove(index + 1)
     if com_failed(hr) do return
@@ -447,7 +447,7 @@ STCodeBlockVTable :: struct {
 
 stcodeblock_serialize :: proc(stcodeblock: STCodeBlock) -> (xml: string, ok: bool) {
     if stcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -459,7 +459,7 @@ stcodeblock_serialize :: proc(stcodeblock: STCodeBlock) -> (xml: string, ok: boo
 
 stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: bool) {
     if stcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -471,7 +471,7 @@ stcodeblock_name_get :: proc(stcodeblock: STCodeBlock) -> (name: string, ok: boo
 
 stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: bool) {
     if stcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -483,7 +483,7 @@ stcodeblock_name_set :: proc(stcodeblock: STCodeBlock, name: string) -> (ok: boo
 
 stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok: bool) {
     if stcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -495,7 +495,7 @@ stcodeblock_stcode_get :: proc(stcodeblock: STCodeBlock) -> (stcode: string, ok:
 
 stcodeblock_stcode_set :: proc(stcodeblock: STCodeBlock, stcode: string) -> (ok: bool) {
     if stcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(stcode)
     defer bstr_free(bs)
@@ -537,7 +537,7 @@ SFCCodeBlockVTable :: struct {
 
 sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -549,7 +549,7 @@ sfccodeblock_name_get :: proc(sfccodeblock: SFCCodeBlock) -> (name: string, ok: 
 
 sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -561,7 +561,7 @@ sfccodeblock_name_set :: proc(sfccodeblock: SFCCodeBlock, name: string) -> (ok: 
 
 sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control: bool, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlGet(&vb)
@@ -572,7 +572,7 @@ sfccodeblock_seq_control_get :: proc(sfccodeblock: SFCCodeBlock) -> (seq_control
 
 sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bool) -> (ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SeqControlPut(to_variantbool(seq_control))
     if com_failed(hr) do return
@@ -582,7 +582,7 @@ sfccodeblock_seq_control_set :: proc(sfccodeblock: SFCCodeBlock, seq_control: bo
 
 sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_elapsed_time: bool, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimeGet(&vb)
@@ -593,7 +593,7 @@ sfccodeblock_step_elapsed_time_get :: proc(sfccodeblock: SFCCodeBlock) -> (step_
 
 sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elapsed_time: bool) -> (ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->StepElapsedTimePut(to_variantbool(step_elapsed_time))
     if com_failed(hr) do return
@@ -603,7 +603,7 @@ sfccodeblock_step_elapsed_time_set :: proc(sfccodeblock: SFCCodeBlock, step_elap
 
 sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_aspect: bool, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectGet(&vb)
@@ -614,7 +614,7 @@ sfccodeblock_viewer_aspect_get :: proc(sfccodeblock: SFCCodeBlock) -> (viewer_as
 
 sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect: bool) -> (ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCViewerAspectPut(to_variantbool(viewer_aspect))
     if com_failed(hr) do return
@@ -624,7 +624,7 @@ sfccodeblock_viewer_aspect_set :: proc(sfccodeblock: SFCCodeBlock, viewer_aspect
 
 sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: SFCElements, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsGet(cast(^rawptr)&sfcelements)
     if com_failed(hr) do return
@@ -634,7 +634,7 @@ sfccodeblock_elements_get :: proc(sfccodeblock: SFCCodeBlock) -> (sfcelements: S
 
 sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCElements) -> (ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^SFCCodeBlockIF)(sfccodeblock)->SFCElementsPut(sfcelements)
     if com_failed(hr) do return
@@ -644,7 +644,7 @@ sfccodeblock_elements_set :: proc(sfccodeblock: SFCCodeBlock, sfcelements: SFCEl
 
 sfccodeblock_serialize :: proc(sfccodeblock: SFCCodeBlock) -> (xml: string, ok: bool) {
     if sfccodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -679,7 +679,7 @@ LDCodeBlockVTable :: struct {
 
 ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: bool) {
     if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -691,7 +691,7 @@ ldcodeblock_serialize :: proc(ldcodeblock: LDCodeBlock) -> (xml: string, ok: boo
 
 ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: bool) {
     if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -703,7 +703,7 @@ ldcodeblock_name_get :: proc(ldcodeblock: LDCodeBlock) -> (name: string, ok: boo
 
 ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: bool) {
     if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -715,7 +715,7 @@ ldcodeblock_name_set :: proc(ldcodeblock: LDCodeBlock, name: string) -> (ok: boo
 
 ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok: bool) {
     if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -727,7 +727,7 @@ ldcodeblock_stcode_get :: proc(ldcodeblock: LDCodeBlock) -> (stcode: string, ok:
 
 ldcodeblock_stcode_set :: proc(ldcodeblock: LDCodeBlock, stcode: string) -> (ok: bool) {
     if ldcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(stcode)
     defer bstr_free(bs)
@@ -763,7 +763,7 @@ ILCodeBlockVTable :: struct {
 
 ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: bool) {
     if ilcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -775,7 +775,7 @@ ilcodeblock_serialize :: proc(ilcodeblock: ILCodeBlock) -> (xml: string, ok: boo
 
 ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: bool) {
     if ilcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -787,7 +787,7 @@ ilcodeblock_name_get :: proc(ilcodeblock: ILCodeBlock) -> (name: string, ok: boo
 
 ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: bool) {
     if ilcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -799,7 +799,7 @@ ilcodeblock_name_set :: proc(ilcodeblock: ILCodeBlock, name: string) -> (ok: boo
 
 ilcodeblock_ilrows_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: ILRows, ok: bool) {
     if ilcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsGet(&p)
@@ -811,7 +811,7 @@ ilcodeblock_ilrows_get :: proc(ilcodeblock: ILCodeBlock) -> (ilrows: ILRows, ok:
 ilcodeblock_ilrows_set :: proc(ilcodeblock: ILCodeBlock, ilrows: ILRows) -> (ok: bool) {
     if ilcodeblock == nil do return
     if ilrows == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ILCodeBlockIF)(ilcodeblock)->ILRowsPut(ilrows)
     if com_failed(hr) do return
@@ -844,7 +844,7 @@ FDCodeBlockVTable :: struct {
 
 fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: bool) {
     if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -856,7 +856,7 @@ fdcodeblock_serialize :: proc(fdcodeblock: FDCodeBlock) -> (xml: string, ok: boo
 
 fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: bool) {
     if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -868,7 +868,7 @@ fdcodeblock_name_get :: proc(fdcodeblock: FDCodeBlock) -> (name: string, ok: boo
 
 fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: bool) {
     if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs :=to_bstr(name)
     defer bstr_free(bs)
@@ -880,7 +880,7 @@ fdcodeblock_name_set :: proc(fdcodeblock: FDCodeBlock, name: string) -> (ok: boo
 
 fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: string, ok: bool) {
     if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -892,7 +892,7 @@ fdcodeblock_xml_string_get :: proc(fdcodeblock: FDCodeBlock) -> (xml_string: str
 
 fdcodeblock_xml_string_set :: proc(fdcodeblock: FDCodeBlock, xml_string: string) -> (ok: bool) {
     if fdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs :=to_bstr(xml_string)
     defer bstr_free(bs)
@@ -927,7 +927,7 @@ FBDCodeBlockVTable :: struct {
 
 fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: bool) {
     if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -939,7 +939,7 @@ fbdcodeblock_serialize :: proc(fbdcodeblock: FBDCodeBlock) -> (xml: string, ok: 
 
 fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: bool) {
     if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -952,7 +952,7 @@ fbdcodeblock_name_get :: proc(fbdcodeblock: FBDCodeBlock) -> (name: string, ok: 
 
 fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: bool) {
     if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -964,7 +964,7 @@ fbdcodeblock_name_set :: proc(fbdcodeblock: FBDCodeBlock, name: string) -> (ok: 
 
 fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, ok: bool) {
     if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -976,7 +976,7 @@ fbdcodeblock_stcode_get :: proc(fbdcodeblock: FBDCodeBlock) -> (stcode: string, 
 
 fbdcodeblock_stcode_set :: proc(fbdcodeblock: FBDCodeBlock, stcode: string) -> (ok: bool) {
     if fbdcodeblock == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(stcode)
     defer bstr_free(bs)

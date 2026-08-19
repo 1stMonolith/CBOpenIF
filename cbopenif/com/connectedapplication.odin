@@ -23,7 +23,7 @@ ConnectedApplicationVTable :: struct {
 
 connectedapplication_name_get :: proc(ca: ConnectedApplication) -> (name: string, ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -35,7 +35,7 @@ connectedapplication_name_get :: proc(ca: ConnectedApplication) -> (name: string
 
 connectedapplication_name_set :: proc(ca: ConnectedApplication, name: string) -> (ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -47,7 +47,7 @@ connectedapplication_name_set :: proc(ca: ConnectedApplication, name: string) ->
 
 connectedapplication_major_version_get :: proc(ca: ConnectedApplication) -> (major_version: i32, ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->MajorVersionGet(&major_version)
     if com_failed(hr) do return
@@ -57,7 +57,7 @@ connectedapplication_major_version_get :: proc(ca: ConnectedApplication) -> (maj
 
 connectedapplication_major_version_set :: proc(ca: ConnectedApplication, major_version: i32) -> (ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->MajorVersionPut(major_version)
     if com_failed(hr) do return
@@ -67,7 +67,7 @@ connectedapplication_major_version_set :: proc(ca: ConnectedApplication, major_v
 
 connectedapplication_minor_version_get :: proc(ca: ConnectedApplication) -> (minor_version: i32, ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->MinorVersionGet(&minor_version)
     if com_failed(hr) do return
@@ -77,7 +77,7 @@ connectedapplication_minor_version_get :: proc(ca: ConnectedApplication) -> (min
 
 connectedapplication_minor_version_set :: proc(ca: ConnectedApplication, minor_version: i32) -> (ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->MinorVersionPut(minor_version)
     if com_failed(hr) do return
@@ -87,7 +87,7 @@ connectedapplication_minor_version_set :: proc(ca: ConnectedApplication, minor_v
 
 connectedapplication_revision_get :: proc(ca: ConnectedApplication) -> (revision: i32, ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->RevisionGet(&revision)
     if com_failed(hr) do return
@@ -97,7 +97,7 @@ connectedapplication_revision_get :: proc(ca: ConnectedApplication) -> (revision
 
 connectedapplication_revision_set :: proc(ca: ConnectedApplication, revision: i32) -> (ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationIF)(ca)->RevisionPut(revision)
     if com_failed(hr) do return
@@ -107,7 +107,7 @@ connectedapplication_revision_set :: proc(ca: ConnectedApplication, revision: i3
 
 connectedapplication_guid_get :: proc(ca: ConnectedApplication) -> (guid: string, ok: bool) {
     if ca == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -144,7 +144,7 @@ ConnectedApplicationsVTable :: struct {
 
 connectedapplications_serialize :: proc(connectedapplications: ConnectedApplications) -> (xml: string, ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -157,7 +157,7 @@ connectedapplications_serialize :: proc(connectedapplications: ConnectedApplicat
 connectedapplications_connectedapplication_add :: proc(connectedapplications: ConnectedApplications, connectedapplication: ConnectedApplication) -> (ok: bool) {
     if connectedapplications == nil do return
     if connectedapplication == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->Add(connectedapplication)
     if com_failed(hr) do return
@@ -168,7 +168,7 @@ connectedapplications_connectedapplication_add :: proc(connectedapplications: Co
 connectedapplications_connectedapplication_add_at_index :: proc(connectedapplications: ConnectedApplications, connectedapplication: ConnectedApplication, index: i32) -> (ok: bool) {
     if connectedapplications == nil do return
     if connectedapplication == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->AddBefore(connectedapplication, index)
     if com_failed(hr) do return
@@ -178,7 +178,7 @@ connectedapplications_connectedapplication_add_at_index :: proc(connectedapplica
 
 connectedapplications_connectedapplication_by_name :: proc(connectedapplications: ConnectedApplications, name: string) -> (connectedapplication: ConnectedApplication, ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -190,7 +190,7 @@ connectedapplications_connectedapplication_by_name :: proc(connectedapplications
 
 connectedapplications_connectedapplication_by_index :: proc(connectedapplications: ConnectedApplications, index: i32) -> (connectedapplication: ConnectedApplication, ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->Item(index + 1, cast(^rawptr)&connectedapplication)
     if com_failed(hr) do return
@@ -200,7 +200,7 @@ connectedapplications_connectedapplication_by_index :: proc(connectedapplication
 
 connectedapplications_connectedapplication_index :: proc(connectedapplications: ConnectedApplications, name: string) -> (index: i32, ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -212,7 +212,7 @@ connectedapplications_connectedapplication_index :: proc(connectedapplications: 
 
 connectedapplications_connectedapplication_count :: proc(connectedapplications: ConnectedApplications) -> (count: i32, ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->Count(&count)
     if com_failed(hr) do return
@@ -222,7 +222,7 @@ connectedapplications_connectedapplication_count :: proc(connectedapplications: 
 
 connectedapplications_connectedapplication_remove_by_name :: proc(connectedapplications: ConnectedApplications, name: string) -> (ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = connectedapplications_connectedapplication_index(connectedapplications, name)
@@ -236,7 +236,7 @@ connectedapplications_connectedapplication_remove_by_name :: proc(connectedappli
 
 connectedapplications_connectedapplication_remove_by_index :: proc(connectedapplications: ConnectedApplications, index: i32) -> (ok: bool) {
     if connectedapplications == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedApplicationsIF)(connectedapplications)->Remove(index + 1)
     if com_failed(hr) do return

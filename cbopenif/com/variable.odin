@@ -42,7 +42,7 @@ VariableVTable :: struct {
 
 variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -54,7 +54,7 @@ variable_serialize :: proc(variable: Variable) -> (xml: string, ok: bool) {
 
 variable_name_get :: proc(variable: Variable) -> (name: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -66,7 +66,7 @@ variable_name_get :: proc(variable: Variable) -> (name: string, ok: bool) {
 
 variable_name_set :: proc(variable: Variable, name: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -78,7 +78,7 @@ variable_name_set :: proc(variable: Variable, name: string) -> (ok: bool) {
 
 variable_type_name_get :: proc(variable: Variable) -> (type_name: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -90,7 +90,7 @@ variable_type_name_get :: proc(variable: Variable) -> (type_name: string, ok: bo
 
 variable_type_name_set :: proc(variable: Variable, type_name: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -102,7 +102,7 @@ variable_type_name_set :: proc(variable: Variable, type_name: string) -> (ok: bo
 
 variable_attribute_get :: proc(variable: Variable) -> (attribute: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -114,7 +114,7 @@ variable_attribute_get :: proc(variable: Variable) -> (attribute: string, ok: bo
 
 variable_attribute_set :: proc(variable: Variable, attribute: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(attribute)
     defer bstr_free(bs)
@@ -126,7 +126,7 @@ variable_attribute_set :: proc(variable: Variable, attribute: string) -> (ok: bo
 
 variable_initial_value_get :: proc(variable: Variable) -> (inital_value: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -138,7 +138,7 @@ variable_initial_value_get :: proc(variable: Variable) -> (inital_value: string,
 
 variable_initial_value_set :: proc(variable: Variable, inital_value: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(inital_value)
     defer bstr_free(bs)
@@ -150,7 +150,7 @@ variable_initial_value_set :: proc(variable: Variable, inital_value: string) -> 
 
 variable_description_get :: proc(variable: Variable) -> (description: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -162,7 +162,7 @@ variable_description_get :: proc(variable: Variable) -> (description: string, ok
 
 variable_description_set :: proc(variable: Variable, description: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -174,7 +174,7 @@ variable_description_set :: proc(variable: Variable, description: string) -> (ok
 
 variable_read_permission_get :: proc(variable: Variable) -> (read_permission: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -186,7 +186,7 @@ variable_read_permission_get :: proc(variable: Variable) -> (read_permission: st
 
 variable_read_permission_set :: proc(variable: Variable, read_permission: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(read_permission)
     defer bstr_free(bs)
@@ -198,7 +198,7 @@ variable_read_permission_set :: proc(variable: Variable, read_permission: string
 
 variable_write_permission_get :: proc(variable: Variable) -> (write_permission: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -210,7 +210,7 @@ variable_write_permission_get :: proc(variable: Variable) -> (write_permission: 
 
 variable_write_permission_set :: proc(variable: Variable, write_permission: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(write_permission)
     defer bstr_free(bs)
@@ -222,7 +222,7 @@ variable_write_permission_set :: proc(variable: Variable, write_permission: stri
 
 variable_authentication_level_get :: proc(variable: Variable) -> (authentication_level: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -234,7 +234,7 @@ variable_authentication_level_get :: proc(variable: Variable) -> (authentication
 
 variable_authentication_level_set :: proc(variable: Variable, authentication_level: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(authentication_level)
     defer bstr_free(bs)
@@ -246,7 +246,7 @@ variable_authentication_level_set :: proc(variable: Variable, authentication_lev
 
 variable_batch_property_get :: proc(variable: Variable) -> (batch_property: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -258,7 +258,7 @@ variable_batch_property_get :: proc(variable: Variable) -> (batch_property: stri
 
 variable_batch_property_set :: proc(variable: Variable, batch_property: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(batch_property)
     defer bstr_free(bs)
@@ -270,7 +270,7 @@ variable_batch_property_set :: proc(variable: Variable, batch_property: string) 
 
 variable_graph_nodes_get :: proc(variable: Variable) -> (graph_nodes: GraphNodes, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariableIF)(variable)->GraphNodesGet(cast(^rawptr)&graph_nodes)
     if com_failed(hr) do return
@@ -280,7 +280,7 @@ variable_graph_nodes_get :: proc(variable: Variable) -> (graph_nodes: GraphNodes
 
 variable_graph_nodes_set :: proc(variable: Variable, graph_nodes: GraphNodes) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariableIF)(variable)->GraphNodesPut(graph_nodes)
     if com_failed(hr) do return
@@ -290,7 +290,7 @@ variable_graph_nodes_set :: proc(variable: Variable, graph_nodes: GraphNodes) ->
 
 variable_type_guid_get :: proc(variable: Variable) -> (guid: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -302,7 +302,7 @@ variable_type_guid_get :: proc(variable: Variable) -> (guid: string, ok: bool) {
 
 variable_type_path_get :: proc(variable: Variable) -> (path: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -314,7 +314,7 @@ variable_type_path_get :: proc(variable: Variable) -> (path: string, ok: bool) {
 
 variable_access_level_get :: proc(variable: Variable) -> (access_level: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -326,7 +326,7 @@ variable_access_level_get :: proc(variable: Variable) -> (access_level: string, 
 
 variable_access_level_set :: proc(variable: Variable, access_level: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -338,7 +338,7 @@ variable_access_level_set :: proc(variable: Variable, access_level: string) -> (
 
 variable_safety_type_get :: proc(variable: Variable) -> (safety_type: string, ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -350,7 +350,7 @@ variable_safety_type_get :: proc(variable: Variable) -> (safety_type: string, ok
 
 variable_safety_type_set :: proc(variable: Variable, safety_type: string) -> (ok: bool) {
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -387,7 +387,7 @@ VariablesVTable :: struct {
 variables_variable_add :: proc(variables: Variables, variable: Variable) -> (ok: bool) {
     if variables == nil do return
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^VariablesIF)(variables)->Add(variable)
     if com_failed(hr) do return
@@ -398,7 +398,7 @@ variables_variable_add :: proc(variables: Variables, variable: Variable) -> (ok:
 variables_variable_add_at_index :: proc(variables: Variables, variable: Variable, index: i32) -> (ok: bool) {
     if variables == nil do return
     if variable == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariablesIF)(variables)->AddBefore(variable, index)
     if com_failed(hr) do return
@@ -408,7 +408,7 @@ variables_variable_add_at_index :: proc(variables: Variables, variable: Variable
 
 variables_variable_by_name :: proc(variables: Variables, name: string) -> (variable: Variable, ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -420,7 +420,7 @@ variables_variable_by_name :: proc(variables: Variables, name: string) -> (varia
 
 variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variable: Variable, ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariablesIF)(variables)->Item(index + 1, cast(^rawptr)&variable)
     if com_failed(hr) do return
@@ -430,7 +430,7 @@ variables_variable_by_index :: proc(variables: Variables, index: i32) -> (variab
 
 variables_variable_index :: proc(variables: Variables, name: string) -> (index: i32, ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -442,7 +442,7 @@ variables_variable_index :: proc(variables: Variables, name: string) -> (index: 
 
 variables_variable_count :: proc(variables: Variables) -> (count: i32, ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariablesIF)(variables)->Count(&count)
     if com_failed(hr) do return
@@ -452,7 +452,7 @@ variables_variable_count :: proc(variables: Variables) -> (count: i32, ok: bool)
 
 variables_variable_remove_by_name :: proc(variables: Variables, name: string) -> (ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = variables_variable_index(variables, name)
@@ -465,7 +465,7 @@ variables_variable_remove_by_name :: proc(variables: Variables, name: string) ->
 
 variables_variable_remove_by_index :: proc(variables: Variables, index: i32) -> (ok: bool) {
     if variables == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^VariablesIF)(variables)->Remove(index + 1)
     if com_failed(hr) do return

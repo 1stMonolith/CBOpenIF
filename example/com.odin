@@ -2,13 +2,18 @@ package main
 
 import "core:fmt"
 
-import cb "../cbopenif"
 import com "../cbopenif/com"
+import reg "../cbopenif/registry"
 
 // using the com interface directly
 main :: proc() {
 
-    com.controlbuilder_connect()
+    test := reg.register_surrogate()
+    fmt.printf("register_surrogate() = %v\n", test)
+
+    fmt.printf("here")
+
+    com.com_connect()
 
     ok: bool
     xml, name, type_name, description: string
@@ -48,23 +53,8 @@ main :: proc() {
         com.release(component)
     }
 
-    fmt.print("\n")
-
     xml, ok = com.serialize(datatype)
     fmt.printf("datatype xml:\n%v\n", xml)
-
-    datatype_struct: cb.DataType
-    datatype_struct, ok = com.datatype_from_com(datatype)
-
-    fmt.printf("com -> struct:\n%v\n", datatype_struct)
-
-    datatype2: com.DataType
-    datatype2, ok = com.datatype_to_com(datatype_struct)
-
-    fmt.print("\n")
-
-    xml, ok = com.serialize(datatype2)
-    fmt.printf("struct -> com -> xml:\n%v\n", xml)
     
-    com.controlbuilder_disconnect()
+    com.com_disconnect()
 }

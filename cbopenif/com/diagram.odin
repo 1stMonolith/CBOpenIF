@@ -65,7 +65,7 @@ DiagramVTable :: struct {
 
 diagram_serialize :: proc(diagram: Diagram) -> (xml: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -77,7 +77,7 @@ diagram_serialize :: proc(diagram: Diagram) -> (xml: string, ok: bool) {
 
 diagram_name_get :: proc(diagram: Diagram) -> (name: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -89,7 +89,7 @@ diagram_name_get :: proc(diagram: Diagram) -> (name: string, ok: bool) {
 
 diagram_name_set :: proc(diagram: Diagram, name: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -101,7 +101,7 @@ diagram_name_set :: proc(diagram: Diagram, name: string) -> (ok: bool) {
 
 diagram_task_connection_get :: proc(diagram: Diagram) -> (task_connection: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -113,7 +113,7 @@ diagram_task_connection_get :: proc(diagram: Diagram) -> (task_connection: strin
 
 diagram_task_connection_set :: proc(diagram: Diagram, task_connection: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
@@ -125,7 +125,7 @@ diagram_task_connection_set :: proc(diagram: Diagram, task_connection: string) -
 
 diagram_type_guid_get :: proc(diagram: Diagram) -> (type_guid: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -137,7 +137,7 @@ diagram_type_guid_get :: proc(diagram: Diagram) -> (type_guid: string, ok: bool)
 
 diagram_type_guid_set :: proc(diagram: Diagram, type_guid: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
@@ -149,7 +149,7 @@ diagram_type_guid_set :: proc(diagram: Diagram, type_guid: string) -> (ok: bool)
 
 diagram_inst_guid_get :: proc(diagram: Diagram) -> (inst_guid: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -161,7 +161,7 @@ diagram_inst_guid_get :: proc(diagram: Diagram) -> (inst_guid: string, ok: bool)
 
 diagram_inst_guid_set :: proc(diagram: Diagram, inst_guid: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(inst_guid)
     defer bstr_free(bs)
@@ -173,7 +173,7 @@ diagram_inst_guid_set :: proc(diagram: Diagram, inst_guid: string) -> (ok: bool)
 
 diagram_description_get :: proc(diagram: Diagram) -> (description: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -185,7 +185,7 @@ diagram_description_get :: proc(diagram: Diagram) -> (description: string, ok: b
 
 diagram_description_set :: proc(diagram: Diagram, description: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -197,7 +197,7 @@ diagram_description_set :: proc(diagram: Diagram, description: string) -> (ok: b
 
 diagram_sil_level_get :: proc(diagram: Diagram) -> (sil_level: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -209,7 +209,7 @@ diagram_sil_level_get :: proc(diagram: Diagram) -> (sil_level: string, ok: bool)
 
 diagram_sil_level_set :: proc(diagram: Diagram, sil_level: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -221,7 +221,7 @@ diagram_sil_level_set :: proc(diagram: Diagram, sil_level: string) -> (ok: bool)
 
 diagram_restricted_sil_get :: proc(diagram: Diagram) -> (restricted_sil: bool, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramIF)(diagram)->RestrictedSILGet(&vb)
@@ -232,7 +232,7 @@ diagram_restricted_sil_get :: proc(diagram: Diagram) -> (restricted_sil: bool, o
 
 diagram_restricted_sil_set :: proc(diagram: Diagram, restricted_sil: bool) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return
@@ -242,7 +242,7 @@ diagram_restricted_sil_set :: proc(diagram: Diagram, restricted_sil: bool) -> (o
 
 diagram_simulation_mark_get :: proc(diagram: Diagram) -> (simulation_mark: bool, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramIF)(diagram)->SimulationMarkGet(&vb)
@@ -253,7 +253,7 @@ diagram_simulation_mark_get :: proc(diagram: Diagram) -> (simulation_mark: bool,
 
 diagram_simulation_mark_set :: proc(diagram: Diagram, simulation_mark: bool) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -263,7 +263,7 @@ diagram_simulation_mark_set :: proc(diagram: Diagram, simulation_mark: bool) -> 
 
 diagram_reserved_by_function_get :: proc(diagram: Diagram) -> (reserved_by_function: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -275,7 +275,7 @@ diagram_reserved_by_function_get :: proc(diagram: Diagram) -> (reserved_by_funct
 
 diagram_reserved_by_function_set :: proc(diagram: Diagram, reserved_by_function: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -287,7 +287,7 @@ diagram_reserved_by_function_set :: proc(diagram: Diagram, reserved_by_function:
 
 diagram_access_level_get :: proc(diagram: Diagram) -> (access_level: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -299,7 +299,7 @@ diagram_access_level_get :: proc(diagram: Diagram) -> (access_level: string, ok:
 
 diagram_access_level_set :: proc(diagram: Diagram, access_level: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -311,7 +311,7 @@ diagram_access_level_set :: proc(diagram: Diagram, access_level: string) -> (ok:
 
 diagram_safety_type_get :: proc(diagram: Diagram) -> (safety_type: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -323,7 +323,7 @@ diagram_safety_type_get :: proc(diagram: Diagram) -> (safety_type: string, ok: b
 
 diagram_safety_type_set :: proc(diagram: Diagram, safety_type: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -335,7 +335,7 @@ diagram_safety_type_set :: proc(diagram: Diagram, safety_type: string) -> (ok: b
 
 diagram_variables_get :: proc(diagram: Diagram) -> (variables: Variables, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->VariablesGet(&p)
@@ -346,7 +346,7 @@ diagram_variables_get :: proc(diagram: Diagram) -> (variables: Variables, ok: bo
 
 diagram_variables_set :: proc(diagram: Diagram, variables: Variables) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -356,7 +356,7 @@ diagram_variables_set :: proc(diagram: Diagram, variables: Variables) -> (ok: bo
 
 diagram_commvariables_get :: proc(diagram: Diagram) -> (commvariables: CommVariables, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->CommVariablesGet(&p)
@@ -367,7 +367,7 @@ diagram_commvariables_get :: proc(diagram: Diagram) -> (commvariables: CommVaria
 
 diagram_commvariables_set :: proc(diagram: Diagram, commvariables: CommVariables) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->CommVariablesPut(commvariables)
     if com_failed(hr) do return
@@ -377,7 +377,7 @@ diagram_commvariables_set :: proc(diagram: Diagram, commvariables: CommVariables
 
 diagram_functionblocks_get :: proc(diagram: Diagram) -> (functionblocks: FunctionBlocks, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->FunctionBlocksGet(&p)
@@ -388,7 +388,7 @@ diagram_functionblocks_get :: proc(diagram: Diagram) -> (functionblocks: Functio
 
 diagram_functionblocks_set :: proc(diagram: Diagram, functionblocks: FunctionBlocks) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -398,7 +398,7 @@ diagram_functionblocks_set :: proc(diagram: Diagram, functionblocks: FunctionBlo
 
 diagram_controlmodules_get :: proc(diagram: Diagram) -> (controlmodules: ControlModules, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->ControlModulesGet(&p)
@@ -409,7 +409,7 @@ diagram_controlmodules_get :: proc(diagram: Diagram) -> (controlmodules: Control
 
 diagram_controlmodules_set :: proc(diagram: Diagram, controlmodules: ControlModules) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->ControlModulesPut(controlmodules)
     if com_failed(hr) do return
@@ -419,7 +419,7 @@ diagram_controlmodules_set :: proc(diagram: Diagram, controlmodules: ControlModu
 
 diagram_initvalues_get :: proc(diagram: Diagram) -> (initvalues: InitValues, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->InitValuesGet(&p)
@@ -430,7 +430,7 @@ diagram_initvalues_get :: proc(diagram: Diagram) -> (initvalues: InitValues, ok:
 
 diagram_initvalues_set :: proc(diagram: Diagram, initvalues: InitValues) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->InitValuesPut(initvalues)
     if com_failed(hr) do return
@@ -440,7 +440,7 @@ diagram_initvalues_set :: proc(diagram: Diagram, initvalues: InitValues) -> (ok:
 
 diagram_codeblocks_get :: proc(diagram: Diagram) -> (codeblocks: CodeBlocks, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->CodeBlocksGet(&p)
@@ -451,7 +451,7 @@ diagram_codeblocks_get :: proc(diagram: Diagram) -> (codeblocks: CodeBlocks, ok:
 
 diagram_codeblocks_set :: proc(diagram: Diagram, codeblocks: CodeBlocks) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -461,7 +461,7 @@ diagram_codeblocks_set :: proc(diagram: Diagram, codeblocks: CodeBlocks) -> (ok:
 
 diagram_diagraminstances_get :: proc(diagram: Diagram) -> (diagraminstances: DiagramInstances, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->DiagramInstancesGet(&p)
@@ -472,7 +472,7 @@ diagram_diagraminstances_get :: proc(diagram: Diagram) -> (diagraminstances: Dia
 
 diagram_diagraminstances_set :: proc(diagram: Diagram, diagraminstances: DiagramInstances) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->DiagramInstancesPut(diagraminstances)
     if com_failed(hr) do return
@@ -482,7 +482,7 @@ diagram_diagraminstances_set :: proc(diagram: Diagram, diagraminstances: Diagram
 
 diagram_signals_get :: proc(diagram: Diagram) -> (signals: Signals, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramIF)(diagram)->SignalsGet(&p)
@@ -493,7 +493,7 @@ diagram_signals_get :: proc(diagram: Diagram) -> (signals: Signals, ok: bool) {
 
 diagram_signals_set :: proc(diagram: Diagram, signals: Signals) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramIF)(diagram)->SignalsPut(signals)
     if com_failed(hr) do return
@@ -503,7 +503,7 @@ diagram_signals_set :: proc(diagram: Diagram, signals: Signals) -> (ok: bool) {
 
 diagram_batch_object_get :: proc(diagram: Diagram) -> (batch_object: string, ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -515,7 +515,7 @@ diagram_batch_object_get :: proc(diagram: Diagram) -> (batch_object: string, ok:
 
 diagram_batch_object_set :: proc(diagram: Diagram, batch_object: string) -> (ok: bool) {
     if diagram == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(batch_object)
     defer bstr_free(bs)
@@ -561,7 +561,7 @@ DiagramInstanceVTable :: struct {
 
 diagraminstance_serialize :: proc(diagraminstance: DiagramInstance) -> (xml: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -573,7 +573,7 @@ diagraminstance_serialize :: proc(diagraminstance: DiagramInstance) -> (xml: str
 
 diagraminstance_name_get :: proc(diagraminstance: DiagramInstance) -> (name: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -585,7 +585,7 @@ diagraminstance_name_get :: proc(diagraminstance: DiagramInstance) -> (name: str
 
 diagraminstance_name_set :: proc(diagraminstance: DiagramInstance, name: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -597,7 +597,7 @@ diagraminstance_name_set :: proc(diagraminstance: DiagramInstance, name: string)
 
 diagraminstance_type_name_get :: proc(diagraminstance: DiagramInstance) -> (type_name: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -609,7 +609,7 @@ diagraminstance_type_name_get :: proc(diagraminstance: DiagramInstance) -> (type
 
 diagraminstance_type_name_set :: proc(diagraminstance: DiagramInstance, type_name: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_name)
     defer bstr_free(bs)
@@ -621,7 +621,7 @@ diagraminstance_type_name_set :: proc(diagraminstance: DiagramInstance, type_nam
 
 diagraminstance_guid_get :: proc(diagraminstance: DiagramInstance) -> (guid: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -633,7 +633,7 @@ diagraminstance_guid_get :: proc(diagraminstance: DiagramInstance) -> (guid: str
 
 diagraminstance_guid_set :: proc(diagraminstance: DiagramInstance, guid: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -645,7 +645,7 @@ diagraminstance_guid_set :: proc(diagraminstance: DiagramInstance, guid: string)
 
 diagraminstance_description_get :: proc(diagraminstance: DiagramInstance) -> (description: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -657,7 +657,7 @@ diagraminstance_description_get :: proc(diagraminstance: DiagramInstance) -> (de
 
 diagraminstance_description_set :: proc(diagraminstance: DiagramInstance, description: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -669,7 +669,7 @@ diagraminstance_description_set :: proc(diagraminstance: DiagramInstance, descri
 
 diagraminstance_aspect_object_get :: proc(diagraminstance: DiagramInstance) -> (aspect_object: bool, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramInstanceIF)(diagraminstance)->AspectObjectGet(&vb)
@@ -680,7 +680,7 @@ diagraminstance_aspect_object_get :: proc(diagraminstance: DiagramInstance) -> (
 
 diagraminstance_aspect_object_set :: proc(diagraminstance: DiagramInstance, aspect_object: bool) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstanceIF)(diagraminstance)->AspectObjectPut(to_variantbool(aspect_object))
     if com_failed(hr) do return
@@ -690,7 +690,7 @@ diagraminstance_aspect_object_set :: proc(diagraminstance: DiagramInstance, aspe
 
 diagraminstance_expose_properties_in_parent_get :: proc(diagraminstance: DiagramInstance) -> (expose: bool, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramInstanceIF)(diagraminstance)->ExposePropertiesInParentGet(&vb)
@@ -701,7 +701,7 @@ diagraminstance_expose_properties_in_parent_get :: proc(diagraminstance: Diagram
 
 diagraminstance_expose_properties_in_parent_set :: proc(diagraminstance: DiagramInstance, expose: bool) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstanceIF)(diagraminstance)->ExposePropertiesInParentPut(to_variantbool(expose))
     if com_failed(hr) do return
@@ -711,7 +711,7 @@ diagraminstance_expose_properties_in_parent_set :: proc(diagraminstance: Diagram
 
 diagraminstance_access_level_get :: proc(diagraminstance: DiagramInstance) -> (access_level: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -723,7 +723,7 @@ diagraminstance_access_level_get :: proc(diagraminstance: DiagramInstance) -> (a
 
 diagraminstance_access_level_set :: proc(diagraminstance: DiagramInstance, access_level: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
@@ -735,7 +735,7 @@ diagraminstance_access_level_set :: proc(diagraminstance: DiagramInstance, acces
 
 diagraminstance_safety_type_get :: proc(diagraminstance: DiagramInstance) -> (safety_type: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -747,7 +747,7 @@ diagraminstance_safety_type_get :: proc(diagraminstance: DiagramInstance) -> (sa
 
 diagraminstance_safety_type_set :: proc(diagraminstance: DiagramInstance, safety_type: string) -> (ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
@@ -759,7 +759,7 @@ diagraminstance_safety_type_set :: proc(diagraminstance: DiagramInstance, safety
 
 diagraminstance_type_guid_get :: proc(diagraminstance: DiagramInstance) -> (type_guid: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -771,7 +771,7 @@ diagraminstance_type_guid_get :: proc(diagraminstance: DiagramInstance) -> (type
 
 diagraminstance_type_path_get :: proc(diagraminstance: DiagramInstance) -> (type_path: string, ok: bool) {
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -808,7 +808,7 @@ DiagramInstancesVTable :: struct {
 diagraminstances_diagraminstance_add :: proc(diagraminstances: DiagramInstances, diagraminstance: DiagramInstance) -> (ok: bool) {
     if diagraminstances == nil do return
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstancesIF)(diagraminstances)->Add(diagraminstance)
     if com_failed(hr) do return
@@ -819,7 +819,7 @@ diagraminstances_diagraminstance_add :: proc(diagraminstances: DiagramInstances,
 diagraminstances_diagraminstance_add_at_index :: proc(diagraminstances: DiagramInstances, diagraminstance: DiagramInstance, index: i32) -> (ok: bool) {
     if diagraminstances == nil do return
     if diagraminstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstancesIF)(diagraminstances)->AddBefore(diagraminstance, index)
     if com_failed(hr) do return
@@ -829,7 +829,7 @@ diagraminstances_diagraminstance_add_at_index :: proc(diagraminstances: DiagramI
 
 diagraminstances_diagraminstance_by_name :: proc(diagraminstances: DiagramInstances, name: string) -> (diagraminstance: DiagramInstance, ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -841,7 +841,7 @@ diagraminstances_diagraminstance_by_name :: proc(diagraminstances: DiagramInstan
 
 diagraminstances_diagraminstance_by_index :: proc(diagraminstances: DiagramInstances, index: i32) -> (diagraminstance: DiagramInstance, ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstancesIF)(diagraminstances)->Item(index + 1, cast(^rawptr)&diagraminstance)
     if com_failed(hr) do return
@@ -851,7 +851,7 @@ diagraminstances_diagraminstance_by_index :: proc(diagraminstances: DiagramInsta
 
 diagraminstances_diagraminstance_index :: proc(diagraminstances: DiagramInstances, name: string) -> (index: i32, ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -863,7 +863,7 @@ diagraminstances_diagraminstance_index :: proc(diagraminstances: DiagramInstance
 
 diagraminstances_diagraminstance_count :: proc(diagraminstances: DiagramInstances) -> (count: i32, ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstancesIF)(diagraminstances)->Count(&count)
     if com_failed(hr) do return
@@ -873,7 +873,7 @@ diagraminstances_diagraminstance_count :: proc(diagraminstances: DiagramInstance
 
 diagraminstances_diagraminstance_remove_by_name :: proc(diagraminstances: DiagramInstances, name: string) -> (ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = diagraminstances_diagraminstance_index(diagraminstances, name)
@@ -887,7 +887,7 @@ diagraminstances_diagraminstance_remove_by_name :: proc(diagraminstances: Diagra
 
 diagraminstances_diagraminstance_remove_by_index :: proc(diagraminstances: DiagramInstances, index: i32) -> (ok: bool) {
     if diagraminstances == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramInstancesIF)(diagraminstances)->Remove(index + 1)
     if com_failed(hr) do return
@@ -959,7 +959,7 @@ DiagramTypeVTable :: struct {
 
 diagramtype_serialize :: proc(diagramtype: DiagramType) -> (xml: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -971,7 +971,7 @@ diagramtype_serialize :: proc(diagramtype: DiagramType) -> (xml: string, ok: boo
 
 diagramtype_name_get :: proc(diagramtype: DiagramType) -> (name: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -983,7 +983,7 @@ diagramtype_name_get :: proc(diagramtype: DiagramType) -> (name: string, ok: boo
 
 diagramtype_name_set :: proc(diagramtype: DiagramType, name: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -995,7 +995,7 @@ diagramtype_name_set :: proc(diagramtype: DiagramType, name: string) -> (ok: boo
 
 diagramtype_protected_get :: proc(diagramtype: DiagramType) -> (protected: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->ProtectedGet(&vb)
@@ -1006,7 +1006,7 @@ diagramtype_protected_get :: proc(diagramtype: DiagramType) -> (protected: bool,
 
 diagramtype_protected_set :: proc(diagramtype: DiagramType, protected: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->ProtectedPut(to_variantbool(protected))
     if com_failed(hr) do return
@@ -1016,7 +1016,7 @@ diagramtype_protected_set :: proc(diagramtype: DiagramType, protected: bool) -> 
 
 diagramtype_hidden_get :: proc(diagramtype: DiagramType) -> (hidden: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->HiddenGet(&vb)
@@ -1027,7 +1027,7 @@ diagramtype_hidden_get :: proc(diagramtype: DiagramType) -> (hidden: bool, ok: b
 
 diagramtype_hidden_set :: proc(diagramtype: DiagramType, hidden: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->HiddenPut(to_variantbool(hidden))
     if com_failed(hr) do return
@@ -1037,7 +1037,7 @@ diagramtype_hidden_set :: proc(diagramtype: DiagramType, hidden: bool) -> (ok: b
 
 diagramtype_scope_get :: proc(diagramtype: DiagramType) -> (scope: i32, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->ScopeGet(&scope)
     if com_failed(hr) do return
@@ -1047,7 +1047,7 @@ diagramtype_scope_get :: proc(diagramtype: DiagramType) -> (scope: i32, ok: bool
 
 diagramtype_scope_set :: proc(diagramtype: DiagramType, scope: i32) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->ScopePut(scope)
     if com_failed(hr) do return
@@ -1057,7 +1057,7 @@ diagramtype_scope_set :: proc(diagramtype: DiagramType, scope: i32) -> (ok: bool
 
 diagramtype_alarm_owner_get :: proc(diagramtype: DiagramType) -> (alarm_owner: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->AlarmOwnerGet(&vb)
@@ -1068,7 +1068,7 @@ diagramtype_alarm_owner_get :: proc(diagramtype: DiagramType) -> (alarm_owner: b
 
 diagramtype_alarm_owner_set :: proc(diagramtype: DiagramType, alarm_owner: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->AlarmOwnerPut(to_variantbool(alarm_owner))
     if com_failed(hr) do return
@@ -1078,7 +1078,7 @@ diagramtype_alarm_owner_set :: proc(diagramtype: DiagramType, alarm_owner: bool)
 
 diagramtype_guid_get :: proc(diagramtype: DiagramType) -> (guid: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1090,7 +1090,7 @@ diagramtype_guid_get :: proc(diagramtype: DiagramType) -> (guid: string, ok: boo
 
 diagramtype_guid_set :: proc(diagramtype: DiagramType, guid: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -1102,7 +1102,7 @@ diagramtype_guid_set :: proc(diagramtype: DiagramType, guid: string) -> (ok: boo
 
 diagramtype_instantiate_as_aspect_object_get :: proc(diagramtype: DiagramType) -> (instantiate: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->InstantiateAsAspectObjectGet(&vb)
@@ -1113,7 +1113,7 @@ diagramtype_instantiate_as_aspect_object_get :: proc(diagramtype: DiagramType) -
 
 diagramtype_instantiate_as_aspect_object_set :: proc(diagramtype: DiagramType, instantiate: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->InstantiateAsAspectObjectPut(to_variantbool(instantiate))
     if com_failed(hr) do return
@@ -1123,7 +1123,7 @@ diagramtype_instantiate_as_aspect_object_set :: proc(diagramtype: DiagramType, i
 
 diagramtype_sil_level_get :: proc(diagramtype: DiagramType) -> (sil_level: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1135,7 +1135,7 @@ diagramtype_sil_level_get :: proc(diagramtype: DiagramType) -> (sil_level: strin
 
 diagramtype_sil_level_set :: proc(diagramtype: DiagramType, sil_level: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(sil_level)
     defer bstr_free(bs)
@@ -1147,7 +1147,7 @@ diagramtype_sil_level_set :: proc(diagramtype: DiagramType, sil_level: string) -
 
 diagramtype_restricted_sil_get :: proc(diagramtype: DiagramType) -> (restricted_sil: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->RestrictedSILGet(&vb)
@@ -1158,7 +1158,7 @@ diagramtype_restricted_sil_get :: proc(diagramtype: DiagramType) -> (restricted_
 
 diagramtype_restricted_sil_set :: proc(diagramtype: DiagramType, restricted_sil: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->RestrictedSILPut(to_variantbool(restricted_sil))
     if com_failed(hr) do return
@@ -1168,7 +1168,7 @@ diagramtype_restricted_sil_set :: proc(diagramtype: DiagramType, restricted_sil:
 
 diagramtype_simulation_mark_get :: proc(diagramtype: DiagramType) -> (simulation_mark: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->SimulationMarkGet(&vb)
@@ -1179,7 +1179,7 @@ diagramtype_simulation_mark_get :: proc(diagramtype: DiagramType) -> (simulation
 
 diagramtype_simulation_mark_set :: proc(diagramtype: DiagramType, simulation_mark: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->SimulationMarkPut(to_variantbool(simulation_mark))
     if com_failed(hr) do return
@@ -1189,7 +1189,7 @@ diagramtype_simulation_mark_set :: proc(diagramtype: DiagramType, simulation_mar
 
 diagramtype_reserved_by_function_get :: proc(diagramtype: DiagramType) -> (reserved_by_function: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1201,7 +1201,7 @@ diagramtype_reserved_by_function_get :: proc(diagramtype: DiagramType) -> (reser
 
 diagramtype_reserved_by_function_set :: proc(diagramtype: DiagramType, reserved_by_function: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -1213,7 +1213,7 @@ diagramtype_reserved_by_function_set :: proc(diagramtype: DiagramType, reserved_
 
 diagramtype_embedded_graphics_visible_get :: proc(diagramtype: DiagramType) -> (visible: bool, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^DiagramTypeIF)(diagramtype)->EmbeddedGraphicsVisibleGet(&vb)
@@ -1224,7 +1224,7 @@ diagramtype_embedded_graphics_visible_get :: proc(diagramtype: DiagramType) -> (
 
 diagramtype_embedded_graphics_visible_set :: proc(diagramtype: DiagramType, visible: bool) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->EmbeddedGraphicsVisiblePut(to_variantbool(visible))
     if com_failed(hr) do return
@@ -1234,7 +1234,7 @@ diagramtype_embedded_graphics_visible_set :: proc(diagramtype: DiagramType, visi
 
 diagramtype_description_get :: proc(diagramtype: DiagramType) -> (description: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1246,7 +1246,7 @@ diagramtype_description_get :: proc(diagramtype: DiagramType) -> (description: s
 
 diagramtype_description_set :: proc(diagramtype: DiagramType, description: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(description)
     defer bstr_free(bs)
@@ -1258,7 +1258,7 @@ diagramtype_description_set :: proc(diagramtype: DiagramType, description: strin
 
 diagramtype_parameters_get :: proc(diagramtype: DiagramType) -> (parameters: Parameters, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->ParametersGet(&p)
@@ -1269,7 +1269,7 @@ diagramtype_parameters_get :: proc(diagramtype: DiagramType) -> (parameters: Par
 
 diagramtype_parameters_set :: proc(diagramtype: DiagramType, parameters: Parameters) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->ParametersPut(parameters)
     if com_failed(hr) do return
@@ -1279,7 +1279,7 @@ diagramtype_parameters_set :: proc(diagramtype: DiagramType, parameters: Paramet
 
 diagramtype_variables_get :: proc(diagramtype: DiagramType) -> (variables: Variables, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->VariablesGet(&p)
@@ -1290,7 +1290,7 @@ diagramtype_variables_get :: proc(diagramtype: DiagramType) -> (variables: Varia
 
 diagramtype_variables_set :: proc(diagramtype: DiagramType, variables: Variables) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->VariablesPut(variables)
     if com_failed(hr) do return
@@ -1300,7 +1300,7 @@ diagramtype_variables_set :: proc(diagramtype: DiagramType, variables: Variables
 
 diagramtype_functionblocks_get :: proc(diagramtype: DiagramType) -> (functionblocks: FunctionBlocks, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->FunctionBlocksGet(&p)
@@ -1311,7 +1311,7 @@ diagramtype_functionblocks_get :: proc(diagramtype: DiagramType) -> (functionblo
 
 diagramtype_functionblocks_set :: proc(diagramtype: DiagramType, functionblocks: FunctionBlocks) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->FunctionBlocksPut(functionblocks)
     if com_failed(hr) do return
@@ -1321,7 +1321,7 @@ diagramtype_functionblocks_set :: proc(diagramtype: DiagramType, functionblocks:
 
 diagramtype_controlmodules_get :: proc(diagramtype: DiagramType) -> (controlmodules: ControlModules, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->ControlModulesGet(&p)
@@ -1332,7 +1332,7 @@ diagramtype_controlmodules_get :: proc(diagramtype: DiagramType) -> (controlmodu
 
 diagramtype_controlmodules_set :: proc(diagramtype: DiagramType, controlmodules: ControlModules) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->ControlModulesPut(controlmodules)
     if com_failed(hr) do return
@@ -1342,7 +1342,7 @@ diagramtype_controlmodules_set :: proc(diagramtype: DiagramType, controlmodules:
 
 diagramtype_diagraminstances_get :: proc(diagramtype: DiagramType) -> (diagraminstances: DiagramInstances, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->DiagramInstancesGet(&p)
@@ -1353,7 +1353,7 @@ diagramtype_diagraminstances_get :: proc(diagramtype: DiagramType) -> (diagramin
 
 diagramtype_diagraminstances_set :: proc(diagramtype: DiagramType, diagraminstances: DiagramInstances) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->DiagramInstancesPut(diagraminstances)
     if com_failed(hr) do return
@@ -1363,7 +1363,7 @@ diagramtype_diagraminstances_set :: proc(diagramtype: DiagramType, diagraminstan
 
 diagramtype_codeblocks_get :: proc(diagramtype: DiagramType) -> (codeblocks: CodeBlocks, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^DiagramTypeIF)(diagramtype)->CodeBlocksGet(&p)
@@ -1374,7 +1374,7 @@ diagramtype_codeblocks_get :: proc(diagramtype: DiagramType) -> (codeblocks: Cod
 
 diagramtype_codeblocks_set :: proc(diagramtype: DiagramType, codeblocks: CodeBlocks) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^DiagramTypeIF)(diagramtype)->CodeBlocksPut(codeblocks)
     if com_failed(hr) do return
@@ -1384,7 +1384,7 @@ diagramtype_codeblocks_set :: proc(diagramtype: DiagramType, codeblocks: CodeBlo
 
 diagramtype_batch_object_get :: proc(diagramtype: DiagramType) -> (batch_object: string, ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -1396,7 +1396,7 @@ diagramtype_batch_object_get :: proc(diagramtype: DiagramType) -> (batch_object:
 
 diagramtype_batch_object_set :: proc(diagramtype: DiagramType, batch_object: string) -> (ok: bool) {
     if diagramtype == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(batch_object)
     defer bstr_free(bs)

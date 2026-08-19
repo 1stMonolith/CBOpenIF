@@ -23,7 +23,7 @@ ConnectedHWLibraryVTable :: struct {
 
 connectedhwlibrary_name_get :: proc(chl: ConnectedHWLibrary) -> (name: string, ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -35,7 +35,7 @@ connectedhwlibrary_name_get :: proc(chl: ConnectedHWLibrary) -> (name: string, o
 
 connectedhwlibrary_name_set :: proc(chl: ConnectedHWLibrary, name: string) -> (ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -47,7 +47,7 @@ connectedhwlibrary_name_set :: proc(chl: ConnectedHWLibrary, name: string) -> (o
 
 connectedhwlibrary_major_version_get :: proc(chl: ConnectedHWLibrary) -> (major_version: i32, ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->MajorVersionGet(&major_version)
     if com_failed(hr) do return
@@ -57,7 +57,7 @@ connectedhwlibrary_major_version_get :: proc(chl: ConnectedHWLibrary) -> (major_
 
 connectedhwlibrary_major_version_set :: proc(chl: ConnectedHWLibrary, major_version: i32) -> (ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->MajorVersionPut(major_version)
     if com_failed(hr) do return
@@ -66,7 +66,7 @@ connectedhwlibrary_major_version_set :: proc(chl: ConnectedHWLibrary, major_vers
 }
 connectedhwlibrary_minor_version_get :: proc(chl: ConnectedHWLibrary) -> (minor_version: i32, ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->MinorVersionGet(&minor_version)
     if com_failed(hr) do return
@@ -76,7 +76,7 @@ connectedhwlibrary_minor_version_get :: proc(chl: ConnectedHWLibrary) -> (minor_
 
 connectedhwlibrary_minor_version_set :: proc(chl: ConnectedHWLibrary, minor_version: i32) -> (ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->MinorVersionPut(minor_version)
     if com_failed(hr) do return
@@ -86,7 +86,7 @@ connectedhwlibrary_minor_version_set :: proc(chl: ConnectedHWLibrary, minor_vers
 
 connectedhwlibrary_revision_get :: proc(chl: ConnectedHWLibrary) -> (revision: i32, ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->RevisionGet(&revision)
     if com_failed(hr) do return
@@ -96,7 +96,7 @@ connectedhwlibrary_revision_get :: proc(chl: ConnectedHWLibrary) -> (revision: i
 
 connectedhwlibrary_revision_set :: proc(chl: ConnectedHWLibrary, revision: i32) -> (ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibraryIF)(chl)->RevisionPut(revision)
     if com_failed(hr) do return
@@ -106,7 +106,7 @@ connectedhwlibrary_revision_set :: proc(chl: ConnectedHWLibrary, revision: i32) 
 
 connectedhwlibrary_guid_get :: proc(chl: ConnectedHWLibrary) -> (guid: string, ok: bool) {
     if chl == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -143,7 +143,7 @@ ConnectedHWLibrariesVTable :: struct {
 
 connectedhwlibraries_serialize :: proc(connectedhwlibraries: ConnectedHWLibraries) -> (xml: string, ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -156,7 +156,7 @@ connectedhwlibraries_serialize :: proc(connectedhwlibraries: ConnectedHWLibrarie
 connectedhwlibraries_connectedhwlibrary_add :: proc(connectedhwlibraries: ConnectedHWLibraries, connectedhwlibrary: ConnectedHWLibrary) -> (ok: bool) {
     if connectedhwlibraries == nil do return
     if connectedhwlibrary == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Add(connectedhwlibrary)
     if com_failed(hr) do return
@@ -167,7 +167,7 @@ connectedhwlibraries_connectedhwlibrary_add :: proc(connectedhwlibraries: Connec
 connectedhwlibraries_connectedhwlibrary_add_at_index :: proc(connectedhwlibraries: ConnectedHWLibraries, connectedhwlibrary: ConnectedHWLibrary, index: i32) -> (ok: bool) {
     if connectedhwlibraries == nil do return
     if connectedhwlibrary == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->AddBefore(connectedhwlibrary, index)
     if com_failed(hr) do return
@@ -177,7 +177,7 @@ connectedhwlibraries_connectedhwlibrary_add_at_index :: proc(connectedhwlibrarie
 
 connectedhwlibraries_connectedhwlibrary_by_name :: proc(connectedhwlibraries: ConnectedHWLibraries, name: string) -> (connectedhwlibrary: ConnectedHWLibrary, ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -189,7 +189,7 @@ connectedhwlibraries_connectedhwlibrary_by_name :: proc(connectedhwlibraries: Co
 
 connectedhwlibraries_connectedhwlibrary_by_index :: proc(connectedhwlibraries: ConnectedHWLibraries, index: i32) -> (connectedhwlibrary: ConnectedHWLibrary, ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Item(index + 1, cast(^rawptr)&connectedhwlibrary)
     if com_failed(hr) do return
@@ -199,7 +199,7 @@ connectedhwlibraries_connectedhwlibrary_by_index :: proc(connectedhwlibraries: C
 
 connectedhwlibraries_connectedhwlibrary_index :: proc(connectedhwlibraries: ConnectedHWLibraries, name: string) -> (index: i32, ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -211,7 +211,7 @@ connectedhwlibraries_connectedhwlibrary_index :: proc(connectedhwlibraries: Conn
 
 connectedhwlibraries_connectedhwlibrary_count :: proc(connectedhwlibraries: ConnectedHWLibraries) -> (count: i32, ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Count(&count)
     if com_failed(hr) do return
@@ -221,7 +221,7 @@ connectedhwlibraries_connectedhwlibrary_count :: proc(connectedhwlibraries: Conn
 
 connectedhwlibraries_connectedhwlibrary_remove_by_name :: proc(connectedhwlibraries: ConnectedHWLibraries, name: string) -> (ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = connectedhwlibraries_connectedhwlibrary_index(connectedhwlibraries, name)
@@ -235,7 +235,7 @@ connectedhwlibraries_connectedhwlibrary_remove_by_name :: proc(connectedhwlibrar
 
 connectedhwlibraries_connectedhwlibrary_remove_by_index :: proc(connectedhwlibraries: ConnectedHWLibraries, index: i32) -> (ok: bool) {
     if connectedhwlibraries == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Remove(index + 1)
     if com_failed(hr) do return

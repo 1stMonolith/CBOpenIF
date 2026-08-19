@@ -26,7 +26,7 @@ ExecutionGroupVTable :: struct {
 
 executiongroup_task_name_get :: proc(executiongroup: ExecutionGroup) -> (task_name: string, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -38,7 +38,7 @@ executiongroup_task_name_get :: proc(executiongroup: ExecutionGroup) -> (task_na
 
 executiongroup_task_name_set :: proc(executiongroup: ExecutionGroup, task_name: string) -> (ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(task_name)
     defer bstr_free(bs)
@@ -50,7 +50,7 @@ executiongroup_task_name_set :: proc(executiongroup: ExecutionGroup, task_name: 
 
 executiongroup_serialize :: proc(executiongroup: ExecutionGroup) -> (xml: string, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -63,7 +63,7 @@ executiongroup_serialize :: proc(executiongroup: ExecutionGroup) -> (xml: string
 executiongroup_executioninstance_add :: proc(executiongroup: ExecutionGroup, executioninstance: ExecutionInstance) -> (ok: bool) {
     if executiongroup == nil do return
     if executioninstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionGroupIF)(executiongroup)->Add(executioninstance)
     if com_failed(hr) do return
@@ -74,7 +74,7 @@ executiongroup_executioninstance_add :: proc(executiongroup: ExecutionGroup, exe
 executiongroup_executioninstance_add_at_index :: proc(executiongroup: ExecutionGroup, executioninstance: ExecutionInstance, index: i32) -> (ok: bool) {
     if executiongroup == nil do return
     if executioninstance == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionGroupIF)(executiongroup)->AddBefore(executioninstance, index)
     if com_failed(hr) do return
@@ -84,7 +84,7 @@ executiongroup_executioninstance_add_at_index :: proc(executiongroup: ExecutionG
 
 executiongroup_executioninstance_by_name :: proc(executiongroup: ExecutionGroup, name: string) -> (executioninstance: ExecutionInstance, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -96,7 +96,7 @@ executiongroup_executioninstance_by_name :: proc(executiongroup: ExecutionGroup,
 
 executiongroup_executioninstance_by_index :: proc(executiongroup: ExecutionGroup, index: i32) -> (executioninstance: ExecutionInstance, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionGroupIF)(executiongroup)->Item(index + 1, cast(^rawptr)&executioninstance)
     if com_failed(hr) do return
@@ -106,7 +106,7 @@ executiongroup_executioninstance_by_index :: proc(executiongroup: ExecutionGroup
 
 executiongroup_executioninstance_index :: proc(executiongroup: ExecutionGroup, name: string) -> (index: i32, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -118,7 +118,7 @@ executiongroup_executioninstance_index :: proc(executiongroup: ExecutionGroup, n
 
 executiongroup_executioninstance_count :: proc(executiongroup: ExecutionGroup) -> (count: i32, ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionGroupIF)(executiongroup)->Count(&count)
     if com_failed(hr) do return
@@ -128,7 +128,7 @@ executiongroup_executioninstance_count :: proc(executiongroup: ExecutionGroup) -
 
 executiongroup_executioninstance_remove_by_name :: proc(executiongroup: ExecutionGroup, name: string) -> (ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = executiongroup_executioninstance_index(executiongroup, name)
@@ -142,7 +142,7 @@ executiongroup_executioninstance_remove_by_name :: proc(executiongroup: Executio
 
 executiongroup_executioninstance_remove_by_index :: proc(executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionGroupIF)(executiongroup)->Remove(index + 1)
     if com_failed(hr) do return
@@ -169,7 +169,7 @@ ExecutionInstanceVTable :: struct {
 
 executioninstance_name_get :: proc(ei: ExecutionInstance) -> (name: string, ok: bool) {
     if ei == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -181,7 +181,7 @@ executioninstance_name_get :: proc(ei: ExecutionInstance) -> (name: string, ok: 
 
 executioninstance_name_set :: proc(ei: ExecutionInstance, name: string) -> (ok: bool) {
     if ei == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -217,7 +217,7 @@ ExecutionOrderVTable :: struct {
 
 executionorder_serialize :: proc(executionorder: ExecutionOrder) -> (xml: string, ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -230,7 +230,7 @@ executionorder_serialize :: proc(executionorder: ExecutionOrder) -> (xml: string
 executionorder_executiongroup_add :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup) -> (ok: bool) {
     if executionorder == nil do return
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionOrderIF)(executionorder)->Add(executiongroup)
     if com_failed(hr) do return
@@ -241,7 +241,7 @@ executionorder_executiongroup_add :: proc(executionorder: ExecutionOrder, execut
 executionorder_executiongroup_add_at_index :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
     if executionorder == nil do return
     if executiongroup == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionOrderIF)(executionorder)->AddBefore(executiongroup, index)
     if com_failed(hr) do return
@@ -251,7 +251,7 @@ executionorder_executiongroup_add_at_index :: proc(executionorder: ExecutionOrde
 
 executionorder_executiongroup_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (executiongroup: ExecutionGroup, ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_task_name := to_bstr(task_name)
     defer bstr_free(bstr_task_name)
@@ -263,7 +263,7 @@ executionorder_executiongroup_by_task_name :: proc(executionorder: ExecutionOrde
 
 executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (executiongroup: ExecutionGroup, ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionOrderIF)(executionorder)->Item(index + 1, cast(^rawptr)&executiongroup)
     if com_failed(hr) do return
@@ -273,7 +273,7 @@ executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, i
 
 executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task_name: string) -> (index: i32, ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_task_name := to_bstr(task_name)
     defer bstr_free(bstr_task_name)
@@ -285,7 +285,7 @@ executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task
 
 executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (count: i32, ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionOrderIF)(executionorder)->Count(&count)
     if com_failed(hr) do return
@@ -295,7 +295,7 @@ executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (
 
 executionorder_executiongroup_remove_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = executionorder_executiongroup_index(executionorder, task_name)
@@ -309,7 +309,7 @@ executionorder_executiongroup_remove_by_task_name :: proc(executionorder: Execut
 
 executionorder_executiongroup_remove_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (ok: bool) {
     if executionorder == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^ExecutionOrderIF)(executionorder)->Remove(index + 1)
     if com_failed(hr) do return

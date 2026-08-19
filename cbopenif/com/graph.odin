@@ -22,7 +22,7 @@ GraphNodeVTable :: struct {
 
 graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
@@ -34,7 +34,7 @@ graphnode_name_get :: proc(graphnode: GraphNode) -> (name: string, ok: bool) {
 
 graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bs := to_bstr(name)
     defer bstr_free(bs)
@@ -46,7 +46,7 @@ graphnode_name_set :: proc(graphnode: GraphNode, name: string) -> (ok: bool) {
 
 graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XGet(&x)
     if com_failed(hr) do return
@@ -56,7 +56,7 @@ graphnode_x_get :: proc(graphnode: GraphNode) -> (x: f64, ok: bool) {
 
 graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->XPut(x)
     if com_failed(hr) do return
@@ -66,7 +66,7 @@ graphnode_x_set :: proc(graphnode: GraphNode, x: f64) -> (ok: bool) {
 
 graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YGet(&y)
     if com_failed(hr) do return
@@ -76,7 +76,7 @@ graphnode_y_get :: proc(graphnode: GraphNode) -> (y: f64, ok: bool) {
 
 graphnode_y_set :: proc(graphnode: GraphNode, y: f64) -> (ok: bool) {
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodeIF)(graphnode)->YPut(y)
     if com_failed(hr) do return
@@ -110,7 +110,7 @@ GraphNodesVTable :: struct {
 graphnodes_graphnode_add :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -> (ok: bool) {
     if graphnodes == nil do return
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodesIF)(graphnodes)->Add(graphnode)
     if com_failed(hr) do return
@@ -121,7 +121,7 @@ graphnodes_graphnode_add :: proc(graphnodes: GraphNodes, graphnode: GraphNode) -
 graphnodes_graphnode_add_at_index :: proc(graphnodes: GraphNodes, graphnode: GraphNode, index: i32) -> (ok: bool) {
     if graphnodes == nil do return
     if graphnode == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodesIF)(graphnodes)->AddBefore(graphnode, index)
     if com_failed(hr) do return
@@ -131,7 +131,7 @@ graphnodes_graphnode_add_at_index :: proc(graphnodes: GraphNodes, graphnode: Gra
 
 graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (graphnode: GraphNode, ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -143,7 +143,7 @@ graphnodes_graphnode_by_name :: proc(graphnodes: GraphNodes, name: string) -> (g
 
 graphnodes_graphnode_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (graphnode: GraphNode, ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodesIF)(graphnodes)->Item(index + 1, cast(^rawptr)&graphnode)
     if com_failed(hr) do return
@@ -153,7 +153,7 @@ graphnodes_graphnode_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (gr
 
 graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (index: i32, ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -165,7 +165,7 @@ graphnodes_graphnode_index :: proc(graphnodes: GraphNodes, name: string) -> (ind
 
 graphnodes_graphnode_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodesIF)(graphnodes)->Count(&count)
     if com_failed(hr) do return
@@ -175,7 +175,7 @@ graphnodes_graphnode_count :: proc(graphnodes: GraphNodes) -> (count: i32, ok: b
 
 graphnodes_graphnode_remove_by_name :: proc(graphnodes: GraphNodes, name: string) -> (ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = graphnodes_graphnode_index(graphnodes, name)
@@ -188,7 +188,7 @@ graphnodes_graphnode_remove_by_name :: proc(graphnodes: GraphNodes, name: string
 
 graphnodes_graphnode_remove_by_index :: proc(graphnodes: GraphNodes, index: i32) -> (ok: bool) {
     if graphnodes == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphNodesIF)(graphnodes)->Remove(index + 1)
     if com_failed(hr) do return
@@ -223,7 +223,7 @@ GraphPosVTable :: struct {
 
 graphpos_x_get :: proc(graphpos: GraphPos) -> (x: f64, ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XGet(&x)
     if com_failed(hr) do return
@@ -233,7 +233,7 @@ graphpos_x_get :: proc(graphpos: GraphPos) -> (x: f64, ok: bool) {
 
 graphpos_x_set :: proc(graphpos: GraphPos, x: f64) -> (ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XPut(x)
     if com_failed(hr) do return
@@ -243,7 +243,7 @@ graphpos_x_set :: proc(graphpos: GraphPos, x: f64) -> (ok: bool) {
 
 graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YGet(&y)
     if com_failed(hr) do return
@@ -253,7 +253,7 @@ graphpos_y_get :: proc(graphpos: GraphPos) -> (y: f64, ok: bool) {
 
 graphpos_y_set :: proc(graphpos: GraphPos, y: f64) -> (ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YPut(y)
     if com_failed(hr) do return
@@ -263,7 +263,7 @@ graphpos_y_set :: proc(graphpos: GraphPos, y: f64) -> (ok: bool) {
 
 graphpos_rotation_get :: proc(graphpos: GraphPos) -> (rotation: f64, ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->RotationGet(&rotation)
     if com_failed(hr) do return
@@ -273,7 +273,7 @@ graphpos_rotation_get :: proc(graphpos: GraphPos) -> (rotation: f64, ok: bool) {
 
 graphpos_rotation_set :: proc(graphpos: GraphPos, rotation: f64) -> (ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->RotationPut(rotation)
     if com_failed(hr) do return
@@ -283,7 +283,7 @@ graphpos_rotation_set :: proc(graphpos: GraphPos, rotation: f64) -> (ok: bool) {
 
 graphpos_xscale_get :: proc(graphpos: GraphPos) -> (xscale: f64, ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XScaleGet(&xscale)
     if com_failed(hr) do return
@@ -293,7 +293,7 @@ graphpos_xscale_get :: proc(graphpos: GraphPos) -> (xscale: f64, ok: bool) {
 
 graphpos_xscale_set :: proc(graphpos: GraphPos, xscale: f64) -> (ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->XScalePut(xscale)
     if com_failed(hr) do return
@@ -303,7 +303,7 @@ graphpos_xscale_set :: proc(graphpos: GraphPos, xscale: f64) -> (ok: bool) {
 
 graphpos_yscale_get :: proc(graphpos: GraphPos) -> (yscale: f64, ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YScaleGet(&yscale)
     if com_failed(hr) do return
@@ -313,7 +313,7 @@ graphpos_yscale_get :: proc(graphpos: GraphPos) -> (yscale: f64, ok: bool) {
 
 graphpos_yscale_set :: proc(graphpos: GraphPos, yscale: f64) -> (ok: bool) {
     if graphpos == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphPosIF)(graphpos)->YScalePut(yscale)
     if com_failed(hr) do return
@@ -344,7 +344,7 @@ GraphSizeVTable :: struct {
 
 graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok: bool) {
     if graphsize == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->LowerLeftGet(cast(^rawptr)&lower_left)
     if com_failed(hr) do return
@@ -354,7 +354,7 @@ graphsize_lower_left_get :: proc(graphsize: GraphSize) -> (lower_left: Point, ok
 
 graphsize_lower_left_set :: proc(graphsize: GraphSize, lower_left: Point) -> (ok: bool) {
     if graphsize == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->LowerLeftPut(lower_left)
     if com_failed(hr) do return
@@ -364,7 +364,7 @@ graphsize_lower_left_set :: proc(graphsize: GraphSize, lower_left: Point) -> (ok
 
 graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, ok: bool) {
     if graphsize == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->UpperRightGet(cast(^rawptr)&upper_right)
     if com_failed(hr) do return
@@ -374,7 +374,7 @@ graphsize_upper_right_get :: proc(graphsize: GraphSize) -> (upper_right: Point, 
 
 graphsize_upper_right_set :: proc(graphsize: GraphSize, upper_right: Point) -> (ok: bool) {
     if graphsize == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := (^GraphSizeIF)(graphsize)->UpperRightPut(upper_right)
     if com_failed(hr) do return

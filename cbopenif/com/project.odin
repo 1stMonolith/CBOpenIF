@@ -1,7 +1,7 @@
 package com
 
 project_new :: proc(name, dir, guid, template: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return false
+    if !com_connected() do return false
     
     bstr_name     := to_bstr(name)
     bstr_dir      := to_bstr(dir)
@@ -20,7 +20,7 @@ project_new :: proc(name, dir, guid, template: string) -> (ok: bool) {
 }
 
 project_open :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return false
+    if !com_connected() do return false
     
     bstr_file_path := to_bstr(file_path)
     defer bstr_free(bstr_file_path)
@@ -31,7 +31,7 @@ project_open :: proc(file_path: string) -> (ok: bool) {
 }
 
 project_close :: proc() -> (ok: bool) {
-    if !controlbuilder_connected() do return false
+    if !com_connected() do return false
     
     hr := cbopenif->CloseProject()
     if com_failed(hr) do return
@@ -40,7 +40,7 @@ project_close :: proc() -> (ok: bool) {
 }
 
 project_refresh :: proc() -> (ok: bool) {
-    if !controlbuilder_connected() do return false
+    if !com_connected() do return false
     
     hr := cbopenif->RefreshProject()
     if com_failed(hr) do return

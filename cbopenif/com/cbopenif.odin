@@ -239,48 +239,8 @@ CBOpenVTable :: struct {
     LoopCheckDownloadAndGoOnline:        proc "system" (this: ^CBOpenIF, IsOnline: ^VariantBool, Messages: ^BStr) -> HResult,
 }
 
-cbopen_connect :: proc() -> (ok: bool) {
-    if cbopenif != nil do return
-    
-    ok = com_initialize()
-    if !ok do return
-
-    clsid := GUID{
-        0x45902D56,
-        0xD537,
-        0x486C,
-        {0x89, 0x1B, 0x81, 0x1C, 0xDA, 0x41, 0x0C, 0x77},
-    }
-
-    iid := GUID{
-        0xEDF53D60,
-        0xF499,
-        0x4EDC,
-        {0xAB, 0x7F, 0x10, 0x38, 0x95, 0xFE, 0x89, 0x91},
-    }
-
-    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&cbopenif)
-    if !ok {
-        com_uninitialize()
-        cbopenif = nil
-        return
-    }
-
-    return true
-}
-
-cbopen_disconnect :: proc() -> (ok: bool) {
-    if cbopenif != nil {
-        cbopenif->Release()
-        cbopenif = nil
-    }
-    com_uninitialize()
-
-    return true
-}
-
 cbopen_new_project :: proc(project_name, directory_path, guid, template_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_project        := to_bstr(project_name)
     bstr_directory_path := to_bstr(directory_path)
@@ -299,7 +259,7 @@ cbopen_new_project :: proc(project_name, directory_path, guid, template_name: st
 }
 
 cbopen_open_project :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_file_path := to_bstr(file_path)
     defer bstr_free(bstr_file_path)
@@ -310,7 +270,7 @@ cbopen_open_project :: proc(file_path: string) -> (ok: bool) {
 }
 
 cbopen_close_project :: proc() -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := cbopenif->CloseProject()
     if !com_failed(hr) do return
@@ -319,7 +279,7 @@ cbopen_close_project :: proc() -> (ok: bool) {
 }
 
 cbopen_get_project_constants :: proc() -> (constants: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_constants: BStr
     hr := cbopenif->GetProjectConstants(&bstr_constants)
@@ -334,7 +294,7 @@ cbopen_get_project_constants :: proc() -> (constants: string, ok: bool) {
 }
 
 cbopen_set_project_constants :: proc(constants: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_constants := to_bstr(constants)
     defer bstr_free(bstr_constants)
@@ -352,7 +312,7 @@ cbopen_set_project_constants :: proc(constants: string) -> (messages: string, ok
 }
 
 cbopen_new_library :: proc(library_name, directory_path, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_library_name   := to_bstr(library_name)
     bstr_directory_path := to_bstr(directory_path)
@@ -369,7 +329,7 @@ cbopen_new_library :: proc(library_name, directory_path, guid: string) -> (ok: b
 }
 
 cbopen_insert_library :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_file_path := to_bstr(file_path)
     defer bstr_free(bstr_file_path)
@@ -380,7 +340,7 @@ cbopen_insert_library :: proc(file_path: string) -> (ok: bool) {
 }
 
 cbopen_rename_library :: proc(library_name, new_library_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_library_name     := to_bstr(library_name)
     bstr_new_library_name := to_bstr(new_library_name)
@@ -396,7 +356,7 @@ cbopen_rename_library :: proc(library_name, new_library_name: string) -> (ok: bo
 }
 
 cbopen_delete_library :: proc(library_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_library_name := to_bstr(library_name)
     defer bstr_free(bstr_library_name)
@@ -408,7 +368,7 @@ cbopen_delete_library :: proc(library_name: string) -> (ok: bool) {
 }
 
 cbopen_get_library_project_constants :: proc(library_name: string) -> (constants: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_library_name := to_bstr(library_name)
     defer bstr_free(bstr_library_name)
@@ -426,7 +386,7 @@ cbopen_get_library_project_constants :: proc(library_name: string) -> (constants
 }
 
 cbopen_set_library_project_constants :: proc(library_name, constants: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_library_name := to_bstr(library_name)
     bstr_constants    := to_bstr(constants)
@@ -448,7 +408,7 @@ cbopen_set_library_project_constants :: proc(library_name, constants: string) ->
 }
 
 cbopen_new_application :: proc(application_name, directory_path, guid, template_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_application_name := to_bstr(application_name)
     bstr_directory_path   := to_bstr(directory_path)
@@ -467,7 +427,7 @@ cbopen_new_application :: proc(application_name, directory_path, guid, template_
 }
 
 cbopen_insert_application :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_file_path := to_bstr(file_path)
     defer bstr_free(bstr_file_path)
@@ -478,7 +438,7 @@ cbopen_insert_application :: proc(file_path: string) -> (ok: bool) {
 }
 
 cbopen_rename_application :: proc(application_name, new_application_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_application_name     := to_bstr(application_name)
     bstr_new_application_name := to_bstr(new_application_name)
@@ -493,7 +453,7 @@ cbopen_rename_application :: proc(application_name, new_application_name: string
 }
 
 cbopen_delete_application :: proc(application_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_application_name := to_bstr(application_name)
     defer bstr_free(bstr_application_name)
@@ -504,7 +464,7 @@ cbopen_delete_application :: proc(application_name: string) -> (ok: bool) {
 }
 
 cbopen_get_application_variables :: proc(application_name: string) -> (variables: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_application_name := to_bstr(application_name)
     defer bstr_free(bstr_application_name)
@@ -522,7 +482,7 @@ cbopen_get_application_variables :: proc(application_name: string) -> (variables
 }
 
 cbopen_set_application_variables :: proc(application_name, variables: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_application_name := to_bstr(application_name)
     bstr_variables        := to_bstr(variables)
@@ -544,7 +504,7 @@ cbopen_set_application_variables :: proc(application_name, variables: string) ->
 }
 
 cbopen_get_task_connection :: proc(object_path: string) -> (task_connection: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_object_path := to_bstr(object_path)
     defer bstr_free(bstr_object_path)
@@ -562,7 +522,7 @@ cbopen_get_task_connection :: proc(object_path: string) -> (task_connection: str
 }
 
 cbopen_set_task_connection :: proc(object_path, task_connection: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_object_path     := to_bstr(object_path)
     bstr_task_connection := to_bstr(task_connection)
@@ -577,7 +537,7 @@ cbopen_set_task_connection :: proc(object_path, task_connection: string) -> (ok:
 }
 
 cbopen_new_controller :: proc(controller_name, controller_type, directory_path, guid, template_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_controller_name := to_bstr(controller_name)
     bstr_controller_type := to_bstr(controller_type)
@@ -598,7 +558,7 @@ cbopen_new_controller :: proc(controller_name, controller_type, directory_path, 
 }
 
 cbopen_insert_controller :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_file_path := to_bstr(file_path)
     defer bstr_free(bstr_file_path)
@@ -609,7 +569,7 @@ cbopen_insert_controller :: proc(file_path: string) -> (ok: bool) {
 }
 
 cbopen_rename_controller :: proc(controller_name, new_controller_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_controller_name     := to_bstr(controller_name)
     bstr_new_controller_name := to_bstr(new_controller_name)
@@ -624,7 +584,7 @@ cbopen_rename_controller :: proc(controller_name, new_controller_name: string) -
 }
 
 cbopen_delete_controller :: proc(controller_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_controller_name := to_bstr(controller_name)
     defer bstr_free(bstr_controller_name)
@@ -635,7 +595,7 @@ cbopen_delete_controller :: proc(controller_name: string) -> (ok: bool) {
 }
 
 cbopen_get_system_identity :: proc(controller_name: string) -> (system_identity: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_controller_name := to_bstr(controller_name)
     defer bstr_free(bstr_controller_name)
@@ -653,7 +613,7 @@ cbopen_get_system_identity :: proc(controller_name: string) -> (system_identity:
 }
 
 cbopen_set_system_identity :: proc(controller_name, system_identity: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_controller_name := to_bstr(controller_name)
     bstr_system_identity := to_bstr(system_identity)
@@ -667,10 +627,8 @@ cbopen_set_system_identity :: proc(controller_name, system_identity: string) -> 
     return true
 }
 
-import "core:fmt"
-
 cbopen_new_data_type :: proc(name, app_or_library_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -694,7 +652,7 @@ cbopen_new_data_type :: proc(name, app_or_library_name, content: string) -> (mes
 }
 
 cbopen_get_data_type :: proc(data_type_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_data_type_path := to_bstr(data_type_path)
     defer bstr_free(bstr_data_type_path)
@@ -712,7 +670,7 @@ cbopen_get_data_type :: proc(data_type_path: string) -> (content: string, ok: bo
 }
 
 cbopen_set_data_type :: proc(data_type_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_data_type_path := to_bstr(data_type_path)
     bstr_content        := to_bstr(content)
@@ -734,7 +692,7 @@ cbopen_set_data_type :: proc(data_type_path, content: string) -> (messages: stri
 }
 
 cbopen_delete_data_type :: proc(data_type_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_data_type_path := to_bstr(data_type_path)
     defer bstr_free(bstr_data_type_path)
@@ -745,7 +703,7 @@ cbopen_delete_data_type :: proc(data_type_path: string) -> (ok: bool) {
 }
 
 cbopen_new_function_block_type :: proc(fbstr_type_name, app_or_library_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(fbstr_type_name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -769,7 +727,7 @@ cbopen_new_function_block_type :: proc(fbstr_type_name, app_or_library_name, con
 }
 
 cbopen_get_function_block_type :: proc(fbstr_type_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_type_path)
     defer bstr_free(bstr_path)
@@ -787,7 +745,7 @@ cbopen_get_function_block_type :: proc(fbstr_type_path: string) -> (content: str
 }
 
 cbopen_set_function_block_type :: proc(fbstr_type_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(fbstr_type_path)
     bstr_content := to_bstr(content)
@@ -809,7 +767,7 @@ cbopen_set_function_block_type :: proc(fbstr_type_path, content: string) -> (mes
 }
 
 cbopen_delete_function_block_type :: proc(fbstr_type_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_type_path)
     defer bstr_free(bstr_path)
@@ -820,7 +778,7 @@ cbopen_delete_function_block_type :: proc(fbstr_type_path: string) -> (ok: bool)
 }
 
 cbopen_new_control_module_type :: proc(cm_type_name, app_or_library_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(cm_type_name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -844,7 +802,7 @@ cbopen_new_control_module_type :: proc(cm_type_name, app_or_library_name, conten
 }
 
 cbopen_get_control_module_type :: proc(cm_type_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_type_path)
     defer bstr_free(bstr_path)
@@ -862,7 +820,7 @@ cbopen_get_control_module_type :: proc(cm_type_path: string) -> (content: string
 }
 
 cbopen_set_control_module_type :: proc(cm_type_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(cm_type_path)
     bstr_content := to_bstr(content)
@@ -884,7 +842,7 @@ cbopen_set_control_module_type :: proc(cm_type_path, content: string) -> (messag
 }
 
 cbopen_delete_control_module_type :: proc(cm_type_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_type_path)
     defer bstr_free(bstr_path)
@@ -895,7 +853,7 @@ cbopen_delete_control_module_type :: proc(cm_type_path: string) -> (ok: bool) {
 }
 
 cbopen_new_control_module :: proc(cm_name, cm_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(cm_name)
     bstr_type    := to_bstr(cm_type)
@@ -921,7 +879,7 @@ cbopen_new_control_module :: proc(cm_name, cm_type, path_to_parent, content: str
 }
 
 cbopen_new_single_control_module :: proc(cm_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(cm_name)
     bstr_parent  := to_bstr(path_to_parent)
@@ -945,7 +903,7 @@ cbopen_new_single_control_module :: proc(cm_name, path_to_parent, content: strin
 }
 
 cbopen_get_control_module :: proc(cm_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_path)
     defer bstr_free(bstr_path)
@@ -963,7 +921,7 @@ cbopen_get_control_module :: proc(cm_path: string) -> (content: string, ok: bool
 }
 
 cbopen_set_control_module :: proc(cm_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(cm_path)
     bstr_content := to_bstr(content)
@@ -985,7 +943,7 @@ cbopen_set_control_module :: proc(cm_path, content: string) -> (messages: string
 }
 
 cbopen_delete_control_module :: proc(cm_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_path)
     defer bstr_free(bstr_path)
@@ -996,7 +954,7 @@ cbopen_delete_control_module :: proc(cm_path: string) -> (ok: bool) {
 }
 
 cbopen_new_program :: proc(program_name, application_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(program_name)
     bstr_app_or_library_name := to_bstr(application_name)
@@ -1020,7 +978,7 @@ cbopen_new_program :: proc(program_name, application_name, content: string) -> (
 }
 
 cbopen_get_program :: proc(program_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(program_path)
     defer bstr_free(bstr_path)
@@ -1038,7 +996,7 @@ cbopen_get_program :: proc(program_path: string) -> (content: string, ok: bool) 
 }
 
 cbopen_set_program :: proc(program_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(program_path)
     bstr_content := to_bstr(content)
@@ -1060,7 +1018,7 @@ cbopen_set_program :: proc(program_path, content: string) -> (messages: string, 
 }
 
 cbopen_delete_program :: proc(program_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(program_path)
     defer bstr_free(bstr_path)
@@ -1071,7 +1029,7 @@ cbopen_delete_program :: proc(program_path: string) -> (ok: bool) {
 }
 
 cbopen_get_access_variables :: proc(controller_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -1089,7 +1047,7 @@ cbopen_get_access_variables :: proc(controller_name: string) -> (content: string
 }
 
 cbopen_set_access_variables :: proc(controller_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(controller_name)
     bstr_content := to_bstr(content)
@@ -1111,7 +1069,7 @@ cbopen_set_access_variables :: proc(controller_name, content: string) -> (messag
 }
 
 cbopen_new_task :: proc(task_name, controller_name, content: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(task_name)
     bstr_ctrl    := to_bstr(controller_name)
@@ -1128,7 +1086,7 @@ cbopen_new_task :: proc(task_name, controller_name, content: string) -> (ok: boo
 }
 
 cbopen_get_task :: proc(task_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(task_path)
     defer bstr_free(bstr_path)
@@ -1146,7 +1104,7 @@ cbopen_get_task :: proc(task_path: string) -> (content: string, ok: bool) {
 }
 
 cbopen_set_task :: proc(task_path, content: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(task_path)
     bstr_content := to_bstr(content)
@@ -1161,7 +1119,7 @@ cbopen_set_task :: proc(task_path, content: string) -> (ok: bool) {
 }
 
 cbopen_delete_task :: proc(task_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(task_path)
     defer bstr_free(bstr_path)
@@ -1172,7 +1130,7 @@ cbopen_delete_task :: proc(task_path: string) -> (ok: bool) {
 }
 
 cbopen_get_connected_applications :: proc(controller_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -1190,7 +1148,7 @@ cbopen_get_connected_applications :: proc(controller_name: string) -> (content: 
 }
 
 cbopen_set_connected_applications :: proc(controller_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(controller_name)
     bstr_content := to_bstr(content)
@@ -1212,7 +1170,7 @@ cbopen_set_connected_applications :: proc(controller_name, content: string) -> (
 }
 
 cbopen_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     bstr_messages: BStr
@@ -1229,7 +1187,7 @@ cbopen_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
 }
 
 cbopen_download_and_go_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     bstr_messages: BStr
@@ -1246,7 +1204,7 @@ cbopen_download_and_go_online :: proc() -> (is_online: bool, messages: string, o
 }
 
 cbopen_test_mode :: proc() -> (is_test_mode: bool, messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     bstr_messages: BStr
@@ -1263,7 +1221,7 @@ cbopen_test_mode :: proc() -> (is_test_mode: bool, messages: string, ok: bool) {
 }
 
 cbopen_offline :: proc() -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_messages: BStr
     hr := cbopenif->Offline(&bstr_messages)
@@ -1278,7 +1236,7 @@ cbopen_offline :: proc() -> (messages: string, ok: bool) {
 }
 
 cbopen_new_hardware_unit :: proc(hw_path: string, hw_type_id: Variant, hw_qualifier, hw_unit_content, redundant_to: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path      := to_bstr(hw_path)
     bstr_qualifier := to_bstr(hw_qualifier)
@@ -1304,7 +1262,7 @@ cbopen_new_hardware_unit :: proc(hw_path: string, hw_type_id: Variant, hw_qualif
 }
 
 cbopen_get_hardware_unit :: proc(hw_path: string, include_substr_units: bool) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(hw_path)
     defer bstr_free(bstr_path)
@@ -1323,7 +1281,7 @@ cbopen_get_hardware_unit :: proc(hw_path: string, include_substr_units: bool) ->
 }
 
 cbopen_get_hardware_type :: proc(hardware_library_name, hardware_type_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(hardware_library_name)
     bstr_type := to_bstr(hardware_type_name)
@@ -1345,7 +1303,7 @@ cbopen_get_hardware_type :: proc(hardware_library_name, hardware_type_name: stri
 }
 
 cbopen_set_hardware_unit :: proc(hw_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(hw_path)
     bstr_content := to_bstr(content)
@@ -1367,7 +1325,7 @@ cbopen_set_hardware_unit :: proc(hw_path, content: string) -> (messages: string,
 }
 
 cbopen_delete_hardware_unit :: proc(hw_path: string, remove_redundant_only: bool) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(hw_path)
     defer bstr_free(bstr_path)
@@ -1380,7 +1338,7 @@ cbopen_delete_hardware_unit :: proc(hw_path: string, remove_redundant_only: bool
 }
 
 cbopen_move_hardware_unit_to :: proc(old_hw_path, new_hw_path: string, do_swap: bool) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_old := to_bstr(old_hw_path)
     bstr_new := to_bstr(new_hw_path)
@@ -1397,7 +1355,7 @@ cbopen_move_hardware_unit_to :: proc(old_hw_path, new_hw_path: string, do_swap: 
 }
 
 cbopen_get_project_tree :: proc(path: string, depth: i32, include_runtime_instances: bool) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -1416,7 +1374,7 @@ cbopen_get_project_tree :: proc(path: string, depth: i32, include_runtime_instan
 }
 
 cbopen_new_function_block :: proc(fbstr_name, fbstr_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(fbstr_name)
     bstr_type    := to_bstr(fbstr_type)
@@ -1442,7 +1400,7 @@ cbopen_new_function_block :: proc(fbstr_name, fbstr_type, path_to_parent, conten
 }
 
 cbopen_get_function_block :: proc(fbstr_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_path)
     defer bstr_free(bstr_path)
@@ -1460,7 +1418,7 @@ cbopen_get_function_block :: proc(fbstr_path: string) -> (content: string, ok: b
 }
 
 cbopen_set_function_block :: proc(fbstr_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(fbstr_path)
     bstr_content := to_bstr(content)
@@ -1482,7 +1440,7 @@ cbopen_set_function_block :: proc(fbstr_path, content: string) -> (messages: str
 }
 
 cbopen_delete_function_block :: proc(fbstr_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_path)
     defer bstr_free(bstr_path)
@@ -1493,7 +1451,7 @@ cbopen_delete_function_block :: proc(fbstr_path: string) -> (ok: bool) {
 }
 
 cbopen_reserve :: proc(fou_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(fou_name)
     defer bstr_free(bstr_name)
@@ -1504,7 +1462,7 @@ cbopen_reserve :: proc(fou_name: string) -> (ok: bool) {
 }
 
 cbopen_is_reserved_by :: proc(fou_name: string) -> (reserver: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(fou_name)
     defer bstr_free(bstr_name)
@@ -1522,7 +1480,7 @@ cbopen_is_reserved_by :: proc(fou_name: string) -> (reserver: string, ok: bool) 
 }
 
 cbopen_release_reservation :: proc(fou_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(fou_name)
     defer bstr_free(bstr_name)
@@ -1533,7 +1491,7 @@ cbopen_release_reservation :: proc(fou_name: string) -> (ok: bool) {
 }
 
 cbopen_get_setting :: proc(setting_name: string) -> (value: Variant, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     variant_init(&value)
     bstr_name := to_bstr(setting_name)
@@ -1549,7 +1507,7 @@ cbopen_get_setting :: proc(setting_name: string) -> (value: Variant, ok: bool) {
 }
 
 cbopen_set_setting_string :: proc(setting_name: string, setting: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     v_setting_name := to_variant(setting_name)
     v_setting      := to_variant(setting)
@@ -1568,7 +1526,7 @@ cbopen_set_setting_string :: proc(setting_name: string, setting: string) -> (ok:
 }
 
 cbopen_set_setting_bool :: proc(setting_name: string, setting: bool) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     v_setting_name := to_variant(setting_name)
     v_setting      := to_variant(setting)
@@ -1587,7 +1545,7 @@ cbopen_set_setting_bool :: proc(setting_name: string, setting: bool) -> (ok: boo
 }
 
 cbopen_get_application_control_modules :: proc(application_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(application_name)
     defer bstr_free(bstr_name)
@@ -1605,7 +1563,7 @@ cbopen_get_application_control_modules :: proc(application_name: string) -> (con
 }
 
 cbopen_set_application_control_modules :: proc(application_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(application_name)
     bstr_content := to_bstr(content)
@@ -1627,7 +1585,7 @@ cbopen_set_application_control_modules :: proc(application_name, content: string
 }
 
 cbopen_new_parameter :: proc(parameter_kind: t.ParameterKind, parameter_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(parameter_name)
     bstr_dtype   := to_bstr(data_type)
@@ -1653,7 +1611,7 @@ cbopen_new_parameter :: proc(parameter_kind: t.ParameterKind, parameter_name, da
 }
 
 cbopen_get_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(parameter_path)
     defer bstr_free(bstr_path)
@@ -1671,7 +1629,7 @@ cbopen_get_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path: st
 }
 
 cbopen_set_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(parameter_path)
     bstr_content := to_bstr(content)
@@ -1693,7 +1651,7 @@ cbopen_set_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path, co
 }
 
 cbopen_delete_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(parameter_path)
     defer bstr_free(bstr_path)
@@ -1704,7 +1662,7 @@ cbopen_delete_parameter :: proc(parameter_kind: t.ParameterKind, parameter_path:
 }
 
 cbopen_new_variable :: proc(variable_kind: t.VariableKind, variable_name, data_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(variable_name)
     bstr_dtype   := to_bstr(data_type)
@@ -1730,7 +1688,7 @@ cbopen_new_variable :: proc(variable_kind: t.VariableKind, variable_name, data_t
 }
 
 cbopen_get_variable :: proc(variable_kind: t.VariableKind, variable_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(variable_path)
     defer bstr_free(bstr_path)
@@ -1748,7 +1706,7 @@ cbopen_get_variable :: proc(variable_kind: t.VariableKind, variable_path: string
 }
 
 cbopen_set_variable :: proc(variable_kind: t.VariableKind, variable_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(variable_path)
     bstr_content := to_bstr(content)
@@ -1770,7 +1728,7 @@ cbopen_set_variable :: proc(variable_kind: t.VariableKind, variable_path, conten
 }
 
 cbopen_delete_variable :: proc(variable_kind: t.VariableKind, variable_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(variable_path)
     defer bstr_free(bstr_path)
@@ -1781,7 +1739,7 @@ cbopen_delete_variable :: proc(variable_kind: t.VariableKind, variable_path: str
 }
 
 cbopen_get_cm_connection :: proc(connection_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(connection_path)
     defer bstr_free(bstr_path)
@@ -1799,7 +1757,7 @@ cbopen_get_cm_connection :: proc(connection_path: string) -> (content: string, o
 }
 
 cbopen_set_cm_connection :: proc(connection_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(connection_path)
     bstr_content := to_bstr(content)
@@ -1821,7 +1779,7 @@ cbopen_set_cm_connection :: proc(connection_path, content: string) -> (messages:
 }
 
 cbopen_new_code_block :: proc(codeblock_kind: t.CodeBlockKind, code_block_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(code_block_name)
     bstr_parent  := to_bstr(path_to_parent)
@@ -1845,7 +1803,7 @@ cbopen_new_code_block :: proc(codeblock_kind: t.CodeBlockKind, code_block_name, 
 }
 
 cbopen_get_code_block :: proc(code_block_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(code_block_path)
     defer bstr_free(bstr_path)
@@ -1863,7 +1821,7 @@ cbopen_get_code_block :: proc(code_block_path: string) -> (content: string, ok: 
 }
 
 cbopen_set_code_block :: proc(code_block_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(code_block_path)
     bstr_content := to_bstr(content)
@@ -1885,7 +1843,7 @@ cbopen_set_code_block :: proc(code_block_path, content: string) -> (messages: st
 }
 
 cbopen_delete_code_block :: proc(code_block_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(code_block_path)
     defer bstr_free(bstr_path)
@@ -1896,7 +1854,7 @@ cbopen_delete_code_block :: proc(code_block_path: string) -> (ok: bool) {
 }
 
 cbopen_get_one_instance_init_vals :: proc(instance_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(instance_path)
     defer bstr_free(bstr_path)
@@ -1914,7 +1872,7 @@ cbopen_get_one_instance_init_vals :: proc(instance_path: string) -> (content: st
 }
 
 cbopen_get_all_instances_init_vals :: proc(path_to_parent: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path_to_parent)
     defer bstr_free(bstr_path)
@@ -1932,7 +1890,7 @@ cbopen_get_all_instances_init_vals :: proc(path_to_parent: string) -> (content: 
 }
 
 cbopen_set_one_instance_init_vals :: proc(instance_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(instance_path)
     bstr_content := to_bstr(content)
@@ -1954,7 +1912,7 @@ cbopen_set_one_instance_init_vals :: proc(instance_path, content: string) -> (me
 }
 
 cbopen_set_all_instances_init_vals :: proc(path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(path_to_parent)
     bstr_content := to_bstr(content)
@@ -1976,7 +1934,7 @@ cbopen_set_all_instances_init_vals :: proc(path_to_parent, content: string) -> (
 }
 
 cbopen_delete_one_instance_init_vals :: proc(instance_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(instance_path)
     defer bstr_free(bstr_path)
@@ -1987,7 +1945,7 @@ cbopen_delete_one_instance_init_vals :: proc(instance_path: string) -> (ok: bool
 }
 
 cbopen_delete_all_instances_init_vals :: proc(path_to_parent: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path_to_parent)
     defer bstr_free(bstr_path)
@@ -1998,7 +1956,7 @@ cbopen_delete_all_instances_init_vals :: proc(path_to_parent: string) -> (ok: bo
 }
 
 cbopen_rename_instance_data_path :: proc(old_path, new_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_old := to_bstr(old_path)
     bstr_new := to_bstr(new_path)
@@ -2013,7 +1971,7 @@ cbopen_rename_instance_data_path :: proc(old_path, new_path: string) -> (ok: boo
 }
 
 cbopen_rename_data_type :: proc(data_type_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(data_type_path)
     bstr_name := to_bstr(new_name)
@@ -2028,7 +1986,7 @@ cbopen_rename_data_type :: proc(data_type_path, new_name: string) -> (ok: bool) 
 }
 
 cbopen_rename_function_block_type :: proc(fbstr_type_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_type_path)
     bstr_name := to_bstr(new_name)
@@ -2043,7 +2001,7 @@ cbopen_rename_function_block_type :: proc(fbstr_type_path, new_name: string) -> 
 }
 
 cbopen_rename_control_module_type :: proc(cm_type_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_type_path)
     bstr_name := to_bstr(new_name)
@@ -2058,7 +2016,7 @@ cbopen_rename_control_module_type :: proc(cm_type_path, new_name: string) -> (ok
 }
 
 cbopen_get_single_control_module :: proc(path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -2076,7 +2034,7 @@ cbopen_get_single_control_module :: proc(path: string) -> (content: string, ok: 
 }
 
 cbopen_set_single_control_module :: proc(path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(path)
     bstr_content := to_bstr(content)
@@ -2098,7 +2056,7 @@ cbopen_set_single_control_module :: proc(path, content: string) -> (messages: st
 }
 
 cbopen_delete_single_control_module :: proc(path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -2109,7 +2067,7 @@ cbopen_delete_single_control_module :: proc(path: string) -> (ok: bool) {
 }
 
 cbopen_get_connected_libraries :: proc(app_or_library_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(app_or_library_name)
     defer bstr_free(bstr_name)
@@ -2127,7 +2085,7 @@ cbopen_get_connected_libraries :: proc(app_or_library_name: string) -> (content:
 }
 
 cbopen_set_connected_libraries :: proc(app_or_library_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(app_or_library_name)
     bstr_content := to_bstr(content)
@@ -2149,7 +2107,7 @@ cbopen_set_connected_libraries :: proc(app_or_library_name, content: string) -> 
 }
 
 cbopen_set_library_version :: proc(library_name: string, major, minor, revision: i32) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(library_name)
     defer bstr_free(bstr_name)
@@ -2160,7 +2118,7 @@ cbopen_set_library_version :: proc(library_name: string, major, minor, revision:
 }
 
 cbopen_set_application_version :: proc(application_name: string, major, minor, revision: i32) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(application_name)
     defer bstr_free(bstr_name)
@@ -2172,7 +2130,7 @@ cbopen_set_application_version :: proc(application_name: string, major, minor, r
 }
 
 cbopen_set_controller_version :: proc(controller_name: string, major, minor, revision: i32) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -2183,7 +2141,7 @@ cbopen_set_controller_version :: proc(controller_name: string, major, minor, rev
 }
 
 cbopen_get_library_state :: proc(library_name: string) -> (state: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(library_name)
     defer bstr_free(bstr_name)
@@ -2201,7 +2159,7 @@ cbopen_get_library_state :: proc(library_name: string) -> (state: string, ok: bo
 }
 
 cbopen_set_library_state :: proc(library_name, state: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name  := to_bstr(library_name)
     bstr_state := to_bstr(state)
@@ -2216,7 +2174,7 @@ cbopen_set_library_state :: proc(library_name, state: string) -> (ok: bool) {
 }
 
 cbopen_connect_library :: proc(app_or_library_name, library_to_connect: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name := to_bstr(app_or_library_name)
     bstr_lib                 := to_bstr(library_to_connect)
@@ -2231,7 +2189,7 @@ cbopen_connect_library :: proc(app_or_library_name, library_to_connect: string) 
 }
 
 cbopen_disconnect_library :: proc(app_or_library_name, library_to_disconnect: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name := to_bstr(app_or_library_name)
     bstr_lib                 := to_bstr(library_to_disconnect)
@@ -2246,7 +2204,7 @@ cbopen_disconnect_library :: proc(app_or_library_name, library_to_disconnect: st
 }
 
 cbopen_get_controller_properties :: proc(controller_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -2264,7 +2222,7 @@ cbopen_get_controller_properties :: proc(controller_name: string) -> (content: s
 }
 
 cbopen_set_controller_properties :: proc(controller_name, content: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(controller_name)
     bstr_content := to_bstr(content)
@@ -2279,7 +2237,7 @@ cbopen_set_controller_properties :: proc(controller_name, content: string) -> (o
 }
 
 cbopen_get_type_path_from_guid :: proc(app_or_library_name, guid: string) -> (type_path: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name := to_bstr(app_or_library_name)
     bstr_guid := to_bstr(guid)
@@ -2301,7 +2259,7 @@ cbopen_get_type_path_from_guid :: proc(app_or_library_name, guid: string) -> (ty
 }
 
 cbopen_rename_program :: proc(program_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(program_path)
     bstr_name := to_bstr(new_name)
@@ -2316,7 +2274,7 @@ cbopen_rename_program :: proc(program_path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_rename_function_block :: proc(fbstr_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(fbstr_path)
     bstr_name := to_bstr(new_name)
@@ -2331,7 +2289,7 @@ cbopen_rename_function_block :: proc(fbstr_path, new_name: string) -> (ok: bool)
 }
 
 cbopen_rename_control_module :: proc(cm_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(cm_path)
     bstr_name := to_bstr(new_name)
@@ -2346,7 +2304,7 @@ cbopen_rename_control_module :: proc(cm_path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_rename_task :: proc(task_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(task_path)
     bstr_name := to_bstr(new_name)
@@ -2361,7 +2319,7 @@ cbopen_rename_task :: proc(task_path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_refresh_project :: proc() -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := cbopenif->RefreshProject()
     if !com_failed(hr) do return
@@ -2370,7 +2328,7 @@ cbopen_refresh_project :: proc() -> (ok: bool) {
 }
 
 cbopen_refresh_library :: proc(library_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(library_name)
     defer bstr_free(bstr_name)
@@ -2381,7 +2339,7 @@ cbopen_refresh_library :: proc(library_name: string) -> (ok: bool) {
 }
 
 cbopen_refresh_application :: proc(application_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(application_name)
     defer bstr_free(bstr_name)
@@ -2392,7 +2350,7 @@ cbopen_refresh_application :: proc(application_name: string) -> (ok: bool) {
 }
 
 cbopen_refresh_controller :: proc(controller_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -2403,7 +2361,7 @@ cbopen_refresh_controller :: proc(controller_name: string) -> (ok: bool) {
 }
 
 cbopen_replace_hardware_unit_type :: proc(hw_path: string, hw_type_id: Variant, hw_qualifier: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path      := to_bstr(hw_path)
     bstr_qualifier := to_bstr(hw_qualifier)
@@ -2418,7 +2376,7 @@ cbopen_replace_hardware_unit_type :: proc(hw_path: string, hw_type_id: Variant, 
 }
 
 cbopen_get_valid_hardware_positions :: proc(hw_father_path: string, hw_type_id: Variant, hw_qualifier: string) -> (positions: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path      := to_bstr(hw_father_path)
     bstr_qualifier := to_bstr(hw_qualifier)
@@ -2440,7 +2398,7 @@ cbopen_get_valid_hardware_positions :: proc(hw_father_path: string, hw_type_id: 
 }
 
 cbopen_insert_data_type :: proc(name, app_or_library_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -2457,7 +2415,7 @@ cbopen_insert_data_type :: proc(name, app_or_library_name, guid: string) -> (ok:
 }
 
 cbopen_insert_function_block_type :: proc(name, app_or_library_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -2474,7 +2432,7 @@ cbopen_insert_function_block_type :: proc(name, app_or_library_name, guid: strin
 }
 
 cbopen_insert_control_module_type :: proc(name, app_or_library_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -2491,7 +2449,7 @@ cbopen_insert_control_module_type :: proc(name, app_or_library_name, guid: strin
 }
 
 cbopen_insert_program :: proc(name, application_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(application_name)
@@ -2508,7 +2466,7 @@ cbopen_insert_program :: proc(name, application_name, guid: string) -> (ok: bool
 }
 
 cbopen_insert_single_control_module :: proc(module_name, path_to_parent, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name   := to_bstr(module_name)
     bstr_parent := to_bstr(path_to_parent)
@@ -2525,7 +2483,7 @@ cbopen_insert_single_control_module :: proc(module_name, path_to_parent, guid: s
 }
 
 cbopen_get_application_properties :: proc(application_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(application_name)
     defer bstr_free(bstr_name)
@@ -2543,7 +2501,7 @@ cbopen_get_application_properties :: proc(application_name: string) -> (content:
 }
 
 cbopen_set_application_properties :: proc(application_name, content: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(application_name)
     bstr_content := to_bstr(content)
@@ -2558,7 +2516,7 @@ cbopen_set_application_properties :: proc(application_name, content: string) -> 
 }
 
 cbopen_new_hardware_library :: proc(name, directory_path, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     bstr_directory_path  := to_bstr(directory_path)
@@ -2575,7 +2533,7 @@ cbopen_new_hardware_library :: proc(name, directory_path, guid: string) -> (ok: 
 }
 
 cbopen_insert_hardware_library :: proc(file_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(file_path)
     defer bstr_free(bstr_path)
@@ -2586,7 +2544,7 @@ cbopen_insert_hardware_library :: proc(file_path: string) -> (ok: bool) {
 }
 
 cbopen_delete_hardware_library :: proc(name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2597,7 +2555,7 @@ cbopen_delete_hardware_library :: proc(name: string) -> (ok: bool) {
 }
 
 cbopen_connect_hardware_library :: proc(controller_name, hw_lib: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_ctrl := to_bstr(controller_name)
     bstr_lib  := to_bstr(hw_lib)
@@ -2612,7 +2570,7 @@ cbopen_connect_hardware_library :: proc(controller_name, hw_lib: string) -> (ok:
 }
 
 cbopen_disconnect_hardware_library :: proc(controller_name, hw_lib: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_ctrl := to_bstr(controller_name)
     bstr_lib  := to_bstr(hw_lib)
@@ -2627,7 +2585,7 @@ cbopen_disconnect_hardware_library :: proc(controller_name, hw_lib: string) -> (
 }
 
 cbopen_get_hardware_library_state :: proc(name: string) -> (state: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2645,7 +2603,7 @@ cbopen_get_hardware_library_state :: proc(name: string) -> (state: string, ok: b
 }
 
 cbopen_set_hardware_library_state :: proc(name, state: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name  := to_bstr(name)
     bstr_state := to_bstr(state)
@@ -2660,7 +2618,7 @@ cbopen_set_hardware_library_state :: proc(name, state: string) -> (ok: bool) {
 }
 
 cbopen_set_hardware_library_version :: proc(name: string, major, minor, revision: i32) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2671,7 +2629,7 @@ cbopen_set_hardware_library_version :: proc(name: string, major, minor, revision
 }
 
 cbopen_copy_hardware_type :: proc(src_lib, src_guid, dst_lib, dst_guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_src_lib  := to_bstr(src_lib)
     bstr_src_guid := to_bstr(src_guid)
@@ -2690,7 +2648,7 @@ cbopen_copy_hardware_type :: proc(src_lib, src_guid, dst_lib, dst_guid: string) 
 }
 
 cbopen_delete_hardware_type :: proc(libstr_name, type_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)
     bstr_type := to_bstr(type_name)
@@ -2705,7 +2663,7 @@ cbopen_delete_hardware_type :: proc(libstr_name, type_name: string) -> (ok: bool
 }
 
 cbopen_get_connected_hardware_libraries :: proc(controller_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -2723,7 +2681,7 @@ cbopen_get_connected_hardware_libraries :: proc(controller_name: string) -> (con
 }
 
 cbopen_set_connected_hardware_libraries :: proc(controller_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(controller_name)
     bstr_content := to_bstr(content)
@@ -2745,7 +2703,7 @@ cbopen_set_connected_hardware_libraries :: proc(controller_name, content: string
 }
 
 cbopen_copy_hardware_library :: proc(src_name, dst_name, dst_guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_src  := to_bstr(src_name)
     bstr_dst  := to_bstr(dst_name)
@@ -2762,7 +2720,7 @@ cbopen_copy_hardware_library :: proc(src_name, dst_name, dst_guid: string) -> (o
 }
 
 cbopen_refresh_hardware_library :: proc(name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -2773,7 +2731,7 @@ cbopen_refresh_hardware_library :: proc(name: string) -> (ok: bool) {
 }
 
 cbopen_replace_connected_hardware_library :: proc(controller_name, connected_name, replacing_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_ctrl := to_bstr(controller_name)
     bstr_conn := to_bstr(connected_name)
@@ -2790,7 +2748,7 @@ cbopen_replace_connected_hardware_library :: proc(controller_name, connected_nam
 }
 
 cbopen_add_hardware_type_file :: proc(libstr_name, type_guid: string, file_type: t.HardwareFile, file_path, version, build_version, build_date, fw_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib   := to_bstr(libstr_name)
     bstr_guid  := to_bstr(type_guid)
@@ -2815,7 +2773,7 @@ cbopen_add_hardware_type_file :: proc(libstr_name, type_guid: string, file_type:
 }
 
 cbopen_insert_hardware_type :: proc(type_name, libstr_name, type_guid, type_id: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_type := to_bstr(type_name)
     bstr_lib  := to_bstr(libstr_name)
@@ -2834,7 +2792,7 @@ cbopen_insert_hardware_type :: proc(type_name, libstr_name, type_guid, type_id: 
 }
 
 cbopen_replace_connected_library :: proc(app_or_library_name, connected_name, replacing_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name := to_bstr(app_or_library_name)
     bstr_conn                := to_bstr(connected_name)
@@ -2851,7 +2809,7 @@ cbopen_replace_connected_library :: proc(app_or_library_name, connected_name, re
 }
 
 cbopen_new_project_in_environment :: proc(project_name, guid, template_name, environment_guid_or_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(project_name)
     bstr_guid := to_bstr(guid)
@@ -2870,7 +2828,7 @@ cbopen_new_project_in_environment :: proc(project_name, guid, template_name, env
 }
 
 cbopen_open_project_in_environment :: proc(project_guid_or_name, environment_guid_or_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_proj := to_bstr(project_guid_or_name)
     bstr_env  := to_bstr(environment_guid_or_name)
@@ -2885,7 +2843,7 @@ cbopen_open_project_in_environment :: proc(project_guid_or_name, environment_gui
 }
 
 cbopen_rename_hardware_library :: proc(name, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(name)
     bstr_new  := to_bstr(new_name)
@@ -2900,7 +2858,7 @@ cbopen_rename_hardware_library :: proc(name, new_name: string) -> (ok: bool) {
 }
 
 cbopen_get_project_and_environment_information :: proc() -> (project_name, project_guid, environment_name, environment_guid: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_pname, bstr_pguid, bstr_ename, bstr_eguid: BStr
     hr := cbopenif->GetProjectAndEnvironmentInformation(&bstr_pname, &bstr_pguid, &bstr_ename, &bstr_eguid)
@@ -2927,7 +2885,7 @@ cbopen_get_project_and_environment_information :: proc() -> (project_name, proje
 }
 
 cbopen_set_storage :: proc(p_iac_storage: rawptr) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := cbopenif->SetStorage(p_iac_storage)
     if !com_failed(hr) do return
@@ -2936,7 +2894,7 @@ cbopen_set_storage :: proc(p_iac_storage: rawptr) -> (ok: bool) {
 }
 
 cbopen_write_information :: proc(message: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_msg := to_bstr(message)
     defer bstr_free(bstr_msg)
@@ -2947,7 +2905,7 @@ cbopen_write_information :: proc(message: string) -> (ok: bool) {
 }
 
 cbopen_write_warning :: proc(message: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_msg := to_bstr(message)
     defer bstr_free(bstr_msg)
@@ -2958,7 +2916,7 @@ cbopen_write_warning :: proc(message: string) -> (ok: bool) {
 }
 
 cbopen_write_error :: proc(message: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_msg := to_bstr(message)
     defer bstr_free(bstr_msg)
@@ -2969,7 +2927,7 @@ cbopen_write_error :: proc(message: string) -> (ok: bool) {
 }
 
 cbopen_new_folder :: proc(folder_kind: t.Folder, folder_name, path_to_parent, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name   := to_bstr(folder_name)
     bstr_parent := to_bstr(path_to_parent)
@@ -2986,7 +2944,7 @@ cbopen_new_folder :: proc(folder_kind: t.Folder, folder_name, path_to_parent, gu
 }
 
 cbopen_rename_folder :: proc(folder_kind: t.Folder, folder_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(folder_path)
     bstr_name := to_bstr(new_name)
@@ -3001,7 +2959,7 @@ cbopen_rename_folder :: proc(folder_kind: t.Folder, folder_path, new_name: strin
 }
 
 cbopen_delete_folder :: proc(folder_kind: t.Folder, folder_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(folder_path)
     defer bstr_free(bstr_path)
@@ -3012,7 +2970,7 @@ cbopen_delete_folder :: proc(folder_kind: t.Folder, folder_path: string) -> (ok:
 }
 
 cbopen_move_folder :: proc(folder_kind: t.Folder, folder_path, destination_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(folder_path)
     bstr_dest := to_bstr(destination_path)
@@ -3027,7 +2985,7 @@ cbopen_move_folder :: proc(folder_kind: t.Folder, folder_path, destination_path:
 }
 
 cbopen_move_folder_object :: proc(folder_kind: t.Folder, object_name, destination_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_obj  := to_bstr(object_name)
     bstr_dest := to_bstr(destination_path)
@@ -3042,7 +3000,7 @@ cbopen_move_folder_object :: proc(folder_kind: t.Folder, object_name, destinatio
 }
 
 cbopen_new_diagram :: proc(diagram_name, application_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(diagram_name)
     bstr_app_or_library_name := to_bstr(application_name)
@@ -3066,7 +3024,7 @@ cbopen_new_diagram :: proc(diagram_name, application_name, content: string) -> (
 }
 
 cbopen_get_diagram :: proc(diagram_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(diagram_path)
     defer bstr_free(bstr_path)
@@ -3084,7 +3042,7 @@ cbopen_get_diagram :: proc(diagram_path: string) -> (content: string, ok: bool) 
 }
 
 cbopen_set_diagram :: proc(diagram_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(diagram_path)
     bstr_content := to_bstr(content)
@@ -3106,7 +3064,7 @@ cbopen_set_diagram :: proc(diagram_path, content: string) -> (messages: string, 
 }
 
 cbopen_delete_diagram :: proc(diagram_path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(diagram_path)
     defer bstr_free(bstr_path)
@@ -3117,7 +3075,7 @@ cbopen_delete_diagram :: proc(diagram_path: string) -> (ok: bool) {
 }
 
 cbopen_rename_diagram :: proc(diagram_path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(diagram_path)
     bstr_name := to_bstr(new_name)
@@ -3132,7 +3090,7 @@ cbopen_rename_diagram :: proc(diagram_path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_insert_diagram :: proc(diagram_name, application_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(diagram_name)
     bstr_app_or_library_name := to_bstr(application_name)
@@ -3149,7 +3107,7 @@ cbopen_insert_diagram :: proc(diagram_name, application_name, guid: string) -> (
 }
 
 cbopen_insert_hardware_definition_file :: proc(hardware_library_name, file_path: string) -> (file_added: bool, messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(hardware_library_name)
     bstr_path := to_bstr(file_path)
@@ -3173,7 +3131,7 @@ cbopen_insert_hardware_definition_file :: proc(hardware_library_name, file_path:
 }
 
 cbopen_get_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKind, application_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name := to_bstr(application_name)
     defer bstr_free(bstr_app_or_library_name)
@@ -3191,7 +3149,7 @@ cbopen_get_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKi
 }
 
 cbopen_set_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKind, application_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_app_or_library_name     := to_bstr(application_name)
     bstr_content := to_bstr(content)
@@ -3213,7 +3171,7 @@ cbopen_set_execution_order :: proc(executioninstance_kind: t.ExecutionInstanceKi
 }
 
 cbopen_new_diagram_type :: proc(name, app_or_library_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -3237,7 +3195,7 @@ cbopen_new_diagram_type :: proc(name, app_or_library_name, content: string) -> (
 }
 
 cbopen_get_diagram_type :: proc(path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -3255,7 +3213,7 @@ cbopen_get_diagram_type :: proc(path: string) -> (content: string, ok: bool) {
 }
 
 cbopen_set_diagram_type :: proc(path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(path)
     bstr_content := to_bstr(content)
@@ -3277,7 +3235,7 @@ cbopen_set_diagram_type :: proc(path, content: string) -> (messages: string, ok:
 }
 
 cbopen_delete_diagram_type :: proc(path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -3288,7 +3246,7 @@ cbopen_delete_diagram_type :: proc(path: string) -> (ok: bool) {
 }
 
 cbopen_rename_diagram_type :: proc(path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     bstr_name := to_bstr(new_name)
@@ -3303,7 +3261,7 @@ cbopen_rename_diagram_type :: proc(path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_insert_diagram_type :: proc(name, app_or_library_name, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name                := to_bstr(name)
     bstr_app_or_library_name := to_bstr(app_or_library_name)
@@ -3320,7 +3278,7 @@ cbopen_insert_diagram_type :: proc(name, app_or_library_name, guid: string) -> (
 }
 
 cbopen_new_diagram_instance :: proc(name, diagram_type, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(name)
     bstr_type    := to_bstr(diagram_type)
@@ -3346,7 +3304,7 @@ cbopen_new_diagram_instance :: proc(name, diagram_type, path_to_parent, content:
 }
 
 cbopen_get_diagram_instance :: proc(path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -3364,7 +3322,7 @@ cbopen_get_diagram_instance :: proc(path: string) -> (content: string, ok: bool)
 }
 
 cbopen_set_diagram_instance :: proc(path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(path)
     bstr_content := to_bstr(content)
@@ -3386,7 +3344,7 @@ cbopen_set_diagram_instance :: proc(path, content: string) -> (messages: string,
 }
 
 cbopen_delete_diagram_instance :: proc(path: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -3397,7 +3355,7 @@ cbopen_delete_diagram_instance :: proc(path: string) -> (ok: bool) {
 }
 
 cbopen_rename_diagram_instance :: proc(path, new_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     bstr_name := to_bstr(new_name)
@@ -3412,7 +3370,7 @@ cbopen_rename_diagram_instance :: proc(path, new_name: string) -> (ok: bool) {
 }
 
 cbopen_new_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(signal_name)
     bstr_parent  := to_bstr(path_to_parent)
@@ -3436,7 +3394,7 @@ cbopen_new_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent
 }
 
 cbopen_get_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name   := to_bstr(signal_name)
     bstr_parent := to_bstr(path_to_parent)
@@ -3458,7 +3416,7 @@ cbopen_get_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent
 }
 
 cbopen_set_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name    := to_bstr(signal_name)
     bstr_parent  := to_bstr(path_to_parent)
@@ -3482,7 +3440,7 @@ cbopen_set_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent
 }
 
 cbopen_delete_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_parent: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name   := to_bstr(signal_name)
     bstr_parent := to_bstr(path_to_parent)
@@ -3497,7 +3455,7 @@ cbopen_delete_signal :: proc(signal_kind: t.SignalKind, signal_name, path_to_par
 }
 
 cbopen_add_hardware_library_file :: proc(libstr_name: string, file_kind: t.HardwareLibraryFile, file_path, version: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)
     bstr_path := to_bstr(file_path)
@@ -3514,7 +3472,7 @@ cbopen_add_hardware_library_file :: proc(libstr_name: string, file_kind: t.Hardw
 }
 
 cbopen_get_hardware_library_files :: proc(libstr_name: string) -> (files: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib := to_bstr(libstr_name)
     defer bstr_free(bstr_lib)
@@ -3532,7 +3490,7 @@ cbopen_get_hardware_library_files :: proc(libstr_name: string) -> (files: string
 }
 
 cbopen_delete_hardware_library_file :: proc(libstr_name: string, file_kind: t.HardwareLibraryFile, file_name: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)
     bstr_file := to_bstr(file_name)
@@ -3547,7 +3505,7 @@ cbopen_delete_hardware_library_file :: proc(libstr_name: string, file_kind: t.Ha
 }
 
 cbopen_set_hardware_type :: proc(libstr_name, type_name, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib     := to_bstr(libstr_name)
     bstr_type    := to_bstr(type_name)
@@ -3571,7 +3529,7 @@ cbopen_set_hardware_type :: proc(libstr_name, type_name, content: string) -> (me
 }
 
 cbopen_get_hardware_definition_info :: proc(libstr_name, type_name: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_lib  := to_bstr(libstr_name)
     bstr_type := to_bstr(type_name)
@@ -3593,7 +3551,7 @@ cbopen_get_hardware_definition_info :: proc(libstr_name, type_name: string) -> (
 }
 
 cbopen_insert_hardware_unit :: proc(parent_hw_path, guid: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(parent_hw_path)
     bstr_guid := to_bstr(guid)
@@ -3608,7 +3566,7 @@ cbopen_insert_hardware_unit :: proc(parent_hw_path, guid: string) -> (ok: bool) 
 }
 
 cbopen_get_controller_settings :: proc(controller_name: string) -> (settings: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name := to_bstr(controller_name)
     defer bstr_free(bstr_name)
@@ -3626,7 +3584,7 @@ cbopen_get_controller_settings :: proc(controller_name: string) -> (settings: st
 }
 
 cbopen_set_controller_settings :: proc(controller_name, settings: string) -> (ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_name     := to_bstr(controller_name)
     bstr_settings := to_bstr(settings)
@@ -3641,7 +3599,7 @@ cbopen_set_controller_settings :: proc(controller_name, settings: string) -> (ok
 }
 
 cbopen_get_fd_connection :: proc(connection_path: string) -> (content: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(connection_path)
     defer bstr_free(bstr_path)
@@ -3659,7 +3617,7 @@ cbopen_get_fd_connection :: proc(connection_path: string) -> (content: string, o
 }
 
 cbopen_set_fd_connection :: proc(connection_path, content: string) -> (messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path    := to_bstr(connection_path)
     bstr_content := to_bstr(content)
@@ -3681,7 +3639,7 @@ cbopen_set_fd_connection :: proc(connection_path, content: string) -> (messages:
 }
 
 cbopen_list_available_libraries :: proc() -> (libraries: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_libs: BStr
     hr := cbopenif->ListAvailableLibraries(&bstr_libs)
@@ -3696,7 +3654,7 @@ cbopen_list_available_libraries :: proc() -> (libraries: string, ok: bool) {
 }
 
 cbopen_list_available_hardware_libraries :: proc() -> (libraries: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_libs: BStr
     hr := cbopenif->ListAvailableHardwareLibraries(&bstr_libs)
@@ -3711,7 +3669,7 @@ cbopen_list_available_hardware_libraries :: proc() -> (libraries: string, ok: bo
 }
 
 cbopen_loop_check_download_and_go_online :: proc() -> (is_online: bool, messages: string, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     bstr_messages: BStr

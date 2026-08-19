@@ -142,50 +142,8 @@ ObjectFactoryVTable :: struct {
     NewSignal:                          proc "system" (this: ^ObjectFactoryIF, Name, Path, Direction: BStr, AcknowledgeGroup: Variant, Signal: ^rawptr) -> HResult,
 }
 
-factory_connect :: proc() -> (ok: bool) {
-    ok = false
-
-    if objectfactory != nil do return
-
-    ok = com_initialize()
-    if !ok do return
-
-    clsid := GUID{
-        0x3CEFCA96,
-        0x1892,
-        0x4539,
-        {0x87, 0x47, 0x29, 0x2B, 0xB8, 0xAE, 0x1D, 0x4B},
-    }
-
-    iid := GUID{
-        0x9198E466,
-        0x81F5,
-        0x4756,
-        {0xB3, 0x9A, 0x12, 0xC7, 0x7F, 0xF5, 0xFF, 0x1A},
-    }
-
-    ok = com_create_instance(&clsid, &iid, cast(^rawptr)&objectfactory)
-    if !ok {
-        com_uninitialize()
-        objectfactory = nil
-        return
-    }
-
-    return true
-}
-
-factory_disconnect :: proc()  -> (ok: bool) {
-    if objectfactory != nil {
-        objectfactory->Release()
-        objectfactory = nil
-    }
-    com_uninitialize()
-
-    return true
-}
-
 externalvariable_deserialize :: proc(xml: string) -> (externalvariable: ExternalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -196,7 +154,7 @@ externalvariable_deserialize :: proc(xml: string) -> (externalvariable: External
 }
 
 globalvariable_deserialize :: proc(xml: string) -> (globalvariable: GlobalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -207,7 +165,7 @@ globalvariable_deserialize :: proc(xml: string) -> (globalvariable: GlobalVariab
 }
 
 variable_deserialize :: proc(xml: string) -> (variable: Variable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -218,7 +176,7 @@ variable_deserialize :: proc(xml: string) -> (variable: Variable, ok: bool) {
 }
 
 cmparameter_deserialize :: proc(xml: string) -> (cmparameter: CMParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -229,7 +187,7 @@ cmparameter_deserialize :: proc(xml: string) -> (cmparameter: CMParameter, ok: b
 }
 
 extensibleparameter_deserialize :: proc(xml: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -240,7 +198,7 @@ extensibleparameter_deserialize :: proc(xml: string) -> (extensibleparameter: Ex
 }
 
 parameter_deserialize :: proc(xml: string) -> (parameter: Parameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -251,7 +209,7 @@ parameter_deserialize :: proc(xml: string) -> (parameter: Parameter, ok: bool) {
 }
 
 codeblock_deserialize :: proc(xml: string) -> (codeblock: CodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -262,7 +220,7 @@ codeblock_deserialize :: proc(xml: string) -> (codeblock: CodeBlock, ok: bool) {
 }
 
 cmconnection_deserialize :: proc(xml: string) -> (cmconnection: CMConnection, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -273,7 +231,7 @@ cmconnection_deserialize :: proc(xml: string) -> (cmconnection: CMConnection, ok
 }
 
 datatype_deserialize :: proc(xml: string) -> (datatype: DataType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -284,7 +242,7 @@ datatype_deserialize :: proc(xml: string) -> (datatype: DataType, ok: bool) {
 }
 
 applicationvariables_deserialize :: proc(xml: string) -> (applicationvariables: ApplicationVariables, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -295,7 +253,7 @@ applicationvariables_deserialize :: proc(xml: string) -> (applicationvariables: 
 }
 
 functionblocktype_deserialize :: proc(xml: string) -> (functionblocktype: FunctionBlockType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -306,7 +264,7 @@ functionblocktype_deserialize :: proc(xml: string) -> (functionblocktype: Functi
 }
 
 bunctionblock_deserialize :: proc(xml: string) -> (bunctionblock: FunctionBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -317,7 +275,7 @@ bunctionblock_deserialize :: proc(xml: string) -> (bunctionblock: FunctionBlock,
 }
 
 controlmoduletype_deserialize :: proc(xml: string) -> (controlmoduletype: ControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -328,7 +286,7 @@ controlmoduletype_deserialize :: proc(xml: string) -> (controlmoduletype: Contro
 }
 
 program_deserialize :: proc(xml: string) -> (program: Program, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -339,7 +297,7 @@ program_deserialize :: proc(xml: string) -> (program: Program, ok: bool) {
 }
 
 controlmodule_deserialize :: proc(xml: string) -> (controlmodule: ControlModule, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -350,7 +308,7 @@ controlmodule_deserialize :: proc(xml: string) -> (controlmodule: ControlModule,
 }
 
 controlmodules_deserialize :: proc(xml: string) -> (controlmodules: ControlModules, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -361,7 +319,7 @@ controlmodules_deserialize :: proc(xml: string) -> (controlmodules: ControlModul
 }
 
 singlecontrolmoduletype_deserialize :: proc(xml: string) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -372,7 +330,7 @@ singlecontrolmoduletype_deserialize :: proc(xml: string) -> (singlecontrolmodule
 }
 
 singlecontrolmoduleinst_deserialize :: proc(xml: string) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -383,7 +341,7 @@ singlecontrolmoduleinst_deserialize :: proc(xml: string) -> (singlecontrolmodule
 }
 
 task_deserialize :: proc(xml: string) -> (task: Task, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -394,7 +352,7 @@ task_deserialize :: proc(xml: string) -> (task: Task, ok: bool) {
 }
 
 connectedapplications_deserialize :: proc(xml: string) -> (connectedapplications: ConnectedApplications, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -405,7 +363,7 @@ connectedapplications_deserialize :: proc(xml: string) -> (connectedapplications
 }
 
 connectedlibraries_deserialize :: proc(xml: string) -> (connectedlibraries: ConnectedLibraries, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -416,7 +374,7 @@ connectedlibraries_deserialize :: proc(xml: string) -> (connectedlibraries: Conn
 }
 
 hwunit_deserialize :: proc(xml: string) -> (hwunit: HWUnit, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -427,7 +385,7 @@ hwunit_deserialize :: proc(xml: string) -> (hwunit: HWUnit, ok: bool) {
 }
 
 accessvariables_deserialize :: proc(xml: string) -> (accessvariables: AccessVariables, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -438,7 +396,7 @@ accessvariables_deserialize :: proc(xml: string) -> (accessvariables: AccessVari
 }
 
 projectsconstants_deserialize :: proc(xml: string) -> (projectsconstants: ProjectConstants, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -449,7 +407,7 @@ projectsconstants_deserialize :: proc(xml: string) -> (projectsconstants: Projec
 }
 
 messagebucket_deserialize :: proc(xml: string) -> (messagebucket: MessageBucket, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -460,7 +418,7 @@ messagebucket_deserialize :: proc(xml: string) -> (messagebucket: MessageBucket,
 }
 
 applicationproperties_deserialize :: proc(xml: string) -> (applicationproperties: ApplicationProperties, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -471,7 +429,7 @@ applicationproperties_deserialize :: proc(xml: string) -> (applicationproperties
 }
 
 connectedhwlibraries_deserialize :: proc(xml: string) -> (connectedhwlibraries: ConnectedHWLibraries, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -482,7 +440,7 @@ connectedhwlibraries_deserialize :: proc(xml: string) -> (connectedhwlibraries: 
 }
 
 commvariable_deserialize :: proc(xml: string) -> (commvariable: CommVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -493,7 +451,7 @@ commvariable_deserialize :: proc(xml: string) -> (commvariable: CommVariable, ok
 }
 
 diagram_deserialize :: proc(xml: string) -> (diagram: Diagram, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -504,7 +462,7 @@ diagram_deserialize :: proc(xml: string) -> (diagram: Diagram, ok: bool) {
 }
 
 executionorder_deserialize :: proc(xml: string) -> (executionorder: ExecutionOrder, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -515,7 +473,7 @@ executionorder_deserialize :: proc(xml: string) -> (executionorder: ExecutionOrd
 }
 
 diagramtype_deserialize :: proc(xml: string) -> (diagramtype: DiagramType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -526,7 +484,7 @@ diagramtype_deserialize :: proc(xml: string) -> (diagramtype: DiagramType, ok: b
 }
 
 diagraminstance_deserialize :: proc(xml: string) -> (diagraminstance: DiagramInstance, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -537,7 +495,7 @@ diagraminstance_deserialize :: proc(xml: string) -> (diagraminstance: DiagramIns
 }
 
 signal_deserialize :: proc(xml: string) -> (signal: Signal, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
@@ -548,7 +506,7 @@ signal_deserialize :: proc(xml: string) -> (signal: Signal, ok: bool) {
 }
 
 datatype_new :: proc(name, description: string) -> (datatype: DataType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -563,7 +521,7 @@ datatype_new :: proc(name, description: string) -> (datatype: DataType, ok: bool
 }
 
 datatype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope) -> (datatype: DataType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -578,7 +536,7 @@ datatype_new1 :: proc(name, description: string, protected, hidden: bool, scope:
 }
 
 applicationvariables_new :: proc(description: string) -> (applicationvariables: ApplicationVariables, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_description := to_bstr(description)
     defer bstr_free(bstr_description)
@@ -589,7 +547,7 @@ applicationvariables_new :: proc(description: string) -> (applicationvariables: 
 }
 
 functionblocktype_new :: proc(name, description: string) -> (functionblocktype: FunctionBlockType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -604,7 +562,7 @@ functionblocktype_new :: proc(name, description: string) -> (functionblocktype: 
 }
 
 functionblocktype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, interaction_window: string, alarm_owner: bool, guid: string) -> (functionblocktype: FunctionBlockType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -623,7 +581,7 @@ functionblocktype_new1 :: proc(name, description: string, protected, hidden: boo
 }
 
 functionblock_new :: proc(name, type_name: string) -> (functionblock: FunctionBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -638,7 +596,7 @@ functionblock_new :: proc(name, type_name: string) -> (functionblock: FunctionBl
 }
 
 functionblock_new1 :: proc(name, type_name, task, guid, description: string) -> (functionblock: FunctionBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_type_name   := to_bstr(type_name)
@@ -659,7 +617,7 @@ functionblock_new1 :: proc(name, type_name, task, guid, description: string) -> 
 }
 
 controlmoduletype_new :: proc(name, description: string) -> (controlmoduletype: ControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -674,7 +632,7 @@ controlmoduletype_new :: proc(name, description: string) -> (controlmoduletype: 
 }
 
 controlmoduletype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, interaction_window: string, alarm_owner: bool, guid: string, graph_size: GraphSize) -> (controlmoduletype: ControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -693,7 +651,7 @@ controlmoduletype_new1 :: proc(name, description: string, protected, hidden: boo
 }
 
 program_new :: proc(name, description: string) -> (program: Program, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -708,7 +666,7 @@ program_new :: proc(name, description: string) -> (program: Program, ok: bool) {
 }
 
 program_new1 :: proc(name, description, task_connection, type_guid, inst_guid: string) -> (program: Program, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -729,7 +687,7 @@ program_new1 :: proc(name, description, task_connection, type_guid, inst_guid: s
 }
 
 controlmodule_new :: proc(name, type_name: string) -> (controlmodule: ControlModule, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -744,7 +702,7 @@ controlmodule_new :: proc(name, type_name: string) -> (controlmodule: ControlMod
 }
 
 controlmodule_new1 :: proc(name, type_name, task: string, visibility: i32, guid, description: string, graph_pos: GraphPos) -> (controlmodule: ControlModule, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_type_name   := to_bstr(type_name)
@@ -765,7 +723,7 @@ controlmodule_new1 :: proc(name, type_name, task: string, visibility: i32, guid,
 }
 
 controlmodules_new :: proc() -> (controlmodules: ControlModules, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewControlModules(cast(^rawptr)&controlmodules)
     if com_failed(hr) do return
@@ -774,7 +732,7 @@ controlmodules_new :: proc() -> (controlmodules: ControlModules, ok: bool) {
 }
 
 singlecontrolmoduletype_new :: proc(name, description: string) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -789,7 +747,7 @@ singlecontrolmoduletype_new :: proc(name, description: string) -> (singlecontrol
 }
 
 singlecontrolmoduletype_new1 :: proc(name, description, interaction_window: string, alarm_owner: bool, type_guid: string, graph_size: GraphSize) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -808,7 +766,7 @@ singlecontrolmoduletype_new1 :: proc(name, description, interaction_window: stri
 }
 
 singlecontrolmoduleinst_new :: proc(name: string) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -819,7 +777,7 @@ singlecontrolmoduleinst_new :: proc(name: string) -> (singlecontrolmoduleinst: S
 }
 
 singlecontrolmoduleinst_new1 :: proc(name, task: string, visibility: i32, type_guid, inst_guid: string, graph_pos: GraphPos) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_task := to_bstr(task)
@@ -838,7 +796,7 @@ singlecontrolmoduleinst_new1 :: proc(name, task: string, visibility: i32, type_g
 }
 
 task_new :: proc(name: string, interval_time: i32, priority: t.TaskPriority) -> (task: Task, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -849,7 +807,7 @@ task_new :: proc(name: string, interval_time: i32, priority: t.TaskPriority) -> 
 }
 
 task_new1 :: proc(name: string, interval_time: i32, priority: t.TaskPriority, offset: i32, output_update: t.TaskOutputUpdate) -> (task: Task, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -860,7 +818,7 @@ task_new1 :: proc(name: string, interval_time: i32, priority: t.TaskPriority, of
 }
 
 connectedapplication_new :: proc(name: string) -> (connectedapplication: ConnectedApplication, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -871,7 +829,7 @@ connectedapplication_new :: proc(name: string) -> (connectedapplication: Connect
 }
 
 connectedapplication_new1 :: proc(name: string, major, minor, revision: i32) -> (connectedapplication: ConnectedApplication, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -882,7 +840,7 @@ connectedapplication_new1 :: proc(name: string, major, minor, revision: i32) -> 
 }
 
 connectedapplications_new :: proc() -> (connectedapplications: ConnectedApplications, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewConnectedApplications(cast(^rawptr)&connectedapplications)
     if com_failed(hr) do return
@@ -891,7 +849,7 @@ connectedapplications_new :: proc() -> (connectedapplications: ConnectedApplicat
 }
 
 connectedlibrary_new :: proc(name: string) -> (connectedlibrary: ConnectedLibrary, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -902,7 +860,7 @@ connectedlibrary_new :: proc(name: string) -> (connectedlibrary: ConnectedLibrar
 }
 
 connectedlibrary_new1 :: proc(name: string, major, minor, revision: i32) -> (connectedlibrary: ConnectedLibrary, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -913,7 +871,7 @@ connectedlibrary_new1 :: proc(name: string, major, minor, revision: i32) -> (con
 }
 
 connectedlibraries_new :: proc() -> (connectedlibraries: ConnectedLibraries, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewConnectedLibraries(cast(^rawptr)&connectedlibraries)
     if com_failed(hr) do return
@@ -922,7 +880,7 @@ connectedlibraries_new :: proc() -> (connectedlibraries: ConnectedLibraries, ok:
 }
 
 hwunit_new :: proc(path: string) -> (hwunit: HWUnit, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -933,7 +891,7 @@ hwunit_new :: proc(path: string) -> (hwunit: HWUnit, ok: bool) {
 }
 
 hwunit_new1 :: proc(path, type_id, type_description, guid: string) -> (hwunit: HWUnit, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_path := to_bstr(path)
     bstr_tid  := to_bstr(type_id)
@@ -952,7 +910,7 @@ hwunit_new1 :: proc(path, type_id, type_description, guid: string) -> (hwunit: H
 }
 
 hwunit_new2 :: proc(path, type_id, type_description, guid, type_guid: string) -> (hwunit: HWUnit, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_path := to_bstr(path)
     bstr_tid  := to_bstr(type_id)
@@ -973,7 +931,7 @@ hwunit_new2 :: proc(path, type_id, type_description, guid, type_guid: string) ->
 }
 
 hwchannel_new :: proc(address, name, con_variable, io_description: string) -> (hwchannel: HWChannel, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_addr           := to_bstr(address)
     bstr_name           := to_bstr(name)
@@ -992,7 +950,7 @@ hwchannel_new :: proc(address, name, con_variable, io_description: string) -> (h
 }
 
 hwchannel_new1 :: proc(address, name, con_variable, io_description: string, min, max, unit, fraction: string, reversed: bool) -> (hwchannel: HWChannel, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_addr           := to_bstr(address)
     bstr_name           := to_bstr(name)
@@ -1019,7 +977,7 @@ hwchannel_new1 :: proc(address, name, con_variable, io_description: string, min,
 }
 
 parametersetting_new :: proc(name, parameter_value: string) -> (parametersetting: ParameterSetting, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name            := to_bstr(name)
     bstr_parameter_value := to_bstr(parameter_value)
@@ -1034,7 +992,7 @@ parametersetting_new :: proc(name, parameter_value: string) -> (parametersetting
 }
 
 variable_new :: proc(name, type_name: string) -> (variable: Variable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1049,7 +1007,7 @@ variable_new :: proc(name, type_name: string) -> (variable: Variable, ok: bool) 
 }
 
 variable_new1 :: proc(name, type_name, attribute, initial_value, read_permission, write_permission, description: string) -> (variable: Variable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_type_name        := to_bstr(type_name)
@@ -1074,7 +1032,7 @@ variable_new1 :: proc(name, type_name, attribute, initial_value, read_permission
 }
 
 globalvariable_new :: proc(name, type_name: string) -> (globalvariable: GlobalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1089,7 +1047,7 @@ globalvariable_new :: proc(name, type_name: string) -> (globalvariable: GlobalVa
 }
 
 globalvariable_new1 :: proc(name, type_name, attribute, initial_value, read_permission, write_permission, description: string) -> (globalvariable: GlobalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_type_name        := to_bstr(type_name)
@@ -1114,7 +1072,7 @@ globalvariable_new1 :: proc(name, type_name, attribute, initial_value, read_perm
 }
 
 externalvariable_new :: proc(name, type_name: string) -> (externalvariable: ExternalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1129,7 +1087,7 @@ externalvariable_new :: proc(name, type_name: string) -> (externalvariable: Exte
 }
 
 externalvariable_new1 :: proc(name, type_name, attribute, read_permission, write_permission, description: string) -> (externalvariable: ExternalVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_type_name        := to_bstr(type_name)
@@ -1152,7 +1110,7 @@ externalvariable_new1 :: proc(name, type_name, attribute, read_permission, write
 }
 
 parameter_new :: proc(name, type_name: string) -> (parameter: Parameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1167,7 +1125,7 @@ parameter_new :: proc(name, type_name: string) -> (parameter: Parameter, ok: boo
 }
 
 parameter_new1 :: proc(name, type_name, attribute: string, direction: i32, initial_value, read_permission, write_permission, description: string) -> (parameter: Parameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_type_name        := to_bstr(type_name)
@@ -1192,7 +1150,7 @@ parameter_new1 :: proc(name, type_name, attribute: string, direction: i32, initi
 }
 
 cmparameter_new :: proc(name, type_name: string) -> (cmparameter: CMParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1207,7 +1165,7 @@ cmparameter_new :: proc(name, type_name: string) -> (cmparameter: CMParameter, o
 }
 
 cmparameter_new1 :: proc(name, type_name, initial_value, read_permission, write_permission, description: string, auto_point: AutoPoint) -> (cmparameter: CMParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_type_name        := to_bstr(type_name)
@@ -1230,7 +1188,7 @@ cmparameter_new1 :: proc(name, type_name, initial_value, read_permission, write_
 }
 
 extensibleparameter_new :: proc(name, type_name: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1245,7 +1203,7 @@ extensibleparameter_new :: proc(name, type_name: string) -> (extensibleparameter
 }
 
 extensibleparameter_new1 :: proc(name, type_name, attribute: string, direction: i32, initial_value, description: string) -> (extensibleparameter: ExtensibleParameter, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name          := to_bstr(name)
     bstr_type_name     := to_bstr(type_name)
@@ -1266,7 +1224,7 @@ extensibleparameter_new1 :: proc(name, type_name, attribute: string, direction: 
 }
 
 component_new :: proc(name, type_name: string) -> (component: Component, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1281,7 +1239,7 @@ component_new :: proc(name, type_name: string) -> (component: Component, ok: boo
 }
 
 component_new1 :: proc(name, type_name: string, attribute := "", initial_value := "", description: string) -> (component: Component, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name          := to_bstr(name)
     bstr_type_name     := to_bstr(type_name)
@@ -1302,7 +1260,7 @@ component_new1 :: proc(name, type_name: string, attribute := "", initial_value :
 }
 
 cmconnection_new :: proc(name, actual_parameter: string) -> (cmconnection: CMConnection, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_actual_parameter := to_bstr(actual_parameter)
@@ -1317,7 +1275,7 @@ cmconnection_new :: proc(name, actual_parameter: string) -> (cmconnection: CMCon
 }
 
 cmconnection_new1 :: proc(name, actual_parameter: string, graphical_connection: bool) -> (cmconnection: CMConnection, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name             := to_bstr(name)
     bstr_actual_parameter := to_bstr(actual_parameter)
@@ -1334,7 +1292,7 @@ cmconnection_new1 :: proc(name, actual_parameter: string, graphical_connection: 
 }
 
 autopoint_new :: proc(auto_pos: i32) -> (autopoint: AutoPoint, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewAutoPoint(auto_pos, cast(^rawptr)&autopoint)
     if com_failed(hr) do return
@@ -1343,7 +1301,7 @@ autopoint_new :: proc(auto_pos: i32) -> (autopoint: AutoPoint, ok: bool) {
 }
 
 point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewPoint(x, y, cast(^rawptr)&point)
     if com_failed(hr) do return
@@ -1352,7 +1310,7 @@ point_new :: proc(x, y: f64) -> (point: Point, ok: bool) {
 }
 
 graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos: GraphPos, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewGraphPos(x_pos, y_pos, rotation, x_scale, y_scale, cast(^rawptr)&graphpos)
     if com_failed(hr) do return
@@ -1361,7 +1319,7 @@ graphpos_new :: proc(x_pos, y_pos, rotation, x_scale, y_scale: f64) -> (graphpos
 }
 
 graphsize_new :: proc(lower_left, upper_right: Point) -> (graphsize: GraphSize, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewGraphSize(lower_left, upper_right, cast(^rawptr)&graphsize)
     if com_failed(hr) do return
@@ -1370,7 +1328,7 @@ graphsize_new :: proc(lower_left, upper_right: Point) -> (graphsize: GraphSize, 
 }
 
 graphnode_new :: proc(name: string, x, y: f64) -> (graphnode: GraphNode, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1381,7 +1339,7 @@ graphnode_new :: proc(name: string, x, y: f64) -> (graphnode: GraphNode, ok: boo
 }
 
 stcodeblock_new :: proc(name: string) -> (stcodeblock: STCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1392,7 +1350,7 @@ stcodeblock_new :: proc(name: string) -> (stcodeblock: STCodeBlock, ok: bool) {
 }
 
 stcodeblock_new1 :: proc(name: string, st_code: string) -> (stcodeblock: STCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name    := to_bstr(name)
     bstr_st_code := to_bstr(st_code)
@@ -1407,7 +1365,7 @@ stcodeblock_new1 :: proc(name: string, st_code: string) -> (stcodeblock: STCodeB
 }
 
 ldcodeblock_new_ld :: proc(name: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1418,7 +1376,7 @@ ldcodeblock_new_ld :: proc(name: string) -> (ldcodeblock: LDCodeBlock, ok: bool)
 }
 
 ldcodeblock_new1 :: proc(name: string, st_code: string) -> (ldcodeblock: LDCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name    := to_bstr(name)
     bstr_st_code := to_bstr(st_code)
@@ -1433,7 +1391,7 @@ ldcodeblock_new1 :: proc(name: string, st_code: string) -> (ldcodeblock: LDCodeB
 }
 
 fbdcodeblock_new :: proc(name: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1444,7 +1402,7 @@ fbdcodeblock_new :: proc(name: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool)
 }
 
 fbdcodeblock_new1 :: proc(name: string, st_code: string) -> (fbdcodeblock: FBDCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name    := to_bstr(name)
     bstr_st_code := to_bstr(st_code)
@@ -1459,7 +1417,7 @@ fbdcodeblock_new1 :: proc(name: string, st_code: string) -> (fbdcodeblock: FBDCo
 }
 
 sfccodeblock_new :: proc(name: string) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1470,7 +1428,7 @@ sfccodeblock_new :: proc(name: string) -> (sfccodeblock: SFCCodeBlock, ok: bool)
 }
 
 sfccodeblock_new1 :: proc(name: string, seq_control, step_elapsed_time: bool) -> (sfccodeblock: SFCCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1481,7 +1439,7 @@ sfccodeblock_new1 :: proc(name: string, seq_control, step_elapsed_time: bool) ->
 }
 
 sfcstep_new :: proc(name: string) -> (sfcstep: SFCStep, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1492,7 +1450,7 @@ sfcstep_new :: proc(name: string) -> (sfcstep: SFCStep, ok: bool) {
 }
 
 sfcstep_new1 :: proc(name: string, initial_step: bool, p1_action, n_action, p0_action: string) -> (sfcstep: SFCStep, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
    
     bstr_name := to_bstr(name)
     bstr_p1   := to_bstr(p1_action)
@@ -1511,7 +1469,7 @@ sfcstep_new1 :: proc(name: string, initial_step: bool, p1_action, n_action, p0_a
 }
 
 sfctransition_new :: proc(name: string) -> (sfctransition: SFCTransition, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1522,7 +1480,7 @@ sfctransition_new :: proc(name: string) -> (sfctransition: SFCTransition, ok: bo
 }
 
 sfctransition_new1 :: proc(name, st_code, dest: string) -> (sfctransition: SFCTransition, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name    := to_bstr(name)
     bstr_st_code := to_bstr(st_code)
@@ -1539,7 +1497,7 @@ sfctransition_new1 :: proc(name, st_code, dest: string) -> (sfctransition: SFCTr
 }
 
 sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: SFCSelection, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewSFCSelection(nr_of_branches, cast(^rawptr)&sfcselection)
     if com_failed(hr) do return
@@ -1548,7 +1506,7 @@ sfcselection_new :: proc(nr_of_branches: i32) -> (sfcselection: SFCSelection, ok
 }
 
 sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: SFCSimultaneous, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewSFCSimultaneous(nr_of_branches, cast(^rawptr)&sfcsimultaneous)
     if com_failed(hr) do return
@@ -1557,7 +1515,7 @@ sfcsimultaneous_new :: proc(nr_of_branches: i32) -> (sfcsimultaneous: SFCSimulta
 }
 
 sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1568,7 +1526,7 @@ sfcsubsequence_new :: proc(name: string) -> (sfcsubsequence: SFCSubSequence, ok:
 }
 
 ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1579,7 +1537,7 @@ ilcodeblock_new :: proc(name: string) -> (ilcodeblock: ILCodeBlock, ok: bool) {
 }
 
 ilrow_new :: proc(label, instruction, operand, description: string) -> (ilrow: ILRow, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_label        := to_bstr(label)
     bstr_instr        := to_bstr(instruction)
@@ -1598,7 +1556,7 @@ ilrow_new :: proc(label, instruction, operand, description: string) -> (ilrow: I
 }
 
 ilrow_new1 :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_comment := to_bstr(comment)
     defer bstr_free(bstr_comment)
@@ -1609,7 +1567,7 @@ ilrow_new1 :: proc(comment: string) -> (ilrow: ILRow, ok: bool) {
 }
 
 vanamedprotocol_new :: proc(name: string) -> (vanamedprotocol: VANamedProtocol, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1620,7 +1578,7 @@ vanamedprotocol_new :: proc(name: string) -> (vanamedprotocol: VANamedProtocol, 
 }
 
 vaaddressedprotocol_new :: proc(name: string) -> (vaaddressedprotocol: VAAddressedProtocol, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1631,7 +1589,7 @@ vaaddressedprotocol_new :: proc(name: string) -> (vaaddressedprotocol: VAAddress
 }
 
 vanamedvariable_new :: proc(name, path: string) -> (vanamedvariable: VANamedVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_path := to_bstr(path)
@@ -1646,7 +1604,7 @@ vanamedvariable_new :: proc(name, path: string) -> (vanamedvariable: VANamedVari
 }
 
 vanamedvariable_new1 :: proc(name, path, va_attribute: string, row: i32) -> (vanamedvariable: VANamedVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_path      := to_bstr(path)
@@ -1663,7 +1621,7 @@ vanamedvariable_new1 :: proc(name, path, va_attribute: string, row: i32) -> (van
 }
 
 vaaddressedvariable_new :: proc(name, path: string) -> (vaaddressedvariable: VAAddressedVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_path := to_bstr(path)
@@ -1678,7 +1636,7 @@ vaaddressedvariable_new :: proc(name, path: string) -> (vaaddressedvariable: VAA
 }
 
 vaaddressedvariable_new1 :: proc(name, path: string, row: i32) -> (vaaddressedvariable: VAAddressedVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_path := to_bstr(path)
@@ -1693,7 +1651,7 @@ vaaddressedvariable_new1 :: proc(name, path: string, row: i32) -> (vaaddressedva
 }
 
 accessvariables_new :: proc() -> (accessvariables: AccessVariables, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewAccessVariables(cast(^rawptr)&accessvariables)
     if com_failed(hr) do return
@@ -1702,7 +1660,7 @@ accessvariables_new :: proc() -> (accessvariables: AccessVariables, ok: bool) {
 }
 
 projectconstants_new :: proc() -> (projectconstants: ProjectConstants, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewProjectConstants(cast(^rawptr)&projectconstants)
     if com_failed(hr) do return
@@ -1711,7 +1669,7 @@ projectconstants_new :: proc() -> (projectconstants: ProjectConstants, ok: bool)
 }
 
 projectconstant_new :: proc(name, pc_type, value: string) -> (projectconstant: ProjectConstant, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(pc_type)
@@ -1728,7 +1686,7 @@ projectconstant_new :: proc(name, pc_type, value: string) -> (projectconstant: P
 }
 
 applicationproperties_new :: proc(sil_level: string, simulation_mark: bool) -> (applicationproperties: ApplicationProperties, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_sil := to_bstr(sil_level)
     defer bstr_free(bstr_sil)
@@ -1739,7 +1697,7 @@ applicationproperties_new :: proc(sil_level: string, simulation_mark: bool) -> (
 }
 
 connectedhwlibrary_new :: proc(name: string) -> (connectedhwlibrary: ConnectedHWLibrary, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1750,7 +1708,7 @@ connectedhwlibrary_new :: proc(name: string) -> (connectedhwlibrary: ConnectedHW
 }
 
 connectedhwlibrary_new1 :: proc(name: string, major, minor, revision: i32) -> (connectedhwlibrary: ConnectedHWLibrary, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1761,7 +1719,7 @@ connectedhwlibrary_new1 :: proc(name: string, major, minor, revision: i32) -> (c
 }
 
 connectedhwlibaries_new :: proc() -> (connectedhwlibaries: ConnectedHWLibraries, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewConnectedHWLibraries(cast(^rawptr)&connectedhwlibaries)
     if com_failed(hr) do return
@@ -1770,7 +1728,7 @@ connectedhwlibaries_new :: proc() -> (connectedhwlibaries: ConnectedHWLibraries,
 }
 
 commvariable_new :: proc(name, type_name, direction: string) -> (commvariable: CommVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1787,7 +1745,7 @@ commvariable_new :: proc(name, type_name, direction: string) -> (commvariable: C
 }
 
 commvariable_new1 :: proc(name, type_name, direction, attribute, initial_value, isp_value, priority, interval_time, read_permission, description: string) -> (commvariable: CommVariable, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name            := to_bstr(name)
     bstr_type_name       := to_bstr(type_name)
@@ -1818,7 +1776,7 @@ commvariable_new1 :: proc(name, type_name, direction, attribute, initial_value, 
 }
 
 initvalue_new :: proc(pou_path, name, value: string) -> (initvalue: InitValue, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_path := to_bstr(pou_path)
     bstr_name := to_bstr(name)
@@ -1835,7 +1793,7 @@ initvalue_new :: proc(pou_path, name, value: string) -> (initvalue: InitValue, o
 }
 
 diagram_new :: proc(name, description: string) -> (diagram: Diagram, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -1850,7 +1808,7 @@ diagram_new :: proc(name, description: string) -> (diagram: Diagram, ok: bool) {
 }
 
 diagram_new1 :: proc(name, description, task, type_guid, inst_guid: string) -> (diagram: Diagram, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -1871,7 +1829,7 @@ diagram_new1 :: proc(name, description, task, type_guid, inst_guid: string) -> (
 }
 
 executionorder_new :: proc() -> (executionorder: ExecutionOrder, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     hr := objectfactory->NewExecutionOrder(cast(^rawptr)&executionorder)
     if com_failed(hr) do return
@@ -1880,7 +1838,7 @@ executionorder_new :: proc() -> (executionorder: ExecutionOrder, ok: bool) {
 }
 
 executioninstance_new :: proc(name: string) -> (executioninstance: ExecutionInstance, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
@@ -1891,7 +1849,7 @@ executioninstance_new :: proc(name: string) -> (executioninstance: ExecutionInst
 }
 
 diagramtype_new :: proc(name, description: string) -> (diagramtype: DiagramType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -1906,7 +1864,7 @@ diagramtype_new :: proc(name, description: string) -> (diagramtype: DiagramType,
 }
 
 diagramtype_new1 :: proc(name, description: string, protected, hidden: bool, scope: t.Scope, alarm_owner: bool, guid: string) -> (diagramtype: DiagramType, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_description := to_bstr(description)
@@ -1923,7 +1881,7 @@ diagramtype_new1 :: proc(name, description: string, protected, hidden: bool, sco
 }
 
 diagraminstance_new :: proc(name, type_name: string) -> (diagraminstance: DiagramInstance, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name      := to_bstr(name)
     bstr_type_name := to_bstr(type_name)
@@ -1938,7 +1896,7 @@ diagraminstance_new :: proc(name, type_name: string) -> (diagraminstance: Diagra
 }
 
 diagraminstance_new1 :: proc(name, type_name, guid, description: string) -> (diagraminstance: DiagramInstance, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
     
     bstr_name        := to_bstr(name)
     bstr_type_name   := to_bstr(type_name)
@@ -1957,7 +1915,7 @@ diagraminstance_new1 :: proc(name, type_name, guid, description: string) -> (dia
 }
 
 signal_new :: proc(name, path: string, direction := "", acknowledge_group := "") -> (signal: Signal, ok: bool) {
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     v_name := to_variant(name)
     v_path := to_variant(path)

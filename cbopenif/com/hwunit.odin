@@ -44,7 +44,7 @@ HWUnitVTable :: struct {
 
 hwunit_serialize :: proc(hwunit: HWUnit) -> (xml: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -56,7 +56,7 @@ hwunit_serialize :: proc(hwunit: HWUnit) -> (xml: string, ok: bool) {
 
 hwunit_path_get :: proc(hwunit: HWUnit) -> (path: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -68,7 +68,7 @@ hwunit_path_get :: proc(hwunit: HWUnit) -> (path: string, ok: bool) {
 
 hwunit_path_set :: proc(hwunit: HWUnit, path: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(path)
     defer bstr_free(bs)
@@ -80,7 +80,7 @@ hwunit_path_set :: proc(hwunit: HWUnit, path: string) -> (ok: bool) {
 
 hwunit_type_id_get :: proc(hwunit: HWUnit) -> (type_id: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -92,7 +92,7 @@ hwunit_type_id_get :: proc(hwunit: HWUnit) -> (type_id: string, ok: bool) {
 
 hwunit_type_id_set :: proc(hwunit: HWUnit, type_id: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_id)
     defer bstr_free(bs)
@@ -104,7 +104,7 @@ hwunit_type_id_set :: proc(hwunit: HWUnit, type_id: string) -> (ok: bool) {
 
 hwunit_type_description_get :: proc(hwunit: HWUnit) -> (type_description: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -116,7 +116,7 @@ hwunit_type_description_get :: proc(hwunit: HWUnit) -> (type_description: string
 
 hwunit_type_description_set :: proc(hwunit: HWUnit, type_description: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_description)
     defer bstr_free(bs)
@@ -128,7 +128,7 @@ hwunit_type_description_set :: proc(hwunit: HWUnit, type_description: string) ->
 
 hwunit_guid_get :: proc(hwunit: HWUnit) -> (guid: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -140,7 +140,7 @@ hwunit_guid_get :: proc(hwunit: HWUnit) -> (guid: string, ok: bool) {
 
 hwunit_guid_set :: proc(hwunit: HWUnit, guid: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(guid)
     defer bstr_free(bs)
@@ -152,7 +152,7 @@ hwunit_guid_set :: proc(hwunit: HWUnit, guid: string) -> (ok: bool) {
 
 hwunit_redundant_pos_get :: proc(hwunit: HWUnit) -> (redundant_pos: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -164,7 +164,7 @@ hwunit_redundant_pos_get :: proc(hwunit: HWUnit) -> (redundant_pos: string, ok: 
 
 hwunit_redundant_pos_set :: proc(hwunit: HWUnit, redundant_pos: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(redundant_pos)
     defer bstr_free(bs)
@@ -176,7 +176,7 @@ hwunit_redundant_pos_set :: proc(hwunit: HWUnit, redundant_pos: string) -> (ok: 
 
 hwunit_hw_simulation_get :: proc(hwunit: HWUnit) -> (hw_simulation: bool, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^HWUnitIF)(hwunit)->HWSimulationGet(&vb)
@@ -187,7 +187,7 @@ hwunit_hw_simulation_get :: proc(hwunit: HWUnit) -> (hw_simulation: bool, ok: bo
 
 hwunit_hw_simulation_set :: proc(hwunit: HWUnit, hw_simulation: bool) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitIF)(hwunit)->HWSimulationPut(to_variantbool(hw_simulation))
     if com_failed(hr) do return
@@ -197,7 +197,7 @@ hwunit_hw_simulation_set :: proc(hwunit: HWUnit, hw_simulation: bool) -> (ok: bo
 
 hwunit_hw_simulation_supported_get :: proc(hwunit: HWUnit) -> (hw_simulation_supported: bool, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     vb: VariantBool
     hr := (^HWUnitIF)(hwunit)->HWSimulationSupportedGet(&vb)
@@ -208,7 +208,7 @@ hwunit_hw_simulation_supported_get :: proc(hwunit: HWUnit) -> (hw_simulation_sup
 
 hwunit_hw_simulation_supported_set :: proc(hwunit: HWUnit, hw_simulation_supported: bool) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitIF)(hwunit)->HWSimulationSupportedPut(to_variantbool(hw_simulation_supported))
     if com_failed(hr) do return
@@ -218,7 +218,7 @@ hwunit_hw_simulation_supported_set :: proc(hwunit: HWUnit, hw_simulation_support
 
 hwunit_reserved_by_function_get :: proc(hwunit: HWUnit) -> (reserved_by_function: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -230,7 +230,7 @@ hwunit_reserved_by_function_get :: proc(hwunit: HWUnit) -> (reserved_by_function
 
 hwunit_reserved_by_function_set :: proc(hwunit: HWUnit, reserved_by_function: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(reserved_by_function)
     defer bstr_free(bs)
@@ -242,7 +242,7 @@ hwunit_reserved_by_function_set :: proc(hwunit: HWUnit, reserved_by_function: st
 
 hwunit_parametersettings_get :: proc(hwunit: HWUnit) -> (parametersettings: ParameterSettings, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^HWUnitIF)(hwunit)->ParameterSettingsGet(&p)
@@ -253,7 +253,7 @@ hwunit_parametersettings_get :: proc(hwunit: HWUnit) -> (parametersettings: Para
 
 hwunit_parametersettings_set :: proc(hwunit: HWUnit, parametersettings: ParameterSettings) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitIF)(hwunit)->ParameterSettingsPut(parametersettings)
     if com_failed(hr) do return
@@ -263,7 +263,7 @@ hwunit_parametersettings_set :: proc(hwunit: HWUnit, parametersettings: Paramete
 
 hwunit_hwchannels_get :: proc(hwunit: HWUnit) -> (hwchannels: HWChannels, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^HWUnitIF)(hwunit)->HWChannelsGet(&p)
@@ -274,7 +274,7 @@ hwunit_hwchannels_get :: proc(hwunit: HWUnit) -> (hwchannels: HWChannels, ok: bo
 
 hwunit_hwchannels_set :: proc(hwunit: HWUnit, hwchannels: HWChannels) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitIF)(hwunit)->HWChannelsPut(hwchannels)
     if com_failed(hr) do return
@@ -284,7 +284,7 @@ hwunit_hwchannels_set :: proc(hwunit: HWUnit, hwchannels: HWChannels) -> (ok: bo
 
 hwunit_hwunits_get :: proc(hwunit: HWUnit) -> (hwunits: HWUnits, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     p: rawptr
     hr := (^HWUnitIF)(hwunit)->HWUnitsGet(&p)
@@ -295,7 +295,7 @@ hwunit_hwunits_get :: proc(hwunit: HWUnit) -> (hwunits: HWUnits, ok: bool) {
 
 hwunit_hwunits_set :: proc(hwunit: HWUnit, hwunits: HWUnits) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitIF)(hwunit)->HWUnitsPut(hwunits)
     if com_failed(hr) do return
@@ -305,7 +305,7 @@ hwunit_hwunits_set :: proc(hwunit: HWUnit, hwunits: HWUnits) -> (ok: bool) {
 
 hwunit_type_guid_get :: proc(hwunit: HWUnit) -> (type_guid: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -317,7 +317,7 @@ hwunit_type_guid_get :: proc(hwunit: HWUnit) -> (type_guid: string, ok: bool) {
 
 hwunit_type_guid_set :: proc(hwunit: HWUnit, type_guid: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
@@ -329,7 +329,7 @@ hwunit_type_guid_set :: proc(hwunit: HWUnit, type_guid: string) -> (ok: bool) {
 
 hwunit_instance_name_get :: proc(hwunit: HWUnit) -> (instance_name: string, ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
@@ -341,7 +341,7 @@ hwunit_instance_name_get :: proc(hwunit: HWUnit) -> (instance_name: string, ok: 
 
 hwunit_instance_name_set :: proc(hwunit: HWUnit, instance_name: string) -> (ok: bool) {
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bs := to_bstr(instance_name)
     defer bstr_free(bs)
@@ -378,7 +378,7 @@ HWUnitsVTable :: struct {
 hwunits_hwunit_add :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
     if hwunits == nil do return
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitsIF)(hwunits)->Add(hwunit)
     if com_failed(hr) do return
@@ -389,7 +389,7 @@ hwunits_hwunit_add :: proc(hwunits: HWUnits, hwunit: HWUnit) -> (ok: bool) {
 hwunits_hwunit_add_at_index :: proc(hwunits: HWUnits, hwunit: HWUnit, index: i32) -> (ok: bool) {
     if hwunits == nil do return
     if hwunit == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitsIF)(hwunits)->AddBefore(hwunit, index)
     if com_failed(hr) do return
@@ -399,7 +399,7 @@ hwunits_hwunit_add_at_index :: proc(hwunits: HWUnits, hwunit: HWUnit, index: i32
 
 hwunits_hwunit_by_path :: proc(hwunits: HWUnits, path: string) -> (hwunit: HWUnit, ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -411,7 +411,7 @@ hwunits_hwunit_by_path :: proc(hwunits: HWUnits, path: string) -> (hwunit: HWUni
 
 hwunits_hwunit_by_index :: proc(hwunits: HWUnits, index: i32) -> (hwunit: HWUnit, ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitsIF)(hwunits)->Item(index + 1, cast(^rawptr)&hwunit)
     if com_failed(hr) do return
@@ -421,7 +421,7 @@ hwunits_hwunit_by_index :: proc(hwunits: HWUnits, index: i32) -> (hwunit: HWUnit
 
 hwunits_hwunit_index :: proc(hwunits: HWUnits, path: string) -> (index: i32, ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     bstr_path := to_bstr(path)
     defer bstr_free(bstr_path)
@@ -433,7 +433,7 @@ hwunits_hwunit_index :: proc(hwunits: HWUnits, path: string) -> (index: i32, ok:
 
 hwunits_hwunit_count :: proc(hwunits: HWUnits) -> (count: i32, ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitsIF)(hwunits)->Count(&count)
     if com_failed(hr) do return
@@ -443,7 +443,7 @@ hwunits_hwunit_count :: proc(hwunits: HWUnits) -> (count: i32, ok: bool) {
 
 hwunits_hwunit_remove_by_path :: proc(hwunits: HWUnits, path: string) -> (ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     index: i32
     index, ok = hwunits_hwunit_index(hwunits, path)
@@ -457,7 +457,7 @@ hwunits_hwunit_remove_by_path :: proc(hwunits: HWUnits, path: string) -> (ok: bo
 
 hwunits_hwunit_remove_by_index :: proc(hwunits: HWUnits, index: i32) -> (ok: bool) {
     if hwunits == nil do return
-    if !controlbuilder_connected() do return
+    if !com_connected() do return
 
     hr := (^HWUnitsIF)(hwunits)->Remove(index + 1)
     if com_failed(hr) do return
