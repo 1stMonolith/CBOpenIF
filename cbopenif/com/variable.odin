@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 Variable  :: distinct rawptr
 Variables :: distinct rawptr
 
@@ -364,6 +366,108 @@ variable_release :: proc(variable: Variable) {
     if variable != nil {
         (^VariableIF)(variable)->Release()
     }
+}
+
+variable_from_com :: proc(variable: Variable, allocator := context.allocator) -> (result: t.Variable, ok: bool) {
+    if variable == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(variable)
+    if !ok do return
+    result.type_name, ok = type_name(variable)
+    if !ok do return
+    result.attribute, ok = attribute(variable)
+    if !ok do return
+    result.initial_value, ok = initial_value(variable)
+    if !ok do return
+    result.description, ok = description(variable)
+    if !ok do return
+    result.read_permission, ok = read_permission(variable)
+    if !ok do return
+    result.write_permission, ok = write_permission(variable)
+    if !ok do return
+    result.authentication_level, ok = authentication_level(variable)
+    if !ok do return
+    result.access_level, ok = access_level(variable)
+    if !ok do return
+    result.safety_type, ok = safety_type(variable)
+    if !ok do return
+    result.batch_property, ok = batch_property(variable)
+    if !ok do return
+    result.type_guid, ok = type_guid(variable)
+    if !ok do return
+    result.type_path, ok = type_path(variable)
+    if !ok do return
+
+    nodes: GraphNodes
+    nodes, ok = graphnodes(variable)
+    if !ok do return
+    defer release(nodes)
+
+    count: i32
+    count, ok = graphnode_count(nodes)
+    if !ok do return
+
+    result.graph_nodes = make([dynamic]t.GraphNode, 0, int(count), allocator)
+
+    for i in 0..<count {
+        node: GraphNode
+        node, ok = graphnode_by_index(nodes, i)
+        if !ok do return
+        defer release(node)
+
+        node_s: t.GraphNode
+        node_s, ok = graphnode_from_com(node)
+        if !ok do return
+
+        append(&result.graph_nodes, node_s)
+    }
+
+    return result, true
+}
+
+variable_to_com :: proc(src: t.Variable) -> (result: Variable, ok: bool) {
+    variable: Variable
+    variable, ok = variable_new1(
+        src.name,
+        src.type_name,
+        src.attribute,
+        src.initial_value,
+        src.read_permission,
+        src.write_permission,
+        src.description,
+    )
+    if !ok do return
+    defer if !ok do release(variable)
+
+    ok = authentication_level(variable, src.authentication_level)
+    if !ok do return
+    ok = access_level(variable, src.access_level)
+    if !ok do return
+    ok = safety_type(variable, src.safety_type)
+    if !ok do return
+    ok = batch_property(variable, src.batch_property)
+    if !ok do return
+
+    // type_guid / type_path are read-only on the COM side
+
+    nodes: GraphNodes
+    nodes, ok = graphnodes(variable)
+    if !ok do return
+    defer release(nodes)
+
+    for n in src.graph_nodes {
+        node: GraphNode
+        node, ok = graphnode_to_com(n)
+        if !ok do return
+        defer release(node)
+
+        ok = graphnode_add(nodes, node)
+        if !ok do return
+    }
+
+    return variable, true
 }
 
 VariablesIF :: struct #raw_union {

@@ -233,7 +233,6 @@ datatype_release :: proc(datatype: DataType) {
 
 datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: t.DataType, ok: bool) {
     if datatype == nil do return
-    if !com_connected() do return
 
     context.allocator = allocator
 
@@ -280,8 +279,6 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
 }
 
 datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
-    if !com_connected() do return
-
     datatype: DataType
     datatype, ok = datatype_new1(
         src.name,
@@ -645,7 +642,6 @@ component_release :: proc(component: Component) {
 
 component_from_com :: proc(component: Component) -> (result: t.Component, ok: bool) {
     if component == nil do return
-    if !com_connected() do return
 
     result.name, ok = name(component)
     if !ok do return

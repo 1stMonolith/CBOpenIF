@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 GraphNode  :: distinct rawptr
 GraphNodes :: distinct rawptr
 GraphPos   :: distinct rawptr
@@ -88,6 +90,29 @@ graphnode_release :: proc(graphnode: GraphNode) {
     if graphnode != nil {
         (^GraphNodeIF)(graphnode)->Release()
     }
+}
+
+graphnode_from_com :: proc(graphnode: GraphNode, allocator := context.allocator) -> (result: t.GraphNode, ok: bool) {
+    if graphnode == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(graphnode)
+    if !ok do return
+    result.x, ok = x(graphnode)
+    if !ok do return
+    result.y, ok = y(graphnode)
+    if !ok do return
+
+    return result, true
+}
+
+graphnode_to_com :: proc(src: t.GraphNode) -> (result: GraphNode, ok: bool) {
+    graphnode: GraphNode
+    graphnode, ok = graphnode_new(src.name, src.x, src.y)
+    if !ok do return
+
+    return graphnode, true
 }
 
 GraphNodesIF :: struct #raw_union {
