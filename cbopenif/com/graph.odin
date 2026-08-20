@@ -352,6 +352,33 @@ graphpos_release :: proc(graphpos: GraphPos) {
     }
 }
 
+graphpos_from_com :: proc(graphpos: GraphPos, allocator := context.allocator) -> (result: t.GraphPos, ok: bool) {
+    if graphpos == nil do return
+
+    context.allocator = allocator
+
+    result.x, ok = x(graphpos)
+    if !ok do return
+    result.y, ok = y(graphpos)
+    if !ok do return
+    result.rotation, ok = rotation(graphpos)
+    if !ok do return
+    result.xscale, ok = xscale(graphpos)
+    if !ok do return
+    result.yscale, ok = yscale(graphpos)
+    if !ok do return
+
+    return result, true
+}
+
+graphpos_to_com :: proc(src: t.GraphPos) -> (result: GraphPos, ok: bool) {
+    graphpos: GraphPos
+    graphpos, ok = graphpos_new(src.x, src.y, src.rotation, src.xscale, src.yscale)
+    if !ok do return
+
+    return graphpos, true
+}
+
 GraphSizeIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^GraphSizeVTable,
@@ -411,4 +438,46 @@ graphsize_release :: proc(graphsize: GraphSize) {
     if graphsize != nil {
         (^GraphSizeIF)(graphsize)->Release()
     }
+}
+
+graphsize_from_com :: proc(graphsize: GraphSize, allocator := context.allocator) -> (result: t.GraphSize, ok: bool) {
+    if graphsize == nil do return
+
+    context.allocator = allocator
+
+    ll: Point
+    ll, ok = point_lower_left(graphsize)
+    if !ok do return
+    defer release(ll)
+
+    result.lower_left, ok = point_from_com(ll)
+    if !ok do return
+
+    ur: Point
+    ur, ok = point_upper_right(graphsize)
+    if !ok do return
+    defer release(ur)
+
+    result.upper_right, ok = point_from_com(ur)
+    if !ok do return
+
+    return result, true
+}
+
+graphsize_to_com :: proc(src: t.GraphSize) -> (result: GraphSize, ok: bool) {
+    ll: Point
+    ll, ok = point_to_com(src.lower_left)
+    if !ok do return
+    defer release(ll)
+
+    ur: Point
+    ur, ok = point_to_com(src.upper_right)
+    if !ok do return
+    defer release(ur)
+
+    graphsize: GraphSize
+    graphsize, ok = graphsize_new(ll, ur)
+    if !ok do return
+
+    return graphsize, true
 }
