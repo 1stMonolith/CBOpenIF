@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 Point  :: distinct rawptr
 Points :: distinct rawptr
 
@@ -60,6 +62,27 @@ point_release :: proc(point: Point) {
     if point != nil {
         (^PointIF)(point)->Release()
     }
+}
+
+point_from_com :: proc(point: Point, allocator := context.allocator) -> (result: t.Point, ok: bool) {
+    if point == nil do return
+
+    context.allocator = allocator
+
+    result.x, ok = x(point)
+    if !ok do return
+    result.y, ok = y(point)
+    if !ok do return
+
+    return result, true
+}
+
+point_to_com :: proc(src: t.Point) -> (result: Point, ok: bool) {
+    point: Point
+    point, ok = point_new(src.x, src.y)
+    if !ok do return
+
+    return point, true
 }
 
 PointsIF :: struct #raw_union {

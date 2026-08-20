@@ -281,3 +281,34 @@ posinfo_release :: proc(posinfo: PosInfo) {
         (^PosInfoIF)(posinfo)->Release()
     }
 }
+
+posinfo_from_com :: proc(posinfo: PosInfo, allocator := context.allocator) -> (result: t.PosInfo, ok: bool) {
+    if posinfo == nil do return
+
+    context.allocator = allocator
+
+    result.fou_name, ok = fou_name(posinfo)
+    if !ok do return
+    result.pou_name, ok = pou_name(posinfo)
+    if !ok do return
+    result.element_name, ok = element_name(posinfo)
+    if !ok do return
+    result.tab_name, ok = tab_name(posinfo)
+    if !ok do return
+    result.page_number, ok = page_number(posinfo)
+    if !ok do return
+    result.row, ok = row(posinfo)
+    if !ok do return
+    result.column, ok = column(posinfo)
+    if !ok do return
+    result.start_position, ok = start_position(posinfo)
+    if !ok do return
+    result.end_position, ok = end_position(posinfo)
+    if !ok do return
+    result.id, ok = id(posinfo)
+    if !ok do return
+    result.message_type, ok = message_type(posinfo)
+    if !ok do return
+
+    return result, true
+}

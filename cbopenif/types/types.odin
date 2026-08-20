@@ -185,7 +185,7 @@ PosInfo :: struct {
     start_position: i32,
     end_position:  i32,
     id:            string,
-    message_type:  string,
+    message_type:  Message,
 }
 
 ErrorMsg :: struct {
