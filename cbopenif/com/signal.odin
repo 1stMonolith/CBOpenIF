@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 Signal  :: distinct rawptr
 Signals :: distinct rawptr
 
@@ -159,6 +161,46 @@ signal_release :: proc(signal: Signal) {
     if signal != nil {
         (^SignalIF)(signal)->Release()
     }
+}
+
+signal_from_com :: proc(signal: Signal, allocator := context.allocator) -> (result: t.Signal, ok: bool) {
+    if signal == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(signal)
+    if !ok do return
+    result.path, ok = path(signal)
+    if !ok do return
+
+    dir_str: string
+    dir_str, ok = direction(signal)
+    if !ok do return
+    result.direction = t.direction_from_string(dir_str)
+
+    result.acknowledge_group, ok = acknowledge_group(signal)
+    if !ok do return
+    result.description, ok = description(signal)
+    if !ok do return
+
+    return result, true
+}
+
+signal_to_com :: proc(src: t.Signal) -> (result: Signal, ok: bool) {
+    signal: Signal
+    signal, ok = signal_new(
+        src.name,
+        src.path,
+        t.direction_to_string(src.direction),
+        src.acknowledge_group,
+    )
+    if !ok do return
+    defer if !ok do release(signal)
+
+    ok = description(signal, src.description)
+    if !ok do return
+
+    return signal, true
 }
 
 SignalsIF :: struct #raw_union {
