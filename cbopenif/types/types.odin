@@ -676,7 +676,8 @@ ApplicationVariables :: struct {
 
 ProjectConstant :: struct {
     name:  string,
-    // value / type fields – expand once the interface is inspected more closely
+    type:  string,
+    value: string,
 }
 
 AccessVariables :: struct {
