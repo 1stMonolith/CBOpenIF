@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 InitValue  :: distinct rawptr
 InitValues :: distinct rawptr
 
@@ -107,6 +109,29 @@ initvalue_release :: proc(initvalue: InitValue) {
     if initvalue != nil {
         (^InitValueIF)(initvalue)->Release()
     }
+}
+
+initvalue_from_com :: proc(initvalue: InitValue, allocator := context.allocator) -> (result: t.InitValue, ok: bool) {
+    if initvalue == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(initvalue)
+    if !ok do return
+    result.pou_path, ok = pou_path(initvalue)
+    if !ok do return
+    result.value, ok = initvalue_value_get(initvalue)
+    if !ok do return
+
+    return result, true
+}
+
+initvalue_to_com :: proc(src: t.InitValue) -> (result: InitValue, ok: bool) {
+    initvalue: InitValue
+    initvalue, ok = initvalue_new(src.pou_path, src.name, src.value)
+    if !ok do return
+
+    return initvalue, true
 }
 
 InitValuesIF :: struct #raw_union {

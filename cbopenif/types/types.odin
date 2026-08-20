@@ -512,7 +512,7 @@ CMConnection :: struct {
 InitValue :: struct {
     name:     string,
     pou_path: string,
-    // value content – expand as needed
+    value:    string,
 }
 
 Program :: struct {
