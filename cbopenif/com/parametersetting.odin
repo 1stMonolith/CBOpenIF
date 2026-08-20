@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ParameterSetting  :: distinct rawptr
 ParameterSettings :: distinct rawptr
 
@@ -81,6 +83,31 @@ parametersetting_release :: proc(parametersetting: ParameterSetting) {
     if parametersetting != nil {
         (^ParameterSettingIF)(parametersetting)->Release()
     }
+}
+
+parametersetting_from_com :: proc(parametersetting: ParameterSetting, allocator := context.allocator) -> (result: t.ParameterSetting, ok: bool) {
+    if parametersetting == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(parametersetting)
+    if !ok do return
+    result.parameter_value, ok = parametersetting_value(parametersetting)
+    if !ok do return
+    result.description, ok = description(parametersetting)
+    if !ok do return
+
+    return result, true
+}
+
+parametersetting_to_com :: proc(src: t.ParameterSetting) -> (result: ParameterSetting, ok: bool) {
+    parametersetting: ParameterSetting
+    parametersetting, ok = parametersetting_new(src.name, src.parameter_value)
+    if !ok do return
+
+    // description is get-only on the COM side (no DescriptionPut)
+
+    return parametersetting, true
 }
 
 ParameterSettingsIF :: struct #raw_union {
