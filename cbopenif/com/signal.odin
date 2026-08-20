@@ -254,7 +254,7 @@ signals_signal_by_name :: proc(signals: Signals, name: string) -> (signal: Signa
     return signal, true
 }
 
-signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signals, ok: bool) {
+signals_signal_by_index :: proc(signals: Signals, index: i32) -> (signal: Signal, ok: bool) {
     if signals == nil do return
     if !com_connected() do return
     

@@ -11,7 +11,7 @@ Direction :: enum i32 {
     InOut  = 2,
 }
 
-// For Signal COM because it exposes Direction as BStr
+// For Signal and CommVariable COM because it exposes Direction as BStr
 direction_from_string :: proc(s: string) -> Direction {
     switch s {
     case "Input", "0":  return .Input
@@ -21,7 +21,7 @@ direction_from_string :: proc(s: string) -> Direction {
     }
 }
 
-// For Signal COM because it exposes Direction as BStr
+// For Signal and CommVariable COM because it exposes Direction as BStr
 direction_to_string :: proc(d: Direction) -> string {
     switch d {
     case .Input:  return "Input"
@@ -288,8 +288,7 @@ CMParameter :: struct {
 }
 
 AutoPoint :: struct {
-    // fields depend on the exact COM surface; keep minimal for now
-    // expand once the AutoPoint interface more closely
+    auto_pos: AutoPos,
 }
 
 Variable :: struct {
@@ -350,10 +349,10 @@ CommVariable :: struct {
     acknowledge_group: string,
     expected_sil:      string,
     restricted_sil:    bool,
-    interval_time:     i32,
-    priority:          i32,
+    interval_time:     string,
+    priority:          string,
     ip_address:        string,
-    unique_id:         string,
+    unique_id:         i32,
     isp_value:         string,
     read_permission:   string,
     type_guid:         string,
@@ -609,9 +608,9 @@ HWChannel :: struct {
     name:           string,
     address:        string,
     unit:           string,
-    min:            f64,
-    max:            f64,
-    fraction:       i32,
+    min:            string,
+    max:            string,
+    fraction:       string,
     reversed:       bool,
     con_variable:   string,
     io_description: string,
@@ -729,4 +728,13 @@ ExecutionGroup :: struct {
 
 ExecutionOrder :: struct {
     groups: [dynamic]ExecutionGroup,
+}
+
+ILRow :: struct {
+    label:          string,
+    instruction:    string,
+    operand:        string,
+    description:    string,
+    row_comment:    string,
+    is_row_comment: bool,
 }

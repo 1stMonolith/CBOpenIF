@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ILRow  :: distinct rawptr
 ILRows :: distinct rawptr
 
@@ -169,6 +171,45 @@ ilrow_release :: proc(ilrow: ILRow) {
     if ilrow != nil {
         (^ILRowIF)(ilrow)->Release()
     }
+}
+
+ilrow_from_com :: proc(ilrow: ILRow, allocator := context.allocator) -> (result: t.ILRow, ok: bool) {
+    if ilrow == nil do return
+
+    context.allocator = allocator
+
+    result.label, ok = ilrow_label_get(ilrow)
+    if !ok do return
+    result.instruction, ok = ilrow_instruction_get(ilrow)
+    if !ok do return
+    result.operand, ok = ilrow_operand_get(ilrow)
+    if !ok do return
+    result.description, ok = description(ilrow)
+    if !ok do return
+    result.row_comment, ok = ilrow_row_comment_get(ilrow)
+    if !ok do return
+    result.is_row_comment, ok = ilrow_is_row_comment_get(ilrow)
+    if !ok do return
+
+    return result, true
+}
+
+ilrow_to_com :: proc(src: t.ILRow) -> (result: ILRow, ok: bool) {
+    ilrow: ILRow
+    if src.is_row_comment {
+        ilrow, ok = ilrow_new1(src.row_comment)
+        if !ok do return
+        return ilrow, true
+    }
+
+    ilrow, ok = ilrow_new(src.label, src.instruction, src.operand, src.description)
+    if !ok do return
+    defer if !ok do release(ilrow)
+
+    ok = ilrow_row_comment_set(ilrow, src.row_comment)
+    if !ok do return
+
+    return ilrow, true
 }
 
 ILRowsIF :: struct #raw_union {

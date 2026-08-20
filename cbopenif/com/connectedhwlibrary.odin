@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ConnectedHWLibrary   :: distinct rawptr
 ConnectedHWLibraries :: distinct rawptr
 
@@ -120,6 +122,31 @@ connectedhwlibrary_release :: proc(chl: ConnectedHWLibrary) {
     if chl != nil {
         (^ConnectedHWLibraryIF)(chl)->Release()
     }
+}
+
+connectedhwlibrary_from_com :: proc(chl: ConnectedHWLibrary, allocator := context.allocator) -> (result: t.ConnectedHWLibrary, ok: bool) {
+    if chl == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(chl)
+    if !ok do return
+    result.major_version, ok = major_version(chl)
+    if !ok do return
+    result.minor_version, ok = minor_version(chl)
+    if !ok do return
+    result.revision, ok = revision(chl)
+    if !ok do return
+
+    return result, true
+}
+
+connectedhwlibrary_to_com :: proc(src: t.ConnectedHWLibrary) -> (result: ConnectedHWLibrary, ok: bool) {
+    chl: ConnectedHWLibrary
+    chl, ok = connectedhwlibrary_new1(src.name, src.major_version, src.minor_version, src.revision)
+    if !ok do return
+
+    return chl, true
 }
 
 ConnectedHWLibrariesIF :: struct #raw_union {

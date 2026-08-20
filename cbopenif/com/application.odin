@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ApplicationProperties :: distinct rawptr
 ApplicationVariables  :: distinct rawptr
 
@@ -10,11 +12,11 @@ ApplicationPropertiesIF :: struct #raw_union {
 
 ApplicationPropertiesVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    SILLevelGet:       proc "system" (this: ^ApplicationPropertiesIF, SILLevel: ^BStr) -> HResult,
-    SILLevelPut:       proc "system" (this: ^ApplicationPropertiesIF, SILLevel: BStr) -> HResult,
-    SimulationMarkGet: proc "system" (this: ^ApplicationPropertiesIF, SimulationMark: ^VariantBool) -> HResult,
-    SimulationMarkPut: proc "system" (this: ^ApplicationPropertiesIF, SimulationMark: VariantBool) -> HResult,
-    Serialize:         proc "system" (this: ^ApplicationPropertiesIF, XML: ^BStr) -> HResult,
+    SILLevelGet:        proc "system" (this: ^ApplicationPropertiesIF, SILLevel: ^BStr) -> HResult,
+    SILLevelPut:        proc "system" (this: ^ApplicationPropertiesIF, SILLevel: BStr) -> HResult,
+    SimulationMarkGet:  proc "system" (this: ^ApplicationPropertiesIF, SimulationMark: ^VariantBool) -> HResult,
+    SimulationMarkPut:  proc "system" (this: ^ApplicationPropertiesIF, SimulationMark: VariantBool) -> HResult,
+    Serialize:          proc "system" (this: ^ApplicationPropertiesIF, XML: ^BStr) -> HResult,
     ApplicationTypeGet: proc "system" (this: ^ApplicationPropertiesIF, ApplicationType: ^BStr) -> HResult,
 }
 
@@ -91,6 +93,31 @@ applicationproperties_release :: proc(applicationproperties: ApplicationProperti
     if applicationproperties != nil {
         (^ApplicationPropertiesIF)(applicationproperties)->Release()
     }
+}
+
+applicationproperties_from_com :: proc(ap: ApplicationProperties, allocator := context.allocator) -> (result: t.ApplicationProperties, ok: bool) {
+    if ap == nil do return
+
+    context.allocator = allocator
+
+    result.sil_level, ok = sil_level(ap)
+    if !ok do return
+    result.simulation_mark, ok = simulation_mark(ap)
+    if !ok do return
+    result.application_type, ok = application_type(ap)
+    if !ok do return
+
+    return result, true
+}
+
+applicationproperties_to_com :: proc(src: t.ApplicationProperties) -> (result: ApplicationProperties, ok: bool) {
+    ap: ApplicationProperties
+    ap, ok = applicationproperties_new(src.sil_level, src.simulation_mark)
+    if !ok do return
+
+    // application_type is get-only
+
+    return ap, true
 }
 
 ApplicationVariablesIF :: struct #raw_union {
@@ -217,4 +244,150 @@ applicationvariables_release :: proc(application_variables: ApplicationVariables
     if application_variables != nil {
         (^ApplicationVariablesIF)(application_variables)->Release()
     }
+}
+
+applicationvariables_from_com :: proc(av: ApplicationVariables, allocator := context.allocator) -> (result: t.ApplicationVariables, ok: bool) {
+    if av == nil do return
+
+    context.allocator = allocator
+
+    result.description, ok = description(av)
+    if !ok do return
+
+    // variables
+    {
+        vars: Variables
+        vars, ok = variables(av)
+        if !ok do return
+        defer release(vars)
+
+        count: i32
+        count, ok = variable_count(vars)
+        if !ok do return
+
+        result.variables = make([dynamic]t.Variable, 0, int(count), allocator)
+        for i in 0..<count {
+            v: Variable
+            v, ok = variable_by_index(vars, i)
+            if !ok do return
+            defer release(v)
+
+            vs: t.Variable
+            vs, ok = variable_from_com(v)
+            if !ok do return
+            append(&result.variables, vs)
+        }
+    }
+
+    // globals
+    {
+        gvars: GlobalVariables
+        gvars, ok = globalvariables(av)
+        if !ok do return
+        defer release(gvars)
+
+        count: i32
+        count, ok = globalvariable_count(gvars)
+        if !ok do return
+
+        result.globals = make([dynamic]t.GlobalVariable, 0, int(count), allocator)
+        for i in 0..<count {
+            g: GlobalVariable
+            g, ok = globalvariable_by_index(gvars, i)
+            if !ok do return
+            defer release(g)
+
+            gs: t.GlobalVariable
+            gs, ok = globalvariable_from_com(g)
+            if !ok do return
+            append(&result.globals, gs)
+        }
+    }
+
+    // signals
+    {
+        sigs: Signals
+        sigs, ok = signals(av)
+        if !ok do return
+        defer release(sigs)
+
+        count: i32
+        count, ok = signal_count(sigs)
+        if !ok do return
+
+        result.signals = make([dynamic]t.Signal, 0, int(count), allocator)
+        for i in 0..<count {
+            s: Signal
+            s, ok = signal_by_index(sigs, i)
+            if !ok do return
+            defer release(s)
+
+            ss: t.Signal
+            ss, ok = signal_from_com(s)
+            if !ok do return
+            append(&result.signals, ss)
+        }
+    }
+
+    return result, true
+}
+
+applicationvariables_to_com :: proc(src: t.ApplicationVariables) -> (result: ApplicationVariables, ok: bool) {
+    av: ApplicationVariables
+    av, ok = applicationvariables_new(src.description)
+    if !ok do return
+    defer if !ok do release(av)
+
+    {
+        vars: Variables
+        vars, ok = variables(av)
+        if !ok do return
+        defer release(vars)
+
+        for vs in src.variables {
+            v: Variable
+            v, ok = variable_to_com(vs)
+            if !ok do return
+            defer release(v)
+
+            ok = variable_add(vars, v)
+            if !ok do return
+        }
+    }
+
+    {
+        gvars: GlobalVariables
+        gvars, ok = globalvariables(av)
+        if !ok do return
+        defer release(gvars)
+
+        for gs in src.globals {
+            g: GlobalVariable
+            g, ok = globalvariable_to_com(gs)
+            if !ok do return
+            defer release(g)
+
+            ok = globalvariable_add(gvars, g)
+            if !ok do return
+        }
+    }
+
+    {
+        sigs: Signals
+        sigs, ok = signals(av)
+        if !ok do return
+        defer release(sigs)
+
+        for ss in src.signals {
+            s: Signal
+            s, ok = signal_to_com(ss)
+            if !ok do return
+            defer release(s)
+
+            ok = signal_add(sigs, s)
+            if !ok do return
+        }
+    }
+
+    return av, true
 }

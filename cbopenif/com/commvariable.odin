@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 CommVariable  :: distinct rawptr
 CommVariables :: distinct rawptr
 
@@ -439,6 +441,86 @@ commvariable_release :: proc(commvariable: CommVariable) {
     if commvariable != nil {
         (^CommVariableIF)(commvariable)->Release()
     }
+}
+
+commvariable_from_com :: proc(commvariable: CommVariable, allocator := context.allocator) -> (result: t.CommVariable, ok: bool) {
+    if commvariable == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(commvariable)
+    if !ok do return
+    result.type_name, ok = type_name(commvariable)
+    if !ok do return
+    result.attribute, ok = attribute(commvariable)
+    if !ok do return
+    result.initial_value, ok = initial_value(commvariable)
+    if !ok do return
+    result.description, ok = description(commvariable)
+    if !ok do return
+
+    dir_str: string
+    dir_str, ok = direction(commvariable)
+    if !ok do return
+    result.direction = t.direction_from_string(dir_str)
+
+    result.ip_address, ok = ipaddress(commvariable)
+    if !ok do return
+    result.interval_time, ok = interval_time(commvariable)
+    if !ok do return
+    result.priority, ok = priority(commvariable)
+    if !ok do return
+    result.isp_value, ok = isp_value(commvariable)
+    if !ok do return
+    result.read_permission, ok = read_permission(commvariable)
+    if !ok do return
+    result.expected_sil, ok = expected_sil(commvariable)
+    if !ok do return
+    result.unique_id, ok = unique_id(commvariable)
+    if !ok do return
+    result.restricted_sil, ok = restricted_sil(commvariable)
+    if !ok do return
+    result.acknowledge_group, ok = acknowledge_group(commvariable)
+    if !ok do return
+    result.type_guid, ok = type_guid(commvariable)
+    if !ok do return
+    result.type_path, ok = type_path(commvariable)
+    if !ok do return
+
+    return result, true
+}
+
+commvariable_to_com :: proc(src: t.CommVariable) -> (result: CommVariable, ok: bool) {
+    commvariable: CommVariable
+    commvariable, ok = commvariable_new1(
+        src.name,
+        src.type_name,
+        t.direction_to_string(src.direction),
+        src.attribute,
+        src.initial_value,
+        src.isp_value,
+        src.priority,
+        src.interval_time,
+        src.read_permission,
+        src.description,
+    )
+    if !ok do return
+    defer if !ok do release(commvariable)
+
+    ok = ipaddress(commvariable, src.ip_address)
+    if !ok do return
+    ok = expected_sil(commvariable, src.expected_sil)
+    if !ok do return
+    ok = unique_id(commvariable, src.unique_id)
+    if !ok do return
+    ok = restricted_sil(commvariable, src.restricted_sil)
+    if !ok do return
+    ok = acknowledge_group(commvariable, src.acknowledge_group)
+    if !ok do return
+
+    // type_guid / type_path are read-only
+
+    return commvariable, true
 }
 
 CommVariablesIF :: struct #raw_union {

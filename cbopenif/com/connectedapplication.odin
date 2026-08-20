@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ConnectedApplication  :: distinct rawptr
 ConnectedApplications :: distinct rawptr
 
@@ -121,6 +123,31 @@ connectedapplication_release :: proc(ca: ConnectedApplication) {
     if ca != nil {
         (^ConnectedApplicationIF)(ca)->Release()
     }
+}
+
+connectedapplication_from_com :: proc(ca: ConnectedApplication, allocator := context.allocator) -> (result: t.ConnectedApplication, ok: bool) {
+    if ca == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(ca)
+    if !ok do return
+    result.major_version, ok = major_version(ca)
+    if !ok do return
+    result.minor_version, ok = minor_version(ca)
+    if !ok do return
+    result.revision, ok = revision(ca)
+    if !ok do return
+
+    return result, true
+}
+
+connectedapplication_to_com :: proc(src: t.ConnectedApplication) -> (result: ConnectedApplication, ok: bool) {
+    ca: ConnectedApplication
+    ca, ok = connectedapplication_new1(src.name, src.major_version, src.minor_version, src.revision)
+    if !ok do return
+
+    return ca, true
 }
 
 ConnectedApplicationsIF :: struct #raw_union {

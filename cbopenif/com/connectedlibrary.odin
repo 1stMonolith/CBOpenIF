@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 ConnectedLibrary   :: distinct rawptr
 ConnectedLibraries :: distinct rawptr
 
@@ -121,6 +123,31 @@ connectedlibrary_release :: proc(cl: ConnectedLibrary) {
     if cl != nil {
         (^ConnectedLibraryIF)(cl)->Release()
     }
+}
+
+connectedlibrary_from_com :: proc(cl: ConnectedLibrary, allocator := context.allocator) -> (result: t.ConnectedLibrary, ok: bool) {
+    if cl == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(cl)
+    if !ok do return
+    result.major_version, ok = major_version(cl)
+    if !ok do return
+    result.minor_version, ok = minor_version(cl)
+    if !ok do return
+    result.revision, ok = revision(cl)
+    if !ok do return
+
+    return result, true
+}
+
+connectedlibrary_to_com :: proc(src: t.ConnectedLibrary) -> (result: ConnectedLibrary, ok: bool) {
+    cl: ConnectedLibrary
+    cl, ok = connectedlibrary_new1(src.name, src.major_version, src.minor_version, src.revision)
+    if !ok do return
+
+    return cl, true
 }
 
 ConnectedLibrariesIF :: struct #raw_union {

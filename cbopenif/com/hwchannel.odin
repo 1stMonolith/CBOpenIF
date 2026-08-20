@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 HWChannel  :: distinct rawptr
 HWChannels :: distinct rawptr
 
@@ -283,6 +285,51 @@ hwchannel_release :: proc(hwchannel: HWChannel) {
     if hwchannel != nil {
         (^HWChannelIF)(hwchannel)->Release()
     }
+}
+
+hwchannel_from_com :: proc(hwchannel: HWChannel, allocator := context.allocator) -> (result: t.HWChannel, ok: bool) {
+    if hwchannel == nil do return
+
+    context.allocator = allocator
+
+    result.name, ok = name(hwchannel)
+    if !ok do return
+    result.address, ok = address(hwchannel)
+    if !ok do return
+    result.min, ok = min(hwchannel)
+    if !ok do return
+    result.max, ok = max(hwchannel)
+    if !ok do return
+    result.unit, ok = unit(hwchannel)
+    if !ok do return
+    result.fraction, ok = fraction(hwchannel)
+    if !ok do return
+    result.reversed, ok = reversed(hwchannel)
+    if !ok do return
+    result.con_variable, ok = con_variable(hwchannel)
+    if !ok do return
+    result.io_description, ok = hwchannel_io_description_get(hwchannel)
+    if !ok do return
+
+    return result, true
+}
+
+hwchannel_to_com :: proc(src: t.HWChannel) -> (result: HWChannel, ok: bool) {
+    hwchannel: HWChannel
+    hwchannel, ok = hwchannel_new1(
+        src.address,
+        src.name,
+        src.con_variable,
+        src.io_description,
+        src.min,
+        src.max,
+        src.unit,
+        src.fraction,
+        src.reversed,
+    )
+    if !ok do return
+
+    return hwchannel, true
 }
 
 HWChannelsIF :: struct #raw_union {

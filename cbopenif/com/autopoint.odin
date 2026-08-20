@@ -43,3 +43,22 @@ autopoint_release :: proc(autopoint: AutoPoint) {
         (^AutoPointIF)(autopoint)->Release()
     }
 }
+
+autopoint_from_com :: proc(autopoint: AutoPoint, allocator := context.allocator) -> (result: t.AutoPoint, ok: bool) {
+    if autopoint == nil do return
+
+    context.allocator = allocator
+
+    result.auto_pos, ok = autopos(autopoint)
+    if !ok do return
+
+    return result, true
+}
+
+autopoint_to_com :: proc(src: t.AutoPoint) -> (result: AutoPoint, ok: bool) {
+    autopoint: AutoPoint
+    autopoint, ok = autopoint_new(i32(src.auto_pos))
+    if !ok do return
+
+    return autopoint, true
+}
