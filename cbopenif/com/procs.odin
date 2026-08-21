@@ -624,6 +624,24 @@ function_name :: proc {
     extrainfo_function_name_set,
 }
 
+functionblock_add      :: proc {
+    functionblocks_functionblock_add,
+    functionblocks_functionblock_add_at_index,
+}
+
+functionblock_by_name :: functionblocks_functionblock_by_name
+
+functionblock_by_index :: functionblocks_functionblock_by_index
+
+functionblock_index :: functionblocks_functionblock_index
+
+functionblock_count    :: functionblocks_functionblock_count
+
+functionblock_remove :: proc {
+    functionblocks_functionblock_remove_by_name,
+    functionblocks_functionblock_remove_by_index,
+}
+
 functionblocks :: proc {
     functionblocktype_functionblocks_get,
     functionblocktype_functionblocks_set,

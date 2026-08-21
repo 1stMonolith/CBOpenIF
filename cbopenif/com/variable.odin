@@ -587,6 +587,43 @@ variables_release :: proc(variables: Variables) {
     }
 }
 
+variables_from_com :: proc(vars: Variables, allocator := context.allocator) -> (result: [dynamic]t.Variable, ok: bool) {
+    if vars == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = variable_count(vars)
+    if !ok do return
+
+    result = make([dynamic]t.Variable, 0, int(count), allocator)
+    for i in 0..<count {
+        v: Variable
+        v, ok = variable_by_index(vars, i)
+        if !ok do return
+        defer release(v)
+
+        vs: t.Variable
+        vs, ok = variable_from_com(v)
+        if !ok do return
+        append(&result, vs)
+    }
+    return result, true
+}
+
+variables_to_com :: proc(vars: Variables, src: []t.Variable) -> (ok: bool) {
+    if vars == nil do return
+    for item in src {
+        v: Variable
+        v, ok = variable_to_com(item)
+        if !ok do return
+        defer release(v)
+
+        ok = variable_add(vars, v)
+        if !ok do return
+    }
+    return true
+}
+
 ExternalVariableIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ExternalVariableVTable,
@@ -1104,6 +1141,43 @@ externalvariables_release :: proc(externalvariables: ExternalVariables) {
     if externalvariables != nil {
         (^ExternalVariablesIF)(externalvariables)->Release()
     }
+}
+
+externalvariables_from_com :: proc(evars: ExternalVariables, allocator := context.allocator) -> (result: [dynamic]t.ExternalVariable, ok: bool) {
+    if evars == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = externalvariable_count(evars)
+    if !ok do return
+
+    result = make([dynamic]t.ExternalVariable, 0, int(count), allocator)
+    for i in 0..<count {
+        ev: ExternalVariable
+        ev, ok = externalvariable_by_index(evars, i)
+        if !ok do return
+        defer release(ev)
+
+        evs: t.ExternalVariable
+        evs, ok = externalvariable_from_com(ev)
+        if !ok do return
+        append(&result, evs)
+    }
+    return result, true
+}
+
+externalvariables_to_com :: proc(evars: ExternalVariables, src: []t.ExternalVariable) -> (ok: bool) {
+    if evars == nil do return
+    for item in src {
+        ev: ExternalVariable
+        ev, ok = externalvariable_to_com(item)
+        if !ok do return
+        defer release(ev)
+
+        ok = externalvariable_add(evars, ev)
+        if !ok do return
+    }
+    return true
 }
 
 GlobalVariableIF :: struct #raw_union {

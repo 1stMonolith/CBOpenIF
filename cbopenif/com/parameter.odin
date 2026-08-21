@@ -488,11 +488,11 @@ parameters_parameter_by_name :: proc(parameters: Parameters, name: string) -> (p
     return parameter, true
 }
 
-parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: rawptr, ok: bool) {
+parameters_parameter_by_index :: proc(parameters: rawptr, index: i32) -> (parameter: Parameter, ok: bool) {
     if parameters == nil do return
     if !com_connected() do return
     
-    hr := (^ParametersIF)(parameters)->Item(index + 1, &parameter)
+    hr := (^ParametersIF)(parameters)->Item(index + 1, cast(^rawptr)&parameter)
     if com_failed(hr) do return
     
     return parameter, true
@@ -547,6 +547,44 @@ parameters_release :: proc(parameters: Parameters) {
     if parameters != nil {
         (^ParametersIF)(parameters)->Release()
     }
+}
+
+parameters_from_com :: proc(params: Parameters, allocator := context.allocator) -> (result: [dynamic]t.Parameter, ok: bool) {
+    if params == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = parameter_count(params)
+    if !ok do return
+
+    result = make([dynamic]t.Parameter, 0, int(count), allocator)
+    for i in 0..<count {
+        pr: Parameter
+        pr, ok = parameter_by_index(params, i)
+        if !ok do return
+        p := Parameter(pr)
+        defer release(p)
+
+        ps: t.Parameter
+        ps, ok = parameter_from_com(p)
+        if !ok do return
+        append(&result, ps)
+    }
+    return result, true
+}
+
+parameters_to_com :: proc(params: Parameters, src: []t.Parameter) -> (ok: bool) {
+    if params == nil do return
+    for item in src {
+        p: Parameter
+        p, ok = parameter_to_com(item)
+        if !ok do return
+        defer release(p)
+
+        ok = parameter_add(params, p)
+        if !ok do return
+    }
+    return true
 }
 
 ExtensibleParameterIF :: struct #raw_union {
@@ -1001,4 +1039,41 @@ extensibleparameters_release :: proc(extensibleparameters: ExtensibleParameters)
     if extensibleparameters != nil {
         (^ExtensibleParametersIF)(extensibleparameters)->Release()
     }
+}
+
+extensibleparameters_from_com :: proc(eparams: ExtensibleParameters, allocator := context.allocator) -> (result: [dynamic]t.ExtensibleParameter, ok: bool) {
+    if eparams == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = extensibleparameter_count(eparams)
+    if !ok do return
+
+    result = make([dynamic]t.ExtensibleParameter, 0, int(count), allocator)
+    for i in 0..<count {
+        ep: ExtensibleParameter
+        ep, ok = extensibleparameter_by_index(eparams, i)
+        if !ok do return
+        defer release(ep)
+
+        eps: t.ExtensibleParameter
+        eps, ok = extensibleparameter_from_com(ep)
+        if !ok do return
+        append(&result, eps)
+    }
+    return result, true
+}
+
+extensibleparameters_to_com :: proc(eparams: ExtensibleParameters, src: []t.ExtensibleParameter) -> (ok: bool) {
+    if eparams == nil do return
+    for item in src {
+        ep: ExtensibleParameter
+        ep, ok = extensibleparameter_to_com(item)
+        if !ok do return
+        defer release(ep)
+
+        ok = extensibleparameter_add(eparams, ep)
+        if !ok do return
+    }
+    return true
 }

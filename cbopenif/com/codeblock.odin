@@ -484,6 +484,43 @@ codeblocks_release :: proc(codeblocks: CodeBlocks) {
     }
 }
 
+codeblocks_from_com :: proc(cbs: CodeBlocks, allocator := context.allocator) -> (result: [dynamic]t.CodeBlock, ok: bool) {
+    if cbs == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = codeblock_count(cbs)
+    if !ok do return
+
+    result = make([dynamic]t.CodeBlock, 0, int(count), allocator)
+    for i in 0..<count {
+        cb: CodeBlock
+        cb, ok = codeblock(cbs, i)
+        if !ok do return
+        defer codeblock_release(cb)
+
+        cbs_: t.CodeBlock
+        cbs_, ok = codeblock_from_com(cb)
+        if !ok do return
+        append(&result, cbs_)
+    }
+    return result, true
+}
+
+codeblocks_to_com :: proc(cbs: CodeBlocks, src: []t.CodeBlock) -> (ok: bool) {
+    if cbs == nil do return
+    for item in src {
+        cb: CodeBlock
+        cb, ok = codeblock_to_com(item)
+        if !ok do return
+        defer codeblock_release(cb)
+
+        ok = codeblock_add(cbs, cb.block)
+        if !ok do return
+    }
+    return true
+}
+
 STCodeBlockIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^STCodeBlockVTable,

@@ -389,7 +389,7 @@ FunctionBlockType :: struct {
     guid:                         string,
     reserved_by_function:         string,
     sil_level:                    string,
-    restricted_sil:               string,
+    restricted_sil:               bool,
     alarm_owner:                  bool,
     interaction_window:           string,
     instantiate_as_aspect_object: bool,
