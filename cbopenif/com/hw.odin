@@ -386,79 +386,29 @@ hwunit_from_com :: proc(hwunit: HWUnit, allocator := context.allocator) -> (resu
     result.redundant_pos, ok = redundant_pos(hwunit)
     if !ok do return
 
-    // channels
     {
         chs: HWChannels
         chs, ok = hwchannels(hwunit)
         if !ok do return
         defer release(chs)
-
-        count: i32
-        count, ok = hwchannel_count(chs)
+        result.channels, ok = hwchannels_from_com(chs)
         if !ok do return
-
-        result.channels = make([dynamic]t.HWChannel, 0, int(count), allocator)
-        for i in 0..<count {
-            ch: HWChannel
-            ch, ok = hwchannel_by_index(chs, i)
-            if !ok do return
-            defer release(ch)
-
-            chs_s: t.HWChannel
-            chs_s, ok = hwchannel_from_com(ch)
-            if !ok do return
-            append(&result.channels, chs_s)
-        }
     }
-
-    // nested units
     {
         units: HWUnits
         units, ok = hwunits(hwunit)
         if !ok do return
         defer release(units)
-
-        count: i32
-        count, ok = hwunits_hwunit_count(units)
+        result.units, ok = hwunits_from_com(units)
         if !ok do return
-
-        result.units = make([dynamic]t.HWUnit, 0, int(count), allocator)
-        for i in 0..<count {
-            u: HWUnit
-            u, ok = hwunit_by_index(units, i)
-            if !ok do return
-            defer release(u)
-
-            us: t.HWUnit
-            us, ok = hwunit_from_com(u)
-            if !ok do return
-            append(&result.units, us)
-        }
     }
-
-    // parameter settings
     {
         pss: ParameterSettings
         pss, ok = parametersettings(hwunit)
         if !ok do return
         defer release(pss)
-
-        count: i32
-        count, ok = parametersetting_count(pss)
+        result.parameter_settings, ok = parametersettings_from_com(pss)
         if !ok do return
-
-        result.parameter_settings = make([dynamic]t.ParameterSetting, 0, int(count), allocator)
-        for i in 0..<count {
-            ps: ParameterSetting
-            ps, ok = parametersetting_by_index(pss, i)
-            if !ok do return
-            defer release(ps)
-
-            pss_s: t.ParameterSetting
-            pss_s, ok = parametersetting_from_com(ps)
-            if !ok do return
-            append(&result.parameter_settings, pss_s)
-        }
     }
 
     return result, true
@@ -488,50 +438,24 @@ hwunit_to_com :: proc(src: t.HWUnit) -> (result: HWUnit, ok: bool) {
         chs, ok = hwchannels(hwunit)
         if !ok do return
         defer release(chs)
-
-        for ch_s in src.channels {
-            ch: HWChannel
-            ch, ok = hwchannel_to_com(ch_s)
-            if !ok do return
-            defer release(ch)
-
-            ok = hwchannel_add(chs, ch)
-            if !ok do return
-        }
+        ok = hwchannels_to_com(chs, src.channels[:])
+        if !ok do return
     }
-
     {
         units: HWUnits
         units, ok = hwunits(hwunit)
         if !ok do return
         defer release(units)
-
-        for u_s in src.units {
-            u: HWUnit
-            u, ok = hwunit_to_com(u_s)
-            if !ok do return
-            defer release(u)
-
-            ok = hwunit_add(units, u)
-            if !ok do return
-        }
+        ok = hwunits_to_com(units, src.units[:])
+        if !ok do return
     }
-
     {
         pss: ParameterSettings
         pss, ok = parametersettings(hwunit)
         if !ok do return
         defer release(pss)
-
-        for ps_s in src.parameter_settings {
-            ps: ParameterSetting
-            ps, ok = parametersetting_to_com(ps_s)
-            if !ok do return
-            defer release(ps)
-
-            ok = parametersetting_add(pss, ps)
-            if !ok do return
-        }
+        ok = parametersettings_to_com(pss, src.parameter_settings[:])
+        if !ok do return
     }
 
     return hwunit, true

@@ -255,25 +255,8 @@ datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) ->
     comps, ok = components(datatype)
     if !ok do return
     defer release(comps)
-
-    count: i32
-    count, ok = component_count(comps)
+    result.components, ok = components_from_com(comps)
     if !ok do return
-
-    result.components = make([dynamic]t.Component, 0, int(count), allocator)
-
-    for i in 0..<count {
-        comp: Component
-        comp, ok = component_by_index(comps, i)
-        if !ok do return
-        defer release(comp)
-
-        comp_s: t.Component
-        comp_s, ok = component_from_com(comp)
-        if !ok do return
-
-        append(&result.components, comp_s)
-    }
 
     return result, true
 }
@@ -299,16 +282,8 @@ datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
     comps, ok = components(datatype)
     if !ok do return
     defer release(comps)
-
-    for c in src.components {
-        comp: Component
-        comp, ok = component_to_com(c)
-        if !ok do return
-        defer release(comp)
-
-        ok = component_add(comps, comp)
-        if !ok do return
-    }
+    ok = components_to_com(comps, src.components[:][:])
+    if !ok do return
 
     return datatype, true
 }

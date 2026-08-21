@@ -408,25 +408,8 @@ variable_from_com :: proc(variable: Variable, allocator := context.allocator) ->
     nodes, ok = graphnodes(variable)
     if !ok do return
     defer release(nodes)
-
-    count: i32
-    count, ok = graphnode_count(nodes)
+    result.graph_nodes, ok = graphnodes_from_com(nodes)
     if !ok do return
-
-    result.graph_nodes = make([dynamic]t.GraphNode, 0, int(count), allocator)
-
-    for i in 0..<count {
-        node: GraphNode
-        node, ok = graphnode_by_index(nodes, i)
-        if !ok do return
-        defer release(node)
-
-        node_s: t.GraphNode
-        node_s, ok = graphnode_from_com(node)
-        if !ok do return
-
-        append(&result.graph_nodes, node_s)
-    }
 
     return result, true
 }
@@ -460,16 +443,8 @@ variable_to_com :: proc(src: t.Variable) -> (result: Variable, ok: bool) {
     nodes, ok = graphnodes(variable)
     if !ok do return
     defer release(nodes)
-
-    for n in src.graph_nodes {
-        node: GraphNode
-        node, ok = graphnode_to_com(n)
-        if !ok do return
-        defer release(node)
-
-        ok = graphnode_add(nodes, node)
-        if !ok do return
-    }
+    ok = graphnodes_to_com(nodes, src.graph_nodes[:])
+    if !ok do return
 
     return variable, true
 }
@@ -967,25 +942,8 @@ externalvariable_from_com :: proc(external_variable: ExternalVariable, allocator
     nodes, ok = graphnodes(external_variable)
     if !ok do return
     defer release(nodes)
-
-    count: i32
-    count, ok = graphnode_count(nodes)
+    result.graph_nodes, ok = graphnodes_from_com(nodes)
     if !ok do return
-
-    result.graph_nodes = make([dynamic]t.GraphNode, 0, int(count), allocator)
-
-    for i in 0..<count {
-        node: GraphNode
-        node, ok = graphnode_by_index(nodes, i)
-        if !ok do return
-        defer release(node)
-
-        node_s: t.GraphNode
-        node_s, ok = graphnode_from_com(node)
-        if !ok do return
-
-        append(&result.graph_nodes, node_s)
-    }
 
     return result, true
 }
@@ -1016,16 +974,8 @@ externalvariable_to_com :: proc(src: t.ExternalVariable) -> (result: ExternalVar
     nodes, ok = graphnodes(external_variable)
     if !ok do return
     defer release(nodes)
-
-    for n in src.graph_nodes {
-        node: GraphNode
-        node, ok = graphnode_to_com(n)
-        if !ok do return
-        defer release(node)
-
-        ok = graphnode_add(nodes, node)
-        if !ok do return
-    }
+    ok = graphnodes_to_com(nodes, src.graph_nodes[:])
+    if !ok do return
 
     return external_variable, true
 }
@@ -1551,25 +1501,8 @@ globalvariable_from_com :: proc(global_variable: GlobalVariable, allocator := co
     nodes, ok = graphnodes(global_variable)
     if !ok do return
     defer release(nodes)
-
-    count: i32
-    count, ok = graphnode_count(nodes)
+    result.graph_nodes, ok = graphnodes_from_com(nodes)
     if !ok do return
-
-    result.graph_nodes = make([dynamic]t.GraphNode, 0, int(count), allocator)
-
-    for i in 0..<count {
-        node: GraphNode
-        node, ok = graphnode_by_index(nodes, i)
-        if !ok do return
-        defer release(node)
-
-        node_s: t.GraphNode
-        node_s, ok = graphnode_from_com(node)
-        if !ok do return
-
-        append(&result.graph_nodes, node_s)
-    }
 
     return result, true
 }
@@ -1601,16 +1534,8 @@ globalvariable_to_com :: proc(src: t.GlobalVariable) -> (result: GlobalVariable,
     nodes, ok = graphnodes(global_variable)
     if !ok do return
     defer release(nodes)
-
-    for n in src.graph_nodes {
-        node: GraphNode
-        node, ok = graphnode_to_com(n)
-        if !ok do return
-        defer release(node)
-
-        ok = graphnode_add(nodes, node)
-        if !ok do return
-    }
+    ok = graphnodes_to_com(nodes, src.graph_nodes[:])
+    if !ok do return
 
     return global_variable, true
 }
