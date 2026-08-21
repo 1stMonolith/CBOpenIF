@@ -276,3 +276,39 @@ connectedapplications_release :: proc(connectedapplications: ConnectedApplicatio
         (^ConnectedApplicationsIF)(connectedapplications)->Release()
     }
 }
+
+connectedapplications_from_com :: proc(cas: ConnectedApplications, allocator := context.allocator) -> (result: [dynamic]t.ConnectedApplication, ok: bool) {
+    if cas == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = connectedapplication_count(cas)
+    if !ok do return
+
+    result = make([dynamic]t.ConnectedApplication, 0, int(count), allocator)
+    for i in 0..<count {
+        ca: ConnectedApplication
+        ca, ok = connectedapplication_by_index(cas, i)
+        if !ok do return
+        defer release(ca)
+
+        cas_: t.ConnectedApplication
+        cas_, ok = connectedapplication_from_com(ca)
+        if !ok do return
+        append(&result, cas_)
+    }
+    return result, true
+}
+
+connectedapplications_to_com :: proc(cas: ConnectedApplications, src: []t.ConnectedApplication) -> (ok: bool) {
+    if cas == nil do return
+    for item in src {
+        ca: ConnectedApplication
+        ca, ok = connectedapplication_to_com(item)
+        if !ok do return
+        defer release(ca)
+        ok = connectedapplication_add(cas, ca)
+        if !ok do return
+    }
+    return true
+}

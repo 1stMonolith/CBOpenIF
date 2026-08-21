@@ -804,7 +804,7 @@ hwunit_by_index :: hwunits_hwunit_by_index
 
 hwunit_index :: hwunits_hwunit_index
 
-hwunit_vount :: hwunits_hwunit_count
+hwunit_count :: hwunits_hwunit_count
 
 hwunit_remove :: proc {
     hwunits_hwunit_remove_by_path,

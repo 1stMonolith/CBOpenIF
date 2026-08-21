@@ -275,3 +275,39 @@ connectedhwlibraries_release :: proc(connectedhwlibraries: ConnectedHWLibraries)
         (^ConnectedHWLibrariesIF)(connectedhwlibraries)->Release()
     }
 }
+
+connectedhwlibraries_from_com :: proc(chls: ConnectedHWLibraries, allocator := context.allocator) -> (result: [dynamic]t.ConnectedHWLibrary, ok: bool) {
+    if chls == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = connectedhwlibrary_count(chls)
+    if !ok do return
+
+    result = make([dynamic]t.ConnectedHWLibrary, 0, int(count), allocator)
+    for i in 0..<count {
+        chl: ConnectedHWLibrary
+        chl, ok = connectedhwlibrary_by_index(chls, i)
+        if !ok do return
+        defer release(chl)
+
+        chls_: t.ConnectedHWLibrary
+        chls_, ok = connectedhwlibrary_from_com(chl)
+        if !ok do return
+        append(&result, chls_)
+    }
+    return result, true
+}
+
+connectedhwlibraries_to_com :: proc(chls: ConnectedHWLibraries, src: []t.ConnectedHWLibrary) -> (ok: bool) {
+    if chls == nil do return
+    for item in src {
+        chl: ConnectedHWLibrary
+        chl, ok = connectedhwlibrary_to_com(item)
+        if !ok do return
+        defer release(chl)
+        ok = connectedhwlibrary_add(chls, chl)
+        if !ok do return
+    }
+    return true
+}

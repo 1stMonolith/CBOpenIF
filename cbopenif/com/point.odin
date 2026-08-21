@@ -157,3 +157,39 @@ points_release :: proc(points: Points) {
         (^PointsIF)(points)->Release()
     }
 }
+
+points_from_com :: proc(pts: Points, allocator := context.allocator) -> (result: [dynamic]t.Point, ok: bool) {
+    if pts == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = point_count(pts)
+    if !ok do return
+
+    result = make([dynamic]t.Point, 0, int(count), allocator)
+    for i in 0..<count {
+        p: Point
+        p, ok = point(pts, i)
+        if !ok do return
+        defer release(p)
+
+        ps: t.Point
+        ps, ok = point_from_com(p)
+        if !ok do return
+        append(&result, ps)
+    }
+    return result, true
+}
+
+points_to_com :: proc(pts: Points, src: []t.Point) -> (ok: bool) {
+    if pts == nil do return
+    for item in src {
+        p: Point
+        p, ok = point_to_com(item)
+        if !ok do return
+        defer release(p)
+        ok = point_add(pts, p)
+        if !ok do return
+    }
+    return true
+}

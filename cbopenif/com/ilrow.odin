@@ -285,3 +285,39 @@ ilrows_release :: proc(ilrows: ILRows) {
         (^ILRowsIF)(ilrows)->Release()
     }
 }
+
+ilrows_from_com :: proc(rows: ILRows, allocator := context.allocator) -> (result: [dynamic]t.ILRow, ok: bool) {
+    if rows == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = ilrow_count(rows)
+    if !ok do return
+
+    result = make([dynamic]t.ILRow, 0, int(count), allocator)
+    for i in 0..<count {
+        r: ILRow
+        r, ok = ilrow_by_index(rows, i)
+        if !ok do return
+        defer release(r)
+
+        rs: t.ILRow
+        rs, ok = ilrow_from_com(r)
+        if !ok do return
+        append(&result, rs)
+    }
+    return result, true
+}
+
+ilrows_to_com :: proc(rows: ILRows, src: []t.ILRow) -> (ok: bool) {
+    if rows == nil do return
+    for item in src {
+        r: ILRow
+        r, ok = ilrow_to_com(item)
+        if !ok do return
+        defer release(r)
+        ok = ilrow_add(rows, r)
+        if !ok do return
+    }
+    return true
+}

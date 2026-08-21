@@ -1727,3 +1727,39 @@ globalvariables_release :: proc(globalvariables: GlobalVariables) {
         (^GlobalVariablesIF)(globalvariables)->Release()
     }
 }
+
+globalvariables_from_com :: proc(gvars: GlobalVariables, allocator := context.allocator) -> (result: [dynamic]t.GlobalVariable, ok: bool) {
+    if gvars == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = globalvariable_count(gvars)
+    if !ok do return
+
+    result = make([dynamic]t.GlobalVariable, 0, int(count), allocator)
+    for i in 0..<count {
+        g: GlobalVariable
+        g, ok = globalvariable_by_index(gvars, i)
+        if !ok do return
+        defer release(g)
+
+        gs: t.GlobalVariable
+        gs, ok = globalvariable_from_com(g)
+        if !ok do return
+        append(&result, gs)
+    }
+    return result, true
+}
+
+globalvariables_to_com :: proc(gvars: GlobalVariables, src: []t.GlobalVariable) -> (ok: bool) {
+    if gvars == nil do return
+    for item in src {
+        g: GlobalVariable
+        g, ok = globalvariable_to_com(item)
+        if !ok do return
+        defer release(g)
+        ok = globalvariable_add(gvars, g)
+        if !ok do return
+    }
+    return true
+}

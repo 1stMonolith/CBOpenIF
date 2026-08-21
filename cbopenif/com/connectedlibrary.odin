@@ -276,3 +276,39 @@ connectedlibraries_release :: proc(connectedlibraries: ConnectedLibraries) {
         (^ConnectedLibrariesIF)(connectedlibraries)->Release()
     }
 }
+
+connectedlibraries_from_com :: proc(cls: ConnectedLibraries, allocator := context.allocator) -> (result: [dynamic]t.ConnectedLibrary, ok: bool) {
+    if cls == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = connectedlibrary_count(cls)
+    if !ok do return
+
+    result = make([dynamic]t.ConnectedLibrary, 0, int(count), allocator)
+    for i in 0..<count {
+        cl: ConnectedLibrary
+        cl, ok = connectedlibrary_by_index(cls, i)
+        if !ok do return
+        defer release(cl)
+
+        cls_: t.ConnectedLibrary
+        cls_, ok = connectedlibrary_from_com(cl)
+        if !ok do return
+        append(&result, cls_)
+    }
+    return result, true
+}
+
+connectedlibraries_to_com :: proc(cls: ConnectedLibraries, src: []t.ConnectedLibrary) -> (ok: bool) {
+    if cls == nil do return
+    for item in src {
+        cl: ConnectedLibrary
+        cl, ok = connectedlibrary_to_com(item)
+        if !ok do return
+        defer release(cl)
+        ok = connectedlibrary_add(cls, cl)
+        if !ok do return
+    }
+    return true
+}

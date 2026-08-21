@@ -314,3 +314,39 @@ signals_release :: proc(signals: Signals) {
         (^SignalsIF)(signals)->Release()
     }
 }
+
+signals_from_com :: proc(sigs: Signals, allocator := context.allocator) -> (result: [dynamic]t.Signal, ok: bool) {
+    if sigs == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = signal_count(sigs)
+    if !ok do return
+
+    result = make([dynamic]t.Signal, 0, int(count), allocator)
+    for i in 0..<count {
+        s: Signal
+        s, ok = signal_by_index(sigs, i)
+        if !ok do return
+        defer release(s)
+
+        ss: t.Signal
+        ss, ok = signal_from_com(s)
+        if !ok do return
+        append(&result, ss)
+    }
+    return result, true
+}
+
+signals_to_com :: proc(sigs: Signals, src: []t.Signal) -> (ok: bool) {
+    if sigs == nil do return
+    for item in src {
+        s: Signal
+        s, ok = signal_to_com(item)
+        if !ok do return
+        defer release(s)
+        ok = signal_add(sigs, s)
+        if !ok do return
+    }
+    return true
+}

@@ -651,6 +651,42 @@ hwunits_release :: proc(hwunits: HWUnits) {
     }
 }
 
+hwunits_from_com :: proc(units: HWUnits, allocator := context.allocator) -> (result: [dynamic]t.HWUnit, ok: bool) {
+    if units == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = hwunits_hwunit_count(units) // procs has typo hwunit_vount
+    if !ok do return
+
+    result = make([dynamic]t.HWUnit, 0, int(count), allocator)
+    for i in 0..<count {
+        u: HWUnit
+        u, ok = hwunit_by_index(units, i)
+        if !ok do return
+        defer release(u)
+
+        us: t.HWUnit
+        us, ok = hwunit_from_com(u)
+        if !ok do return
+        append(&result, us)
+    }
+    return result, true
+}
+
+hwunits_to_com :: proc(units: HWUnits, src: []t.HWUnit) -> (ok: bool) {
+    if units == nil do return
+    for item in src {
+        u: HWUnit
+        u, ok = hwunit_to_com(item)
+        if !ok do return
+        defer release(u)
+        ok = hwunit_add(units, u)
+        if !ok do return
+    }
+    return true
+}
+
 HWChannelIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^HWChannelVTable,
@@ -1092,3 +1128,38 @@ hwchannels_release :: proc(hwchannels: HWChannels) {
     }
 }
 
+hwchannels_from_com :: proc(chs: HWChannels, allocator := context.allocator) -> (result: [dynamic]t.HWChannel, ok: bool) {
+    if chs == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = hwchannel_count(chs)
+    if !ok do return
+
+    result = make([dynamic]t.HWChannel, 0, int(count), allocator)
+    for i in 0..<count {
+        ch: HWChannel
+        ch, ok = hwchannel_by_index(chs, i)
+        if !ok do return
+        defer release(ch)
+
+        chs_: t.HWChannel
+        chs_, ok = hwchannel_from_com(ch)
+        if !ok do return
+        append(&result, chs_)
+    }
+    return result, true
+}
+
+hwchannels_to_com :: proc(chs: HWChannels, src: []t.HWChannel) -> (ok: bool) {
+    if chs == nil do return
+    for item in src {
+        ch: HWChannel
+        ch, ok = hwchannel_to_com(item)
+        if !ok do return
+        defer release(ch)
+        ok = hwchannel_add(chs, ch)
+        if !ok do return
+    }
+    return true
+}

@@ -816,3 +816,39 @@ components_release :: proc(components: Components) {
         (^ComponentsIF)(components)->Release()
     }
 }
+
+components_from_com :: proc(comps: Components, allocator := context.allocator) -> (result: [dynamic]t.Component, ok: bool) {
+    if comps == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = component_count(comps)
+    if !ok do return
+
+    result = make([dynamic]t.Component, 0, int(count), allocator)
+    for i in 0..<count {
+        c: Component
+        c, ok = component_by_index(comps, i)
+        if !ok do return
+        defer release(c)
+
+        cs: t.Component
+        cs, ok = component_from_com(c)
+        if !ok do return
+        append(&result, cs)
+    }
+    return result, true
+}
+
+components_to_com :: proc(comps: Components, src: []t.Component) -> (ok: bool) {
+    if comps == nil do return
+    for item in src {
+        c: Component
+        c, ok = component_to_com(item)
+        if !ok do return
+        defer release(c)
+        ok = component_add(comps, c)
+        if !ok do return
+    }
+    return true
+}

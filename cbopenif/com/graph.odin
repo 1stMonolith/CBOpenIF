@@ -227,6 +227,42 @@ graphnodes_release :: proc(graphnodes: GraphNodes) {
     }
 }
 
+graphnodes_from_com :: proc(nodes: GraphNodes, allocator := context.allocator) -> (result: [dynamic]t.GraphNode, ok: bool) {
+    if nodes == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = graphnode_count(nodes)
+    if !ok do return
+
+    result = make([dynamic]t.GraphNode, 0, int(count), allocator)
+    for i in 0..<count {
+        n: GraphNode
+        n, ok = graphnode_by_index(nodes, i)
+        if !ok do return
+        defer release(n)
+
+        ns: t.GraphNode
+        ns, ok = graphnode_from_com(n)
+        if !ok do return
+        append(&result, ns)
+    }
+    return result, true
+}
+
+graphnodes_to_com :: proc(nodes: GraphNodes, src: []t.GraphNode) -> (ok: bool) {
+    if nodes == nil do return
+    for item in src {
+        n: GraphNode
+        n, ok = graphnode_to_com(item)
+        if !ok do return
+        defer release(n)
+        ok = graphnode_add(nodes, n)
+        if !ok do return
+    }
+    return true
+}
+
 GraphPosIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^GraphPosVTable,

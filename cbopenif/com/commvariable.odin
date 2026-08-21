@@ -635,3 +635,39 @@ commvariables_release :: proc(commvariables: CommVariables) {
         (^CommVariablesIF)(commvariables)->Release()
     }
 }
+
+commvariables_from_com :: proc(cvs: CommVariables, allocator := context.allocator) -> (result: [dynamic]t.CommVariable, ok: bool) {
+    if cvs == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = commvariable_count(cvs)
+    if !ok do return
+
+    result = make([dynamic]t.CommVariable, 0, int(count), allocator)
+    for i in 0..<count {
+        cv: CommVariable
+        cv, ok = commvariable_by_index(cvs, i)
+        if !ok do return
+        defer release(cv)
+
+        cvs_: t.CommVariable
+        cvs_, ok = commvariable_from_com(cv)
+        if !ok do return
+        append(&result, cvs_)
+    }
+    return result, true
+}
+
+commvariables_to_com :: proc(cvs: CommVariables, src: []t.CommVariable) -> (ok: bool) {
+    if cvs == nil do return
+    for item in src {
+        cv: CommVariable
+        cv, ok = commvariable_to_com(item)
+        if !ok do return
+        defer release(cv)
+        ok = commvariable_add(cvs, cv)
+        if !ok do return
+    }
+    return true
+}

@@ -221,3 +221,39 @@ parametersettings_release :: proc(parametersettings: ParameterSettings) {
         (^ParameterSettingsIF)(parametersettings)->Release()
     }
 }
+
+parametersettings_from_com :: proc(pss: ParameterSettings, allocator := context.allocator) -> (result: [dynamic]t.ParameterSetting, ok: bool) {
+    if pss == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = parametersetting_count(pss)
+    if !ok do return
+
+    result = make([dynamic]t.ParameterSetting, 0, int(count), allocator)
+    for i in 0..<count {
+        ps: ParameterSetting
+        ps, ok = parametersetting_by_index(pss, i)
+        if !ok do return
+        defer release(ps)
+
+        pss_: t.ParameterSetting
+        pss_, ok = parametersetting_from_com(ps)
+        if !ok do return
+        append(&result, pss_)
+    }
+    return result, true
+}
+
+parametersettings_to_com :: proc(pss: ParameterSettings, src: []t.ParameterSetting) -> (ok: bool) {
+    if pss == nil do return
+    for item in src {
+        ps: ParameterSetting
+        ps, ok = parametersetting_to_com(item)
+        if !ok do return
+        defer release(ps)
+        ok = parametersetting_add(pss, ps)
+        if !ok do return
+    }
+    return true
+}
