@@ -575,7 +575,7 @@ executioninstance_by_index :: executiongroup_executioninstance_by_index
 
 executioninstance_index :: executiongroup_executioninstance_index
 
-executioninstance_count :: executiongroup_count
+executioninstance_count :: executiongroup_executioninstance_count
 
 executioninstance_remove :: proc {
     executiongroup_executioninstance_remove_by_name,
@@ -960,8 +960,8 @@ minor_version :: proc {
 }
 
 message_text :: proc {
-    //message_text_get,
-    //message_text_set,
+    message_text_get,
+    message_text_set,
     errormsg_text_get,
     errormsg_text_set,
     findmsg_text_get,
@@ -991,8 +991,6 @@ min :: proc {
 }
 
 name :: proc {
-    //icodeblock_name_get,
-    //icodeblock_name_set,
     codeblock_name_get,
     codeblock_name_set,
     fbdcodeblock_name_get,
@@ -1209,7 +1207,7 @@ points :: proc {
 }
 
 posinfo :: proc {
-    //message_posinfo_get,
+    message_posinfo_get,
     errormsg_posinfo_get,
     errormsg_posinfo_set,
     warningmsg_posinfo_get,

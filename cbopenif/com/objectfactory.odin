@@ -1934,10 +1934,9 @@ signal_new :: proc(name, path: string, direction := "", acknowledge_group := "")
     result: Variant
     this := cast(^IUnknownIF)objectfactory
 
-    hr, arg_err, ok2 := com_invoke_name(this, "NewSignal", args,  &result)
+    ok = com_invoke_name(this, "NewSignal", args,  &result)
+    if !ok do return
     defer variant_free(&result)
-    //fmt.printf("NewSignal Invoke hr=0x%X argErr=%d\n", u32(hr), arg_err)
-    if com_failed(hr) do return
 
     // Retval is usually VT_DISPATCH or VT_UNKNOWN
     sig: rawptr

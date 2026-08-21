@@ -1519,8 +1519,8 @@ cbopen_set_setting_string :: proc(setting_name: string, setting: string) -> (ok:
     args := []Variant{ v_setting_name, v_setting }
 
     this := cast(^IUnknownIF)cbopenif
-    hr, arg_err, ok2 := com_invoke_name(this, "SetSetting", args, nil)
-    if !ok2 do return
+    ok = com_invoke_name(this, "SetSetting", args, nil)
+    if !ok do return
 
     return true
 }
@@ -1538,8 +1538,8 @@ cbopen_set_setting_bool :: proc(setting_name: string, setting: bool) -> (ok: boo
     args := []Variant{ v_setting_name, v_setting }
 
     this := cast(^IUnknownIF)cbopenif
-    hr, arg_err, ok2 := com_invoke_name(this, "SetSetting", args, nil)
-    if !ok2 do return
+    ok = com_invoke_name(this, "SetSetting", args, nil)
+    if !ok do return
 
     return true
 }

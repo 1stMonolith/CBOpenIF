@@ -184,49 +184,57 @@ icodeblock_release :: proc(icodeblock: ICodeBlock) {
 from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bool) {
     if icodeblock == nil do return
 
-    if is, ok := icodeblock_is_st(icodeblock); ok && is {
-        st, ok := icodeblock_as_st(icodeblock)
-        if !ok do return
+    is: bool
+
+    is, ok = icodeblock_is_st(icodeblock);
+    if ok && is {
+        st, okas := icodeblock_as_st(icodeblock)
+        if !okas do return
         codeblock.kind = .ST
         codeblock.block = st
         return codeblock, true 
     }
 
-    if is, ok := icodeblock_is_sfc(icodeblock); ok && is {
-        sfc, ok := icodeblock_as_sfc(icodeblock)
-        if !ok do return
+    is, ok = icodeblock_is_sfc(icodeblock)
+    if ok && is {
+        sfc, okas := icodeblock_as_sfc(icodeblock)
+        if !okas do return
         codeblock.kind = .SFC
         codeblock.block = sfc
         return codeblock, true 
     }
 
-    if is, ok := icodeblock_is_fbd(icodeblock); ok && is {
-        fbd, ok := icodeblock_as_fbd(icodeblock)
-        if !ok do return
+    is, ok = icodeblock_is_fbd(icodeblock)
+    if ok && is {
+        fbd, okas := icodeblock_as_fbd(icodeblock)
+        if !okas do return
         codeblock.kind = .FBD
         codeblock.block = fbd
         return codeblock, true 
     }
 
-    if is, ok := icodeblock_is_ld(icodeblock); ok && is {
-        ld, ok := icodeblock_as_ld(icodeblock)
-        if !ok do return
+    is, ok = icodeblock_is_ld(icodeblock)
+    if ok && is {
+        ld, okas := icodeblock_as_ld(icodeblock)
+        if !okas do return
         codeblock.kind = .LD
         codeblock.block = ld
         return codeblock, true 
     }
 
-    if is, ok := icodeblock_is_il(icodeblock); ok && is {
-        il, ok := icodeblock_as_il(icodeblock)
-        if !ok do return
+    is, ok = icodeblock_is_il(icodeblock)
+    if ok && is {
+        il, okas := icodeblock_as_il(icodeblock)
+        if !okas do return
         codeblock.kind = .IL
         codeblock.block = il
         return codeblock, true 
     }
 
-    if is, ok := icodeblock_is_fd(icodeblock); ok && is {
-        fd, ok := icodeblock_as_fd(icodeblock)
-        if !ok do return
+    is, ok = icodeblock_is_fd(icodeblock)
+    if ok && is {
+        fd, okas := icodeblock_as_fd(icodeblock)
+        if !okas do return
         codeblock.kind = .FD
         codeblock.block = fd
         return codeblock, true 

@@ -135,34 +135,40 @@ imsg_release :: proc(imsg: IMsg) {
 
 from_imsg :: proc(imsg: IMsg) -> (message: Msg, ok: bool) {
     if imsg == nil do return
+    
+    is: bool
 
-    if is, ok := imsg_is_error(imsg); ok && is {
-        e, ok := imsg_as_error(imsg)
-        if !ok do return
+    is, ok = imsg_is_error(imsg)
+    if ok && is {
+        e, okas := imsg_as_error(imsg)
+        if !okas do return
         message.kind = .Error
         message.msg = e
         return message, true
     }
 
-    if is, ok := imsg_is_warning(imsg); ok && is {
-        w, ok := imsg_as_warning(imsg)
-        if !ok do return
+    is, ok = imsg_is_warning(imsg)
+    if ok && is {
+        w, okas := imsg_as_warning(imsg)
+        if !okas do return
         message.kind = .Warning
         message.msg = w
         return message, true
     }
 
-    if is, ok := imsg_is_info(imsg); ok && is {
-        i, ok := imsg_as_info(imsg)
-        if !ok do return
+    is, ok = imsg_is_info(imsg)
+    if ok && is {
+        i, okas := imsg_as_info(imsg)
+        if !okas do return
         message.kind = .Info
         message.msg = i
         return message, true
     }
 
-    if is, ok := imsg_is_find(imsg); ok && is {
-        f, ok := imsg_as_find(imsg)
-        if !ok do return
+    is, ok = imsg_is_find(imsg)
+    if ok && is {
+        f, okas := imsg_as_find(imsg)
+        if !okas do return
         message.kind = .Find
         message.msg = f
         return message, true
@@ -214,11 +220,11 @@ message_from_com :: proc(message: Msg, allocator := context.allocator) -> (resul
     context.allocator = allocator
     result.kind = message.kind
 
-    result.text, ok = message_text_get(message)
+    result.text, ok = message_text(message)
     if !ok do return
 
     pi: PosInfo
-    pi, ok = message_posinfo_get(message)
+    pi, ok = posinfo(message)
     if !ok do return
     defer release(pi)
     result.pos_info, ok = posinfo_from_com(pi)
@@ -226,11 +232,11 @@ message_from_com :: proc(message: Msg, allocator := context.allocator) -> (resul
 
     switch m in message.msg {
     case ErrorMsg:
-        result.error_number, ok = errormsg_error_number_get(m)
+        result.error_number, ok = error_number(m)
         if !ok do return
         
         ei: ExtraInfo
-        ei, ok = errormsg_extra_info_get(m)
+        ei, ok = extrainfo(m)
         if !ok do return
         defer release(ei)
         
@@ -238,11 +244,11 @@ message_from_com :: proc(message: Msg, allocator := context.allocator) -> (resul
         if !ok do return
 
     case WarningMsg:
-        result.warning_number, ok = warningmsg_warning_number_get(m)
+        result.warning_number, ok = warning_number(m)
         if !ok do return
         
         ei: ExtraInfo
-        ei, ok = warningmsg_extra_info_get(m)
+        ei, ok = extrainfo(m)
         if !ok do return
         defer release(ei)
         
@@ -251,7 +257,7 @@ message_from_com :: proc(message: Msg, allocator := context.allocator) -> (resul
 
     case InfoMsg:
         ei: ExtraInfo
-        ei, ok = infomsg_extra_info_get(m)
+        ei, ok = extrainfo(m)
         if !ok do return
         defer release(ei)
         
@@ -390,20 +396,20 @@ msgbucket_from_com :: proc(bucket: MsgBucket, allocator := context.allocator) ->
     count, ok = msgbucket_message_count(bucket)
     if !ok do return
 
-    result.messages = make([dynamic]t.Msg, 0, int(count), allocator)
+    result.messages = make([dynamic]t.Message, 0, int(count), allocator)
 
     for i in 0..<count {
-        im: IMessage
-        im, ok = msgbucket_message_by_index(bucket, i)
+        imsg: IMsg
+        imsg, ok = msgbucket_message_by_index(bucket, i)
         if !ok do return
-        defer release(im)
+        defer release(imsg)
 
-        msg: Message
-        msg, ok = from_imsg(im)
+        msg: Msg
+        msg, ok = from_imsg(imsg)
         if !ok do return
         defer message_release(msg)
 
-        msgs: t.Msg
+        msgs: t.Message
         msgs, ok = message_from_com(msg)
         if !ok do return
         append(&result.messages, msgs)
@@ -495,21 +501,21 @@ warningmsg_posinfo_set :: proc(warningmsg: WarningMsg, posinfo: PosInfo) -> (ok:
     return true
 }
 
-warningmsg_extrainfo_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraInfo, ok: bool) {
+warningmsg_extrainfo_get :: proc(warningmsg: WarningMsg) -> (extrainfo: ExtraInfo, ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
-    hr := (^WarningMsgIF)(warningmsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
+    hr := (^WarningMsgIF)(warningmsg)->ExtraInfoGet(cast(^rawptr)&extrainfo)
     if com_failed(hr) do return
 
-    return extra_info, true
+    return extrainfo, true
 }
 
-warningmsg_extrainfo_set :: proc(warningmsg: WarningMsg, extra_info: ExtraInfo) -> (ok: bool) {
+warningmsg_extrainfo_set :: proc(warningmsg: WarningMsg, extrainfo: ExtraInfo) -> (ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
-    hr := (^WarningMsgIF)(warningmsg)->ExtraInfoPut(extra_info)
+    hr := (^WarningMsgIF)(warningmsg)->ExtraInfoPut(extrainfo)
     if com_failed(hr) do return
 
     return true
@@ -582,21 +588,21 @@ infomsg_posinfo_set :: proc(infomsg: InfoMsg, posinfo: PosInfo) -> (ok: bool) {
     return true
 }
 
-infomsg_extrainfo_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: bool) {
+infomsg_extrainfo_get :: proc(infomsg: InfoMsg) -> (extrainfo: ExtraInfo, ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
-    hr := (^InfoMsgIF)(infomsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
+    hr := (^InfoMsgIF)(infomsg)->ExtraInfoGet(cast(^rawptr)&extrainfo)
     if com_failed(hr) do return
 
-    return extra_info, true
+    return extrainfo, true
 }
 
-infomsg_extrainfo_set :: proc(infomsg: InfoMsg, extra_info: ExtraInfo) -> (ok: bool) {
+infomsg_extrainfo_set :: proc(infomsg: InfoMsg, extrainfo: ExtraInfo) -> (ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
-    hr := (^InfoMsgIF)(infomsg)->ExtraInfoPut(extra_info)
+    hr := (^InfoMsgIF)(infomsg)->ExtraInfoPut(extrainfo)
     if com_failed(hr) do return
 
     return true
@@ -755,21 +761,21 @@ errormsg_posinfo_set :: proc(errormsg: ErrorMsg, posinfo: PosInfo) -> (ok: bool)
     return true
 }
 
-errormsg_extrainfo_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, ok: bool) {
+errormsg_extrainfo_get :: proc(errormsg: ErrorMsg) -> (extrainfo: ExtraInfo, ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
-    hr := (^ErrorMsgIF)(errormsg)->ExtraInfoGet(cast(^rawptr)&extra_info)
+    hr := (^ErrorMsgIF)(errormsg)->ExtraInfoGet(cast(^rawptr)&extrainfo)
     if com_failed(hr) do return
 
-    return extra_info, true
+    return extrainfo, true
 }
 
-errormsg_extrainfo_set :: proc(errormsg: ErrorMsg, extra_info: ExtraInfo) -> (ok: bool) {
+errormsg_extrainfo_set :: proc(errormsg: ErrorMsg, extrainfo: ExtraInfo) -> (ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
-    hr := (^ErrorMsgIF)(errormsg)->ExtraInfoPut(extra_info)
+    hr := (^ErrorMsgIF)(errormsg)->ExtraInfoPut(extrainfo)
     if com_failed(hr) do return
 
     return true
@@ -927,15 +933,15 @@ extrainfo_from_com :: proc(extrainfo: ExtraInfo, allocator := context.allocator)
 
     context.allocator = allocator
 
-    result.jump_destination, ok = extrainfo_jump_destination_get(extrainfo)
+    result.jump_destination, ok = jump_destination(extrainfo)
     if !ok do return
-    result.var_name, ok = extrainfo_var_name_get(extrainfo)
+    result.var_name, ok = var_name(extrainfo)
     if !ok do return
-    result.function_name, ok = extrainfo_function_name_get(extrainfo)
+    result.function_name, ok = function_name(extrainfo)
     if !ok do return
-    result.expected_type, ok = extrainfo_expected_type_get(extrainfo)
+    result.expected_type, ok = expected_type(extrainfo)
     if !ok do return
-    result.traverse_no, ok = extrainfo_traverse_number_get(extrainfo)
+    result.traverse_no, ok = traverse_number(extrainfo)
     if !ok do return
 
     return result, true

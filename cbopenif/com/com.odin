@@ -154,7 +154,7 @@ com_get_dispid :: proc(this: ^IUnknownIF, name: string) -> (id: i32, ok: bool) {
     return dispids[0], true
 }
 
-com_invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Variant, wflags := DISPATCH_METHOD) -> (hr: HResult, arg_err: u32) {
+com_invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Variant, wflags := DISPATCH_METHOD) -> (hr: HResult) {
     hr = HResult(-2147467259) // E_FAIL default 0x80004005
     
     if this == nil do return
@@ -185,6 +185,7 @@ com_invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Var
     excep: EXCEPINFO
     iid := NULL_IID
 
+    arg_err: u32
     hr = this.vtable.Invoke(
         this,
         dispid,
@@ -202,17 +203,17 @@ com_invoke :: proc(this: ^IUnknownIF, dispid: i32, args: []Variant, result: ^Var
     if excep.bstrDescription != nil do bstr_free(excep.bstrDescription)
     if excep.bstrHelpFile != nil    do bstr_free(excep.bstrHelpFile)
 
-    return hr, arg_err
+    return hr
 }
 
 // Invoke by name (GetIDsOfNames + Invoke)
-com_invoke_name :: proc(this: ^IUnknownIF, name: string, args: []Variant, result: ^Variant = nil, wflags := DISPATCH_METHOD) -> (hr: HResult, arg_err: u32, ok: bool) {
-    hr = HResult(-2147352573) // DISP_E_MEMBERNOTFOUND-ish 0x80020003
+com_invoke_name :: proc(this: ^IUnknownIF, name: string, args: []Variant, result: ^Variant = nil, wflags := DISPATCH_METHOD) -> (ok: bool) {
+    hr := HResult(-2147352573) // DISP_E_MEMBERNOTFOUND-ish 0x80020003
 
     dispid, found := com_get_dispid(this, name)
     if !found do return
     
-    hr, arg_err = com_invoke(this, dispid, args, result, wflags)
+    hr = com_invoke(this, dispid, args, result, wflags)
     
-    return hr, arg_err, !com_failed(hr)
+    return !com_failed(hr)
 }
