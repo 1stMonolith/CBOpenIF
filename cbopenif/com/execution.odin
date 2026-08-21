@@ -1,8 +1,189 @@
 package com
 
+import t "../types"
+
+ExecutionOrder    :: distinct rawptr
 ExecutionGroup    :: distinct rawptr
 ExecutionInstance :: distinct rawptr
-ExecutionOrder    :: distinct rawptr
+
+ExecutionOrderIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^ExecutionOrderVTable,
+}
+
+ExecutionOrderVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    Serialize: proc "system" (this: ^ExecutionOrderIF, XML: ^BStr) -> HResult,
+    Add:       proc "system" (this: ^ExecutionOrderIF, ExecutionGroup: rawptr) -> HResult,
+    AddBefore: proc "system" (this: ^ExecutionOrderIF, ExecutionGroup: rawptr, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, ExecutionGroup: ^rawptr) -> HResult,
+    Find:      proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, ExecutionGroup: ^rawptr) -> HResult,
+    FindNr:    proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, Index: ^i32) -> HResult,
+    Item:      proc "system" (this: ^ExecutionOrderIF, Index: i32, ExecutionGroup: ^rawptr) -> HResult,
+    Count:     proc "system" (this: ^ExecutionOrderIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^ExecutionOrderIF, Index: i32) -> HResult,
+}
+
+executionorder_serialize :: proc(executionorder: ExecutionOrder) -> (xml: string, ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ExecutionOrderIF)(executionorder)->Serialize(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+executionorder_executiongroup_add :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup) -> (ok: bool) {
+    if executionorder == nil do return
+    if executiongroup == nil do return
+    if !com_connected() do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->Add(executiongroup)
+    if com_failed(hr) do return
+
+    return true
+}
+
+executionorder_executiongroup_add_at_index :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
+    if executionorder == nil do return
+    if executiongroup == nil do return
+    if !com_connected() do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->AddBefore(executiongroup, index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+executionorder_executiongroup_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (executiongroup: ExecutionGroup, ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    bstr_task_name := to_bstr(task_name)
+    defer bstr_free(bstr_task_name)
+    hr := (^ExecutionOrderIF)(executionorder)->Find(bstr_task_name, cast(^rawptr)&executiongroup)
+    if com_failed(hr) do return
+
+    return executiongroup, true
+}
+
+executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (executiongroup: ExecutionGroup, ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->Item(index + 1, cast(^rawptr)&executiongroup)
+    if com_failed(hr) do return
+
+    return executiongroup, true
+}
+
+executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task_name: string) -> (index: i32, ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    bstr_task_name := to_bstr(task_name)
+    defer bstr_free(bstr_task_name)
+    hr := (^ExecutionOrderIF)(executionorder)->FindNr(bstr_task_name, &index)
+    if com_failed(hr) do return
+
+    return index - 1, true
+}
+
+executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (count: i32, ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->Count(&count)
+    if com_failed(hr) do return
+
+    return count, true
+}
+
+executionorder_executiongroup_remove_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    index: i32
+    index, ok = executionorder_executiongroup_index(executionorder, task_name)
+    if !ok do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->Remove(index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+executionorder_executiongroup_remove_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (ok: bool) {
+    if executionorder == nil do return
+    if !com_connected() do return
+
+    hr := (^ExecutionOrderIF)(executionorder)->Remove(index + 1)
+    if com_failed(hr) do return
+
+    return true
+}
+
+executionorder_release :: proc(executionorder: ExecutionOrder) {
+    if executionorder != nil {
+        (^ExecutionOrderIF)(executionorder)->Release()
+    }
+}
+
+executionorder_from_com :: proc(eo: ExecutionOrder, allocator := context.allocator) -> (result: t.ExecutionOrder, ok: bool) {
+    if eo == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = executiongroup_count(eo)
+    if !ok do return
+
+    result.groups = make([dynamic]t.ExecutionGroup, 0, int(count), allocator)
+    for i in 0..<count {
+        eg: ExecutionGroup
+        eg, ok = executiongroup_by_index(eo, i)
+        if !ok do return
+        defer release(eg)
+
+        egs: t.ExecutionGroup
+        egs, ok = executiongroup_from_com(eg)
+        if !ok do return
+        append(&result.groups, egs)
+    }
+
+    return result, true
+}
+
+executionorder_to_com :: proc(src: t.ExecutionOrder) -> (result: ExecutionOrder, ok: bool) {
+    eo: ExecutionOrder
+    eo, ok = executionorder_new()
+    if !ok do return
+    defer if !ok do release(eo)
+
+    for g in src.groups {
+        bstr_task := to_bstr(g.task_name)
+        defer bstr_free(bstr_task)
+
+        eg: ExecutionGroup
+        hr := (^ExecutionOrderIF)(eo)->Add1(bstr_task, cast(^rawptr)&eg)
+        if com_failed(hr) do return
+        defer release(eg)
+
+        for inst in g.instances {
+            ei: ExecutionInstance
+            ei, ok = executioninstance_to_com(inst)
+            if !ok do return
+            defer release(ei)
+
+            ok = executioninstance_add(eg, ei)
+            if !ok do return
+        }
+    }
+
+    return eo, true
+}
 
 ExecutionGroupIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
@@ -156,6 +337,33 @@ executiongroup_release :: proc(executiongroup: ExecutionGroup) {
     }
 }
 
+executiongroup_from_com :: proc(eg: ExecutionGroup, allocator := context.allocator) -> (result: t.ExecutionGroup, ok: bool) {
+    if eg == nil do return
+    context.allocator = allocator
+
+    result.task_name, ok = name(eg)
+    if !ok do return
+
+    count: i32
+    count, ok = executioninstance_count(eg)
+    if !ok do return
+
+    result.instances = make([dynamic]t.ExecutionInstance, 0, int(count), allocator)
+    for i in 0..<count {
+        ei: ExecutionInstance
+        ei, ok = executioninstance_by_index(eg, i)
+        if !ok do return
+        defer release(ei)
+
+        eis: t.ExecutionInstance
+        eis, ok = executioninstance_from_com(ei)
+        if !ok do return
+        append(&result.instances, eis)
+    }
+
+    return result, true
+}
+
 ExecutionInstanceIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ExecutionInstanceVTable,
@@ -197,128 +405,17 @@ executioninstance_release :: proc(ei: ExecutionInstance) {
     }
 }
 
-ExecutionOrderIF :: struct #raw_union {
-    #subtype iunknownif: IUnknownIF,
-    using vtable: ^ExecutionOrderVTable,
-}
+executioninstance_from_com :: proc(ei: ExecutionInstance, allocator := context.allocator) -> (result: t.ExecutionInstance, ok: bool) {
+    if ei == nil do return
+    
+    context.allocator = allocator
 
-ExecutionOrderVTable :: struct {
-    using iunknownvtable: IUnknownVTable,
-    Serialize: proc "system" (this: ^ExecutionOrderIF, XML: ^BStr) -> HResult,
-    Add:       proc "system" (this: ^ExecutionOrderIF, ExecutionGroup: rawptr) -> HResult,
-    AddBefore: proc "system" (this: ^ExecutionOrderIF, ExecutionGroup: rawptr, Index: i32) -> HResult,
-    Add1:      proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, ExecutionGroup: ^rawptr) -> HResult,
-    Find:      proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, ExecutionGroup: ^rawptr) -> HResult,
-    FindNr:    proc "system" (this: ^ExecutionOrderIF, TaskName: BStr, Index: ^i32) -> HResult,
-    Item:      proc "system" (this: ^ExecutionOrderIF, Index: i32, ExecutionGroup: ^rawptr) -> HResult,
-    Count:     proc "system" (this: ^ExecutionOrderIF, Count: ^i32) -> HResult,
-    Remove:    proc "system" (this: ^ExecutionOrderIF, Index: i32) -> HResult,
-}
-
-executionorder_serialize :: proc(executionorder: ExecutionOrder) -> (xml: string, ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^ExecutionOrderIF)(executionorder)->Serialize(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-executionorder_executiongroup_add :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup) -> (ok: bool) {
-    if executionorder == nil do return
-    if executiongroup == nil do return
-    if !com_connected() do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->Add(executiongroup)
-    if com_failed(hr) do return
-
-    return true
-}
-
-executionorder_executiongroup_add_at_index :: proc(executionorder: ExecutionOrder, executiongroup: ExecutionGroup, index: i32) -> (ok: bool) {
-    if executionorder == nil do return
-    if executiongroup == nil do return
-    if !com_connected() do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->AddBefore(executiongroup, index)
-    if com_failed(hr) do return
-
-    return true
-}
-
-executionorder_executiongroup_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (executiongroup: ExecutionGroup, ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    bstr_task_name := to_bstr(task_name)
-    defer bstr_free(bstr_task_name)
-    hr := (^ExecutionOrderIF)(executionorder)->Find(bstr_task_name, cast(^rawptr)&executiongroup)
-    if com_failed(hr) do return
-
-    return executiongroup, true
-}
-
-executionorder_executiongroup_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (executiongroup: ExecutionGroup, ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->Item(index + 1, cast(^rawptr)&executiongroup)
-    if com_failed(hr) do return
-
-    return executiongroup, true
-}
-
-executionorder_executiongroup_index :: proc(executionorder: ExecutionOrder, task_name: string) -> (index: i32, ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    bstr_task_name := to_bstr(task_name)
-    defer bstr_free(bstr_task_name)
-    hr := (^ExecutionOrderIF)(executionorder)->FindNr(bstr_task_name, &index)
-    if com_failed(hr) do return
-
-    return index - 1, true
-}
-
-executionorder_executiongroup_count :: proc(executionorder: ExecutionOrder) -> (count: i32, ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->Count(&count)
-    if com_failed(hr) do return
-
-    return count, true
-}
-
-executionorder_executiongroup_remove_by_task_name :: proc(executionorder: ExecutionOrder, task_name: string) -> (ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    index: i32
-    index, ok = executionorder_executiongroup_index(executionorder, task_name)
+    result.name, ok = name(ei)
     if !ok do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->Remove(index)
-    if com_failed(hr) do return
-
-    return true
+    
+    return result, true
 }
 
-executionorder_executiongroup_remove_by_index :: proc(executionorder: ExecutionOrder, index: i32) -> (ok: bool) {
-    if executionorder == nil do return
-    if !com_connected() do return
-
-    hr := (^ExecutionOrderIF)(executionorder)->Remove(index + 1)
-    if com_failed(hr) do return
-
-    return true
-}
-
-executionorder_release :: proc(executionorder: ExecutionOrder) {
-    if executionorder != nil {
-        (^ExecutionOrderIF)(executionorder)->Release()
-    }
+executioninstance_to_com :: proc(src: t.ExecutionInstance) -> (result: ExecutionInstance, ok: bool) {
+    return executioninstance_new(src.name)
 }

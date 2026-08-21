@@ -110,6 +110,14 @@ Message :: enum i32 {
     Other         = 14,
 }
 
+ExtraInfo :: struct {
+    jump_destination: string,
+    var_name:         string,
+    function_name:    string,
+    expected_type:    string,
+    traverse_no:      i32,
+}
+
 ParameterKind :: enum i32 {
     Parameter     = 0,
     Extensible    = 1,
@@ -379,6 +387,7 @@ DataType :: struct {
 }
 
 CodeBlock :: struct {
+    kind:   CodeBlockKind,
     name:   string,
     stcode: string,
 }
@@ -717,8 +726,8 @@ VAAddressedProtocol :: struct {
     variables: [dynamic]VAAddressedVariable,
 }
 
-ExecutionInstance :: struct {
-    name: string,
+ExecutionOrder :: struct {
+    groups: [dynamic]ExecutionGroup,
 }
 
 ExecutionGroup :: struct {
@@ -726,8 +735,8 @@ ExecutionGroup :: struct {
     instances:  [dynamic]ExecutionInstance,
 }
 
-ExecutionOrder :: struct {
-    groups: [dynamic]ExecutionGroup,
+ExecutionInstance :: struct {
+    name: string,
 }
 
 ILRow :: struct {

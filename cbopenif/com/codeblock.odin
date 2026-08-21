@@ -283,7 +283,7 @@ codeblock_serialize :: proc(codeblock: CodeBlock) -> (xml: string, ok: bool) {
 }
 
 codeblock_stcode_get :: proc(codeblock: CodeBlock) -> (stcode: string, ok: bool) {
-     #partial switch block in codeblock.block {
+    #partial switch block in codeblock.block {
         case STCodeBlock:  return stcodeblock_stcode_get(block)
         case FBDCodeBlock: return fbdcodeblock_stcode_get(block)
         case LDCodeBlock:  return ldcodeblock_stcode_get(block)
@@ -298,6 +298,54 @@ codeblock_stcode_set :: proc(codeblock: CodeBlock, stcode: string) -> (ok: bool)
         case LDCodeBlock:  return ldcodeblock_stcode_set(block, stcode)
     }
     return
+}
+
+codeblock_from_com :: proc(cb: CodeBlock, allocator := context.allocator) -> (result: t.CodeBlock, ok: bool) {
+    context.allocator = allocator
+
+    result.name, ok = name(cb)
+    if !ok do return
+
+    result.kind = cb.kind
+
+    #partial switch cb.kind {
+        case .ST, .FBD, .LD:
+            result.stcode, ok = stcode(cb)
+            if !ok do return
+        case .SFC, .IL, .FD:
+            // TODO
+            return
+    }
+
+    return result, true
+}
+
+codeblock_to_com :: proc(src: t.CodeBlock) -> (result: CodeBlock, ok: bool) {
+    cb: CodeBlock
+    cb.kind = src.kind
+
+    #partial switch src.kind {
+        case .ST:
+            block: STCodeBlock
+            block, ok = stcodeblock_new1(src.name, src.stcode)
+            if !ok do return
+            cb.block = block
+        case .FBD:
+            block: FBDCodeBlock
+            block, ok = fbdcodeblock_new1(src.name, src.stcode)
+            if !ok do return
+            cb.block = block
+        case .LD:
+            block: LDCodeBlock
+            block, ok = ldcodeblock_new1(src.name, src.stcode)
+            if !ok do return
+            cb.block = block
+        case .SFC, .IL, .FD:
+            // TODO
+            return
+    }
+
+    return cb, true
 }
 
 CodeBlocksIF :: struct #raw_union {
