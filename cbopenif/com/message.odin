@@ -203,10 +203,10 @@ message_posinfo_get :: proc(message: Msg) -> (posinfo: PosInfo, ok: bool) {
 
 message_release :: proc(message: Msg) {
     switch m in message.msg {
-    case ErrorMsg:   errormsg_release(m)
-    case WarningMsg: warningmsg_release(m)
-    case InfoMsg:    infomsg_release(m)
-    case FindMsg:    findmsg_release(m)
+        case ErrorMsg:   errormsg_release(m)
+        case WarningMsg: warningmsg_release(m)
+        case InfoMsg:    infomsg_release(m)
+        case FindMsg:    findmsg_release(m)
     }
 }
 
@@ -214,7 +214,7 @@ message_from_com :: proc(message: Msg, allocator := context.allocator) -> (resul
     context.allocator = allocator
     result.kind = message.kind
 
-    result.message, ok = message_text_get(message)
+    result.text, ok = message_text_get(message)
     if !ok do return
 
     pi: PosInfo
@@ -935,7 +935,7 @@ extrainfo_from_com :: proc(extrainfo: ExtraInfo, allocator := context.allocator)
     if !ok do return
     result.expected_type, ok = extrainfo_expected_type_get(extrainfo)
     if !ok do return
-    result.traverse_no, ok = extrainfo_traverse_no_get(extrainfo)
+    result.traverse_no, ok = extrainfo_traverse_number_get(extrainfo)
     if !ok do return
 
     return result, true

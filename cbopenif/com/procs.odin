@@ -960,8 +960,8 @@ minor_version :: proc {
 }
 
 message_text :: proc {
-    //message_message_get,
-    //message_message_set,
+    //message_text_get,
+    //message_text_set,
     errormsg_text_get,
     errormsg_text_set,
     findmsg_text_get,
@@ -1208,7 +1208,7 @@ points :: proc {
     cmconnection_points_set,
 }
 
-pos_info :: proc {
+posinfo :: proc {
     //message_posinfo_get,
     errormsg_posinfo_get,
     errormsg_posinfo_set,
