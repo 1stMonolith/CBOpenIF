@@ -92,7 +92,7 @@ HardwareLibraryFile :: enum {
     IconFile = 1,
 }
 
-Message :: enum i32 {
+MessageTypeKind :: enum i32 {
     UndefPOU      = 0,
     DataType      = 1,
     Function      = 2,
@@ -185,7 +185,7 @@ PosInfo :: struct {
     start_position: i32,
     end_position:  i32,
     id:            string,
-    message_type:  Message,
+    message_type:  MessageTypeKind,
 }
 
 MessageKind :: enum {
@@ -195,13 +195,13 @@ MessageKind :: enum {
     Find,
 }
 
-Msg :: struct {
-    kind:             MessageKind,
-    message:          string,
-    error_number:     i32,
-    warning_number:   i32,
-    pos_info:         PosInfo,
-    extra_info:       ExtraInfo,
+Message :: struct {
+    kind:           MessageKind,
+    text:           string,
+    error_number:   i32,
+    warning_number: i32,
+    pos_info:       PosInfo,
+    extra_info:     ExtraInfo,
 }
 
 ExtraInfo :: struct {
@@ -213,7 +213,7 @@ ExtraInfo :: struct {
 }
 
 MessageBucket :: struct {
-    messages: [dynamic]Msg,
+    messages: [dynamic]Message,
 }
 
 Component :: struct {

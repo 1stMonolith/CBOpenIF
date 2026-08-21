@@ -406,7 +406,7 @@ projectsconstants_deserialize :: proc(xml: string) -> (projectsconstants: Projec
     return projectsconstants, true
 }
 
-messagebucket_deserialize :: proc(xml: string) -> (messagebucket: MessageBucket, ok: bool) {
+messagebucket_deserialize :: proc(xml: string) -> (messagebucket: MsgBucket, ok: bool) {
     if !com_connected() do return
     
     bstr_xml := to_bstr(xml)

@@ -486,13 +486,13 @@ error_number :: proc {
     errormsg_error_number_set,
 }
 
-extra_info :: proc {
-    errormsg_extra_info_get,
-    errormsg_extra_info_set,
-    warningmsg_extra_info_get,
-    warningmsg_extra_info_set,
-    infomsg_extra_info_get,
-    infomsg_extra_info_set,
+extrainfo :: proc {
+    errormsg_extrainfo_get,
+    errormsg_extrainfo_set,
+    warningmsg_extrainfo_get,
+    warningmsg_extrainfo_set,
+    infomsg_extrainfo_get,
+    infomsg_extrainfo_set,
 }
 
 expected_sil :: proc {
@@ -959,24 +959,26 @@ minor_version :: proc {
     connectedhwlibrary_minor_version_set,
 }
 
-message :: proc {
-    errormsg_message_get,
-    errormsg_message_set,
-    findmsg_message_get,
-    findmsg_message_set,
-    infomsg_message_get,
-    infomsg_message_set,
-    warningmsg_message_get,
-    warningmsg_message_set,
+message_text :: proc {
+    //message_message_get,
+    //message_message_set,
+    errormsg_text_get,
+    errormsg_text_set,
+    findmsg_text_get,
+    findmsg_text_set,
+    infomsg_text_get,
+    infomsg_text_set,
+    warningmsg_text_get,
+    warningmsg_text_set,
 }
 
-message_add :: messagebucket_message_add
+message_add :: msgbucket_message_add
 
-message_by_index :: messagebucket_message_by_index
+message_by_index :: msgbucket_message_by_index
 
-message_count :: messagebucket_message_count
+message_count :: msgbucket_message_count
 
-message_remove :: messagebucket_message_remove_by_index
+message_remove :: msgbucket_message_remove_by_index
 
 message_type :: proc {
     posinfo_message_type_get,
@@ -1090,13 +1092,13 @@ name :: proc {
 }
 
 number_of_errors :: proc {
-    messagebucket_number_of_errors_get,
-    messagebucket_number_of_errors_set,
+    msgbucket_number_of_errors_get,
+    msgbucket_number_of_errors_set,
 }
 
 number_of_warnings :: proc {
-    messagebucket_number_of_warnings_get,
-    messagebucket_number_of_warnings_set,
+    msgbucket_number_of_warnings_get,
+    msgbucket_number_of_warnings_set,
 }
 
 offset :: proc {
@@ -1207,7 +1209,7 @@ points :: proc {
 }
 
 pos_info :: proc {
-    message_posinfo_get,
+    //message_posinfo_get,
     errormsg_posinfo_get,
     errormsg_posinfo_set,
     warningmsg_posinfo_get,
@@ -1309,8 +1311,8 @@ release :: proc {
     extrainfo_release,
     findmsg_release,
     infomsg_release,
-    messagebucket_release,
-    imessage_release,
+    msgbucket_release,
+    imsg_release,
     posinfo_release,
     warningmsg_release,
     cmparameter_release,
@@ -1495,7 +1497,7 @@ serialize :: proc {
     stcodeblock_serialize,
     cmconnection_serialize,
     initvalue_serialize,
-    messagebucket_serialize,
+    msgbucket_serialize,
     cmparameter_serialize,
     extensibleparameter_serialize,
     parameter_serialize,

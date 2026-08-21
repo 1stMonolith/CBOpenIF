@@ -211,7 +211,7 @@ posinfo_tab_name_set :: proc(posinfo: PosInfo, tab_name: string) -> (ok: bool) {
     return true
 }
 
-posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.Message, ok: bool) {
+posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.MessageTypeKind, ok: bool) {
     if posinfo == nil do return
     if !com_connected() do return
 
@@ -219,10 +219,10 @@ posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: t.Message, 
     hr := (^PosInfoIF)(posinfo)->MessageTypeGet(&mt)
     if com_failed(hr) do return
 
-    return t.Message(mt), true
+    return t.MessageTypeKind(mt), true
 }
 
-posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: t.Message) -> (ok: bool) {
+posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: t.MessageTypeKind) -> (ok: bool) {
     if posinfo == nil do return
     if !com_connected() do return
 

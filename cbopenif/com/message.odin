@@ -2,24 +2,24 @@ package com
 
 import t "../types"
 
-IMessage      :: distinct rawptr
-MessageBucket :: distinct rawptr
-WarningMsg    :: distinct rawptr
-InfoMsg       :: distinct rawptr
-FindMsg       :: distinct rawptr
-ErrorMsg      :: distinct rawptr
-ExtraInfo     :: distinct rawptr
+IMsg       :: distinct rawptr
+MsgBucket  :: distinct rawptr
+WarningMsg :: distinct rawptr
+InfoMsg    :: distinct rawptr
+FindMsg    :: distinct rawptr
+ErrorMsg   :: distinct rawptr
+ExtraInfo  :: distinct rawptr
 
-MessageUnion :: union {
+MsgUnion :: union {
     ErrorMsg,
     WarningMsg,
     InfoMsg,
     FindMsg,
 }
 
-Message :: struct {
+Msg :: struct {
     kind: t.MessageKind,
-    msg:  MessageUnion,
+    msg:  MsgUnion,
 }
 
 IID_ErrorMsg   :: GUID{0xAA7D0C85, 0xEB7F, 0x4859, {0xAB, 0xE8, 0xE7, 0xE9, 0x45, 0x41, 0x93, 0x0B}}
@@ -28,140 +28,140 @@ IID_WarningMsg :: GUID{0xD5246053, 0xFB82, 0x45FE, {0xAF, 0x12, 0x10, 0xE2, 0xFC
 IID_FindMsg    :: GUID{0xDBE93C58, 0xDE18, 0x4B71, {0xBF, 0x89, 0xA3, 0x1B, 0xBB, 0x7A, 0xD7, 0x38}}
 IID_IMsg       :: GUID{0x24B4263B, 0xFD38, 0x4D67, {0x99, 0x03, 0x0A, 0x6D, 0x81, 0xA8, 0x76, 0x8C}}
 
-IMessageIF :: struct #raw_union {
+IMsgIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
-    using vtable: ^IMessageVTable,
+    using vtable: ^IMsgVTable,
 }
 
-IMessageVTable :: struct {
+IMsgVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    MessageGet:    proc "system" (this: ^IMessageIF, Message: ^BStr) -> HResult,
-    MessagePut:    proc "system" (this: ^IMessageIF, Message: BStr) -> HResult,
-    IsErrorMsg:    proc "system" (this: ^IMessageIF, IsErrorMessage: ^VariantBool) -> HResult,
-    IsWarningMsg:  proc "system" (this: ^IMessageIF, IsWarningMessage: ^VariantBool) -> HResult,
-    IsInfoMsg:     proc "system" (this: ^IMessageIF, IsInfoMessage: ^VariantBool) -> HResult,
-    IsFindMsg:     proc "system" (this: ^IMessageIF, IsFindMessage: ^VariantBool) -> HResult,
+    TextGet:      proc "system" (this: ^IMsgIF, Text: ^BStr) -> HResult,
+    TextPut:      proc "system" (this: ^IMsgIF, Text: BStr) -> HResult,
+    IsErrorMsg:   proc "system" (this: ^IMsgIF, Is: ^VariantBool) -> HResult,
+    IsWarningMsg: proc "system" (this: ^IMsgIF, Is: ^VariantBool) -> HResult,
+    IsInfoMsg:    proc "system" (this: ^IMsgIF, Is: ^VariantBool) -> HResult,
+    IsFindMsg:    proc "system" (this: ^IMsgIF, Is: ^VariantBool) -> HResult,
 }
 
-imessage_is_error :: proc(imessage: IMessage) -> (is_error: bool, ok: bool) {
-    if imessage == nil do return
+imsg_is_error :: proc(imsg: IMsg) -> (is_error: bool, ok: bool) {
+    if imsg == nil do return
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsErrorMsg(&vb)
+    hr := (^IMsgIF)(imsg)->IsErrorMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
 }
 
-imessage_as_error :: proc(imessage: IMessage) -> (errormsg: ErrorMsg, ok: bool) {
-    if imessage == nil do return
+imsg_as_error :: proc(imsg: IMsg) -> (errormsg: ErrorMsg, ok: bool) {
+    if imsg == nil do return
     
     IID := IID_ErrorMsg
-    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&errormsg)
+    hr := (^IUnknownIF)(imsg)->QueryInterface(&IID, cast(^rawptr)&errormsg)
     if com_failed(hr) do return
     
     return errormsg, true
 }
 
-imessage_is_warning :: proc(imessage: IMessage) -> (is_warning: bool, ok: bool) {
-    if imessage == nil do return
+imsg_is_warning :: proc(imsg: IMsg) -> (is_warning: bool, ok: bool) {
+    if imsg == nil do return
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsWarningMsg(&vb)
+    hr := (^IMsgIF)(imsg)->IsWarningMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
 }
 
-imessage_as_warning :: proc(imessage: IMessage) -> (warningmsg: WarningMsg, ok: bool) {
-    if imessage == nil do return
+imsg_as_warning :: proc(imsg: IMsg) -> (warningmsg: WarningMsg, ok: bool) {
+    if imsg == nil do return
     
     IID := IID_WarningMsg
-    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&warningmsg)
+    hr := (^IUnknownIF)(imsg)->QueryInterface(&IID, cast(^rawptr)&warningmsg)
     if com_failed(hr) do return
     
     return warningmsg, true
 }
 
-imessage_is_info :: proc(imessage: IMessage) -> (is_info: bool, ok: bool) {
-    if imessage == nil do return
+imsg_is_info :: proc(imsg: IMsg) -> (is_info: bool, ok: bool) {
+    if imsg == nil do return
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsInfoMsg(&vb)
+    hr := (^IMsgIF)(imsg)->IsInfoMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
 }
 
-imessage_as_info :: proc(imessage: IMessage) -> (infomsg: InfoMsg, ok: bool) {
-    if imessage == nil do return
+imsg_as_info :: proc(imsg: IMsg) -> (infomsg: InfoMsg, ok: bool) {
+    if imsg == nil do return
     
     IID := IID_InfoMsg
-    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&infomsg)
+    hr := (^IUnknownIF)(imsg)->QueryInterface(&IID, cast(^rawptr)&infomsg)
     if com_failed(hr) do return
     
     return infomsg, true
 }
 
-imessage_is_find :: proc(imessage: IMessage) -> (is_find: bool, ok: bool) {
-    if imessage == nil do return
+imsg_is_find :: proc(imsg: IMsg) -> (is_find: bool, ok: bool) {
+    if imsg == nil do return
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsFindMsg(&vb)
+    hr := (^IMsgIF)(imsg)->IsFindMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
 }
 
-imessage_as_find :: proc(imessage: IMessage) -> (findmsg: FindMsg, ok: bool) {
-    if imessage == nil do return
+imsg_as_find :: proc(imsg: IMsg) -> (findmsg: FindMsg, ok: bool) {
+    if imsg == nil do return
     
     IID := IID_FindMsg
-    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&findmsg)
+    hr := (^IUnknownIF)(imsg)->QueryInterface(&IID, cast(^rawptr)&findmsg)
     if com_failed(hr) do return
     
     return findmsg, true
 }
 
-imessage_release :: proc(imessage: IMessage) {
-    if imessage != nil {
-        (^IMessageIF)(imessage)->Release()
+imsg_release :: proc(imsg: IMsg) {
+    if imsg != nil {
+        (^IMsgIF)(imsg)->Release()
     }
 }
 
-from_imessage :: proc(imessage: IMessage) -> (message: Message, ok: bool) {
-    if imessage == nil do return
+from_imsg :: proc(imsg: IMsg) -> (message: Msg, ok: bool) {
+    if imsg == nil do return
 
-    if is, ok := imessage_is_error(imessage); ok && is {
-        e, ok := imessage_as_error(imessage)
+    if is, ok := imsg_is_error(imsg); ok && is {
+        e, ok := imsg_as_error(imsg)
         if !ok do return
         message.kind = .Error
         message.msg = e
         return message, true
     }
 
-    if is, ok := imessage_is_warning(imessage); ok && is {
-        w, ok := imessage_as_warning(imessage)
+    if is, ok := imsg_is_warning(imsg); ok && is {
+        w, ok := imsg_as_warning(imsg)
         if !ok do return
         message.kind = .Warning
         message.msg = w
         return message, true
     }
 
-    if is, ok := imessage_is_info(imessage); ok && is {
-        i, ok := imessage_as_info(imessage)
+    if is, ok := imsg_is_info(imsg); ok && is {
+        i, ok := imsg_as_info(imsg)
         if !ok do return
         message.kind = .Info
         message.msg = i
         return message, true
     }
 
-    if is, ok := imessage_is_find(imessage); ok && is {
-        f, ok := imessage_as_find(imessage)
+    if is, ok := imsg_is_find(imsg); ok && is {
+        f, ok := imsg_as_find(imsg)
         if !ok do return
         message.kind = .Find
         message.msg = f
@@ -171,27 +171,27 @@ from_imessage :: proc(imessage: IMessage) -> (message: Message, ok: bool) {
     return {}, false
 }
 
-message_message_get :: proc(message: Message) -> (text: string, ok: bool) {
+message_text_get :: proc(message: Msg) -> (text: string, ok: bool) {
     switch m in message.msg {
-        case ErrorMsg:   return errormsg_message_get(m)
-        case WarningMsg: return warningmsg_message_get(m)
-        case InfoMsg:    return infomsg_message_get(m)
-        case FindMsg:    return findmsg_message_get(m)
+        case ErrorMsg:   return errormsg_text_get(m)
+        case WarningMsg: return warningmsg_text_get(m)
+        case InfoMsg:    return infomsg_text_get(m)
+        case FindMsg:    return findmsg_text_get(m)
     }
     return
 }
 
-message_message_set :: proc(message: Message, text: string) -> (ok: bool) {
+message_text_set :: proc(message: Msg, text: string) -> (ok: bool) {
     switch m in message.msg {
-        case ErrorMsg:   return errormsg_message_set(m, text)
-        case WarningMsg: return warningmsg_message_set(m, text)
-        case InfoMsg:    return infomsg_message_set(m, text)
-        case FindMsg:    return findmsg_message_set(m, text)
+        case ErrorMsg:   return errormsg_text_set(m, text)
+        case WarningMsg: return warningmsg_text_set(m, text)
+        case InfoMsg:    return infomsg_text_set(m, text)
+        case FindMsg:    return findmsg_text_set(m, text)
     }
     return
 }
 
-message_posinfo_get :: proc(message: Message) -> (posinfo: PosInfo, ok: bool) {
+message_posinfo_get :: proc(message: Msg) -> (posinfo: PosInfo, ok: bool) {
     switch m in message.msg {
         case ErrorMsg:   return errormsg_posinfo_get(m)
         case WarningMsg: return warningmsg_posinfo_get(m)
@@ -201,182 +201,212 @@ message_posinfo_get :: proc(message: Message) -> (posinfo: PosInfo, ok: bool) {
     return
 }
 
-message_from_com :: proc(message: Message, allocator := context.allocator) -> (result: t.Msg, ok: bool) {
+message_release :: proc(message: Msg) {
+    switch m in message.msg {
+    case ErrorMsg:   errormsg_release(m)
+    case WarningMsg: warningmsg_release(m)
+    case InfoMsg:    infomsg_release(m)
+    case FindMsg:    findmsg_release(m)
+    }
+}
+
+message_from_com :: proc(message: Msg, allocator := context.allocator) -> (result: t.Message, ok: bool) {
     context.allocator = allocator
     result.kind = message.kind
 
-    result.message, ok = message(message)
+    result.message, ok = message_text_get(message)
     if !ok do return
 
-    result.pos_info, ok = pos_info(message)
+    pi: PosInfo
+    pi, ok = message_posinfo_get(message)
+    if !ok do return
+    defer release(pi)
+    result.pos_info, ok = posinfo_from_com(pi)
     if !ok do return
 
-    if message.kind == .Error {
-        result.error_number, ok = error_number(message)
+    switch m in message.msg {
+    case ErrorMsg:
+        result.error_number, ok = errormsg_error_number_get(m)
         if !ok do return
-    }
-
-    if message.kind == .Warning {
-        result.warning_number, ok = warning_number(message)
-        if !ok do return
-    }
-
-    if message.kind == .Warning || message.kind == .Info || message.kind == .Error {
+        
         ei: ExtraInfo
-        ei, ok = extrainfo(ei)
+        ei, ok = errormsg_extra_info_get(m)
         if !ok do return
         defer release(ei)
-
-        eis: t.ExtraInfo
+        
         result.extra_info, ok = extrainfo_from_com(ei)
         if !ok do return
+
+    case WarningMsg:
+        result.warning_number, ok = warningmsg_warning_number_get(m)
+        if !ok do return
+        
+        ei: ExtraInfo
+        ei, ok = warningmsg_extra_info_get(m)
+        if !ok do return
+        defer release(ei)
+        
+        result.extra_info, ok = extrainfo_from_com(ei)
+        if !ok do return
+
+    case InfoMsg:
+        ei: ExtraInfo
+        ei, ok = infomsg_extra_info_get(m)
+        if !ok do return
+        defer release(ei)
+        
+        result.extra_info, ok = extrainfo_from_com(ei)
+        if !ok do return
+
+    case FindMsg:
+        // nothing extra
     }
 
     return result, true
 }
 
-MessageBucketIF :: struct #raw_union {
+MsgBucketIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
-    using vtable: ^MessageBucketVTable,
+    using vtable: ^MsgBucketVTable,
 }
 
-MessageBucketVTable :: struct {
+MsgBucketVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    NoOfErrorsGet:   proc "system" (this: ^MessageBucketIF, NoOfErrors: ^i32) -> HResult,
-    NoOfErrorsPut:   proc "system" (this: ^MessageBucketIF, NoOfErrors: i32) -> HResult,
-    NoOfWarningsGet: proc "system" (this: ^MessageBucketIF, NoOfWarnings: ^i32) -> HResult,
-    NoOfWarningsPut: proc "system" (this: ^MessageBucketIF, NoOfWarnings: i32) -> HResult,
-    Serialize:       proc "system" (this: ^MessageBucketIF, XML: ^BStr) -> HResult,
-    Add:             proc "system" (this: ^MessageBucketIF, Message: rawptr) -> HResult,
-    Item:            proc "system" (this: ^MessageBucketIF, Index: i32, Message: ^rawptr) -> HResult,
-    Count:           proc "system" (this: ^MessageBucketIF, Count: ^i32) -> HResult,
-    Remove:          proc "system" (this: ^MessageBucketIF, Index: i32) -> HResult,
+    NoOfErrorsGet:   proc "system" (this: ^MsgBucketIF, NoOfErrors: ^i32) -> HResult,
+    NoOfErrorsPut:   proc "system" (this: ^MsgBucketIF, NoOfErrors: i32) -> HResult,
+    NoOfWarningsGet: proc "system" (this: ^MsgBucketIF, NoOfWarnings: ^i32) -> HResult,
+    NoOfWarningsPut: proc "system" (this: ^MsgBucketIF, NoOfWarnings: i32) -> HResult,
+    Serialize:       proc "system" (this: ^MsgBucketIF, XML: ^BStr) -> HResult,
+    Add:             proc "system" (this: ^MsgBucketIF, Message: rawptr) -> HResult,
+    Item:            proc "system" (this: ^MsgBucketIF, Index: i32, Message: ^rawptr) -> HResult,
+    Count:           proc "system" (this: ^MsgBucketIF, Count: ^i32) -> HResult,
+    Remove:          proc "system" (this: ^MsgBucketIF, Index: i32) -> HResult,
 }
 
-messagebucket_serialize :: proc(bucket: MessageBucket) -> (xml: string, ok: bool) {
+msgbucket_serialize :: proc(bucket: MsgBucket) -> (xml: string, ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^MessageBucketIF)(bucket)->Serialize(&bs)
+    hr := (^MsgBucketIF)(bucket)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-messagebucket_number_of_errors_get :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
+msgbucket_number_of_errors_get :: proc(bucket: MsgBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->NoOfErrorsGet(&count)
+    hr := (^MsgBucketIF)(bucket)->NoOfErrorsGet(&count)
     if com_failed(hr) do return
 
     return count, true
 }
 
-messagebucket_number_of_errors_set :: proc(bucket: MessageBucket, count: i32) -> (ok: bool) {
+msgbucket_number_of_errors_set :: proc(bucket: MsgBucket, count: i32) -> (ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->NoOfErrorsPut(count)
+    hr := (^MsgBucketIF)(bucket)->NoOfErrorsPut(count)
     if com_failed(hr) do return
 
     return true
 }
 
-messagebucket_number_of_warnings_get :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
+msgbucket_number_of_warnings_get :: proc(bucket: MsgBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->NoOfWarningsGet(&count)
+    hr := (^MsgBucketIF)(bucket)->NoOfWarningsGet(&count)
     if com_failed(hr) do return
 
     return count, true
 }
 
-messagebucket_number_of_warnings_set :: proc(bucket: MessageBucket, count: i32) -> (ok: bool) {
+msgbucket_number_of_warnings_set :: proc(bucket: MsgBucket, count: i32) -> (ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->NoOfWarningsPut(count)
+    hr := (^MsgBucketIF)(bucket)->NoOfWarningsPut(count)
     if com_failed(hr) do return
 
     return true
 }
 
-messagebucket_message_add :: proc(bucket: MessageBucket, imessage: IMessage) -> (ok: bool) {
+msgbucket_message_add :: proc(bucket: MsgBucket, imsg: IMsg) -> (ok: bool) {
     if bucket == nil do return
-    if imessage == nil do return
+    if imsg == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Add(imessage)
+    hr := (^MsgBucketIF)(bucket)->Add(imsg)
     if com_failed(hr) do return
 
     return true
 }
 
-messagebucket_message_by_index :: proc(bucket: MessageBucket, index: i32) -> (imessage: IMessage, ok: bool) {
+msgbucket_message_by_index :: proc(bucket: MsgBucket, index: i32) -> (imsg: IMsg, ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Item(index + 1, cast(^rawptr)&imessage)
+    hr := (^MsgBucketIF)(bucket)->Item(index + 1, cast(^rawptr)&imsg)
     if com_failed(hr) do return
 
-    return imessage, true
+    return imsg, true
 }
 
-messagebucket_message_count :: proc(bucket: MessageBucket) -> (count: i32, ok: bool) {
+msgbucket_message_count :: proc(bucket: MsgBucket) -> (count: i32, ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Count(&count)
+    hr := (^MsgBucketIF)(bucket)->Count(&count)
     if com_failed(hr) do return
 
     return count, true
 }
 
-messagebucket_message_remove_by_index :: proc(bucket: MessageBucket, index: i32) -> (ok: bool) {
+msgbucket_message_remove_by_index :: proc(bucket: MsgBucket, index: i32) -> (ok: bool) {
     if bucket == nil do return
     if !com_connected() do return
 
-    hr := (^MessageBucketIF)(bucket)->Remove(index + 1)
+    hr := (^MsgBucketIF)(bucket)->Remove(index + 1)
     if com_failed(hr) do return
 
     return true
 }
 
-messagebucket_release :: proc(bucket: MessageBucket) {
+msgbucket_release :: proc(bucket: MsgBucket) {
     if bucket != nil {
-        (^MessageBucketIF)(bucket)->Release()
+        (^MsgBucketIF)(bucket)->Release()
     }
 }
 
-messagebucket_from_com :: proc(bucket: MessageBucket, allocator := context.allocator) -> (result: t.MessageBucket, ok: bool) {
+msgbucket_from_com :: proc(bucket: MsgBucket, allocator := context.allocator) -> (result: t.MessageBucket, ok: bool) {
     if bucket == nil do return
     context.allocator = allocator
 
     count: i32
-    count, ok = messagebucket_message_count(bucket)
+    count, ok = msgbucket_message_count(bucket)
     if !ok do return
 
     result.messages = make([dynamic]t.Msg, 0, int(count), allocator)
 
     for i in 0..<count {
         im: IMessage
-        im, ok = messagebucket_message_by_index(bucket, i)
+        im, ok = msgbucket_message_by_index(bucket, i)
         if !ok do return
         defer release(im)
 
         msg: Message
-        msg, ok = from_imessage(im)
+        msg, ok = from_imsg(im)
         if !ok do return
-        defer release(msg.msg)
+        defer message_release(msg)
 
-        ms: t.Msg
-        ms, ok = message_from_com(msg)
+        msgs: t.Msg
+        msgs, ok = message_from_com(msg)
         if !ok do return
-        append(&result.messages, ms)
+        append(&result.messages, msgs)
     }
 
     return result, true
@@ -391,8 +421,8 @@ WarningMsgVTable :: struct {
     using iunknownvtable: IUnknownVTable,
     WarningNoGet: proc "system" (this: ^WarningMsgIF, WarningNo: ^i32) -> HResult,
     WarningNoPut: proc "system" (this: ^WarningMsgIF, WarningNo: i32) -> HResult,
-    MessageGet:   proc "system" (this: ^WarningMsgIF, Message: ^BStr) -> HResult,
-    MessagePut:   proc "system" (this: ^WarningMsgIF, Message: BStr) -> HResult,
+    TextGet:      proc "system" (this: ^WarningMsgIF, Text: ^BStr) -> HResult,
+    TextPut:      proc "system" (this: ^WarningMsgIF, Text: BStr) -> HResult,
     PosInfoGet:   proc "system" (this: ^WarningMsgIF, PosInfo: ^rawptr) -> HResult,
     Missing12:    proc "system" (this: ^WarningMsgIF) -> HResult,
     PosInfoPut:   proc "system" (this: ^WarningMsgIF, PosInfo: rawptr) -> HResult,
@@ -421,25 +451,25 @@ warningmsg_warning_number_set :: proc(warningmsg: WarningMsg, warning_number: i3
     return true
 }
 
-warningmsg_message_get :: proc(warningmsg: WarningMsg) -> (message: string, ok: bool) {
+warningmsg_text_get :: proc(warningmsg: WarningMsg) -> (text: string, ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^WarningMsgIF)(warningmsg)->MessageGet(&bs)
+    hr := (^WarningMsgIF)(warningmsg)->TextGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-warningmsg_message_set :: proc(warningmsg: WarningMsg, message: string) -> (ok: bool) {
+warningmsg_text_set :: proc(warningmsg: WarningMsg, text: string) -> (ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
-    bs := to_bstr(message)
+    bs := to_bstr(text)
     defer bstr_free(bs)
-    hr := (^WarningMsgIF)(warningmsg)->MessagePut(bs)
+    hr := (^WarningMsgIF)(warningmsg)->TextPut(bs)
     if com_failed(hr) do return
 
     return true
@@ -465,7 +495,7 @@ warningmsg_posinfo_set :: proc(warningmsg: WarningMsg, posinfo: PosInfo) -> (ok:
     return true
 }
 
-warningmsg_extra_info_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraInfo, ok: bool) {
+warningmsg_extrainfo_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
@@ -475,7 +505,7 @@ warningmsg_extra_info_get :: proc(warningmsg: WarningMsg) -> (extra_info: ExtraI
     return extra_info, true
 }
 
-warningmsg_extra_info_set :: proc(warningmsg: WarningMsg, extra_info: ExtraInfo) -> (ok: bool) {
+warningmsg_extrainfo_set :: proc(warningmsg: WarningMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if warningmsg == nil do return
     if !com_connected() do return
 
@@ -498,8 +528,8 @@ InfoMsgIF :: struct #raw_union {
 
 InfoMsgVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    MessageGet:   proc "system" (this: ^InfoMsgIF, Message: ^BStr) -> HResult,
-    MessagePut:   proc "system" (this: ^InfoMsgIF, Message: BStr) -> HResult,
+    TextGet:      proc "system" (this: ^InfoMsgIF, Text: ^BStr) -> HResult,
+    TextPut:      proc "system" (this: ^InfoMsgIF, Text: BStr) -> HResult,
     PosInfoGet:   proc "system" (this: ^InfoMsgIF, PosInfo: ^rawptr) -> HResult,
     Missing10:    proc "system" (this: ^InfoMsgIF) -> HResult,
     PosInfoPut:   proc "system" (this: ^InfoMsgIF, PosInfo: rawptr) -> HResult,
@@ -508,25 +538,25 @@ InfoMsgVTable :: struct {
     ExtraInfoPut: proc "system" (this: ^InfoMsgIF, ExtraInfo: rawptr) -> HResult,
 }
 
-infomsg_message_get :: proc(infomsg: InfoMsg) -> (message: string, ok: bool) {
+infomsg_text_get :: proc(infomsg: InfoMsg) -> (text: string, ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^InfoMsgIF)(infomsg)->MessageGet(&bs)
+    hr := (^InfoMsgIF)(infomsg)->TextGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-infomsg_message_set :: proc(infomsg: InfoMsg, message: string) -> (ok: bool) {
+infomsg_text_set :: proc(infomsg: InfoMsg, text: string) -> (ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
-    bs := to_bstr(message)
+    bs := to_bstr(text)
     defer bstr_free(bs)
-    hr := (^InfoMsgIF)(infomsg)->MessagePut(bs)
+    hr := (^InfoMsgIF)(infomsg)->TextPut(bs)
     if com_failed(hr) do return
 
     return true
@@ -552,7 +582,7 @@ infomsg_posinfo_set :: proc(infomsg: InfoMsg, posinfo: PosInfo) -> (ok: bool) {
     return true
 }
 
-infomsg_extra_info_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: bool) {
+infomsg_extrainfo_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
@@ -562,7 +592,7 @@ infomsg_extra_info_get :: proc(infomsg: InfoMsg) -> (extra_info: ExtraInfo, ok: 
     return extra_info, true
 }
 
-infomsg_extra_info_set :: proc(infomsg: InfoMsg, extra_info: ExtraInfo) -> (ok: bool) {
+infomsg_extrainfo_set :: proc(infomsg: InfoMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if infomsg == nil do return
     if !com_connected() do return
 
@@ -585,32 +615,32 @@ FindMsgIF :: struct #raw_union {
 
 FindMsgVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    MessageGet: proc "system" (this: ^FindMsgIF, Message: ^BStr) -> HResult,
-    MessagePut: proc "system" (this: ^FindMsgIF, Message: BStr) -> HResult,
+    TextGet:    proc "system" (this: ^FindMsgIF, Text: ^BStr) -> HResult,
+    TextPut:    proc "system" (this: ^FindMsgIF, Text: BStr) -> HResult,
     PosInfoGet: proc "system" (this: ^FindMsgIF, PosInfo: ^rawptr) -> HResult,
     Missing10:  proc "system" (this: ^FindMsgIF) -> HResult,
     PosInfoPut: proc "system" (this: ^FindMsgIF, PosInfo: rawptr) -> HResult,
 }
 
-findmsg_message_get :: proc(findmsg: FindMsg) -> (message: string, ok: bool) {
+findmsg_text_get :: proc(findmsg: FindMsg) -> (text: string, ok: bool) {
     if findmsg == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^FindMsgIF)(findmsg)->MessageGet(&bs)
+    hr := (^FindMsgIF)(findmsg)->TextGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-findmsg_message_set :: proc(findmsg: FindMsg, message: string) -> (ok: bool) {
+findmsg_text_set :: proc(findmsg: FindMsg, text: string) -> (ok: bool) {
     if findmsg == nil do return
     if !com_connected() do return
 
-    bs := to_bstr(message)
+    bs := to_bstr(text)
     defer bstr_free(bs)
-    hr := (^FindMsgIF)(findmsg)->MessagePut(bs)
+    hr := (^FindMsgIF)(findmsg)->TextPut(bs)
     if com_failed(hr) do return
 
     return true
@@ -651,8 +681,8 @@ ErrorMsgVTable :: struct {
     using iunknownvtable: IUnknownVTable,
     ErrorNoGet:   proc "system" (this: ^ErrorMsgIF, ErrorNo: ^i32) -> HResult,
     ErrorNoPut:   proc "system" (this: ^ErrorMsgIF, ErrorNo: i32) -> HResult,
-    MessageGet:   proc "system" (this: ^ErrorMsgIF, Message: ^BStr) -> HResult,
-    MessagePut:   proc "system" (this: ^ErrorMsgIF, Message: BStr) -> HResult,
+    TextGet:      proc "system" (this: ^ErrorMsgIF, Text: ^BStr) -> HResult,
+    TextPut:      proc "system" (this: ^ErrorMsgIF, Text: BStr) -> HResult,
     PosInfoGet:   proc "system" (this: ^ErrorMsgIF, PosInfo: ^rawptr) -> HResult,
     Missing12:    proc "system" (this: ^ErrorMsgIF) -> HResult,
     PosInfoPut:   proc "system" (this: ^ErrorMsgIF, PosInfo: rawptr) -> HResult,
@@ -681,25 +711,25 @@ errormsg_error_number_set :: proc(errormsg: ErrorMsg, error_no: i32) -> (ok: boo
     return true
 }
 
-errormsg_message_get :: proc(errormsg: ErrorMsg) -> (message: string, ok: bool) {
+errormsg_text_get :: proc(errormsg: ErrorMsg) -> (text: string, ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^ErrorMsgIF)(errormsg)->MessageGet(&bs)
+    hr := (^ErrorMsgIF)(errormsg)->TextGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-errormsg_message_set :: proc(errormsg: ErrorMsg, message: string) -> (ok: bool) {
+errormsg_text_set :: proc(errormsg: ErrorMsg, text: string) -> (ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
-    bs := to_bstr(message)
+    bs := to_bstr(text)
     defer bstr_free(bs)
-    hr := (^ErrorMsgIF)(errormsg)->MessagePut(bs)
+    hr := (^ErrorMsgIF)(errormsg)->TextPut(bs)
     if com_failed(hr) do return
 
     return true
@@ -725,7 +755,7 @@ errormsg_posinfo_set :: proc(errormsg: ErrorMsg, posinfo: PosInfo) -> (ok: bool)
     return true
 }
 
-errormsg_extra_info_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, ok: bool) {
+errormsg_extrainfo_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
@@ -735,7 +765,7 @@ errormsg_extra_info_get :: proc(errormsg: ErrorMsg) -> (extra_info: ExtraInfo, o
     return extra_info, true
 }
 
-errormsg_extra_info_set :: proc(errormsg: ErrorMsg, extra_info: ExtraInfo) -> (ok: bool) {
+errormsg_extrainfo_set :: proc(errormsg: ErrorMsg, extra_info: ExtraInfo) -> (ok: bool) {
     if errormsg == nil do return
     if !com_connected() do return
 
