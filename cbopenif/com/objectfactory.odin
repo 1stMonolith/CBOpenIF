@@ -44,9 +44,9 @@ ObjectFactoryVTable :: struct {
     NewSingleControlModuleType:         proc "system" (this: ^ObjectFactoryIF, Name, Description: BStr, SingleControlModuleType: ^rawptr) -> HResult,
     NewSingleControlModuleType1:        proc "system" (this: ^ObjectFactoryIF, Name, Description, InteractionWindow: BStr, AlarmOwner: VariantBool, Guid: BStr, GraphSize: rawptr, SingleControlModuleType: ^rawptr) -> HResult,
     DeserializeSingleControlModuleType: proc "system" (this: ^ObjectFactoryIF, XMLStr: ^BStr, SingleControlModuleType: ^rawptr) -> HResult,
-    DeserializeSingleControlModuleInst: proc "system" (this: ^ObjectFactoryIF, XMLStr: ^BStr, SingleControlModuleInst: ^rawptr) -> HResult,
-    NewSingleControlModuleInst:         proc "system" (this: ^ObjectFactoryIF, Name: BStr, SingleControlModuleInst: ^rawptr) -> HResult,
-    NewSingleControlModuleInst1:        proc "system" (this: ^ObjectFactoryIF, Name, Task: BStr, VisibilityInGraphics: i32, Guid, InstGuide: BStr, GraphPos: rawptr, SingleControlModuleInst: ^rawptr) -> HResult,
+    DeserializeSingleControlModule: proc "system" (this: ^ObjectFactoryIF, XMLStr: ^BStr, SingleControlModule: ^rawptr) -> HResult,
+    NewSingleControlModule:         proc "system" (this: ^ObjectFactoryIF, Name: BStr, SingleControlModule: ^rawptr) -> HResult,
+    NewSingleControlModule1:        proc "system" (this: ^ObjectFactoryIF, Name, Task: BStr, VisibilityInGraphics: i32, Guid, InstGuide: BStr, GraphPos: rawptr, SingleControlModule: ^rawptr) -> HResult,
     DeserializeTask:                    proc "system" (this: ^ObjectFactoryIF, XMLStr: ^BStr, Task: ^rawptr) -> HResult,
     NewTask:                            proc "system" (this: ^ObjectFactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: i32, Task: ^rawptr) -> HResult,
     NewTask1:                           proc "system" (this: ^ObjectFactoryIF, Name: BStr, IntervalTime: i32, TaskPriority: i32, Offset: i32, OutputUpdate: i32, Task: ^rawptr) -> HResult,
@@ -318,26 +318,15 @@ controlmodules_deserialize :: proc(xml: string) -> (controlmodules: ControlModul
     return controlmodules, true
 }
 
-singlecontrolmoduletype_deserialize :: proc(xml: string) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
+singlecontrolmodule_deserialize :: proc(xml: string) -> (singlecontrolmodule: SingleControlModule, ok: bool) {
     if !com_connected() do return
     
     bstr_xml := to_bstr(xml)
     defer bstr_free(bstr_xml)
-    hr := objectfactory->DeserializeSingleControlModuleType(&bstr_xml, cast(^rawptr)&singlecontrolmoduletype)
+    hr := objectfactory->DeserializeSingleControlModule(&bstr_xml, cast(^rawptr)&singlecontrolmodule)
     if com_failed(hr) do return
     
-    return singlecontrolmoduletype, true
-}
-
-singlecontrolmoduleinst_deserialize :: proc(xml: string) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
-    if !com_connected() do return
-    
-    bstr_xml := to_bstr(xml)
-    defer bstr_free(bstr_xml)
-    hr := objectfactory->DeserializeSingleControlModuleInst(&bstr_xml, cast(^rawptr)&singlecontrolmoduleinst)
-    if com_failed(hr) do return
-    
-    return singlecontrolmoduleinst, true
+    return singlecontrolmodule, true
 }
 
 task_deserialize :: proc(xml: string) -> (task: Task, ok: bool) {
@@ -731,52 +720,18 @@ controlmodules_new :: proc() -> (controlmodules: ControlModules, ok: bool) {
     return controlmodules, true
 }
 
-singlecontrolmoduletype_new :: proc(name, description: string) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
-    if !com_connected() do return
-    
-    bstr_name        := to_bstr(name)
-    bstr_description := to_bstr(description)
-    defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_description)
-    }
-    hr := objectfactory->NewSingleControlModuleType(bstr_name, bstr_description, cast(^rawptr)&singlecontrolmoduletype)
-    if com_failed(hr) do return
-    
-    return singlecontrolmoduletype, true
-}
-
-singlecontrolmoduletype_new1 :: proc(name, description, interaction_window: string, alarm_owner: bool, type_guid: string, graph_size: GraphSize) -> (singlecontrolmoduletype: SingleControlModuleType, ok: bool) {
-    if !com_connected() do return
-    
-    bstr_name        := to_bstr(name)
-    bstr_description := to_bstr(description)
-    bstr_iw          := to_bstr(interaction_window)
-    bstr_guid        := to_bstr(type_guid)
-    defer {
-        bstr_free(bstr_name)
-        bstr_free(bstr_description)
-        bstr_free(bstr_iw)
-        bstr_free(bstr_guid)
-    }
-    hr := objectfactory->NewSingleControlModuleType1(bstr_name, bstr_description, bstr_iw, to_variantbool(alarm_owner), bstr_guid, graph_size, cast(^rawptr)&singlecontrolmoduletype)
-    if com_failed(hr) do return
-    
-    return singlecontrolmoduletype, true
-}
-
-singlecontrolmoduleinst_new :: proc(name: string) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
+singlecontrolmodule_new :: proc(name: string) -> (singlecontrolmodule: SingleControlModule, ok: bool) {
     if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := objectfactory->NewSingleControlModuleInst(bstr_name, cast(^rawptr)&singlecontrolmoduleinst)
+    hr := objectfactory->NewSingleControlModule(bstr_name, cast(^rawptr)&singlecontrolmodule)
     if com_failed(hr) do return
     
-    return singlecontrolmoduleinst, true
+    return singlecontrolmodule, true
 }
 
-singlecontrolmoduleinst_new1 :: proc(name, task: string, visibility: i32, type_guid, inst_guid: string, graph_pos: GraphPos) -> (singlecontrolmoduleinst: SingleControlModuleInst, ok: bool) {
+singlecontrolmodule_new1 :: proc(name, task: string, visibility: i32, type_guid, inst_guid: string, graph_pos: GraphPos) -> (singlecontrolmodule: SingleControlModule, ok: bool) {
     if !com_connected() do return
     
     bstr_name := to_bstr(name)
@@ -789,10 +744,10 @@ singlecontrolmoduleinst_new1 :: proc(name, task: string, visibility: i32, type_g
         bstr_free(bstr_tg)
         bstr_free(bstr_ig)
     }
-    hr := objectfactory->NewSingleControlModuleInst1(bstr_name, bstr_task, visibility, bstr_tg, bstr_ig, graph_pos, cast(^rawptr)&singlecontrolmoduleinst)
+    hr := objectfactory->NewSingleControlModule1(bstr_name, bstr_task, visibility, bstr_tg, bstr_ig, graph_pos, cast(^rawptr)&singlecontrolmodule)
     if com_failed(hr) do return
     
-    return singlecontrolmoduleinst, true
+    return singlecontrolmodule, true
 }
 
 task_new :: proc(name: string, interval_time: i32, priority: t.TaskPriority) -> (task: Task, ok: bool) {

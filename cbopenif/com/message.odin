@@ -10,16 +10,11 @@ FindMsg    :: distinct rawptr
 ErrorMsg   :: distinct rawptr
 ExtraInfo  :: distinct rawptr
 
-MsgUnion :: union {
+Msg :: union {
     ErrorMsg,
     WarningMsg,
     InfoMsg,
     FindMsg,
-}
-
-Msg :: struct {
-    kind: t.MessageKind,
-    msg:  MsgUnion,
 }
 
 IID_ErrorMsg   :: GUID{0xAA7D0C85, 0xEB7F, 0x4859, {0xAB, 0xE8, 0xE7, 0xE9, 0x45, 0x41, 0x93, 0x0B}}
@@ -133,7 +128,7 @@ imsg_release :: proc(imsg: IMsg) {
     }
 }
 
-from_imsg :: proc(imsg: IMsg) -> (message: Msg, ok: bool) {
+from_imsg :: proc(imsg: IMsg) -> (msg: Msg, ok: bool) {
     if imsg == nil do return
     
     is: bool
@@ -142,43 +137,35 @@ from_imsg :: proc(imsg: IMsg) -> (message: Msg, ok: bool) {
     if ok && is {
         e, okas := imsg_as_error(imsg)
         if !okas do return
-        message.kind = .Error
-        message.msg = e
-        return message, true
+        return e, true
     }
 
     is, ok = imsg_is_warning(imsg)
     if ok && is {
         w, okas := imsg_as_warning(imsg)
         if !okas do return
-        message.kind = .Warning
-        message.msg = w
-        return message, true
+        return w, true
     }
 
     is, ok = imsg_is_info(imsg)
     if ok && is {
         i, okas := imsg_as_info(imsg)
         if !okas do return
-        message.kind = .Info
-        message.msg = i
-        return message, true
+        return i, true
     }
 
     is, ok = imsg_is_find(imsg)
     if ok && is {
         f, okas := imsg_as_find(imsg)
         if !okas do return
-        message.kind = .Find
-        message.msg = f
-        return message, true
+        return f, true
     }
 
     return {}, false
 }
 
-message_text_get :: proc(message: Msg) -> (text: string, ok: bool) {
-    switch m in message.msg {
+message_text_get :: proc(msg: Msg) -> (text: string, ok: bool) {
+    switch m in msg {
         case ErrorMsg:   return errormsg_text_get(m)
         case WarningMsg: return warningmsg_text_get(m)
         case InfoMsg:    return infomsg_text_get(m)
@@ -187,8 +174,8 @@ message_text_get :: proc(message: Msg) -> (text: string, ok: bool) {
     return
 }
 
-message_text_set :: proc(message: Msg, text: string) -> (ok: bool) {
-    switch m in message.msg {
+message_text_set :: proc(msg: Msg, text: string) -> (ok: bool) {
+    switch m in msg {
         case ErrorMsg:   return errormsg_text_set(m, text)
         case WarningMsg: return warningmsg_text_set(m, text)
         case InfoMsg:    return infomsg_text_set(m, text)
@@ -197,8 +184,8 @@ message_text_set :: proc(message: Msg, text: string) -> (ok: bool) {
     return
 }
 
-message_posinfo_get :: proc(message: Msg) -> (posinfo: PosInfo, ok: bool) {
-    switch m in message.msg {
+message_posinfo_get :: proc(msg: Msg) -> (posinfo: PosInfo, ok: bool) {
+    switch m in msg {
         case ErrorMsg:   return errormsg_posinfo_get(m)
         case WarningMsg: return warningmsg_posinfo_get(m)
         case InfoMsg:    return infomsg_posinfo_get(m)
@@ -207,8 +194,8 @@ message_posinfo_get :: proc(message: Msg) -> (posinfo: PosInfo, ok: bool) {
     return
 }
 
-message_release :: proc(message: Msg) {
-    switch m in message.msg {
+message_release :: proc(msg: Msg) {
+    switch m in msg {
         case ErrorMsg:   errormsg_release(m)
         case WarningMsg: warningmsg_release(m)
         case InfoMsg:    infomsg_release(m)
@@ -216,56 +203,58 @@ message_release :: proc(message: Msg) {
     }
 }
 
-message_from_com :: proc(message: Msg, allocator := context.allocator) -> (result: t.Message, ok: bool) {
+message_from_com :: proc(msg: Msg, allocator := context.allocator) -> (result: t.Message, ok: bool) {
     context.allocator = allocator
-    result.kind = message.kind
 
-    result.text, ok = message_text(message)
+    result.text, ok = message_text(msg)
     if !ok do return
 
     pi: PosInfo
-    pi, ok = posinfo(message)
+    pi, ok = posinfo(msg)
     if !ok do return
     defer release(pi)
     result.pos_info, ok = posinfo_from_com(pi)
     if !ok do return
 
-    switch m in message.msg {
-    case ErrorMsg:
-        result.error_number, ok = error_number(m)
-        if !ok do return
-        
-        ei: ExtraInfo
-        ei, ok = extrainfo(m)
-        if !ok do return
-        defer release(ei)
-        
-        result.extra_info, ok = extrainfo_from_com(ei)
-        if !ok do return
+    switch m in msg {
+        case ErrorMsg:
+            result.kind = .Error
+            result.error_number, ok = error_number(m)
+            if !ok do return
+            
+            ei: ExtraInfo
+            ei, ok = extrainfo(m)
+            if !ok do return
+            defer release(ei)
+            
+            result.extra_info, ok = extrainfo_from_com(ei)
+            if !ok do return
 
-    case WarningMsg:
-        result.warning_number, ok = warning_number(m)
-        if !ok do return
-        
-        ei: ExtraInfo
-        ei, ok = extrainfo(m)
-        if !ok do return
-        defer release(ei)
-        
-        result.extra_info, ok = extrainfo_from_com(ei)
-        if !ok do return
+        case WarningMsg:
+            result.kind = .Warning
+            result.warning_number, ok = warning_number(m)
+            if !ok do return
+            
+            ei: ExtraInfo
+            ei, ok = extrainfo(m)
+            if !ok do return
+            defer release(ei)
+            
+            result.extra_info, ok = extrainfo_from_com(ei)
+            if !ok do return
 
-    case InfoMsg:
-        ei: ExtraInfo
-        ei, ok = extrainfo(m)
-        if !ok do return
-        defer release(ei)
-        
-        result.extra_info, ok = extrainfo_from_com(ei)
-        if !ok do return
+        case InfoMsg:
+            result.kind = .Info
+            ei: ExtraInfo
+            ei, ok = extrainfo(m)
+            if !ok do return
+            defer release(ei)
+            
+            result.extra_info, ok = extrainfo_from_com(ei)
+            if !ok do return
 
-    case FindMsg:
-        // nothing extra
+        case FindMsg:
+            result.kind = .Find
     }
 
     return result, true

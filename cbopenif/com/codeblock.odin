@@ -11,18 +11,13 @@ ILCodeBlock  :: distinct rawptr
 FDCodeBlock  :: distinct rawptr
 FBDCodeBlock :: distinct rawptr
 
-CodeBlockUnion :: union {
+CodeBlock :: union {
     STCodeBlock,
     SFCCodeBlock,
     FBDCodeBlock,
     LDCodeBlock,
     ILCodeBlock,
     FDCodeBlock,
-}
-
-CodeBlock :: struct {
-    kind: t.CodeBlockKind,
-    block: CodeBlockUnion,
 }
 
 IID_STCodeBlock  :: GUID{0x79C9A3E8, 0x451D, 0x4EE8, {0xB9, 0xFF, 0xA4, 0x1A, 0xA9, 0x02, 0x4B, 0x65}}
@@ -190,139 +185,137 @@ from_icodeblock :: proc(icodeblock: ICodeBlock) -> (codeblock: CodeBlock, ok: bo
     if ok && is {
         st, okas := icodeblock_as_st(icodeblock)
         if !okas do return
-        codeblock.kind = .ST
-        codeblock.block = st
-        return codeblock, true 
+        return st, true 
     }
 
     is, ok = icodeblock_is_sfc(icodeblock)
     if ok && is {
         sfc, okas := icodeblock_as_sfc(icodeblock)
         if !okas do return
-        codeblock.kind = .SFC
-        codeblock.block = sfc
-        return codeblock, true 
+        return sfc, true 
     }
 
     is, ok = icodeblock_is_fbd(icodeblock)
     if ok && is {
         fbd, okas := icodeblock_as_fbd(icodeblock)
         if !okas do return
-        codeblock.kind = .FBD
-        codeblock.block = fbd
-        return codeblock, true 
+        return fbd, true 
     }
 
     is, ok = icodeblock_is_ld(icodeblock)
     if ok && is {
         ld, okas := icodeblock_as_ld(icodeblock)
         if !okas do return
-        codeblock.kind = .LD
-        codeblock.block = ld
-        return codeblock, true 
+        return ld, true 
     }
 
     is, ok = icodeblock_is_il(icodeblock)
     if ok && is {
         il, okas := icodeblock_as_il(icodeblock)
         if !okas do return
-        codeblock.kind = .IL
-        codeblock.block = il
-        return codeblock, true 
+        return il, true 
     }
 
     is, ok = icodeblock_is_fd(icodeblock)
     if ok && is {
         fd, okas := icodeblock_as_fd(icodeblock)
         if !okas do return
-        codeblock.kind = .FD
-        codeblock.block = fd
-        return codeblock, true 
+        return fd, true 
     }
 
     return {}, false
 }
 
 codeblock_name_get :: proc(codeblock: CodeBlock) -> (name: string, ok: bool) {
-    switch block in codeblock.block {
-        case STCodeBlock:  return stcodeblock_name_get(block)
-        case SFCCodeBlock: return sfccodeblock_name_get(block)
-        case FBDCodeBlock: return fbdcodeblock_name_get(block)
-        case LDCodeBlock:  return ldcodeblock_name_get(block)
-        case ILCodeBlock:  return ilcodeblock_name_get(block)
-        case FDCodeBlock:  return fdcodeblock_name_get(block)
+    switch cb in codeblock {
+        case STCodeBlock:  return stcodeblock_name_get(cb)
+        case SFCCodeBlock: return sfccodeblock_name_get(cb)
+        case FBDCodeBlock: return fbdcodeblock_name_get(cb)
+        case LDCodeBlock:  return ldcodeblock_name_get(cb)
+        case ILCodeBlock:  return ilcodeblock_name_get(cb)
+        case FDCodeBlock:  return fdcodeblock_name_get(cb)
     }
     return
 }
 
 codeblock_name_set :: proc(codeblock: CodeBlock, name: string) -> (ok: bool) {
-    switch block in codeblock.block {
-        case STCodeBlock:  return stcodeblock_name_set(block, name)
-        case SFCCodeBlock: return sfccodeblock_name_set(block, name)
-        case FBDCodeBlock: return fbdcodeblock_name_set(block, name)
-        case LDCodeBlock:  return ldcodeblock_name_set(block, name)
-        case ILCodeBlock:  return ilcodeblock_name_set(block, name)
-        case FDCodeBlock:  return fdcodeblock_name_set(block, name)
+    switch cb in codeblock {
+        case STCodeBlock:  return stcodeblock_name_set(cb, name)
+        case SFCCodeBlock: return sfccodeblock_name_set(cb, name)
+        case FBDCodeBlock: return fbdcodeblock_name_set(cb, name)
+        case LDCodeBlock:  return ldcodeblock_name_set(cb, name)
+        case ILCodeBlock:  return ilcodeblock_name_set(cb, name)
+        case FDCodeBlock:  return fdcodeblock_name_set(cb, name)
     }
     return
 }
 
 codeblock_release :: proc(codeblock: CodeBlock) {
-    switch block in codeblock.block {
-        case STCodeBlock:  stcodeblock_release(block)
-        case SFCCodeBlock: sfccodeblock_release(block)
-        case FBDCodeBlock: fbdcodeblock_release(block)
-        case LDCodeBlock:  ldcodeblock_release(block)
-        case ILCodeBlock:  ilcodeblock_release(block)
-        case FDCodeBlock:  fdcodeblock_release(block)
+    switch cb in codeblock {
+        case STCodeBlock:  stcodeblock_release(cb)
+        case SFCCodeBlock: sfccodeblock_release(cb)
+        case FBDCodeBlock: fbdcodeblock_release(cb)
+        case LDCodeBlock:  ldcodeblock_release(cb)
+        case ILCodeBlock:  ilcodeblock_release(cb)
+        case FDCodeBlock:  fdcodeblock_release(cb)
     }
 }
 
 codeblock_serialize :: proc(codeblock: CodeBlock) -> (xml: string, ok: bool) {
-    switch block in codeblock.block {
-        case STCodeBlock:  return stcodeblock_serialize(block)
-        case SFCCodeBlock: return sfccodeblock_serialize(block)
-        case FBDCodeBlock: return fbdcodeblock_serialize(block)
-        case LDCodeBlock:  return ldcodeblock_serialize(block)
-        case ILCodeBlock:  return ilcodeblock_serialize(block)
-        case FDCodeBlock:  return fdcodeblock_serialize(block)
+    switch cb in codeblock {
+        case STCodeBlock:  return stcodeblock_serialize(cb)
+        case SFCCodeBlock: return sfccodeblock_serialize(cb)
+        case FBDCodeBlock: return fbdcodeblock_serialize(cb)
+        case LDCodeBlock:  return ldcodeblock_serialize(cb)
+        case ILCodeBlock:  return ilcodeblock_serialize(cb)
+        case FDCodeBlock:  return fdcodeblock_serialize(cb)
     }
     return
 }
 
 codeblock_stcode_get :: proc(codeblock: CodeBlock) -> (stcode: string, ok: bool) {
-    #partial switch block in codeblock.block {
-        case STCodeBlock:  return stcodeblock_stcode_get(block)
-        case FBDCodeBlock: return fbdcodeblock_stcode_get(block)
-        case LDCodeBlock:  return ldcodeblock_stcode_get(block)
+    #partial switch cb in codeblock {
+        case STCodeBlock:  return stcodeblock_stcode_get(cb)
+        case FBDCodeBlock: return fbdcodeblock_stcode_get(cb)
+        case LDCodeBlock:  return ldcodeblock_stcode_get(cb)
     }
     return
 }
 
 codeblock_stcode_set :: proc(codeblock: CodeBlock, stcode: string) -> (ok: bool) {
-    #partial switch block in codeblock.block {
-        case STCodeBlock:  return stcodeblock_stcode_set(block, stcode)
-        case FBDCodeBlock: return fbdcodeblock_stcode_set(block, stcode)
-        case LDCodeBlock:  return ldcodeblock_stcode_set(block, stcode)
+    #partial switch cb in codeblock {
+        case STCodeBlock:  return stcodeblock_stcode_set(cb, stcode)
+        case FBDCodeBlock: return fbdcodeblock_stcode_set(cb, stcode)
+        case LDCodeBlock:  return ldcodeblock_stcode_set(cb, stcode)
     }
     return
 }
 
-codeblock_from_com :: proc(cb: CodeBlock, allocator := context.allocator) -> (result: t.CodeBlock, ok: bool) {
+codeblock_from_com :: proc(codeblock: CodeBlock, allocator := context.allocator) -> (result: t.CodeBlock, ok: bool) {
     context.allocator = allocator
 
-    result.name, ok = name(cb)
+    result.name, ok = name(codeblock)
     if !ok do return
 
-    result.kind = cb.kind
-
-    #partial switch cb.kind {
-        case .ST, .FBD, .LD:
+    switch cb in codeblock {
+        case STCodeBlock:
+            result.kind = .ST
             result.stcode, ok = stcode(cb)
             if !ok do return
-        case .SFC, .IL, .FD:
-            // TODO
-            return
+        case FBDCodeBlock:
+            result.kind = .FBD
+            result.stcode, ok = stcode(cb)
+            if !ok do return
+        case LDCodeBlock:
+            result.kind = .LD
+            result.stcode, ok = stcode(cb)
+            if !ok do return
+        case SFCCodeBlock:
+            return // TODO
+        case ILCodeBlock:
+            return // TODO
+        case FDCodeBlock:
+            return // TODO
     }
 
     return result, true
@@ -330,27 +323,29 @@ codeblock_from_com :: proc(cb: CodeBlock, allocator := context.allocator) -> (re
 
 codeblock_to_com :: proc(src: t.CodeBlock) -> (result: CodeBlock, ok: bool) {
     cb: CodeBlock
-    cb.kind = src.kind
 
-    #partial switch src.kind {
+    switch src.kind {
         case .ST:
             block: STCodeBlock
             block, ok = stcodeblock_new1(src.name, src.stcode)
             if !ok do return
-            cb.block = block
+            block = block
         case .FBD:
             block: FBDCodeBlock
             block, ok = fbdcodeblock_new1(src.name, src.stcode)
             if !ok do return
-            cb.block = block
+            block = block
         case .LD:
             block: LDCodeBlock
             block, ok = ldcodeblock_new1(src.name, src.stcode)
             if !ok do return
-            cb.block = block
-        case .SFC, .IL, .FD:
-            // TODO
-            return
+            block = block
+        case .SFC:
+            return // TODO
+        case .IL:
+            return // TODO
+        case .FD:
+            return // TODO
     }
 
     return cb, true
@@ -387,7 +382,7 @@ CodeBlocksVTable :: struct {
     AddFDCodeBlock:   proc "system" (this: ^CodeBlocksIF, FDCodeBlock: rawptr) -> HResult,
 }
 
-codeblocks_codeblock_add :: proc(codeblocks: CodeBlocks, codeblock: CodeBlockUnion) -> (ok: bool) {
+codeblocks_codeblock_add :: proc(codeblocks: CodeBlocks, codeblock: CodeBlock) -> (ok: bool) {
     if codeblocks == nil do return
     if codeblock == nil do return
     if !com_connected() do return
@@ -515,7 +510,7 @@ codeblocks_to_com :: proc(cbs: CodeBlocks, src: []t.CodeBlock) -> (ok: bool) {
         if !ok do return
         defer codeblock_release(cb)
 
-        ok = codeblock_add(cbs, cb.block)
+        ok = codeblock_add(cbs, cb)
         if !ok do return
     }
     return true

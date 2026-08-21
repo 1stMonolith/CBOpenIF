@@ -2,16 +2,23 @@ package com
 
 import t "../types"
 
-IControlModule          :: distinct rawptr
-ControlModule           :: distinct rawptr
-ControlModules          :: distinct rawptr
-ControlModuleType       :: distinct rawptr
-SingleControlModuleType :: distinct rawptr
-SingleControlModuleInst :: distinct rawptr
-CMConnection            :: distinct rawptr
-CMConnections           :: distinct rawptr
-CMParameter             :: distinct rawptr
-CMParameters            :: distinct rawptr
+IControlModule      :: distinct rawptr
+ControlModule       :: distinct rawptr
+ControlModules      :: distinct rawptr
+ControlModuleType   :: distinct rawptr
+SingleControlModule :: distinct rawptr
+CMConnection        :: distinct rawptr
+CMConnections       :: distinct rawptr
+CMParameter         :: distinct rawptr
+CMParameters        :: distinct rawptr
+
+Module :: union {
+    ControlModule,
+    SingleControlModule,
+}
+
+IID_ControlModule       :: GUID{0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
+IID_SingleControlModule :: GUID{0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}}
 
 IControlModuleIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
@@ -22,8 +29,8 @@ IControlModuleVTable :: struct {
     using iunknownvtable: IUnknownVTable,
     NameGet:               proc "system" (this: ^IControlModuleIF, Name: ^BStr) -> HResult,
     NamePut:               proc "system" (this: ^IControlModuleIF, Name: BStr) -> HResult,
-    IsControlModule:       proc "system" (this: ^IControlModuleIF, IsControlModule: ^VariantBool) -> HResult,
-    IsSingleControlModule: proc "system" (this: ^IControlModuleIF, IsSingleControlModule: ^VariantBool) -> HResult,
+    IsControlModule:       proc "system" (this: ^IControlModuleIF, Is: ^VariantBool) -> HResult,
+    IsSingleControlModule: proc "system" (this: ^IControlModuleIF, Is: ^VariantBool) -> HResult,
 }
 
 icontrolmodule_name_get :: proc(icontrolmodule: IControlModule) -> (name: string, ok: bool) {
@@ -50,7 +57,7 @@ icontrolmodule_name_set :: proc(icontrolmodule: IControlModule, name: string) ->
     return true
 }
 
-icontrolmodule_is_controlmodule :: proc(icontrolmodule: IControlModule) -> (is_controlmodule: bool, ok: bool) {
+icontrolmodule_is_controlmodule :: proc(icontrolmodule: IControlModule) -> (is: bool, ok: bool) {
     if icontrolmodule == nil do return
     if !com_connected() do return
     
@@ -61,7 +68,15 @@ icontrolmodule_is_controlmodule :: proc(icontrolmodule: IControlModule) -> (is_c
     return from_variantbool(vb), true
 }
 
-icontrolmodule_is_singlecontrolmodule :: proc(icontrolmodule: IControlModule) -> (is_singlecontrolmodule: bool, ok: bool) {
+icontrolmodule_as_controlmodule :: proc(icm: IControlModule) -> (cm: ControlModule, ok: bool) {
+    if icm == nil do return
+    IID := IID_ControlModule
+    hr := (^IUnknownIF)(icm)->QueryInterface(&IID, cast(^rawptr)&cm)
+    if com_failed(hr) do return
+    return cm, true
+}
+
+icontrolmodule_is_singlecontrolmodule :: proc(icontrolmodule: IControlModule) -> (is: bool, ok: bool) {
     if icontrolmodule == nil do return
     if !com_connected() do return
     
@@ -70,6 +85,73 @@ icontrolmodule_is_singlecontrolmodule :: proc(icontrolmodule: IControlModule) ->
     if com_failed(hr) do return
 
     return from_variantbool(vb), true
+}
+
+icontrolmodule_as_single :: proc(icm: IControlModule) -> (inst: SingleControlModule, ok: bool) {
+    if icm == nil do return
+    IID := IID_SingleControlModule
+    hr := (^IUnknownIF)(icm)->QueryInterface(&IID, cast(^rawptr)&inst)
+    if com_failed(hr) do return
+    return inst, true
+}
+
+icontrolmodule_release :: proc(icm: IControlModule) {
+    if icm != nil {
+        (^IControlModuleIF)(icm)->Release()
+    }
+}
+
+from_icontrolmodule :: proc(icm: IControlModule) -> (module: Module, ok: bool) {
+    if icm == nil do return
+
+    is: bool
+
+    is, ok = icontrolmodule_is_controlmodule(icm)
+    if ok && is {
+        cm, okas := icontrolmodule_as_controlmodule(icm)
+        if !okas do return
+        return cm, true
+    }
+
+    is, ok = icontrolmodule_is_singlecontrolmodule(icm)
+    if ok && is {
+        scm, okas := icontrolmodule_as_single(icm)
+        if !okas do return
+        return scm, true
+    }
+
+    return {}, false
+}
+
+module_name_get :: proc(module: Module) -> (name: string, ok: bool) {
+    switch m in module {
+    case ControlModule:       return controlmodule_name_get(m)
+    case SingleControlModule: return singlecontrolmodule_name_get(m)
+    }
+    return
+}
+
+module_name_set :: proc(module: Module, name: string) -> (ok: bool) {
+    switch m in module {
+    case ControlModule:       return controlmodule_name_set(m, name)
+    case SingleControlModule: return singlecontrolmodule_name_set(m, name)
+    }
+    return
+}
+
+module_release :: proc(module: Module) {
+    switch m in module {
+    case ControlModule:       controlmodule_release(m)
+    case SingleControlModule: singlecontrolmodule_release(m)
+    }
+}
+
+module_serialize :: proc(module: Module) -> (xml: string, ok: bool) {
+    switch m in module {
+    case ControlModule:       return controlmodule_serialize(m)
+    case SingleControlModule: return singlecontrolmodule_serialize(m)
+    }
+    return
 }
 
 ControlModuleIF :: struct #raw_union {
@@ -204,7 +286,7 @@ controlmodule_visibility_in_graphics_get :: proc(controlmodule: ControlModule) -
     if !com_connected() do return
     
     vb: VariantBool
-    hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentGet(&vb)
+    hr := (^ControlModuleIF)(controlmodule)->VisibilityinGraphicsGet(&vb)
     if com_failed(hr) do return
 
     return from_variantbool(vb), true
@@ -215,7 +297,7 @@ controlmodule_visibility_in_graphics_set :: proc(controlmodule: ControlModule, v
     if !com_connected() do return
     
     vb := to_variantbool(visibility_in_graphics)
-    hr := (^ControlModuleIF)(controlmodule)->ExposePropertiesinParentPut(vb)
+    hr := (^ControlModuleIF)(controlmodule)->VisibilityinGraphicsPut(vb)
     if com_failed(hr) do return
 
     return true
@@ -269,7 +351,7 @@ controlmodule_description_set :: proc(controlmodule: ControlModule, description:
     return true
 }
 
-controlmodule_cmconnections_get :: proc(controlmodule: ControlModule) -> (cmconnections: Parameters, ok: bool) {
+controlmodule_cmconnections_get :: proc(controlmodule: ControlModule) -> (cmconnections: CMConnections, ok: bool) {
     if controlmodule == nil do return
     if !com_connected() do return
     
@@ -277,10 +359,10 @@ controlmodule_cmconnections_get :: proc(controlmodule: ControlModule) -> (cmconn
     hr := (^ControlModuleIF)(controlmodule)->CMConnectionsGet(&p)
     if com_failed(hr) do return
 
-    return Parameters(p), true
+    return CMConnections(p), true
 }
 
-controlmodule_cmconnections_set :: proc(controlmodule: ControlModule, cmconnections: Parameters) -> (ok: bool) {
+controlmodule_cmconnections_set :: proc(controlmodule: ControlModule, cmconnections: CMConnections) -> (ok: bool) {
     if controlmodule == nil do return
     if !com_connected() do return
     
@@ -456,6 +538,102 @@ controlmodule_release :: proc(controlmodule: ControlModule) {
     }
 }
 
+controlmodule_from_com :: proc(cm: ControlModule, allocator := context.allocator) -> (result: t.ControlModule, ok: bool) {
+    if cm == nil do return
+    context.allocator = allocator
+
+    result.name, ok = name(cm)
+    if !ok do return
+    result.type_name, ok = type_name(cm)
+    if !ok do return
+    result.description, ok = description(cm)
+    if !ok do return
+    result.access_level, ok = access_level(cm)
+    if !ok do return
+    result.safety_type, ok = safety_type(cm)
+    if !ok do return
+    result.aspect_object, ok = aspect_object(cm)
+    if !ok do return
+    result.expose_properties_in_parent, ok = expose_properties_in_parent(cm)
+    if !ok do return
+    result.task_connection, ok = task_connection(cm)
+    if !ok do return
+    result.instance_graphics, ok = instance_graphics(cm)
+    if !ok do return
+    result.visibility_in_graphics, ok = controlmodule_visibility_in_graphics_get(cm)
+    if !ok do return
+    result.type_guid, ok = type_guid(cm)
+    if !ok do return
+    result.type_path, ok = type_path(cm)
+    if !ok do return
+
+    {
+        gp: GraphPos
+        gp, ok = graphpos(cm)
+        if !ok do return
+        defer release(gp)
+        result.graph_pos, ok = graphpos_from_com(gp)
+        if !ok do return
+    }
+    {
+        c: CMConnections
+        c, ok = cmconnections(cm)
+        if !ok do return
+        defer release(c)
+        result.cm_connections, ok = cmconnections_from_com(c)
+        if !ok do return
+    }
+
+    return result, true
+}
+
+controlmodule_to_com :: proc(src: t.ControlModule) -> (result: ControlModule, ok: bool) {
+    gp: GraphPos
+    gp, ok = graphpos_to_com(src.graph_pos)
+    if !ok do return
+    defer release(gp)
+
+    vis: i32 = 1 if src.visibility_in_graphics else 0  // after types → bool
+
+    cm: ControlModule
+    cm, ok = controlmodule_new1(
+        src.name,
+        src.type_name,
+        src.task_connection,
+        vis,
+        src.guid,
+        src.description,
+        gp,
+    )
+    if !ok do return
+    defer if !ok do release(cm)
+
+    ok = access_level(cm, src.access_level)
+    if !ok do return
+    ok = safety_type(cm, src.safety_type)
+    if !ok do return
+    ok = aspect_object(cm, src.aspect_object)
+    if !ok do return
+    ok = expose_properties_in_parent(cm, src.expose_properties_in_parent)
+    if !ok do return
+    ok = instance_graphics(cm, src.instance_graphics)
+    if !ok do return
+    ok = controlmodule_visibility_in_graphics_set(cm, src.visibility_in_graphics)
+    if !ok do return
+    // type_guid / type_path read-only
+
+    {
+        c: CMConnections
+        c, ok = cmconnections(cm)
+        if !ok do return
+        defer release(c)
+        ok = cmconnections_to_com(c, src.cm_connections[:])
+        if !ok do return
+    }
+
+    return cm, true
+}
+
 ControlModulesIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ControlModulesVTable,
@@ -468,8 +646,8 @@ ControlModulesVTable :: struct {
     AddBefore:                   proc "system" (this: ^ControlModulesIF, IControlModule: rawptr, Index: i32) -> HResult,
     AddControlModule:            proc "system" (this: ^ControlModulesIF, Name, TypeName: BStr, ControlModule: ^rawptr) -> HResult,
     AddControlModule1:           proc "system" (this: ^ControlModulesIF, Name, TypeName, TaskConnection: BStr, VisibilityInGraphics: i32, Guid, Description: BStr, ControlModules: ^rawptr) -> HResult,
-    AddSingleControlModuleInst:  proc "system" (this: ^ControlModulesIF, Name: BStr, SingleControlModuleInst: ^rawptr) -> HResult,
-    AddSingleControlModuleInst1: proc "system" (this: ^ControlModulesIF, Name, TaskConnection: BStr, VisibilityInGraphics: i32, TypeGuid, InstGuid: BStr, GraphPos: ^GraphPos, SingleControlModuleInst: ^rawptr) -> HResult,
+    AddSingleControlModule:  proc "system" (this: ^ControlModulesIF, Name: BStr, SingleControlModule: ^rawptr) -> HResult,
+    AddSingleControlModule1: proc "system" (this: ^ControlModulesIF, Name, TaskConnection: BStr, VisibilityInGraphics: i32, TypeGuid, InstGuid: BStr, GraphPos: ^GraphPos, SingleControlModule: ^rawptr) -> HResult,
     Find:                        proc "system" (this: ^ControlModulesIF, Name: BStr, IControlModule: ^rawptr) -> HResult,
     FindNr:                      proc "system" (this: ^ControlModulesIF, Name: BStr, Index: ^i32) -> HResult,
     Item:                        proc "system" (this: ^ControlModulesIF, Index: i32, IControlModule: ^rawptr) -> HResult,
@@ -489,29 +667,7 @@ controlmodules_serialize :: proc(controlmodules: ControlModules) -> (xml: string
     return from_bstr(bs), true
 }
 
-controlmodules_icontrolmodule_add :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule) -> (ok: bool) {
-    if controlmodules == nil do return
-    if icontrolmodule == nil do return
-    if !com_connected() do return
-
-    hr := (^ExternalVariablesIF)(controlmodules)->Add(icontrolmodule)
-    if com_failed(hr) do return
-
-    return true
-}
-
-controlmodules_icontrolmodule_add_at_index :: proc(controlmodules: ControlModules, icontrolmodule: IControlModule, index: i32) -> (ok: bool) {
-    if controlmodules == nil do return
-    if icontrolmodule == nil do return
-    if !com_connected() do return
-    
-    hr := (^ExternalVariablesIF)(controlmodules)->AddBefore(icontrolmodule, index)
-    if com_failed(hr) do return
-
-    return true
-}
-
-controlmodules_controlmodule_add :: proc(controlmodules: ControlModules, name, type_name: string, controlmodule: ControlModule) -> (ok: bool) {
+controlmodules_controlmodule_add :: proc(controlmodules: ControlModules, name, type_name: string) -> (controlmodule: ControlModule, ok: bool) {
     if controlmodules == nil do return
     if controlmodule == nil do return
     if !com_connected() do return
@@ -522,45 +678,48 @@ controlmodules_controlmodule_add :: proc(controlmodules: ControlModules, name, t
         bstr_free(bstr_name)
         bstr_free(bstr_type_name)
     }
-    hr := (^ControlModulesIF)(controlmodules)->AddControlModule(bstr_name, bstr_type_name, cast(^rawptr)controlmodule)
+    hr := (^ControlModulesIF)(controlmodules)->AddControlModule(bstr_name, bstr_type_name, cast(^rawptr)&controlmodule)
     if com_failed(hr) do return
 
-    return true
+    return controlmodule, true
 }
 
-controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, name: string, singlecontrolmoduleinst: SingleControlModuleInst) -> (ok: bool) {
-    if controlmodules == nil do return
-    if singlecontrolmoduleinst == nil do return
-    if !com_connected() do return
-    
-    bstr_name := to_bstr(name)
-    defer bstr_free(bstr_name)
-    hr := (^ControlModulesIF)(controlmodules)->AddSingleControlModuleInst(bstr_name, cast(^rawptr)singlecontrolmoduleinst)
-    if com_failed(hr) do return
-
-    return true
-}
-
-controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, name: string) -> (icontrolmodule: IControlModule, ok: bool) {
+controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, name: string) -> (singlecontrolmodule: SingleControlModule, ok: bool) {
     if controlmodules == nil do return
     if !com_connected() do return
     
     bstr_name := to_bstr(name)
     defer bstr_free(bstr_name)
-    hr := (^ControlModulesIF)(controlmodules)->Find(bstr_name, cast(^rawptr)&icontrolmodule)
+    hr := (^ControlModulesIF)(controlmodules)->AddSingleControlModule(bstr_name, cast(^rawptr)&singlecontrolmodule)
     if com_failed(hr) do return
-    
-    return icontrolmodule, true
+
+    return singlecontrolmodule, true
 }
 
-controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (icontrolmodule: IControlModule, ok: bool) {
+controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, name: string) -> (module: Module, ok: bool) {
     if controlmodules == nil do return
     if !com_connected() do return
     
-    hr := (^ControlModulesIF)(controlmodules)->Item(index + 1, cast(^rawptr)&icontrolmodule)
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    i: IControlModule
+    hr := (^ControlModulesIF)(controlmodules)->Find(bstr_name, cast(^rawptr)&i)
     if com_failed(hr) do return
+    defer release(i)
     
-    return icontrolmodule, true
+    return from_icontrolmodule(i)
+}
+
+controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (module: Module, ok: bool) {
+    if controlmodules == nil do return
+    if !com_connected() do return
+    
+    i: IControlModule
+    hr := (^ControlModulesIF)(controlmodules)->Item(index + 1, cast(^rawptr)&i)
+    if com_failed(hr) do return
+    defer release(i)
+    
+    return from_icontrolmodule(i)
 }
 
 controlmodules_controlmodule_index :: proc(controlmodules: ControlModules, name: string) -> (index: i32, ok: bool) {
@@ -612,6 +771,66 @@ controlmodules_release :: proc(controlmodules: ControlModules) {
     if controlmodules != nil {
         (^ControlModulesIF)(controlmodules)->Release()
     }
+}
+
+controlmodules_from_com :: proc(cms: ControlModules, allocator := context.allocator) -> (dcms: [dynamic]t.ControlModule, dscms: [dynamic]t.SingleControlModule, ok: bool) {
+    if cms == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = controlmodule_count(cms)
+    if !ok do return
+
+    dcms = make([dynamic]t.ControlModule, 0, int(count), allocator)
+    dscms = make([dynamic]t.SingleControlModule, 0, int(count), allocator)
+    for i in 0..<count {
+        module: Module
+        module, ok = controlmodule_by_index(cms, i)
+        if !ok do return
+        defer release(module)
+
+        switch m in module {
+            case ControlModule:
+                cms: t.ControlModule
+                cms, ok = controlmodule_from_com(m)
+                if !ok do return
+                append(&dcms, cms)
+
+            case SingleControlModule:
+                scms: t.SingleControlModule
+                scms, ok = singlecontrolmodule_from_com(m)
+                if !ok do return
+                append(&dscms, scms)
+        }
+    }
+
+    return dcms, dscms, true
+}
+
+controlmodules_to_com :: proc(cms: ControlModules, dcms: []t.ControlModule, dscms: []t.SingleControlModule) -> (ok: bool) {
+    if cms == nil do return
+
+    for m in dcms {
+        cm: ControlModule
+        cm, ok = controlmodule_to_com(m)
+        if !ok do return
+        defer release(cm)
+
+        ok = controlmodule_add(cms, cm)
+        if !ok do return
+    }
+
+    for m in dscms {
+        scm: SingleControlModule
+        scm, ok = singlecontrolmodule_to_com(m)
+        if !ok do return
+        defer release(scm)
+
+        ok = controlmodule_add(cms, scm)
+        if !ok do return
+    }
+
+    return true
 }
 
 ControlModuleTypeIF :: struct #raw_union {
@@ -1202,860 +1421,588 @@ controlmoduletype_release :: proc(controlmoduletype: ControlModuleType) {
     }
 }
 
-SingleControlModuleTypeIF :: struct #raw_union {
-    #subtype iunknownif: IUnknownIF,
-    using vtable: ^SingleControlModuleTypeVTable,
-}
-
-SingleControlModuleTypeVTable :: struct {
-    using iunknownvtable: IUnknownVTable,
-    NameGet:               proc "system" (this: ^SingleControlModuleTypeIF, name: ^BStr) -> HResult,
-    NamePut:               proc "system" (this: ^SingleControlModuleTypeIF, name: BStr) -> HResult,
-    InteractionWindowGet:  proc "system" (this: ^SingleControlModuleTypeIF, InteractionWindow: ^BStr) -> HResult,
-    InteractionWindowPut:  proc "system" (this: ^SingleControlModuleTypeIF, InteractionWindow: BStr) -> HResult,
-    AlarmOwnerGet:         proc "system" (this: ^SingleControlModuleTypeIF, AlarmOwner: ^VariantBool) -> HResult,
-    AlarmOwnerPut:         proc "system" (this: ^SingleControlModuleTypeIF, AlarmOwner: VariantBool) -> HResult,
-    TypeGuidGet:           proc "system" (this: ^SingleControlModuleTypeIF, TypeGuid: ^BStr) -> HResult,
-    TypeGuidPut:           proc "system" (this: ^SingleControlModuleTypeIF, TypeGuid: BStr) -> HResult,
-    BatchObjectGet:        proc "system" (this: ^SingleControlModuleTypeIF, BatchObject: ^BStr) -> HResult,
-    BatchObjectPut:        proc "system" (this: ^SingleControlModuleTypeIF, BatchObject: BStr) -> HResult,
-    SILLevelGet:           proc "system" (this: ^SingleControlModuleTypeIF, SILLevel: ^BStr) -> HResult,
-    SILLevelPut:           proc "system" (this: ^SingleControlModuleTypeIF, SILLevel: BStr) -> HResult,
-    SimulationMarkGet:     proc "system" (this: ^SingleControlModuleTypeIF, SimulationMark: ^VariantBool) -> HResult,
-    SimulationMarkPut:     proc "system" (this: ^SingleControlModuleTypeIF, SimulationMark: VariantBool) -> HResult,
-    ReservedByFunctionGet: proc "system" (this: ^SingleControlModuleTypeIF, ReservedByFunction: ^BStr) -> HResult,
-    ReservedByFunctionPut: proc "system" (this: ^SingleControlModuleTypeIF, ReservedByFunction: BStr) -> HResult,
-    DescriptionGet:        proc "system" (this: ^SingleControlModuleTypeIF, Description: ^BStr) -> HResult,
-    DescriptionPut:        proc "system" (this: ^SingleControlModuleTypeIF, Description: BStr) -> HResult,
-    CMTypeGraphicsGet:     proc "system" (this: ^SingleControlModuleTypeIF, CMTypeGraphics: ^BStr) -> HResult,
-    CMTypeGraphicsPut:     proc "system" (this: ^SingleControlModuleTypeIF, CMTypeGraphics: BStr) -> HResult,
-    CMParametersGet:       proc "system" (this: ^SingleControlModuleTypeIF, CMParameters: ^rawptr) -> HResult,
-    Missing28:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    CMParametersPut:       proc "system" (this: ^SingleControlModuleTypeIF, CMParameters: rawptr) -> HResult,
-    VariablesGet:          proc "system" (this: ^SingleControlModuleTypeIF, Variables: ^rawptr) -> HResult,
-    Missing31:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    VariablesPut:          proc "system" (this: ^SingleControlModuleTypeIF, Variables: rawptr) -> HResult,
-    ExternalVariablesGet:  proc "system" (this: ^SingleControlModuleTypeIF, ExternalVariables: ^rawptr) -> HResult,
-    Missing34:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    ExternalVariablesPut:  proc "system" (this: ^SingleControlModuleTypeIF, ExternalVariables: rawptr) -> HResult,
-    FunctionBlocksGet:     proc "system" (this: ^SingleControlModuleTypeIF, FunctionBlocks: ^rawptr) -> HResult,
-    Missing37:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    FunctionBlocksPut:     proc "system" (this: ^SingleControlModuleTypeIF, FunctionBlocks: rawptr) -> HResult,
-    ControlModulesGet:     proc "system" (this: ^SingleControlModuleTypeIF, ControlModules: ^rawptr) -> HResult,
-    Missing40:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    ControlModulesPut:     proc "system" (this: ^SingleControlModuleTypeIF, ControlModules: rawptr) -> HResult,
-    CodeBlocksGet:         proc "system" (this: ^SingleControlModuleTypeIF, CodeBlocks: ^rawptr) -> HResult,
-    Missing43:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    CodeBlocksPut:         proc "system" (this: ^SingleControlModuleTypeIF, CodeBlocks: rawptr) -> HResult,
-    GraphSizeGet:          proc "system" (this: ^SingleControlModuleTypeIF, GraphSize: ^rawptr) -> HResult,
-    Missing46:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    GraphSizePut:          proc "system" (this: ^SingleControlModuleTypeIF, GraphSize: rawptr) -> HResult,
-    Serialize:             proc "system" (this: ^SingleControlModuleTypeIF, XML: ^BStr) -> HResult,
-    RestrictedSILGet:      proc "system" (this: ^SingleControlModuleTypeIF, RestrictedSIL: ^VariantBool) -> HResult,
-    RestrictedSILPut:      proc "system" (this: ^SingleControlModuleTypeIF, RestrictedSIL: VariantBool) -> HResult,
-    CommVariablesGet:      proc "system" (this: ^SingleControlModuleTypeIF, CommVariables: ^rawptr) -> HResult,
-    Missing52:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    CommVariablesPut:      proc "system" (this: ^SingleControlModuleTypeIF, CommVariables: rawptr) -> HResult,
-    InitValuesGet:         proc "system" (this: ^SingleControlModuleTypeIF, InitValues: ^rawptr) -> HResult,
-    Missing55:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    InitValuesPut:         proc "system" (this: ^SingleControlModuleTypeIF, InitValues: rawptr) -> HResult,
-    SignalsGet:            proc "system" (this: ^SingleControlModuleTypeIF, Signals: ^rawptr) -> HResult,
-    Missing58:             proc "system" (this: ^SingleControlModuleTypeIF) -> HResult,
-    SignalsPut:            proc "system" (this: ^SingleControlModuleTypeIF, Signals: rawptr) -> HResult,
-}
-
-singlecontrolmoduletype_serialize :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (xml: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->Serialize(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_name_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (name: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->NameGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_name_set :: proc(singlecontrolmoduletype: SingleControlModuleType, name: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(name)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->NamePut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_interaction_window_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (interaction_window: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InteractionWindowGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_interaction_window_set :: proc(singlecontrolmoduletype: SingleControlModuleType, interaction_window: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(interaction_window)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InteractionWindowPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_alarm_owner_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (alarm_owner: bool, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    vb: VariantBool
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->AlarmOwnerGet(&vb)
-    if com_failed(hr) do return
-
-    return from_variantbool(vb), true
-}
-
-singlecontrolmoduletype_alarm_owner_set :: proc(singlecontrolmoduletype: SingleControlModuleType, alarm_owner: bool) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->AlarmOwnerPut(to_variantbool(alarm_owner))
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_type_guid_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (type_guid: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->TypeGuidGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_type_guid_set :: proc(singlecontrolmoduletype: SingleControlModuleType, type_guid: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(type_guid)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->TypeGuidPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_batch_object_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (batch_object: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->BatchObjectGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_batch_object_set :: proc(singlecontrolmoduletype: SingleControlModuleType, batch_object: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(batch_object)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->BatchObjectPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_sil_level_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (sil_level: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SILLevelGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_sil_level_set :: proc(singlecontrolmoduletype: SingleControlModuleType, sil_level: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(sil_level)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SILLevelPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_simulation_mark_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (simulation_mark: bool, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    vb: VariantBool
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SimulationMarkGet(&vb)
-    if com_failed(hr) do return
-
-    return from_variantbool(vb), true
-}
-
-singlecontrolmoduletype_simulation_mark_set :: proc(singlecontrolmoduletype: SingleControlModuleType, simulation_mark: bool) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SimulationMarkPut(to_variantbool(simulation_mark))
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_reserved_by_function_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (reserved_by_function: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ReservedByFunctionGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_reserved_by_function_set :: proc(singlecontrolmoduletype: SingleControlModuleType, reserved_by_function: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(reserved_by_function)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ReservedByFunctionPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_description_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (description: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->DescriptionGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_description_set :: proc(singlecontrolmoduletype: SingleControlModuleType, description: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(description)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->DescriptionPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_cmgraphics_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (cmgraphics: string, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMTypeGraphicsGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-singlecontrolmoduletype_cmgraphics_set :: proc(singlecontrolmoduletype: SingleControlModuleType, cmgraphics: string) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    bs := to_bstr(cmgraphics)
-    defer bstr_free(bs)
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMTypeGraphicsPut(bs)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_cmparameters_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (cmparameters: CMParameters, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMParametersGet(&p)
-    if com_failed(hr) do return
-
-    return CMParameters(p), true
-}
-
-singlecontrolmoduletype_cmparameters_set :: proc(singlecontrolmoduletype: SingleControlModuleType, cmparameters: CMParameters) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CMParametersPut(cmparameters)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_variables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (variables: Variables, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->VariablesGet(&p)
-    if com_failed(hr) do return
-
-    return Variables(p), true
-}
-
-singlecontrolmoduletype_variables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, variables: Variables) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->VariablesPut(variables)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_externalvariables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (externalvariables: ExternalVariables, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ExternalVariablesGet(&p)
-    if com_failed(hr) do return
-
-    return ExternalVariables(p), true
-}
-
-singlecontrolmoduletype_externalvariables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, externalvariables: ExternalVariables) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ExternalVariablesPut(externalvariables)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_functionblocks_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (functionblocks: FunctionBlocks, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->FunctionBlocksGet(&p)
-    if com_failed(hr) do return
-
-    return FunctionBlocks(p), true
-}
-
-singlecontrolmoduletype_functionblocks_set :: proc(singlecontrolmoduletype: SingleControlModuleType, functionblocks: FunctionBlocks) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->FunctionBlocksPut(functionblocks)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_controlmodules_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (controlmodules: ControlModules, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ControlModulesGet(&p)
-    if com_failed(hr) do return
-
-    return ControlModules(p), true
-}
-
-singlecontrolmoduletype_controlmodules_set :: proc(singlecontrolmoduletype: SingleControlModuleType, controlmodules: ControlModules) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->ControlModulesPut(controlmodules)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_codeblocks_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (codeblocks: CodeBlocks, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CodeBlocksGet(&p)
-    if com_failed(hr) do return
-
-    return CodeBlocks(p), true
-}
-
-singlecontrolmoduletype_codeblocks_set :: proc(singlecontrolmoduletype: SingleControlModuleType, codeblocks: CodeBlocks) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CodeBlocksPut(codeblocks)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_graphsize_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (graphsize: GraphSize, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->GraphSizeGet(&p)
-    if com_failed(hr) do return
-
-    return GraphSize(p), true
-}
-
-singlecontrolmoduletype_graphsize_set :: proc(singlecontrolmoduletype: SingleControlModuleType, graphsize: GraphSize) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->GraphSizePut(graphsize)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_restricted_sil_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (restricted_sil: bool, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    vb: VariantBool
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->RestrictedSILGet(&vb)
-    if com_failed(hr) do return
-
-    return from_variantbool(vb), true
-}
-
-singlecontrolmoduletype_restricted_sil_set :: proc(singlecontrolmoduletype: SingleControlModuleType, restricted_sil: bool) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->RestrictedSILPut(to_variantbool(restricted_sil))
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_commvariables_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (commvariables: CommVariables, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CommVariablesGet(&p)
-    if com_failed(hr) do return
-
-    return CommVariables(p), true
-}
-
-singlecontrolmoduletype_commvariables_set :: proc(singlecontrolmoduletype: SingleControlModuleType, commvariables: CommVariables) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->CommVariablesPut(commvariables)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_initvalues_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (initvalues: InitValues, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InitValuesGet(&p)
-    if com_failed(hr) do return
-
-    return InitValues(p), true
-}
-
-singlecontrolmoduletype_initvalues_set :: proc(singlecontrolmoduletype: SingleControlModuleType, initvalues: InitValues) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->InitValuesPut(initvalues)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_signals_get :: proc(singlecontrolmoduletype: SingleControlModuleType) -> (signals: Signals, ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    p: rawptr
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SignalsGet(&p)
-    if com_failed(hr) do return
-
-    return Signals(p), true
-}
-
-singlecontrolmoduletype_signals_set :: proc(singlecontrolmoduletype: SingleControlModuleType, signals: Signals) -> (ok: bool) {
-    if singlecontrolmoduletype == nil do return
-    if !com_connected() do return
-    
-    hr := (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->SignalsPut(signals)
-    if com_failed(hr) do return
-
-    return true
-}
-
-singlecontrolmoduletype_release :: proc(singlecontrolmoduletype: SingleControlModuleType) {
-    if singlecontrolmoduletype != nil {
-        (^SingleControlModuleTypeIF)(singlecontrolmoduletype)->Release()
+controlmoduletype_from_com :: proc(cmt: ControlModuleType, allocator := context.allocator) -> (result: t.ControlModuleType, ok: bool) {
+    if cmt == nil do return
+    context.allocator = allocator
+
+    result.name, ok = name(cmt)
+    if !ok do return
+    result.description, ok = description(cmt)
+    if !ok do return
+    result.protected, ok = protected(cmt)
+    if !ok do return
+    result.hidden, ok = hidden(cmt)
+    if !ok do return
+    result.scope, ok = scope(cmt)
+    if !ok do return
+    result.guid, ok = guid(cmt)
+    if !ok do return
+    result.reserved_by_function, ok = reserved_by_function(cmt)
+    if !ok do return
+    result.sil_level, ok = sil_level(cmt)
+    if !ok do return
+    result.restricted_sil, ok = restricted_sil(cmt)
+    if !ok do return
+    result.alarm_owner, ok = alarm_owner(cmt)
+    if !ok do return
+    result.batch_object, ok = controlmoduletype_batch_object_get(cmt)
+    if !ok do return
+    result.interaction_window, ok = interaction_window(cmt)
+    if !ok do return
+    result.instantiate_as_aspect_object, ok = instantiate_as_aspect_object(cmt)
+    if !ok do return
+    result.simulation_mark, ok = simulation_mark(cmt)
+    if !ok do return
+    result.embedded_graphics_visible, ok = controlmoduletype_embedded_graphiscs_visible_get(cmt)
+    if !ok do return
+    result.cm_graphics, ok = controlmoduletype_cmgraphics_get(cmt)
+    if !ok do return
+
+    {
+        gs: GraphSize
+        gs, ok = graphsize(cmt)
+        if !ok do return
+        defer release(gs)
+        result.graph_size, ok = graphsize_from_com(gs)
+        if !ok do return
     }
+    {
+        c: CMParameters
+        c, ok = cmparameters(cmt)
+        if !ok do return
+        defer release(c)
+        result.cm_parameters, ok = cmparameters_from_com(c)
+        if !ok do return
+    }
+    {
+        c: Variables
+        c, ok = variables(cmt)
+        if !ok do return
+        defer release(c)
+        result.variables, ok = variables_from_com(c)
+        if !ok do return
+    }
+    {
+        c: ExternalVariables
+        c, ok = externalvariables(cmt)
+        if !ok do return
+        defer release(c)
+        result.external_variables, ok = externalvariables_from_com(c)
+        if !ok do return
+    }
+    {
+        c: CodeBlocks
+        c, ok = codeblocks(cmt)
+        if !ok do return
+        defer release(c)
+        result.code_blocks, ok = codeblocks_from_com(c)
+        if !ok do return
+    }
+    {
+        c: FunctionBlocks
+        c, ok = functionblocks(cmt)
+        if !ok do return
+        defer release(c)
+        result.function_blocks, ok = functionblocks_from_com(c)
+        if !ok do return
+    }
+    {
+        c: ControlModules
+        c, ok = controlmodules(cmt)
+        if !ok do return
+        defer release(c)
+        result.control_modules, result.single_control_modules, ok = controlmodules_from_com(c)
+        if !ok do return
+    }
+
+    return result, true
 }
 
-SingleControlModuleInstIF :: struct #raw_union {
+controlmoduletype_to_com :: proc(src: t.ControlModuleType) -> (result: ControlModuleType, ok: bool) {
+    gs: GraphSize
+    gs, ok = graphsize_to_com(src.graph_size)
+    if !ok do return
+    defer release(gs)
+
+    cmt: ControlModuleType
+    cmt, ok = controlmoduletype_new1(
+        src.name,
+        src.description,
+        src.protected,
+        src.hidden,
+        src.scope,
+        src.interaction_window,
+        src.alarm_owner,
+        src.guid,
+        gs,
+    )
+    if !ok do return
+    defer if !ok do release(cmt)
+
+    ok = reserved_by_function(cmt, src.reserved_by_function)
+    if !ok do return
+    ok = sil_level(cmt, src.sil_level)
+    if !ok do return
+    ok = restricted_sil(cmt, src.restricted_sil)
+    if !ok do return
+    ok = controlmoduletype_batch_object_set(cmt, src.batch_object)
+    if !ok do return
+    ok = instantiate_as_aspect_object(cmt, src.instantiate_as_aspect_object)
+    if !ok do return
+    ok = simulation_mark(cmt, src.simulation_mark)
+    if !ok do return
+    ok = controlmoduletype_embedded_graphiscs_visible_set(cmt, src.embedded_graphics_visible)
+    if !ok do return
+    ok = controlmoduletype_cmgraphics_set(cmt, src.cm_graphics)
+    if !ok do return
+
+    {
+        c: CMParameters
+        c, ok = cmparameters(cmt)
+        if !ok do return
+        defer release(c)
+        ok = cmparameters_to_com(c, src.cm_parameters[:])
+        if !ok do return
+    }
+    {
+        c: Variables
+        c, ok = variables(cmt)
+        if !ok do return
+        defer release(c)
+        ok = variables_to_com(c, src.variables[:])
+        if !ok do return
+    }
+    {
+        c: ExternalVariables
+        c, ok = externalvariables(cmt)
+        if !ok do return
+        defer release(c)
+        ok = externalvariables_to_com(c, src.external_variables[:])
+        if !ok do return
+    }
+    {
+        c: CodeBlocks
+        c, ok = codeblocks(cmt)
+        if !ok do return
+        defer release(c)
+        ok = codeblocks_to_com(c, src.code_blocks[:])
+        if !ok do return
+    }
+    {
+        c: FunctionBlocks
+        c, ok = functionblocks(cmt)
+        if !ok do return
+        defer release(c)
+        ok = functionblocks_to_com(c, src.function_blocks[:])
+        if !ok do return
+    }
+    {
+        c: ControlModules
+        c, ok = controlmodules(cmt)
+        if !ok do return
+        defer release(c)
+        ok = controlmodules_to_com(c, src.control_modules[:], src.single_control_modules[:])
+        if !ok do return
+    }
+
+    return cmt, true
+}
+
+SingleControlModuleIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
-    using vtable: ^SingleControlModuleInstVTable,
+    using vtable: ^SingleControlModuleVTable,
 }
 
-SingleControlModuleInstVTable :: struct {
+SingleControlModuleVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    NameGet:                     proc "system" (this: ^SingleControlModuleInstIF, name: ^BStr) -> HResult,
-    NamePut:                     proc "system" (this: ^SingleControlModuleInstIF, name: BStr) -> HResult,
-    TaskConnectionGet:           proc "system" (this: ^SingleControlModuleInstIF, TaskConnection: ^BStr) -> HResult,
-    TaskConnectionPut:           proc "system" (this: ^SingleControlModuleInstIF, TaskConnection: BStr) -> HResult,
-    VisibilityinGraphicsGet:     proc "system" (this: ^SingleControlModuleInstIF, Visibility: ^VariantBool) -> HResult,
-    VisibilityinGraphicsPut:     proc "system" (this: ^SingleControlModuleInstIF, Visibility: VariantBool) -> HResult,
-    TypeGuidGet:                 proc "system" (this: ^SingleControlModuleInstIF, TypeGuid: ^BStr) -> HResult,
-    TypeGuidPut:                 proc "system" (this: ^SingleControlModuleInstIF, TypeGuid: BStr) -> HResult,
-    InstGuidGet:                 proc "system" (this: ^SingleControlModuleInstIF, InstGuid: ^BStr) -> HResult,
-    InstGuidPut:                 proc "system" (this: ^SingleControlModuleInstIF, InstGuid: BStr) -> HResult,
-    DescriptionGet:              proc "system" (this: ^SingleControlModuleInstIF, Description: ^BStr) -> HResult,
-    DescriptionPut:              proc "system" (this: ^SingleControlModuleInstIF, Description: BStr) -> HResult,
-    CMConnectionsGet:            proc "system" (this: ^SingleControlModuleInstIF, CMConnections: ^rawptr) -> HResult,
-    Missing20:                   proc "system" (this: ^SingleControlModuleInstIF) -> HResult,
-    CMConnectionsPut:            proc "system" (this: ^SingleControlModuleInstIF, CMConnections: rawptr) -> HResult,
-    GraphPosGet:                 proc "system" (this: ^SingleControlModuleInstIF, GraphPos: ^rawptr) -> HResult,
-    Missing23:                   proc "system" (this: ^SingleControlModuleInstIF) -> HResult,
-    GraphPosPut:                 proc "system" (this: ^SingleControlModuleInstIF, GraphPos: rawptr) -> HResult,
-    CMInstGraphicsGet:           proc "system" (this: ^SingleControlModuleInstIF, CMinstGraphics: ^BStr) -> HResult,
-    CMInstGraphicsPut:           proc "system" (this: ^SingleControlModuleInstIF, CMinstGraphics: BStr) -> HResult,
-    Missing27:                   proc "system" (this: ^SingleControlModuleInstIF) -> HResult,
-    Missing28:                   proc "system" (this: ^SingleControlModuleInstIF) -> HResult,
-    Missing29:                   proc "system" (this: ^SingleControlModuleInstIF) -> HResult,
-    Serialize:                   proc "system" (this: ^SingleControlModuleInstIF, XML: ^BStr) -> HResult,
-    AccessLevelGet:              proc "system" (this: ^SingleControlModuleInstIF, AccessLevel: ^BStr) -> HResult,
-    AccessLevelPut:              proc "system" (this: ^SingleControlModuleInstIF, AccessLevel: BStr) -> HResult,
-    SafetyTypeGet:               proc "system" (this: ^SingleControlModuleInstIF, X: ^BStr) -> HResult,
-    SafetyTypePut:               proc "system" (this: ^SingleControlModuleInstIF, X: BStr) -> HResult,
+    NameGet:                     proc "system" (this: ^SingleControlModuleIF, name: ^BStr) -> HResult,
+    NamePut:                     proc "system" (this: ^SingleControlModuleIF, name: BStr) -> HResult,
+    TaskConnectionGet:           proc "system" (this: ^SingleControlModuleIF, TaskConnection: ^BStr) -> HResult,
+    TaskConnectionPut:           proc "system" (this: ^SingleControlModuleIF, TaskConnection: BStr) -> HResult,
+    VisibilityinGraphicsGet:     proc "system" (this: ^SingleControlModuleIF, Visibility: ^VariantBool) -> HResult,
+    VisibilityinGraphicsPut:     proc "system" (this: ^SingleControlModuleIF, Visibility: VariantBool) -> HResult,
+    TypeGuidGet:                 proc "system" (this: ^SingleControlModuleIF, TypeGuid: ^BStr) -> HResult,
+    TypeGuidPut:                 proc "system" (this: ^SingleControlModuleIF, TypeGuid: BStr) -> HResult,
+    InstGuidGet:                 proc "system" (this: ^SingleControlModuleIF, InstGuid: ^BStr) -> HResult,
+    InstGuidPut:                 proc "system" (this: ^SingleControlModuleIF, InstGuid: BStr) -> HResult,
+    DescriptionGet:              proc "system" (this: ^SingleControlModuleIF, Description: ^BStr) -> HResult,
+    DescriptionPut:              proc "system" (this: ^SingleControlModuleIF, Description: BStr) -> HResult,
+    CMConnectionsGet:            proc "system" (this: ^SingleControlModuleIF, CMConnections: ^rawptr) -> HResult,
+    Missing20:                   proc "system" (this: ^SingleControlModuleIF) -> HResult,
+    CMConnectionsPut:            proc "system" (this: ^SingleControlModuleIF, CMConnections: rawptr) -> HResult,
+    GraphPosGet:                 proc "system" (this: ^SingleControlModuleIF, GraphPos: ^rawptr) -> HResult,
+    Missing23:                   proc "system" (this: ^SingleControlModuleIF) -> HResult,
+    GraphPosPut:                 proc "system" (this: ^SingleControlModuleIF, GraphPos: rawptr) -> HResult,
+    CMInstGraphicsGet:           proc "system" (this: ^SingleControlModuleIF, CMinstGraphics: ^BStr) -> HResult,
+    CMInstGraphicsPut:           proc "system" (this: ^SingleControlModuleIF, CMinstGraphics: BStr) -> HResult,
+    Missing27:                   proc "system" (this: ^SingleControlModuleIF) -> HResult,
+    Missing28:                   proc "system" (this: ^SingleControlModuleIF) -> HResult,
+    Missing29:                   proc "system" (this: ^SingleControlModuleIF) -> HResult,
+    Serialize:                   proc "system" (this: ^SingleControlModuleIF, XML: ^BStr) -> HResult,
+    AccessLevelGet:              proc "system" (this: ^SingleControlModuleIF, AccessLevel: ^BStr) -> HResult,
+    AccessLevelPut:              proc "system" (this: ^SingleControlModuleIF, AccessLevel: BStr) -> HResult,
+    SafetyTypeGet:               proc "system" (this: ^SingleControlModuleIF, X: ^BStr) -> HResult,
+    SafetyTypePut:               proc "system" (this: ^SingleControlModuleIF, X: BStr) -> HResult,
 }
 
-singlecontrolmoduleinst_serialize :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (xml: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_serialize :: proc(singlecontrolmodule: SingleControlModule) -> (xml: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->Serialize(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->Serialize(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_name_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (name: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_name_get :: proc(singlecontrolmodule: SingleControlModule) -> (name: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->NameGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->NameGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_name_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, name: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_name_set :: proc(singlecontrolmodule: SingleControlModule, name: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(name)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->NamePut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->NamePut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_task_connection_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (task_connection: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_task_connection_get :: proc(singlecontrolmodule: SingleControlModule) -> (task_connection: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->TaskConnectionGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->TaskConnectionGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_task_connection_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, task_connection: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_task_connection_set :: proc(singlecontrolmodule: SingleControlModule, task_connection: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(task_connection)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->TaskConnectionPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->TaskConnectionPut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_visibility_in_graphics_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (visibility_in_graphics: bool, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_visibility_in_graphics_get :: proc(singlecontrolmodule: SingleControlModule) -> (visibility_in_graphics: bool, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     vb: VariantBool
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsGet(&vb)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->VisibilityinGraphicsGet(&vb)
     if com_failed(hr) do return
 
     return from_variantbool(vb), true
 }
 
-singlecontrolmoduleinst_visibility_in_graphics_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, visibility_in_graphics: bool) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_visibility_in_graphics_set :: proc(singlecontrolmodule: SingleControlModule, visibility_in_graphics: bool) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     vb := to_variantbool(visibility_in_graphics)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->VisibilityinGraphicsPut(vb)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->VisibilityinGraphicsPut(vb)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_type_guid_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (type_guid: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_type_guid_get :: proc(singlecontrolmodule: SingleControlModule) -> (type_guid: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->TypeGuidGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->TypeGuidGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_type_guid_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, type_guid: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_type_guid_set :: proc(singlecontrolmodule: SingleControlModule, type_guid: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(type_guid)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->TypeGuidPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->TypeGuidPut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_inst_guid_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (inst_guid: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_inst_guid_get :: proc(singlecontrolmodule: SingleControlModule) -> (inst_guid: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->InstGuidGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->InstGuidGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_inst_guid_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, inst_guid: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_inst_guid_set :: proc(singlecontrolmodule: SingleControlModule, inst_guid: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(inst_guid)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->InstGuidPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->InstGuidPut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_description_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (description: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_description_get :: proc(singlecontrolmodule: SingleControlModule) -> (description: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->DescriptionGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->DescriptionGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_description_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, description: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_description_set :: proc(singlecontrolmodule: SingleControlModule, description: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs := to_bstr(description)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->DescriptionPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->DescriptionPut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_cmconnections_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (cmconnections: Parameters, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_cmconnections_get :: proc(singlecontrolmodule: SingleControlModule) -> (cmconnections: CMConnections, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     p: rawptr
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMConnectionsGet(&p)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->CMConnectionsGet(&p)
     if com_failed(hr) do return
 
-    return Parameters(p), true
+    return CMConnections(p), true
 }
 
-singlecontrolmoduleinst_cmconnections_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, cmconnections: Parameters) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_cmconnections_set :: proc(singlecontrolmodule: SingleControlModule, cmconnections: CMConnections) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMConnectionsPut(cmconnections)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->CMConnectionsPut(cmconnections)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_graphpos_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (graphpos: GraphPos, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_graphpos_get :: proc(singlecontrolmodule: SingleControlModule) -> (graphpos: GraphPos, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     p: rawptr
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->GraphPosGet(&p)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->GraphPosGet(&p)
     if com_failed(hr) do return
 
     return GraphPos(p), true
 }
 
-singlecontrolmoduleinst_graphpos_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, graphpos: GraphPos) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_graphpos_set :: proc(singlecontrolmodule: SingleControlModule, graphpos: GraphPos) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->GraphPosPut(graphpos)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->GraphPosPut(graphpos)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_instance_graphics_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (instance_graphics: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_instance_graphics_get :: proc(singlecontrolmodule: SingleControlModule) -> (instance_graphics: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMInstGraphicsGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->CMInstGraphicsGet(&bs)
     if com_failed(hr) do return
 
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_instance_graphics_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, instance_graphics: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_instance_graphics_set :: proc(singlecontrolmodule: SingleControlModule, instance_graphics: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
     
     bs := to_bstr(instance_graphics)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->CMInstGraphicsPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->CMInstGraphicsPut(bs)
     if com_failed(hr) do return
 
     return true
 }
 
-singlecontrolmoduleinst_access_level_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (access_level: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_access_level_get :: proc(singlecontrolmodule: SingleControlModule) -> (access_level: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->AccessLevelGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->AccessLevelGet(&bs)
     if com_failed(hr) do return
     
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_access_level_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, access_level: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_access_level_set :: proc(singlecontrolmodule: SingleControlModule, access_level: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(access_level)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->AccessLevelPut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->AccessLevelPut(bs)
     if com_failed(hr) do return
     
     return true
 }
 
-singlecontrolmoduleinst_safety_type_get :: proc(singlecontrolmoduleinst: SingleControlModuleInst) -> (safety_type: string, ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_safety_type_get :: proc(singlecontrolmodule: SingleControlModule) -> (safety_type: string, ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs: BStr
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->SafetyTypeGet(&bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->SafetyTypeGet(&bs)
     if com_failed(hr) do return
     
     return from_bstr(bs), true
 }
 
-singlecontrolmoduleinst_safety_type_set :: proc(singlecontrolmoduleinst: SingleControlModuleInst, safety_type: string) -> (ok: bool) {
-    if singlecontrolmoduleinst == nil do return
+singlecontrolmodule_safety_type_set :: proc(singlecontrolmodule: SingleControlModule, safety_type: string) -> (ok: bool) {
+    if singlecontrolmodule == nil do return
     if !com_connected() do return
 
     bs := to_bstr(safety_type)
     defer bstr_free(bs)
-    hr := (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->SafetyTypePut(bs)
+    hr := (^SingleControlModuleIF)(singlecontrolmodule)->SafetyTypePut(bs)
     if com_failed(hr) do return
     
     return true
 }
 
-singlecontrolmoduleinst_release :: proc(singlecontrolmoduleinst: SingleControlModuleInst) {
-    if singlecontrolmoduleinst != nil {
-        (^SingleControlModuleInstIF)(singlecontrolmoduleinst)->Release()
+singlecontrolmodule_release :: proc(singlecontrolmodule: SingleControlModule) {
+    if singlecontrolmodule != nil {
+        (^SingleControlModuleIF)(singlecontrolmodule)->Release()
     }
+}
+
+singlecontrolmodule_from_com :: proc(inst: SingleControlModule, allocator := context.allocator) -> (result: t.SingleControlModule, ok: bool) {
+    if inst == nil do return
+    context.allocator = allocator
+
+    result.name, ok = name(inst)
+    if !ok do return
+    result.description, ok = description(inst)
+    if !ok do return
+    result.access_level, ok = access_level(inst)
+    if !ok do return
+    result.safety_type, ok = safety_type(inst)
+    if !ok do return
+    result.task_connection, ok = task_connection(inst)
+    if !ok do return
+    result.instance_graphics, ok = instance_graphics(inst)
+    if !ok do return
+    result.visibility_in_graphics, ok = singlecontrolmodule_visibility_in_graphics_get(inst)
+    if !ok do return
+    result.inst_guid, ok = inst_guid(inst)
+    if !ok do return
+    result.type_guid, ok = type_guid(inst)
+    if !ok do return
+
+    {
+        gp: GraphPos
+        gp, ok = graphpos(inst)
+        if !ok do return
+        defer release(gp)
+        result.graph_pos, ok = graphpos_from_com(gp)
+        if !ok do return
+    }
+    {
+        c: CMConnections
+        c, ok = cmconnections(inst)
+        if !ok do return
+        defer release(c)
+        result.cm_connections, ok = cmconnections_from_com(c)
+        if !ok do return
+    }
+
+    return result, true
+}
+
+singlecontrolmodule_to_com :: proc(src: t.SingleControlModule) -> (result: SingleControlModule, ok: bool) {
+    gp: GraphPos
+    gp, ok = graphpos_to_com(src.graph_pos)
+    if !ok do return
+    defer release(gp)
+
+    vis: i32 = 1 if src.visibility_in_graphics else 0
+
+    inst: SingleControlModule
+    inst, ok = singlecontrolmodule_new1(
+        src.name,
+        src.task_connection,
+        vis,
+        src.type_guid,
+        src.inst_guid,
+        gp,
+    )
+    if !ok do return
+    defer if !ok do release(inst)
+
+    ok = description(inst, src.description)
+    if !ok do return
+    ok = access_level(inst, src.access_level)
+    if !ok do return
+    ok = safety_type(inst, src.safety_type)
+    if !ok do return
+    ok = instance_graphics(inst, src.instance_graphics)
+    if !ok do return
+    ok = singlecontrolmodule_visibility_in_graphics_set(inst, src.visibility_in_graphics)
+    if !ok do return
+
+    {
+        c: CMConnections
+        c, ok = cmconnections(inst)
+        if !ok do return
+        defer release(c)
+        ok = cmconnections_to_com(c, src.cm_connections[:])
+        if !ok do return
+    }
+
+    return inst, true
 }
 
 CMConnectionIF :: struct #raw_union {
@@ -2185,6 +2132,47 @@ cmconnection_release :: proc(cmconnection: CMConnection) {
     }
 }
 
+cmconnection_from_com :: proc(c: CMConnection, allocator := context.allocator) -> (result: t.CMConnection, ok: bool) {
+    if c == nil do return
+    context.allocator = allocator
+
+    result.name, ok = name(c)
+    if !ok do return
+    result.actual_parameter, ok = actual_parameter(c)
+    if !ok do return
+    result.graphical_connection, ok = graphical_connection(c)
+    if !ok do return
+
+    {
+        pts: Points
+        pts, ok = points(c)
+        if !ok do return
+        defer release(pts)
+        result.points, ok = points_from_com(pts)
+        if !ok do return
+    }
+
+    return result, true
+}
+
+cmconnection_to_com :: proc(src: t.CMConnection) -> (result: CMConnection, ok: bool) {
+    c: CMConnection
+    c, ok = cmconnection_new1(src.name, src.actual_parameter, src.graphical_connection)
+    if !ok do return
+    defer if !ok do release(c)
+
+    {
+        pts: Points
+        pts, ok = points(c)
+        if !ok do return
+        defer release(pts)
+        ok = points_to_com(pts, src.points[:])
+        if !ok do return
+    }
+
+    return c, true
+}
+
 CMConnectionsIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^CMConnectionsVTable,
@@ -2295,6 +2283,43 @@ cmconnections_release :: proc(cmconnections: CMConnections) {
     if cmconnections != nil {
         (^CMConnectionsIF)(cmconnections)->Release()
     }
+}
+
+cmconnections_from_com :: proc(conns: CMConnections, allocator := context.allocator) -> (result: [dynamic]t.CMConnection, ok: bool) {
+    if conns == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = cmconnection_count(conns)
+    if !ok do return
+
+    result = make([dynamic]t.CMConnection, 0, int(count), allocator)
+    for i in 0..<count {
+        c: CMConnection
+        c, ok = cmconnection_by_index(conns, i)
+        if !ok do return
+        defer release(c)
+
+        cs: t.CMConnection
+        cs, ok = cmconnection_from_com(c)
+        if !ok do return
+        append(&result, cs)
+    }
+    return result, true
+}
+
+cmconnections_to_com :: proc(conns: CMConnections, src: []t.CMConnection) -> (ok: bool) {
+    if conns == nil do return
+    for item in src {
+        c: CMConnection
+        c, ok = cmconnection_to_com(item)
+        if !ok do return
+        defer release(c)
+
+        ok = cmconnection_add(conns, c)
+        if !ok do return
+    }
+    return true
 }
 
 CMParameterIF :: struct #raw_union {
@@ -2709,6 +2734,104 @@ cmparameter_release :: proc(cmparameter: CMParameter) {
     }
 }
 
+cmparameter_from_com :: proc(p: CMParameter, allocator := context.allocator) -> (result: t.CMParameter, ok: bool) {
+    if p == nil do return
+    context.allocator = allocator
+
+    result.name, ok = name(p)
+    if !ok do return
+    result.type_name, ok = type_name(p)
+    if !ok do return
+    result.direction, ok = direction(p)
+    if !ok do return
+    result.initial_value, ok = initial_value(p)
+    if !ok do return
+    result.description, ok = description(p)
+    if !ok do return
+    result.read_permission, ok = read_permission(p)
+    if !ok do return
+    result.write_permission, ok = write_permission(p)
+    if !ok do return
+    result.authentication_level, ok = authentication_level(p)
+    if !ok do return
+    result.access_level, ok = access_level(p)
+    if !ok do return
+    result.safety_type, ok = safety_type(p)
+    if !ok do return
+    result.batch_property, ok = batch_property(p)
+    if !ok do return
+    result.fd_port, ok = fdport(p)
+    if !ok do return
+    result.type_guid, ok = type_guid(p)
+    if !ok do return
+    result.type_path, ok = type_path(p)
+    if !ok do return
+
+    {
+        ap: AutoPoint
+        ap, ok = autopoint(p)
+        if !ok do return
+        defer release(ap)
+        result.auto_point, ok = autopoint_from_com(ap)
+        if !ok do return
+    }
+    {
+        nodes: GraphNodes
+        nodes, ok = graphnodes(p)
+        if !ok do return
+        defer release(nodes)
+        result.graph_nodes, ok = graphnodes_from_com(nodes)
+        if !ok do return
+    }
+
+    return result, true
+}
+
+cmparameter_to_com :: proc(src: t.CMParameter) -> (result: CMParameter, ok: bool) {
+    ap: AutoPoint
+    ap, ok = autopoint_to_com(src.auto_point)
+    if !ok do return
+    defer release(ap)
+
+    p: CMParameter
+    p, ok = cmparameter_new1(
+        src.name,
+        src.type_name,
+        src.initial_value,
+        src.read_permission,
+        src.write_permission,
+        src.description,
+        ap,
+    )
+    if !ok do return
+    defer if !ok do release(p)
+
+    ok = direction(p, src.direction)
+    if !ok do return
+    ok = authentication_level(p, src.authentication_level)
+    if !ok do return
+    ok = access_level(p, src.access_level)
+    if !ok do return
+    ok = safety_type(p, src.safety_type)
+    if !ok do return
+    ok = batch_property(p, src.batch_property)
+    if !ok do return
+    ok = fdport(p, src.fd_port)
+    if !ok do return
+    // type_guid / type_path read-only
+
+    {
+        nodes: GraphNodes
+        nodes, ok = graphnodes(p)
+        if !ok do return
+        defer release(nodes)
+        ok = graphnodes_to_com(nodes, src.graph_nodes[:])
+        if !ok do return
+    }
+
+    return p, true
+}
+
 CMParametersIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^CMParametersVTable,
@@ -2820,4 +2943,41 @@ cmparameters_release :: proc(cmparameters: CMParameters) {
     if cmparameters != nil {
         (^CMParametersIF)(cmparameters)->Release()
     }
+}
+
+cmparameters_from_com :: proc(params: CMParameters, allocator := context.allocator) -> (result: [dynamic]t.CMParameter, ok: bool) {
+    if params == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = cmparameter_count(params)
+    if !ok do return
+
+    result = make([dynamic]t.CMParameter, 0, int(count), allocator)
+    for i in 0..<count {
+        p: CMParameter
+        p, ok = cmparameter_by_index(params, i)
+        if !ok do return
+        defer release(p)
+
+        ps: t.CMParameter
+        ps, ok = cmparameter_from_com(p)
+        if !ok do return
+        append(&result, ps)
+    }
+    return result, true
+}
+
+cmparameters_to_com :: proc(params: CMParameters, src: []t.CMParameter) -> (ok: bool) {
+    if params == nil do return
+    for item in src {
+        p: CMParameter
+        p, ok = cmparameter_to_com(item)
+        if !ok do return
+        defer release(p)
+
+        ok = cmparameter_add(params, p)
+        if !ok do return
+    }
+    return true
 }

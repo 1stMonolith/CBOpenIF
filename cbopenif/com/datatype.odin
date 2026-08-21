@@ -282,7 +282,7 @@ datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
     comps, ok = components(datatype)
     if !ok do return
     defer release(comps)
-    ok = components_to_com(comps, src.components[:][:])
+    ok = components_to_com(comps, src.components[:])
     if !ok do return
 
     return datatype, true
