@@ -486,13 +486,13 @@ error_number :: proc {
     errormsg_error_number_set,
 }
 
-extrainfo :: proc {
+extra_info :: proc {
     errormsg_extra_info_get,
     errormsg_extra_info_set,
-    infomsg_extra_info_get,
-    infomsg_extra_info_set,
     warningmsg_extra_info_get,
     warningmsg_extra_info_set,
+    infomsg_extra_info_get,
+    infomsg_extra_info_set,
 }
 
 expected_sil :: proc {
@@ -950,19 +950,6 @@ max :: proc {
     hwchannel_max_set,
 }
 
-message :: proc {
-    errormsg_message_get,
-    errormsg_message_set,
-    findmsg_message_get,
-    findmsg_message_set,
-    infomsg_message_get,
-    infomsg_message_set,
-    imessage_get,
-    imessage_set,
-    warningmsg_message_get,
-    warningmsg_message_set,
-}
-
 minor_version :: proc {
     connectedapplication_minor_version_get,
     connectedapplication_minor_version_set,
@@ -970,6 +957,17 @@ minor_version :: proc {
     connectedlibrary_minor_version_set,
     connectedhwlibrary_minor_version_get,
     connectedhwlibrary_minor_version_set,
+}
+
+message :: proc {
+    errormsg_message_get,
+    errormsg_message_set,
+    findmsg_message_get,
+    findmsg_message_set,
+    infomsg_message_get,
+    infomsg_message_set,
+    warningmsg_message_get,
+    warningmsg_message_set,
 }
 
 message_add :: messagebucket_message_add
@@ -1208,15 +1206,16 @@ points :: proc {
     cmconnection_points_set,
 }
 
-posinfo :: proc {
+pos_info :: proc {
+    message_posinfo_get,
     errormsg_posinfo_get,
     errormsg_posinfo_set,
-    findmsg_posinfo_get,
-    findmsg_posinfo_set,
-    infomsg_posinfo_get,
-    infomsg_posinfo_set,
     warningmsg_posinfo_get,
     warningmsg_posinfo_set,
+    infomsg_posinfo_get,
+    infomsg_posinfo_set,
+    findmsg_posinfo_get,
+    findmsg_posinfo_set,
 }
 
 pou_name :: proc {

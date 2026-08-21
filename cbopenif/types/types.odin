@@ -110,14 +110,6 @@ Message :: enum i32 {
     Other         = 14,
 }
 
-ExtraInfo :: struct {
-    jump_destination: string,
-    var_name:         string,
-    function_name:    string,
-    expected_type:    string,
-    traverse_no:      i32,
-}
-
 ParameterKind :: enum i32 {
     Parameter     = 0,
     Extensible    = 1,
@@ -196,36 +188,32 @@ PosInfo :: struct {
     message_type:  Message,
 }
 
-ErrorMsg :: struct {
-    error_number: i32,
-    message:      string,
-    extra_info:   string,
-    pos_info:     PosInfo,
+MessageKind :: enum {
+    Error,
+    Warning,
+    Info,
+    Find,
 }
 
-WarningMsg :: struct {
-    warning_number: i32,
-    message:        string,
-    extra_info:     string,
-    pos_info:       PosInfo,
+Msg :: struct {
+    kind:             MessageKind,
+    message:          string,
+    error_number:     i32,
+    warning_number:   i32,
+    pos_info:         PosInfo,
+    extra_info:       ExtraInfo,
 }
 
-InfoMsg :: struct {
-    message:    string,
-    extra_info: string,
-    pos_info:   PosInfo,
-}
-
-FindMsg :: struct {
-    message:  string,
-    pos_info: PosInfo,
+ExtraInfo :: struct {
+    jump_destination: string,
+    var_name:         string,
+    function_name:    string,
+    expected_type:    string,
+    traverse_no:      i32,
 }
 
 MessageBucket :: struct {
-    errors:   [dynamic]ErrorMsg,
-    warnings: [dynamic]WarningMsg,
-    infos:    [dynamic]InfoMsg,
-    finds:    [dynamic]FindMsg,
+    messages: [dynamic]Msg,
 }
 
 Component :: struct {

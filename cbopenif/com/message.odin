@@ -1,5 +1,7 @@
 package com
 
+import t "../types"
+
 IMessage      :: distinct rawptr
 MessageBucket :: distinct rawptr
 WarningMsg    :: distinct rawptr
@@ -8,6 +10,24 @@ FindMsg       :: distinct rawptr
 ErrorMsg      :: distinct rawptr
 ExtraInfo     :: distinct rawptr
 
+MessageUnion :: union {
+    ErrorMsg,
+    WarningMsg,
+    InfoMsg,
+    FindMsg,
+}
+
+Message :: struct {
+    kind: t.MessageKind,
+    msg:  MessageUnion,
+}
+
+IID_ErrorMsg   :: GUID{0xAA7D0C85, 0xEB7F, 0x4859, {0xAB, 0xE8, 0xE7, 0xE9, 0x45, 0x41, 0x93, 0x0B}}
+IID_InfoMsg    :: GUID{0xE045A7B5, 0x1FE2, 0x49BD, {0xB2, 0x6F, 0x26, 0xCC, 0xEF, 0x82, 0x68, 0xC0}}
+IID_WarningMsg :: GUID{0xD5246053, 0xFB82, 0x45FE, {0xAF, 0x12, 0x10, 0xE2, 0xFC, 0xAE, 0x91, 0xF0}}
+IID_FindMsg    :: GUID{0xDBE93C58, 0xDE18, 0x4B71, {0xBF, 0x89, 0xA3, 0x1B, 0xBB, 0x7A, 0xD7, 0x38}}
+IID_IMsg       :: GUID{0x24B4263B, 0xFD38, 0x4D67, {0x99, 0x03, 0x0A, 0x6D, 0x81, 0xA8, 0x76, 0x8C}}
+
 IMessageIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^IMessageVTable,
@@ -15,36 +35,12 @@ IMessageIF :: struct #raw_union {
 
 IMessageVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    MessageGet:       proc "system" (this: ^IMessageIF, Message: ^BStr) -> HResult,
-    MessagePut:       proc "system" (this: ^IMessageIF, Message: BStr) -> HResult,
-    IsErrorMessage:   proc "system" (this: ^IMessageIF, IsErrorMessage: ^VariantBool) -> HResult,
-    IsWarningMessage: proc "system" (this: ^IMessageIF, IsWarningMessage: ^VariantBool) -> HResult,
-    IsInfoMessage:    proc "system" (this: ^IMessageIF, IsInfoMessage: ^VariantBool) -> HResult,
-    IsFindMessage:    proc "system" (this: ^IMessageIF, IsFindMessage: ^VariantBool) -> HResult,
-}
-
-imessage_get :: proc(imessage: IMessage) -> (msg: string, ok: bool) {
-    if imessage == nil do return
-    if !com_connected() do return
-
-    bs: BStr
-    defer bstr_free(bs)
-    hr := (^IMessageIF)(imessage)->MessageGet(&bs)
-    if com_failed(hr) do return
-
-    return from_bstr(bs), true
-}
-
-imessage_set :: proc(imessage: IMessage, msg: string) -> (ok: bool) {
-    if imessage == nil do return
-    if !com_connected() do return
-
-    bs := to_bstr(msg)
-    defer bstr_free(bs)
-    hr := (^IMessageIF)(imessage)->MessagePut(bs)
-    if com_failed(hr) do return
-
-    return true
+    MessageGet:    proc "system" (this: ^IMessageIF, Message: ^BStr) -> HResult,
+    MessagePut:    proc "system" (this: ^IMessageIF, Message: BStr) -> HResult,
+    IsErrorMsg:    proc "system" (this: ^IMessageIF, IsErrorMessage: ^VariantBool) -> HResult,
+    IsWarningMsg:  proc "system" (this: ^IMessageIF, IsWarningMessage: ^VariantBool) -> HResult,
+    IsInfoMsg:     proc "system" (this: ^IMessageIF, IsInfoMessage: ^VariantBool) -> HResult,
+    IsFindMsg:     proc "system" (this: ^IMessageIF, IsFindMessage: ^VariantBool) -> HResult,
 }
 
 imessage_is_error :: proc(imessage: IMessage) -> (is_error: bool, ok: bool) {
@@ -52,10 +48,20 @@ imessage_is_error :: proc(imessage: IMessage) -> (is_error: bool, ok: bool) {
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsErrorMessage(&vb)
+    hr := (^IMessageIF)(imessage)->IsErrorMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
+}
+
+imessage_as_error :: proc(imessage: IMessage) -> (errormsg: ErrorMsg, ok: bool) {
+    if imessage == nil do return
+    
+    IID := IID_ErrorMsg
+    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&errormsg)
+    if com_failed(hr) do return
+    
+    return errormsg, true
 }
 
 imessage_is_warning :: proc(imessage: IMessage) -> (is_warning: bool, ok: bool) {
@@ -63,10 +69,20 @@ imessage_is_warning :: proc(imessage: IMessage) -> (is_warning: bool, ok: bool) 
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsWarningMessage(&vb)
+    hr := (^IMessageIF)(imessage)->IsWarningMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
+}
+
+imessage_as_warning :: proc(imessage: IMessage) -> (warningmsg: WarningMsg, ok: bool) {
+    if imessage == nil do return
+    
+    IID := IID_WarningMsg
+    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&warningmsg)
+    if com_failed(hr) do return
+    
+    return warningmsg, true
 }
 
 imessage_is_info :: proc(imessage: IMessage) -> (is_info: bool, ok: bool) {
@@ -74,10 +90,20 @@ imessage_is_info :: proc(imessage: IMessage) -> (is_info: bool, ok: bool) {
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsInfoMessage(&vb)
+    hr := (^IMessageIF)(imessage)->IsInfoMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
+}
+
+imessage_as_info :: proc(imessage: IMessage) -> (infomsg: InfoMsg, ok: bool) {
+    if imessage == nil do return
+    
+    IID := IID_InfoMsg
+    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&infomsg)
+    if com_failed(hr) do return
+    
+    return infomsg, true
 }
 
 imessage_is_find :: proc(imessage: IMessage) -> (is_find: bool, ok: bool) {
@@ -85,16 +111,128 @@ imessage_is_find :: proc(imessage: IMessage) -> (is_find: bool, ok: bool) {
     if !com_connected() do return
 
     vb: VariantBool
-    hr := (^IMessageIF)(imessage)->IsFindMessage(&vb)
+    hr := (^IMessageIF)(imessage)->IsFindMsg(&vb)
     if com_failed(hr) do return
 
     return vb == VariantBoolTrue, true
+}
+
+imessage_as_find :: proc(imessage: IMessage) -> (findmsg: FindMsg, ok: bool) {
+    if imessage == nil do return
+    
+    IID := IID_FindMsg
+    hr := (^IUnknownIF)(imessage)->QueryInterface(&IID, cast(^rawptr)&findmsg)
+    if com_failed(hr) do return
+    
+    return findmsg, true
 }
 
 imessage_release :: proc(imessage: IMessage) {
     if imessage != nil {
         (^IMessageIF)(imessage)->Release()
     }
+}
+
+from_imessage :: proc(imessage: IMessage) -> (message: Message, ok: bool) {
+    if imessage == nil do return
+
+    if is, ok := imessage_is_error(imessage); ok && is {
+        e, ok := imessage_as_error(imessage)
+        if !ok do return
+        message.kind = .Error
+        message.msg = e
+        return message, true
+    }
+
+    if is, ok := imessage_is_warning(imessage); ok && is {
+        w, ok := imessage_as_warning(imessage)
+        if !ok do return
+        message.kind = .Warning
+        message.msg = w
+        return message, true
+    }
+
+    if is, ok := imessage_is_info(imessage); ok && is {
+        i, ok := imessage_as_info(imessage)
+        if !ok do return
+        message.kind = .Info
+        message.msg = i
+        return message, true
+    }
+
+    if is, ok := imessage_is_find(imessage); ok && is {
+        f, ok := imessage_as_find(imessage)
+        if !ok do return
+        message.kind = .Find
+        message.msg = f
+        return message, true
+    }
+
+    return {}, false
+}
+
+message_message_get :: proc(message: Message) -> (text: string, ok: bool) {
+    switch m in message.msg {
+        case ErrorMsg:   return errormsg_message_get(m)
+        case WarningMsg: return warningmsg_message_get(m)
+        case InfoMsg:    return infomsg_message_get(m)
+        case FindMsg:    return findmsg_message_get(m)
+    }
+    return
+}
+
+message_message_set :: proc(message: Message, text: string) -> (ok: bool) {
+    switch m in message.msg {
+        case ErrorMsg:   return errormsg_message_set(m, text)
+        case WarningMsg: return warningmsg_message_set(m, text)
+        case InfoMsg:    return infomsg_message_set(m, text)
+        case FindMsg:    return findmsg_message_set(m, text)
+    }
+    return
+}
+
+message_posinfo_get :: proc(message: Message) -> (posinfo: PosInfo, ok: bool) {
+    switch m in message.msg {
+        case ErrorMsg:   return errormsg_posinfo_get(m)
+        case WarningMsg: return warningmsg_posinfo_get(m)
+        case InfoMsg:    return infomsg_posinfo_get(m)
+        case FindMsg:    return findmsg_posinfo_get(m)
+    }
+    return
+}
+
+message_from_com :: proc(message: Message, allocator := context.allocator) -> (result: t.Msg, ok: bool) {
+    context.allocator = allocator
+    result.kind = message.kind
+
+    result.message, ok = message(message)
+    if !ok do return
+
+    result.pos_info, ok = pos_info(message)
+    if !ok do return
+
+    if message.kind == .Error {
+        result.error_number, ok = error_number(message)
+        if !ok do return
+    }
+
+    if message.kind == .Warning {
+        result.warning_number, ok = warning_number(message)
+        if !ok do return
+    }
+
+    if message.kind == .Warning || message.kind == .Info || message.kind == .Error {
+        ei: ExtraInfo
+        ei, ok = extrainfo(ei)
+        if !ok do return
+        defer release(ei)
+
+        eis: t.ExtraInfo
+        result.extra_info, ok = extrainfo_from_com(ei)
+        if !ok do return
+    }
+
+    return result, true
 }
 
 MessageBucketIF :: struct #raw_union {
@@ -212,6 +350,36 @@ messagebucket_release :: proc(bucket: MessageBucket) {
     if bucket != nil {
         (^MessageBucketIF)(bucket)->Release()
     }
+}
+
+messagebucket_from_com :: proc(bucket: MessageBucket, allocator := context.allocator) -> (result: t.MessageBucket, ok: bool) {
+    if bucket == nil do return
+    context.allocator = allocator
+
+    count: i32
+    count, ok = messagebucket_message_count(bucket)
+    if !ok do return
+
+    result.messages = make([dynamic]t.Msg, 0, int(count), allocator)
+
+    for i in 0..<count {
+        im: IMessage
+        im, ok = messagebucket_message_by_index(bucket, i)
+        if !ok do return
+        defer release(im)
+
+        msg: Message
+        msg, ok = from_imessage(im)
+        if !ok do return
+        defer release(msg.msg)
+
+        ms: t.Msg
+        ms, ok = message_from_com(msg)
+        if !ok do return
+        append(&result.messages, ms)
+    }
+
+    return result, true
 }
 
 WarningMsgIF :: struct #raw_union {
@@ -722,4 +890,23 @@ extrainfo_release :: proc(extrainfo: ExtraInfo) {
     if extrainfo != nil {
         (^ExtraInfoIF)(extrainfo)->Release()
     }
+}
+
+extrainfo_from_com :: proc(extrainfo: ExtraInfo, allocator := context.allocator) -> (result: t.ExtraInfo, ok: bool) {
+    if extrainfo == nil do return
+
+    context.allocator = allocator
+
+    result.jump_destination, ok = extrainfo_jump_destination_get(extrainfo)
+    if !ok do return
+    result.var_name, ok = extrainfo_var_name_get(extrainfo)
+    if !ok do return
+    result.function_name, ok = extrainfo_function_name_get(extrainfo)
+    if !ok do return
+    result.expected_type, ok = extrainfo_expected_type_get(extrainfo)
+    if !ok do return
+    result.traverse_no, ok = extrainfo_traverse_no_get(extrainfo)
+    if !ok do return
+
+    return result, true
 }

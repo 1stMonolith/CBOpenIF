@@ -419,7 +419,7 @@ hwunit_from_com :: proc(hwunit: HWUnit, allocator := context.allocator) -> (resu
         defer release(units)
 
         count: i32
-        count, ok = hwunit_count(units) // or hwunits_hwunit_count
+        count, ok = hwunits_hwunit_count(units)
         if !ok do return
 
         result.units = make([dynamic]t.HWUnit, 0, int(count), allocator)
