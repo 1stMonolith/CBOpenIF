@@ -1,7 +1,5 @@
 package com
 
-import t "../types"
-
 ICodeBlock   :: distinct rawptr
 CodeBlocks   :: distinct rawptr
 STCodeBlock  :: distinct rawptr
@@ -291,66 +289,6 @@ codeblock_stcode_set :: proc(codeblock: CodeBlock, stcode: string) -> (ok: bool)
     return
 }
 
-codeblock_from_com :: proc(codeblock: CodeBlock, allocator := context.allocator) -> (result: t.CodeBlock, ok: bool) {
-    context.allocator = allocator
-
-    result.name, ok = name(codeblock)
-    if !ok do return
-
-    switch cb in codeblock {
-        case STCodeBlock:
-            result.kind = .ST
-            result.stcode, ok = stcode(cb)
-            if !ok do return
-        case FBDCodeBlock:
-            result.kind = .FBD
-            result.stcode, ok = stcode(cb)
-            if !ok do return
-        case LDCodeBlock:
-            result.kind = .LD
-            result.stcode, ok = stcode(cb)
-            if !ok do return
-        case SFCCodeBlock:
-            return // TODO
-        case ILCodeBlock:
-            return // TODO
-        case FDCodeBlock:
-            return // TODO
-    }
-
-    return result, true
-}
-
-codeblock_to_com :: proc(src: t.CodeBlock) -> (result: CodeBlock, ok: bool) {
-    cb: CodeBlock
-
-    switch src.kind {
-        case .ST:
-            block: STCodeBlock
-            block, ok = stcodeblock_new1(src.name, src.stcode)
-            if !ok do return
-            block = block
-        case .FBD:
-            block: FBDCodeBlock
-            block, ok = fbdcodeblock_new1(src.name, src.stcode)
-            if !ok do return
-            block = block
-        case .LD:
-            block: LDCodeBlock
-            block, ok = ldcodeblock_new1(src.name, src.stcode)
-            if !ok do return
-            block = block
-        case .SFC:
-            return // TODO
-        case .IL:
-            return // TODO
-        case .FD:
-            return // TODO
-    }
-
-    return cb, true
-}
-
 CodeBlocksIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^CodeBlocksVTable,
@@ -477,43 +415,6 @@ codeblocks_release :: proc(codeblocks: CodeBlocks) {
     if codeblocks != nil {
         (^CodeBlocksIF)(codeblocks)->Release()
     }
-}
-
-codeblocks_from_com :: proc(cbs: CodeBlocks, allocator := context.allocator) -> (result: [dynamic]t.CodeBlock, ok: bool) {
-    if cbs == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = codeblock_count(cbs)
-    if !ok do return
-
-    result = make([dynamic]t.CodeBlock, 0, int(count), allocator)
-    for i in 0..<count {
-        cb: CodeBlock
-        cb, ok = codeblock(cbs, i)
-        if !ok do return
-        defer codeblock_release(cb)
-
-        cbs_: t.CodeBlock
-        cbs_, ok = codeblock_from_com(cb)
-        if !ok do return
-        append(&result, cbs_)
-    }
-    return result, true
-}
-
-codeblocks_to_com :: proc(cbs: CodeBlocks, src: []t.CodeBlock) -> (ok: bool) {
-    if cbs == nil do return
-    for item in src {
-        cb: CodeBlock
-        cb, ok = codeblock_to_com(item)
-        if !ok do return
-        defer codeblock_release(cb)
-
-        ok = codeblock_add(cbs, cb)
-        if !ok do return
-    }
-    return true
 }
 
 STCodeBlockIF :: struct #raw_union {

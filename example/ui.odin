@@ -52,14 +52,12 @@ main :: proc() {
     dt1.components = slice.clone_to_dynamic(comps[:])
     defer delete(dt1.components)
 
-    dt2: cb.DataType
-    dt2.name = "MyTestDataType2"
-    dt2.description = "This is a datatype with name MyTestDataType2!"
-    dt2.hidden = false
-    dt2.protected = false
-    dt2.scope = cb.Scope.Public
-    dt2.components = slice.clone_to_dynamic(comps[:])
-    defer delete(dt2.components)
+    cmt1: cb.ControlModuleType
+    cmt1.name = "MyTestControlModuleType1"
+    cmt1.description = "This is a controlmoduletype with name MyTestControlModuleType1"
+    cmt1.alarm_owner = false
+    cmt1.embedded_graphics_visible = true
+    cmt1.sil_level = "NonSIL"
     
     y:  f32 = 20
     x:  f32 = 20
@@ -112,8 +110,9 @@ main :: proc() {
 
         y = y + bh + 5
 
-        if rl.GuiButton({x, y, bw, bh}, "New DataType 2") {
-            cb.datatype_new("MyTestlib", dt2)
+        if rl.GuiButton({x, y, bw, bh}, "New ControlModtuleType") {
+            cb.controlmoduletype_new("MyTestlib", cmt1)
+            cb.controlmoduletype_get("MyTestlib", "Yo")
         }
 
         y = y + bh + 5

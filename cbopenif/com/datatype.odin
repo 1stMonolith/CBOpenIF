@@ -1,7 +1,5 @@
 package com
 
-import t "../types"
-
 DataType   :: distinct rawptr
 Component  :: distinct rawptr
 Components :: distinct rawptr
@@ -111,7 +109,7 @@ datatype_hidden_set :: proc(datatype: DataType, hidden: bool) -> (ok: bool) {
     return true
 }
 
-datatype_scope_get :: proc(datatype: DataType) -> (scope: t.Scope, ok: bool) {
+datatype_scope_get :: proc(datatype: DataType) -> (scope: i32, ok: bool) {
     if datatype == nil do return
     if !com_connected() do return
 
@@ -119,14 +117,14 @@ datatype_scope_get :: proc(datatype: DataType) -> (scope: t.Scope, ok: bool) {
     hr := (^DataTypeIF)(datatype)->ScopeGet(&s)
     if com_failed(hr) do return
 
-    return t.Scope(s), true
+    return s, true
 }
 
-datatype_scope_set :: proc(datatype: DataType, scope: t.Scope) -> (ok: bool) {
+datatype_scope_set :: proc(datatype: DataType, scope: i32) -> (ok: bool) {
     if datatype == nil do return
     if !com_connected() do return
     
-    hr := (^DataTypeIF)(datatype)->ScopePut(i32(scope))
+    hr := (^DataTypeIF)(datatype)->ScopePut(scope)
     if com_failed(hr) do return
 
     return true
@@ -229,63 +227,6 @@ datatype_release :: proc(datatype: DataType) {
     if datatype != nil {
         (^DataTypeIF)(datatype)->Release()
     }
-}
-
-datatype_from_com :: proc(datatype: DataType, allocator := context.allocator) -> (result: t.DataType, ok: bool) {
-    if datatype == nil do return
-
-    context.allocator = allocator
-
-    result.name, ok = name(datatype)
-    if !ok do return
-    result.description, ok = description(datatype)
-    if !ok do return
-    result.protected, ok = protected(datatype)
-    if !ok do return
-    result.hidden, ok = hidden(datatype)
-    if !ok do return
-    result.scope, ok = scope(datatype)
-    if !ok do return
-    result.guid, ok = guid(datatype)
-    if !ok do return
-    result.reserved_by_function, ok = reserved_by_function(datatype)
-    if !ok do return
-
-    comps: Components
-    comps, ok = components(datatype)
-    if !ok do return
-    defer release(comps)
-    result.components, ok = components_from_com(comps)
-    if !ok do return
-
-    return result, true
-}
-
-datatype_to_com :: proc(src: t.DataType) -> (result: DataType, ok: bool) {
-    datatype: DataType
-    datatype, ok = datatype_new1(
-        src.name,
-        src.description,
-        src.protected,
-        src.hidden,
-        src.scope,
-    )
-    if !ok do return
-    defer if !ok do release(datatype)
-
-    ok = guid(datatype, src.guid)
-    if !ok do return
-    ok = reserved_by_function(datatype, src.reserved_by_function)
-    if !ok do return
-
-    comps: Components
-    comps, ok = components(datatype)
-    if !ok do return
-    defer release(comps)
-    ok = components_to_com(comps, src.components[:])
-    if !ok do return
-
-    return datatype, true
 }
 
 ComponentIF :: struct #raw_union {
@@ -615,67 +556,6 @@ component_release :: proc(component: Component) {
     }
 }
 
-component_from_com :: proc(component: Component) -> (result: t.Component, ok: bool) {
-    if component == nil do return
-
-    result.name, ok = name(component)
-    if !ok do return
-    result.type_name, ok = type_name(component)
-    if !ok do return
-    result.attribute, ok = attribute(component)
-    if !ok do return
-    result.initial_value, ok = initial_value(component)
-    if !ok do return
-    result.description, ok = description(component)
-    if !ok do return
-    result.read_permission, ok = read_permission(component)
-    if !ok do return
-    result.write_permission, ok = write_permission(component)
-    if !ok do return
-    result.authentication_level, ok = authentication_level(component)
-    if !ok do return
-    result.access_level, ok = access_level(component)
-    if !ok do return
-    result.safety_type, ok = safety_type(component)
-    if !ok do return
-    result.isp_value, ok = isp_value(component)
-    if !ok do return
-    result.type_guid, ok = type_guid(component)
-    if !ok do return
-    result.type_path, ok = type_path(component)
-    if !ok do return
-
-    return result, true
-}
-
-component_to_com :: proc(src: t.Component) -> (result: Component, ok: bool) {
-    component: Component
-    component, ok = component_new1(
-        src.name,
-        src.type_name,
-        src.attribute,
-        src.initial_value,
-        src.description,
-    )
-    if !ok do return
-    defer if !ok do release(component)
-
-    ok = read_permission(component, src.read_permission)
-    if !ok do return
-    ok = write_permission(component, src.write_permission)
-    if !ok do return
-    ok = authentication_level(component, src.authentication_level)
-    if !ok do return
-    ok = access_level(component, src.access_level)
-    if !ok do return
-    ok = safety_type(component, src.safety_type)
-    if !ok do return
-    ok = isp_value(component, src.isp_value)
-    if !ok do return
-
-    return component, true
-}
-
 ComponentsIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ComponentsVTable,
@@ -790,40 +670,4 @@ components_release :: proc(components: Components) {
     if components != nil {
         (^ComponentsIF)(components)->Release()
     }
-}
-
-components_from_com :: proc(comps: Components, allocator := context.allocator) -> (result: [dynamic]t.Component, ok: bool) {
-    if comps == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = component_count(comps)
-    if !ok do return
-
-    result = make([dynamic]t.Component, 0, int(count), allocator)
-    for i in 0..<count {
-        c: Component
-        c, ok = component_by_index(comps, i)
-        if !ok do return
-        defer release(c)
-
-        cs: t.Component
-        cs, ok = component_from_com(c)
-        if !ok do return
-        append(&result, cs)
-    }
-    return result, true
-}
-
-components_to_com :: proc(comps: Components, src: []t.Component) -> (ok: bool) {
-    if comps == nil do return
-    for item in src {
-        c: Component
-        c, ok = component_to_com(item)
-        if !ok do return
-        defer release(c)
-        ok = component_add(comps, c)
-        if !ok do return
-    }
-    return true
 }

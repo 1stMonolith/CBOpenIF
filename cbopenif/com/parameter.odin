@@ -1,9 +1,9 @@
 package com
 
-import t "../types"
-
-Parameter  :: distinct rawptr
-Parameters :: distinct rawptr
+Parameter            :: distinct rawptr
+Parameters           :: distinct rawptr
+ParameterSetting     :: distinct rawptr
+ParameterSettings    :: distinct rawptr
 ExtensibleParameter  :: distinct rawptr
 ExtensibleParameters :: distinct rawptr
 
@@ -127,7 +127,7 @@ parameter_attribute_set :: proc(parameter: Parameter, attribute: string) -> (ok:
     return true
 }
 
-parameter_direction_get :: proc(parameter: Parameter) -> (direction: t.Direction, ok: bool) {
+parameter_direction_get :: proc(parameter: Parameter) -> (direction: i32, ok: bool) {
     if parameter == nil do return
     if !com_connected() do return
 
@@ -135,14 +135,14 @@ parameter_direction_get :: proc(parameter: Parameter) -> (direction: t.Direction
     hr := (^ParameterIF)(parameter)->DirectionGet(&d)
     if com_failed(hr) do return
     
-    return t.Direction(d), true
+    return d, true
 }
 
-parameter_direction_set :: proc(parameter: Parameter, direction: t.Direction) -> (ok: bool) {
+parameter_direction_set :: proc(parameter: Parameter, direction: i32) -> (ok: bool) {
     if parameter == nil do return
     if !com_connected() do return
 
-    hr := (^ParameterIF)(parameter)->DirectionPut(i32(direction))
+    hr := (^ParameterIF)(parameter)->DirectionPut(direction)
     if com_failed(hr) do return
     
     return true
@@ -370,72 +370,6 @@ parameter_release :: proc(parameter: Parameter) {
     }
 }
 
-parameter_from_com :: proc(parameter: Parameter, allocator := context.allocator) -> (result: t.Parameter, ok: bool) {
-    if parameter == nil do return
-
-    context.allocator = allocator
-
-    result.name, ok = name(parameter)
-    if !ok do return
-    result.type_name, ok = type_name(parameter)
-    if !ok do return
-    result.attribute, ok = attribute(parameter)
-    if !ok do return
-    result.direction, ok = direction(parameter)
-    if !ok do return
-    result.initial_value, ok = initial_value(parameter)
-    if !ok do return
-    result.description, ok = description(parameter)
-    if !ok do return
-    result.read_permission, ok = read_permission(parameter)
-    if !ok do return
-    result.write_permission, ok = write_permission(parameter)
-    if !ok do return
-    result.authentication_level, ok = authentication_level(parameter)
-    if !ok do return
-    result.access_level, ok = access_level(parameter)
-    if !ok do return
-    result.safety_type, ok = safety_type(parameter)
-    if !ok do return
-    result.fd_port, ok = fdport(parameter)
-    if !ok do return
-    result.type_guid, ok = type_guid(parameter)
-    if !ok do return
-    result.type_path, ok = type_path(parameter)
-    if !ok do return
-
-    return result, true
-}
-
-parameter_to_com :: proc(src: t.Parameter) -> (result: Parameter, ok: bool) {
-    parameter: Parameter
-    parameter, ok = parameter_new1(
-        src.name,
-        src.type_name,
-        src.attribute,
-        i32(src.direction),
-        src.initial_value,
-        src.read_permission,
-        src.write_permission,
-        src.description,
-    )
-    if !ok do return
-    defer if !ok do release(parameter)
-
-    ok = authentication_level(parameter, src.authentication_level)
-    if !ok do return
-    ok = access_level(parameter, src.access_level)
-    if !ok do return
-    ok = safety_type(parameter, src.safety_type)
-    if !ok do return
-    ok = fdport(parameter, src.fd_port)
-    if !ok do return
-
-    // type_guid / type_path are read-only
-
-    return parameter, true
-}
-
 ParametersIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ParametersVTable,
@@ -549,42 +483,196 @@ parameters_release :: proc(parameters: Parameters) {
     }
 }
 
-parameters_from_com :: proc(params: Parameters, allocator := context.allocator) -> (result: [dynamic]t.Parameter, ok: bool) {
-    if params == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = parameter_count(params)
-    if !ok do return
-
-    result = make([dynamic]t.Parameter, 0, int(count), allocator)
-    for i in 0..<count {
-        pr: Parameter
-        pr, ok = parameter_by_index(params, i)
-        if !ok do return
-        p := Parameter(pr)
-        defer release(p)
-
-        ps: t.Parameter
-        ps, ok = parameter_from_com(p)
-        if !ok do return
-        append(&result, ps)
-    }
-    return result, true
+ParameterSettingIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^ParameterSettingVTable,
 }
 
-parameters_to_com :: proc(params: Parameters, src: []t.Parameter) -> (ok: bool) {
-    if params == nil do return
-    for item in src {
-        p: Parameter
-        p, ok = parameter_to_com(item)
-        if !ok do return
-        defer release(p)
+ParameterSettingVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    NameGet:           proc "system" (this: ^ParameterSettingIF, Name: ^BStr) -> HResult,
+    NamePut:           proc "system" (this: ^ParameterSettingIF, Name: BStr) -> HResult,
+    ParameterValueGet: proc "system" (this: ^ParameterSettingIF, ParameterValue: ^BStr) -> HResult,
+    ParameterValuePut: proc "system" (this: ^ParameterSettingIF, ParameterValue: BStr) -> HResult,
+    DescriptionGet:    proc "system" (this: ^ParameterSettingIF, Description: ^BStr) -> HResult,
+}
 
-        ok = parameter_add(params, p)
-        if !ok do return
-    }
+parametersetting_name_get :: proc(parametersetting: ParameterSetting) -> (name: string, ok: bool) {
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ParameterSettingIF)(parametersetting)->NameGet(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+parametersetting_name_set :: proc(parametersetting: ParameterSetting, name: string) -> (ok: bool) {
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    bs := to_bstr(name)
+    defer bstr_free(bs)
+    hr := (^ParameterSettingIF)(parametersetting)->NamePut(bs)
+    if com_failed(hr) do return
+    
     return true
+}
+
+parametersetting_parameter_value_get :: proc(parametersetting: ParameterSetting) -> (type_name: string, ok: bool) {
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ParameterSettingIF)(parametersetting)->ParameterValueGet(&bs)
+    if com_failed(hr) do return
+    
+    return from_bstr(bs), true
+}
+
+parametersetting_parameter_value_set :: proc(parametersetting: ParameterSetting, type_name: string) -> (ok: bool) {
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    bs := to_bstr(type_name)
+    defer bstr_free(bs)
+    hr := (^ParameterSettingIF)(parametersetting)->ParameterValuePut(bs)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+parametersetting_description_get :: proc(parametersetting: ParameterSetting) -> (description: string, ok: bool) {
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^ParameterSettingIF)(parametersetting)->DescriptionGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+parametersetting_release :: proc(parametersetting: ParameterSetting) {
+    if parametersetting != nil {
+        (^ParameterSettingIF)(parametersetting)->Release()
+    }
+}
+
+ParameterSettingsIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^ParameterSettingsVTable,
+}
+
+ParameterSettingsVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    Add:       proc "system" (this: ^ParameterSettingsIF, ParameterSetting: rawptr) -> HResult,
+    AddBefore: proc "system" (this: ^ParameterSettingsIF, ParameterSetting: rawptr, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^ParameterSettingsIF, Name, ParameterValue: BStr, ParameterSetting: ^rawptr) -> HResult,
+    Find:      proc "system" (this: ^ParameterSettingsIF, Name: BStr, ParameterSetting: ^rawptr) -> HResult,
+    FindNr:    proc "system" (this: ^ParameterSettingsIF, Name: BStr, Index: ^i32) -> HResult,
+    Item:      proc "system" (this: ^ParameterSettingsIF, Index: i32, ParameterSetting: ^rawptr) -> HResult,
+    Count:     proc "system" (this: ^ParameterSettingsIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^ParameterSettingsIF, Index: i32) -> HResult,
+}
+
+parametersettings_parametersetting_add :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting) -> (ok: bool) {
+    if parametersettings == nil do return
+    if parametersetting == nil do return
+    if !com_connected() do return
+
+    hr := (^ParameterSettingsIF)(parametersettings)->Add(parametersetting)
+    if com_failed(hr) do return
+
+    return true
+}
+
+parametersettings_parametersetting_add_at_index :: proc(parametersettings: ParameterSettings, parametersetting: ParameterSetting, index: i32) -> (ok: bool) {
+    if parametersettings == nil do return
+    if parametersetting == nil do return
+    if !com_connected() do return
+    
+    hr := (^ParameterSettingsIF)(parametersettings)->AddBefore(parametersetting, index)
+    if com_failed(hr) do return
+
+    return true
+}
+
+parametersettings_parametersetting_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (parametersetting: ParameterSetting, ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+    
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    hr := (^ParameterSettingsIF)(parametersettings)->Find(bstr_name, cast(^rawptr)&parametersetting)
+    if com_failed(hr) do return
+    
+    return parametersetting, true
+}
+
+parametersettings_parametersetting_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (parametersetting: ParameterSetting, ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+    
+    hr := (^ParameterSettingsIF)(parametersettings)->Item(index + 1, cast(^rawptr)&parametersetting)
+    if com_failed(hr) do return
+    
+    return parametersetting, true
+}
+
+parametersettings_parametersetting_index :: proc(parametersettings: ParameterSettings, name: string) -> (index: i32, ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+    
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    hr := (^ParameterSettingsIF)(parametersettings)->FindNr(bstr_name, &index)
+    if com_failed(hr) do return
+    
+    return index - 1, true
+}
+
+parametersettings_parametersetting_count :: proc(parametersettings: ParameterSettings) -> (count: i32, ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+    
+    hr := (^ParameterSettingsIF)(parametersettings)->Count(&count)
+    if com_failed(hr) do return
+    
+    return count, true
+}
+
+parametersettings_parametersetting_remove_by_name :: proc(parametersettings: ParameterSettings, name: string) -> (ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+
+    index: i32
+    index, ok = parametersettings_parametersetting_index(parametersettings, name)
+    
+    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+parametersettings_parametersetting_remove_by_index :: proc(parametersettings: ParameterSettings, index: i32) -> (ok: bool) {
+    if parametersettings == nil do return
+    if !com_connected() do return
+    
+    hr := (^ParameterSettingsIF)(parametersettings)->Remove(index + 1)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+parametersettings_release :: proc(parametersettings: ParameterSettings) {
+    if parametersettings != nil {
+        (^ParameterSettingsIF)(parametersettings)->Release()
+    }
 }
 
 ExtensibleParameterIF :: struct #raw_union {
@@ -701,7 +789,7 @@ extensibleparameter_attribute_set :: proc(extensibleparameter: ExtensibleParamet
     return true
 }
 
-extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: t.Direction, ok: bool) {
+extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParameter) -> (direction: i32, ok: bool) {
     if extensibleparameter == nil do return
     if !com_connected() do return
 
@@ -709,14 +797,14 @@ extensibleparameter_direction_get :: proc(extensibleparameter: ExtensibleParamet
     hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionGet(&d)
     if com_failed(hr) do return
 
-    return t.Direction(d), true
+    return d, true
 }
 
-extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: t.Direction) -> (ok: bool) {
+extensibleparameter_direction_set :: proc(extensibleparameter: ExtensibleParameter, direction: i32) -> (ok: bool) {
     if extensibleparameter == nil do return
     if !com_connected() do return
 
-    hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionPut(i32(direction))
+    hr := (^ExtensibleParameterIF)(extensibleparameter)->DirectionPut(direction)
     if com_failed(hr) do return
 
     return true
@@ -872,62 +960,6 @@ extensibleparameter_release :: proc(extensibleparameter: ExtensibleParameter) {
     }
 }
 
-extensibleparameter_from_com :: proc(extensibleparameter: ExtensibleParameter, allocator := context.allocator) -> (result: t.ExtensibleParameter, ok: bool) {
-    if extensibleparameter == nil do return
-
-    context.allocator = allocator
-
-    result.name, ok = name(extensibleparameter)
-    if !ok do return
-    result.type_name, ok = type_name(extensibleparameter)
-    if !ok do return
-    result.attribute, ok = attribute(extensibleparameter)
-    if !ok do return
-    result.direction, ok = direction(extensibleparameter)
-    if !ok do return
-    result.initial_value, ok = initial_value(extensibleparameter)
-    if !ok do return
-    result.description, ok = description(extensibleparameter)
-    if !ok do return
-    result.access_level, ok = access_level(extensibleparameter)
-    if !ok do return
-    result.safety_type, ok = safety_type(extensibleparameter)
-    if !ok do return
-    result.fd_port, ok = fdport(extensibleparameter)
-    if !ok do return
-    result.type_guid, ok = type_guid(extensibleparameter)
-    if !ok do return
-    result.type_path, ok = type_path(extensibleparameter)
-    if !ok do return
-
-    return result, true
-}
-
-extensibleparameter_to_com :: proc(src: t.ExtensibleParameter) -> (result: ExtensibleParameter, ok: bool) {
-    extensibleparameter: ExtensibleParameter
-    extensibleparameter, ok = extensibleparameter_new1(
-        src.name,
-        src.type_name,
-        src.attribute,
-        i32(src.direction),
-        src.initial_value,
-        src.description,
-    )
-    if !ok do return
-    defer if !ok do release(extensibleparameter)
-
-    ok = access_level(extensibleparameter, src.access_level)
-    if !ok do return
-    ok = safety_type(extensibleparameter, src.safety_type)
-    if !ok do return
-    ok = fdport(extensibleparameter, src.fd_port)
-    if !ok do return
-
-    // type_guid / type_path are read-only
-
-    return extensibleparameter, true
-}
-
 ExtensibleParametersIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^ExtensibleParametersVTable,
@@ -1039,41 +1071,4 @@ extensibleparameters_release :: proc(extensibleparameters: ExtensibleParameters)
     if extensibleparameters != nil {
         (^ExtensibleParametersIF)(extensibleparameters)->Release()
     }
-}
-
-extensibleparameters_from_com :: proc(eparams: ExtensibleParameters, allocator := context.allocator) -> (result: [dynamic]t.ExtensibleParameter, ok: bool) {
-    if eparams == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = extensibleparameter_count(eparams)
-    if !ok do return
-
-    result = make([dynamic]t.ExtensibleParameter, 0, int(count), allocator)
-    for i in 0..<count {
-        ep: ExtensibleParameter
-        ep, ok = extensibleparameter_by_index(eparams, i)
-        if !ok do return
-        defer release(ep)
-
-        eps: t.ExtensibleParameter
-        eps, ok = extensibleparameter_from_com(ep)
-        if !ok do return
-        append(&result, eps)
-    }
-    return result, true
-}
-
-extensibleparameters_to_com :: proc(eparams: ExtensibleParameters, src: []t.ExtensibleParameter) -> (ok: bool) {
-    if eparams == nil do return
-    for item in src {
-        ep: ExtensibleParameter
-        ep, ok = extensibleparameter_to_com(item)
-        if !ok do return
-        defer release(ep)
-
-        ok = extensibleparameter_add(eparams, ep)
-        if !ok do return
-    }
-    return true
 }

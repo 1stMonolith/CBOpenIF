@@ -1,7 +1,5 @@
 package com
 
-import t "../types"
-
 IMsg       :: distinct rawptr
 MsgBucket  :: distinct rawptr
 WarningMsg :: distinct rawptr
@@ -9,6 +7,7 @@ InfoMsg    :: distinct rawptr
 FindMsg    :: distinct rawptr
 ErrorMsg   :: distinct rawptr
 ExtraInfo  :: distinct rawptr
+PosInfo    :: distinct rawptr
 
 Msg :: union {
     ErrorMsg,
@@ -203,63 +202,6 @@ message_release :: proc(msg: Msg) {
     }
 }
 
-message_from_com :: proc(msg: Msg, allocator := context.allocator) -> (result: t.Message, ok: bool) {
-    context.allocator = allocator
-
-    result.text, ok = message_text(msg)
-    if !ok do return
-
-    pi: PosInfo
-    pi, ok = posinfo(msg)
-    if !ok do return
-    defer release(pi)
-    result.pos_info, ok = posinfo_from_com(pi)
-    if !ok do return
-
-    switch m in msg {
-        case ErrorMsg:
-            result.kind = .Error
-            result.error_number, ok = error_number(m)
-            if !ok do return
-            
-            ei: ExtraInfo
-            ei, ok = extrainfo(m)
-            if !ok do return
-            defer release(ei)
-            
-            result.extra_info, ok = extrainfo_from_com(ei)
-            if !ok do return
-
-        case WarningMsg:
-            result.kind = .Warning
-            result.warning_number, ok = warning_number(m)
-            if !ok do return
-            
-            ei: ExtraInfo
-            ei, ok = extrainfo(m)
-            if !ok do return
-            defer release(ei)
-            
-            result.extra_info, ok = extrainfo_from_com(ei)
-            if !ok do return
-
-        case InfoMsg:
-            result.kind = .Info
-            ei: ExtraInfo
-            ei, ok = extrainfo(m)
-            if !ok do return
-            defer release(ei)
-            
-            result.extra_info, ok = extrainfo_from_com(ei)
-            if !ok do return
-
-        case FindMsg:
-            result.kind = .Find
-    }
-
-    return result, true
-}
-
 MsgBucketIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^MsgBucketVTable,
@@ -375,36 +317,6 @@ msgbucket_release :: proc(bucket: MsgBucket) {
     if bucket != nil {
         (^MsgBucketIF)(bucket)->Release()
     }
-}
-
-msgbucket_from_com :: proc(bucket: MsgBucket, allocator := context.allocator) -> (result: t.MessageBucket, ok: bool) {
-    if bucket == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = msgbucket_message_count(bucket)
-    if !ok do return
-
-    result.messages = make([dynamic]t.Message, 0, int(count), allocator)
-
-    for i in 0..<count {
-        imsg: IMsg
-        imsg, ok = msgbucket_message_by_index(bucket, i)
-        if !ok do return
-        defer release(imsg)
-
-        msg: Msg
-        msg, ok = from_imsg(imsg)
-        if !ok do return
-        defer message_release(msg)
-
-        msgs: t.Message
-        msgs, ok = message_from_com(msg)
-        if !ok do return
-        append(&result.messages, msgs)
-    }
-
-    return result, true
 }
 
 WarningMsgIF :: struct #raw_union {
@@ -917,21 +829,280 @@ extrainfo_release :: proc(extrainfo: ExtraInfo) {
     }
 }
 
-extrainfo_from_com :: proc(extrainfo: ExtraInfo, allocator := context.allocator) -> (result: t.ExtraInfo, ok: bool) {
-    if extrainfo == nil do return
+PosInfoIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^PosInfoVTable,
+}
 
-    context.allocator = allocator
+PosInfoVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    RowGet:         proc "system" (this: ^PosInfoIF, Row: ^i32) -> HResult,
+    RowPut:         proc "system" (this: ^PosInfoIF, Row: i32) -> HResult,
+    ColGet:         proc "system" (this: ^PosInfoIF, Col: ^i32) -> HResult,
+    ColPut:         proc "system" (this: ^PosInfoIF, Col: i32) -> HResult,
+    StartPosGet:    proc "system" (this: ^PosInfoIF, StartPos: ^i32) -> HResult,
+    StartPosPut:    proc "system" (this: ^PosInfoIF, StartPos: i32) -> HResult,
+    EndPosGet:      proc "system" (this: ^PosInfoIF, EndPos: ^i32) -> HResult,
+    EndPosPut:      proc "system" (this: ^PosInfoIF, EndPos: i32) -> HResult,
+    ElementNameGet: proc "system" (this: ^PosInfoIF, ElementName: ^BStr) -> HResult,
+    ElementNamePut: proc "system" (this: ^PosInfoIF, ElementName: BStr) -> HResult,
+    FOUNameGet:     proc "system" (this: ^PosInfoIF, FOUName: ^BStr) -> HResult,
+    FOUNamePut:     proc "system" (this: ^PosInfoIF, FOUName: BStr) -> HResult,
+    POUNameGet:     proc "system" (this: ^PosInfoIF, POUName: ^BStr) -> HResult,
+    POUNamePut:     proc "system" (this: ^PosInfoIF, POUName: BStr) -> HResult,
+    TabNameGet:     proc "system" (this: ^PosInfoIF, TabName: ^BStr) -> HResult,
+    TabNamePut:     proc "system" (this: ^PosInfoIF, TabName: BStr) -> HResult,
+    MessageTypeGet: proc "system" (this: ^PosInfoIF, MessageType: ^i32) -> HResult,
+    MessageTypePut: proc "system" (this: ^PosInfoIF, MessageType: i32) -> HResult,
+    PageNoGet:      proc "system" (this: ^PosInfoIF, PageNo: ^i32) -> HResult,
+    PageNoPut:      proc "system" (this: ^PosInfoIF, PageNo: i32) -> HResult,
+    IdGet:          proc "system" (this: ^PosInfoIF, Id: ^BStr) -> HResult,
+    IdPut:          proc "system" (this: ^PosInfoIF, Id: BStr) -> HResult,
+}
 
-    result.jump_destination, ok = jump_destination(extrainfo)
-    if !ok do return
-    result.var_name, ok = var_name(extrainfo)
-    if !ok do return
-    result.function_name, ok = function_name(extrainfo)
-    if !ok do return
-    result.expected_type, ok = expected_type(extrainfo)
-    if !ok do return
-    result.traverse_no, ok = traverse_number(extrainfo)
-    if !ok do return
+posinfo_row_get :: proc(posinfo: PosInfo) -> (row: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
 
-    return result, true
+    hr := (^PosInfoIF)(posinfo)->RowGet(&row)
+    if com_failed(hr) do return
+
+    return row, true
+}
+
+posinfo_row_set :: proc(posinfo: PosInfo, row: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->RowPut(row)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_column_get :: proc(posinfo: PosInfo) -> (column: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->ColGet(&column)
+    if com_failed(hr) do return
+
+    return column, true
+}
+
+posinfo_column_set :: proc(posinfo: PosInfo, column: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->ColPut(column)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_start_position_get :: proc(posinfo: PosInfo) -> (start_position: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->StartPosGet(&start_position)
+    if com_failed(hr) do return
+
+    return start_position, true
+}
+
+posinfo_start_position_set :: proc(posinfo: PosInfo, start_position: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->StartPosPut(start_position)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_end_position_get :: proc(posinfo: PosInfo) -> (end_position: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->EndPosGet(&end_position)
+    if com_failed(hr) do return
+
+    return end_position, true
+}
+
+posinfo_end_position_set :: proc(posinfo: PosInfo, end_position: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->EndPosPut(end_position)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_element_name_get :: proc(posinfo: PosInfo) -> (element_name: string, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->ElementNameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+posinfo_element_name_set :: proc(posinfo: PosInfo, element_name: string) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs := to_bstr(element_name)
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->ElementNamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_fou_name_get :: proc(posinfo: PosInfo) -> (fou_name: string, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->FOUNameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+posinfo_fou_name_set :: proc(posinfo: PosInfo, fou_name: string) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs := to_bstr(fou_name)
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->FOUNamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_pou_name_get :: proc(posinfo: PosInfo) -> (pou_name: string, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->POUNameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+posinfo_pou_name_set :: proc(posinfo: PosInfo, pou_name: string) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs := to_bstr(pou_name)
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->POUNamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_tab_name_get :: proc(posinfo: PosInfo) -> (tab_name: string, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->TabNameGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+posinfo_tab_name_set :: proc(posinfo: PosInfo, tab_name: string) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs := to_bstr(tab_name)
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->TabNamePut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_message_type_get :: proc(posinfo: PosInfo) -> (message_type: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    mt: i32
+    hr := (^PosInfoIF)(posinfo)->MessageTypeGet(&mt)
+    if com_failed(hr) do return
+
+    return mt, true
+}
+
+posinfo_message_type_set :: proc(posinfo: PosInfo, message_type: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->MessageTypePut(message_type)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_page_number_get :: proc(posinfo: PosInfo) -> (page_number: i32, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->PageNoGet(&page_number)
+    if com_failed(hr) do return
+
+    return page_number, true
+}
+
+posinfo_page_number_set :: proc(posinfo: PosInfo, page_number: i32) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    hr := (^PosInfoIF)(posinfo)->PageNoPut(page_number)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_id_get :: proc(posinfo: PosInfo) -> (id: string, ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs: BStr
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->IdGet(&bs)
+    if com_failed(hr) do return
+
+    return from_bstr(bs), true
+}
+
+posinfo_id_set :: proc(posinfo: PosInfo, id: string) -> (ok: bool) {
+    if posinfo == nil do return
+    if !com_connected() do return
+
+    bs := to_bstr(id)
+    defer bstr_free(bs)
+    hr := (^PosInfoIF)(posinfo)->IdPut(bs)
+    if com_failed(hr) do return
+
+    return true
+}
+
+posinfo_release :: proc(posinfo: PosInfo) {
+    if posinfo != nil {
+        (^PosInfoIF)(posinfo)->Release()
+    }
 }

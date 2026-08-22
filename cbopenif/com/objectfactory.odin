@@ -1,7 +1,5 @@
 package com
 
-import t "../types"
-
 objectfactory: ^ObjectFactoryIF
 
 ObjectFactoryIF :: struct #raw_union {

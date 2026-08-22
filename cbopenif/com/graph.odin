@@ -1,11 +1,12 @@
 package com
 
-import t "../types"
-
 GraphNode  :: distinct rawptr
 GraphNodes :: distinct rawptr
 GraphPos   :: distinct rawptr
 GraphSize  :: distinct rawptr
+Point      :: distinct rawptr
+Points     :: distinct rawptr
+AutoPoint  :: distinct rawptr
 
 GraphNodeIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
@@ -90,29 +91,6 @@ graphnode_release :: proc(graphnode: GraphNode) {
     if graphnode != nil {
         (^GraphNodeIF)(graphnode)->Release()
     }
-}
-
-graphnode_from_com :: proc(graphnode: GraphNode, allocator := context.allocator) -> (result: t.GraphNode, ok: bool) {
-    if graphnode == nil do return
-
-    context.allocator = allocator
-
-    result.name, ok = name(graphnode)
-    if !ok do return
-    result.x, ok = x(graphnode)
-    if !ok do return
-    result.y, ok = y(graphnode)
-    if !ok do return
-
-    return result, true
-}
-
-graphnode_to_com :: proc(src: t.GraphNode) -> (result: GraphNode, ok: bool) {
-    graphnode: GraphNode
-    graphnode, ok = graphnode_new(src.name, src.x, src.y)
-    if !ok do return
-
-    return graphnode, true
 }
 
 GraphNodesIF :: struct #raw_union {
@@ -225,42 +203,6 @@ graphnodes_release :: proc(graphnodes: GraphNodes) {
     if graphnodes != nil {
         (^GraphNodesIF)(graphnodes)->Release()
     }
-}
-
-graphnodes_from_com :: proc(nodes: GraphNodes, allocator := context.allocator) -> (result: [dynamic]t.GraphNode, ok: bool) {
-    if nodes == nil do return
-    context.allocator = allocator
-
-    count: i32
-    count, ok = graphnode_count(nodes)
-    if !ok do return
-
-    result = make([dynamic]t.GraphNode, 0, int(count), allocator)
-    for i in 0..<count {
-        n: GraphNode
-        n, ok = graphnode_by_index(nodes, i)
-        if !ok do return
-        defer release(n)
-
-        ns: t.GraphNode
-        ns, ok = graphnode_from_com(n)
-        if !ok do return
-        append(&result, ns)
-    }
-    return result, true
-}
-
-graphnodes_to_com :: proc(nodes: GraphNodes, src: []t.GraphNode) -> (ok: bool) {
-    if nodes == nil do return
-    for item in src {
-        n: GraphNode
-        n, ok = graphnode_to_com(item)
-        if !ok do return
-        defer release(n)
-        ok = graphnode_add(nodes, n)
-        if !ok do return
-    }
-    return true
 }
 
 GraphPosIF :: struct #raw_union {
@@ -388,33 +330,6 @@ graphpos_release :: proc(graphpos: GraphPos) {
     }
 }
 
-graphpos_from_com :: proc(graphpos: GraphPos, allocator := context.allocator) -> (result: t.GraphPos, ok: bool) {
-    if graphpos == nil do return
-
-    context.allocator = allocator
-
-    result.x, ok = x(graphpos)
-    if !ok do return
-    result.y, ok = y(graphpos)
-    if !ok do return
-    result.rotation, ok = rotation(graphpos)
-    if !ok do return
-    result.xscale, ok = xscale(graphpos)
-    if !ok do return
-    result.yscale, ok = yscale(graphpos)
-    if !ok do return
-
-    return result, true
-}
-
-graphpos_to_com :: proc(src: t.GraphPos) -> (result: GraphPos, ok: bool) {
-    graphpos: GraphPos
-    graphpos, ok = graphpos_new(src.x, src.y, src.rotation, src.xscale, src.yscale)
-    if !ok do return
-
-    return graphpos, true
-}
-
 GraphSizeIF :: struct #raw_union {
     #subtype iunknownif: IUnknownIF,
     using vtable: ^GraphSizeVTable,
@@ -476,44 +391,174 @@ graphsize_release :: proc(graphsize: GraphSize) {
     }
 }
 
-graphsize_from_com :: proc(graphsize: GraphSize, allocator := context.allocator) -> (result: t.GraphSize, ok: bool) {
-    if graphsize == nil do return
-
-    context.allocator = allocator
-
-    ll: Point
-    ll, ok = point_lower_left(graphsize)
-    if !ok do return
-    defer release(ll)
-
-    result.lower_left, ok = point_from_com(ll)
-    if !ok do return
-
-    ur: Point
-    ur, ok = point_upper_right(graphsize)
-    if !ok do return
-    defer release(ur)
-
-    result.upper_right, ok = point_from_com(ur)
-    if !ok do return
-
-    return result, true
+PointIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^PointVTable,
 }
 
-graphsize_to_com :: proc(src: t.GraphSize) -> (result: GraphSize, ok: bool) {
-    ll: Point
-    ll, ok = point_to_com(src.lower_left)
-    if !ok do return
-    defer release(ll)
+PointVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    XGet:    proc "system" (this: ^PointIF, X: ^f64) -> HResult,
+    XPut:    proc "system" (this: ^PointIF, X: f64) -> HResult,
+    YGet:    proc "system" (this: ^PointIF, Y: ^f64) -> HResult,
+    YPut:    proc "system" (this: ^PointIF, Y: f64) -> HResult,
+}
 
-    ur: Point
-    ur, ok = point_to_com(src.upper_right)
-    if !ok do return
-    defer release(ur)
+point_x_get :: proc(point: Point) -> (x: f64, ok: bool) {
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointIF)(point)->XGet(&x)
+    if com_failed(hr) do return
+    
+    return x, true
+}
 
-    graphsize: GraphSize
-    graphsize, ok = graphsize_new(ll, ur)
-    if !ok do return
+point_x_set :: proc(point: Point, x: f64) -> (ok: bool) {
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointIF)(point)->XPut(x)
+    if com_failed(hr) do return
+    
+    return true
+}
 
-    return graphsize, true
+point_y_get :: proc(point: Point) -> (y: f64, ok: bool) {
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointIF)(point)->YGet(&y)
+    if com_failed(hr) do return
+    
+    return y, true
+}
+
+point_y_set :: proc(point: Point, y: f64) -> (ok: bool) {
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointIF)(point)->YPut(y)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+point_release :: proc(point: Point) {
+    if point != nil {
+        (^PointIF)(point)->Release()
+    }
+}
+
+PointsIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^PointsVTable,
+}
+
+PointsVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    Add:       proc "system" (this: ^PointsIF, Point: rawptr) -> HResult,
+    AddBefore: proc "system" (this: ^PointsIF, Point: rawptr, Index: i32) -> HResult,
+    Add1:      proc "system" (this: ^PointsIF, X, Y: f64, Point: ^rawptr) -> HResult,
+    Item:      proc "system" (this: ^PointsIF, Index: i32, Point: ^rawptr) -> HResult,
+    Count:     proc "system" (this: ^PointsIF, Count: ^i32) -> HResult,
+    Remove:    proc "system" (this: ^PointsIF, Index: i32) -> HResult,
+}
+
+points_point_add :: proc(points: Points, point: Point) -> (ok: bool) {
+    if points == nil do return
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointsIF)(points)->Add(point)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+points_point_add_at_index :: proc(points: Points, point: Point, index: i32) -> (ok: bool) {
+    if points == nil do return
+    if point == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointsIF)(points)->AddBefore(point, index)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+points_point_by_index :: proc(points: Points, index: i32) -> (point: Point, ok: bool) {
+    if points == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointsIF)(points)->Item(index + 1, cast(^rawptr)&point)
+    if com_failed(hr) do return
+    
+    return point, true
+}
+
+points_point_count :: proc(points: Points) -> (count: i32, ok: bool) {
+    if points == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointsIF)(points)->Count(&count)
+    if com_failed(hr) do return
+    
+    return count, true
+}
+
+points_point_remove_by_index :: proc(points: Points, index: i32) -> (ok: bool) {
+    if points == nil do return
+    if !com_connected() do return
+    
+    hr := (^PointsIF)(points)->Remove(index + 1)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+points_release :: proc(points: Points) {
+    if points != nil {
+        (^PointsIF)(points)->Release()
+    }
+}
+
+AutoPointIF :: struct #raw_union {
+    #subtype iunknownif: IUnknownIF,
+    using vtable: ^AutoPointVTable,
+}
+
+AutoPointVTable :: struct {
+    using iunknownvtable: IUnknownVTable,
+    AutoPosGet: proc "system" (this: ^AutoPointIF, AutoPos: ^i32) -> HResult,
+    AutoPosPut: proc "system" (this: ^AutoPointIF, AutoPos: i32) -> HResult,
+}
+
+autopoint_autopos_get :: proc(autopoint: AutoPoint) -> (position: i32, ok: bool) {
+    if autopoint == nil do return
+    if !com_connected() do return
+    
+    apt: i32
+    hr := (^AutoPointIF)(autopoint)->AutoPosGet(&apt)
+    if com_failed(hr) do return
+
+    if !ok do return
+    
+    return apt, true
+}
+
+autopoint_autopos_set :: proc(autopoint: AutoPoint, position: i32) -> (ok: bool) {
+    if autopoint == nil do return
+    if !com_connected() do return
+    
+    hr := (^AutoPointIF)(autopoint)->AutoPosPut(position)
+    if com_failed(hr) do return
+    
+    return true
+}
+
+autopoint_release :: proc(autopoint: AutoPoint) {
+    if autopoint != nil {
+        (^AutoPointIF)(autopoint)->Release()
+    }
 }

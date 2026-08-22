@@ -1,7 +1,5 @@
 package com
 
-import t "../types"
-
 Task :: distinct rawptr
 
 TaskIF :: struct #raw_union {
@@ -88,7 +86,7 @@ task_interval_time_set :: proc(task: Task, interval_time: i32) -> (ok: bool) {
     return true
 }
 
-task_priority_get :: proc(task: Task) -> (priority: t.TaskPriority, ok: bool) {
+task_priority_get :: proc(task: Task) -> (priority: i32, ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
@@ -96,14 +94,14 @@ task_priority_get :: proc(task: Task) -> (priority: t.TaskPriority, ok: bool) {
     hr := (^TaskIF)(task)->PriorityGet(&p)
     if com_failed(hr) do return
 
-    return t.TaskPriority(p), true
+    return p, true
 }
 
-task_priority_set :: proc(task: Task, priority: t.TaskPriority) -> (ok: bool) {
+task_priority_set :: proc(task: Task, priority: i32) -> (ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
-    hr := (^TaskIF)(task)->PriorityPut(i32(priority))
+    hr := (^TaskIF)(task)->PriorityPut(priority)
     if com_failed(hr) do return
 
     return true
@@ -129,7 +127,7 @@ task_offset_set :: proc(task: Task, offset: i32) -> (ok: bool) {
     return true
 }
 
-task_output_update_get :: proc(task: Task) -> (output_update: t.TaskOutputUpdate, ok: bool) {
+task_output_update_get :: proc(task: Task) -> (output_update: i32, ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
@@ -137,14 +135,14 @@ task_output_update_get :: proc(task: Task) -> (output_update: t.TaskOutputUpdate
     hr := (^TaskIF)(task)->OutputUpdateGet(&ou)
     if com_failed(hr) do return
 
-    return t.TaskOutputUpdate(ou), true
+    return ou, true
 }
 
-task_output_update_set :: proc(task: Task, output_update: t.TaskOutputUpdate) -> (ok: bool) {
+task_output_update_set :: proc(task: Task, output_update: i32) -> (ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
-    hr := (^TaskIF)(task)->OutputUpdatePut(i32(output_update))
+    hr := (^TaskIF)(task)->OutputUpdatePut(output_update)
     if com_failed(hr) do return
 
     return true
@@ -193,7 +191,7 @@ task_latency_percentage_set :: proc(task: Task, percentage: i32) -> (ok: bool) {
     return true
 }
 
-task_sil_level_get :: proc(task: Task) -> (sil_level: t.TaskSILLevel, ok: bool) {
+task_sil_level_get :: proc(task: Task) -> (sil_level: i32, ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
@@ -201,14 +199,14 @@ task_sil_level_get :: proc(task: Task) -> (sil_level: t.TaskSILLevel, ok: bool) 
     hr := (^TaskIF)(task)->TaskSILLevelGet(&s)
     if com_failed(hr) do return
 
-    return t.TaskSILLevel(s), true
+    return s, true
 }
 
-task_sil_level_set :: proc(task: Task, sil_level: t.TaskSILLevel) -> (ok: bool) {
+task_sil_level_set :: proc(task: Task, sil_level: i32) -> (ok: bool) {
     if task == nil do return
     if !com_connected() do return
 
-    hr := (^TaskIF)(task)->TaskSILLevelPut(i32(sil_level))
+    hr := (^TaskIF)(task)->TaskSILLevelPut(sil_level)
     if com_failed(hr) do return
 
     return true
@@ -242,55 +240,4 @@ task_release :: proc(task: Task) {
     if task != nil {
         (^TaskIF)(task)->Release()
     }
-}
-
-task_from_com :: proc(task: Task, allocator := context.allocator) -> (result: t.Task, ok: bool) {
-    if task == nil do return
-
-    context.allocator = allocator
-
-    result.name, ok = name(task)
-    if !ok do return
-    result.interval_time, ok = interval_time(task)
-    if !ok do return
-    result.priority, ok = priority(task)
-    if !ok do return
-    result.offset, ok = offset(task)
-    if !ok do return
-    result.output_update, ok = output_update(task)
-    if !ok do return
-    result.latency_supervision, ok = latency_supervision(task)
-    if !ok do return
-    result.latency_percentage, ok = latency_percentage(task)
-    if !ok do return
-    result.sil_level, ok = sil_level(task)
-    if !ok do return
-    result.guid, ok = guid(task)
-    if !ok do return
-
-    return result, true
-}
-
-task_to_com :: proc(src: t.Task) -> (result: Task, ok: bool) {
-    task: Task
-    task, ok = task_new1(
-        src.name,
-        src.interval_time,
-        src.priority,
-        src.offset,
-        src.output_update,
-    )
-    if !ok do return
-    defer if !ok do release(task)
-
-    ok = latency_supervision(task, src.latency_supervision)
-    if !ok do return
-    ok = latency_percentage(task, src.latency_percentage)
-    if !ok do return
-    ok = sil_level(task, src.sil_level)
-    if !ok do return
-    ok = guid(task, src.guid)
-    if !ok do return
-
-    return task, true
 }
