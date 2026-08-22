@@ -341,9 +341,7 @@ controlmodule_by_name :: proc {
     controlmodules_controlmodule_by_name,
 }
 
-controlmodule_by_index :: proc {
-    controlmodules_controlmodule_by_index,
-}
+controlmodule_by_index :: controlmodules_controlmodule_by_index
 
 controlmodule_index :: controlmodules_controlmodule_index
 

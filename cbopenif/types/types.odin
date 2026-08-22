@@ -444,16 +444,17 @@ ControlModuleType :: struct {
     code_blocks:                  [dynamic]CodeBlock,
     function_blocks:              [dynamic]FunctionBlock,
     control_modules:              [dynamic]ControlModule,
-    single_control_modules:       [dynamic]SingleControlModule,
 }
 
 ControlModule :: struct {
+    kind:                        ControlModuleKind,
     name:                        string,
     type_name:                   string,
     description:                 string,
     access_level:                string,
     safety_type:                 string,
     guid:                        string,
+    inst_guid:                   string,
     aspect_object:               bool,
     expose_properties_in_parent: bool,
     task_connection:             string,
@@ -463,20 +464,6 @@ ControlModule :: struct {
     type_guid:                   string,
     type_path:                   string,
     cm_connections:              [dynamic]CMConnection,
-}
-
-SingleControlModule :: struct {
-    name:                       string,
-    description:                string,
-    access_level:               string,
-    safety_type:                string,
-    task_connection:            string,
-    instance_graphics:          string,
-    visibility_in_graphics:     bool,
-    graph_pos:                  GraphPos,
-    inst_guid:                  string,
-    type_guid:                  string,
-    cm_connections:             [dynamic]CMConnection,
 }
 
 CMConnection :: struct {
@@ -531,7 +518,6 @@ DiagramType :: struct {
     code_blocks:                  [dynamic]CodeBlock,
     function_blocks:              [dynamic]FunctionBlock,
     control_modules:              [dynamic]ControlModule,
-    single_control_modules:       [dynamic]SingleControlModule,
     diagram_instances:            [dynamic]DiagramInstance,
 }
 
@@ -554,7 +540,6 @@ Diagram :: struct {
     code_blocks:            [dynamic]CodeBlock,
     function_blocks:        [dynamic]FunctionBlock,
     control_modules:        [dynamic]ControlModule,
-    single_control_modules: [dynamic]SingleControlModule,
     diagram_instances:      [dynamic]DiagramInstance,
     init_values:            [dynamic]InitValue,
 }

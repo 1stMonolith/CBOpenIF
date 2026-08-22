@@ -87,7 +87,7 @@ icontrolmodule_is_singlecontrolmodule :: proc(icontrolmodule: IControlModule) ->
     return from_variantbool(vb), true
 }
 
-icontrolmodule_as_single :: proc(icm: IControlModule) -> (inst: SingleControlModule, ok: bool) {
+icontrolmodule_as_singlecontrolmodule :: proc(icm: IControlModule) -> (inst: SingleControlModule, ok: bool) {
     if icm == nil do return
     IID := IID_SingleControlModule
     hr := (^IUnknownIF)(icm)->QueryInterface(&IID, cast(^rawptr)&inst)
@@ -104,20 +104,18 @@ icontrolmodule_release :: proc(icm: IControlModule) {
 from_icontrolmodule :: proc(icm: IControlModule) -> (module: Module, ok: bool) {
     if icm == nil do return
 
-    is: bool
-
-    is, ok = icontrolmodule_is_controlmodule(icm)
-    if ok && is {
+    is_single: bool
+    is_single, ok = icontrolmodule_is_singlecontrolmodule(icm)
+    if !ok do return
+    
+    if is_single {
+        scm, okas := icontrolmodule_as_singlecontrolmodule(icm)
+        if !okas do return
+        return scm, true
+    } else {
         cm, okas := icontrolmodule_as_controlmodule(icm)
         if !okas do return
         return cm, true
-    }
-
-    is, ok = icontrolmodule_is_singlecontrolmodule(icm)
-    if ok && is {
-        scm, okas := icontrolmodule_as_single(icm)
-        if !okas do return
-        return scm, true
     }
 
     return {}, false
@@ -641,18 +639,18 @@ ControlModulesIF :: struct #raw_union {
 
 ControlModulesVTable :: struct {
     using iunknownvtable: IUnknownVTable,
-    Serialize:                   proc "system" (this: ^ControlModulesIF, XML: ^BStr) -> HResult,
-    Add:                         proc "system" (this: ^ControlModulesIF, IControlModule: rawptr) -> HResult,
-    AddBefore:                   proc "system" (this: ^ControlModulesIF, IControlModule: rawptr, Index: i32) -> HResult,
-    AddControlModule:            proc "system" (this: ^ControlModulesIF, Name, TypeName: BStr, ControlModule: ^rawptr) -> HResult,
-    AddControlModule1:           proc "system" (this: ^ControlModulesIF, Name, TypeName, TaskConnection: BStr, VisibilityInGraphics: i32, Guid, Description: BStr, ControlModules: ^rawptr) -> HResult,
+    Serialize:               proc "system" (this: ^ControlModulesIF, XML: ^BStr) -> HResult,
+    Add:                     proc "system" (this: ^ControlModulesIF, IControlModule: rawptr) -> HResult,
+    AddBefore:               proc "system" (this: ^ControlModulesIF, IControlModule: rawptr, Index: i32) -> HResult,
+    AddControlModule:        proc "system" (this: ^ControlModulesIF, Name, TypeName: BStr, ControlModule: ^rawptr) -> HResult,
+    AddControlModule1:       proc "system" (this: ^ControlModulesIF, Name, TypeName, TaskConnection: BStr, VisibilityInGraphics: i32, Guid, Description: BStr, ControlModules: ^rawptr) -> HResult,
     AddSingleControlModule:  proc "system" (this: ^ControlModulesIF, Name: BStr, SingleControlModule: ^rawptr) -> HResult,
     AddSingleControlModule1: proc "system" (this: ^ControlModulesIF, Name, TaskConnection: BStr, VisibilityInGraphics: i32, TypeGuid, InstGuid: BStr, GraphPos: ^GraphPos, SingleControlModule: ^rawptr) -> HResult,
-    Find:                        proc "system" (this: ^ControlModulesIF, Name: BStr, IControlModule: ^rawptr) -> HResult,
-    FindNr:                      proc "system" (this: ^ControlModulesIF, Name: BStr, Index: ^i32) -> HResult,
-    Item:                        proc "system" (this: ^ControlModulesIF, Index: i32, IControlModule: ^rawptr) -> HResult,
-    Count:                       proc "system" (this: ^ControlModulesIF, Count: ^i32) -> HResult,
-    Remove:                      proc "system" (this: ^ControlModulesIF, Index: i32) -> HResult,
+    Find:                    proc "system" (this: ^ControlModulesIF, Name: BStr, IControlModule: ^rawptr) -> HResult,
+    FindNr:                  proc "system" (this: ^ControlModulesIF, Name: BStr, Index: ^i32) -> HResult,
+    Item:                    proc "system" (this: ^ControlModulesIF, Index: i32, IControlModule: ^rawptr) -> HResult,
+    Count:                   proc "system" (this: ^ControlModulesIF, Count: ^i32) -> HResult,
+    Remove:                  proc "system" (this: ^ControlModulesIF, Index: i32) -> HResult,
 }
 
 controlmodules_serialize :: proc(controlmodules: ControlModules) -> (xml: string, ok: bool) {
@@ -696,6 +694,20 @@ controlmodules_singlecontrolmodule_add :: proc(controlmodules: ControlModules, n
     return singlecontrolmodule, true
 }
 
+controlmodules_icontrolmodule_by_name :: proc(controlmodules: ControlModules, name: string) -> (icontrolmodule: IControlModule, ok: bool) {
+    if controlmodules == nil do return
+    if !com_connected() do return
+    
+    bstr_name := to_bstr(name)
+    defer bstr_free(bstr_name)
+    i: IControlModule
+    hr := (^ControlModulesIF)(controlmodules)->Find(bstr_name, cast(^rawptr)&i)
+    if com_failed(hr) do return
+    defer release(i)
+    
+    return i, true
+}
+
 controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, name: string) -> (module: Module, ok: bool) {
     if controlmodules == nil do return
     if !com_connected() do return
@@ -708,6 +720,18 @@ controlmodules_controlmodule_by_name :: proc(controlmodules: ControlModules, nam
     defer release(i)
     
     return from_icontrolmodule(i)
+}
+
+controlmodules_icontrolmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (icontrolmodule: IControlModule, ok: bool) {
+    if controlmodules == nil do return
+    if !com_connected() do return
+    
+    i: IControlModule
+    hr := (^ControlModulesIF)(controlmodules)->Item(index + 1, cast(^rawptr)&i)
+    if com_failed(hr) do return
+    defer release(i)
+    
+    return i, true
 }
 
 controlmodules_controlmodule_by_index :: proc(controlmodules: ControlModules, index: i32) -> (module: Module, ok: bool) {
@@ -773,7 +797,7 @@ controlmodules_release :: proc(controlmodules: ControlModules) {
     }
 }
 
-controlmodules_from_com :: proc(cms: ControlModules, allocator := context.allocator) -> (dcms: [dynamic]t.ControlModule, dscms: [dynamic]t.SingleControlModule, ok: bool) {
+controlmodules_from_com :: proc(cms: ControlModules, allocator := context.allocator) -> (dcm: [dynamic]t.ControlModule, ok: bool) {
     if cms == nil do return
     context.allocator = allocator
 
@@ -781,53 +805,66 @@ controlmodules_from_com :: proc(cms: ControlModules, allocator := context.alloca
     count, ok = controlmodule_count(cms)
     if !ok do return
 
-    dcms = make([dynamic]t.ControlModule, 0, int(count), allocator)
-    dscms = make([dynamic]t.SingleControlModule, 0, int(count), allocator)
+    dcm = make([dynamic]t.ControlModule, 0, int(count), allocator)
     for i in 0..<count {
-        module: Module
-        module, ok = controlmodule_by_index(cms, i)
+        im: IControlModule
+        im, ok = controlmodules_icontrolmodule_by_index(cms, i)
         if !ok do return
-        defer release(module)
+        defer release(im)
+        
+        is_single: bool
+        is_single, ok = icontrolmodule_is_singlecontrolmodule(im)
+        if !ok do return
 
-        switch m in module {
-            case ControlModule:
-                cms: t.ControlModule
-                cms, ok = controlmodule_from_com(m)
-                if !ok do return
-                append(&dcms, cms)
+        cms: t.ControlModule
+        if is_single {
+            cm: ControlModule
+            cm, ok = icontrolmodule_as_controlmodule(im)
+            if !ok do return
+            defer release(cm)
 
-            case SingleControlModule:
-                scms: t.SingleControlModule
-                scms, ok = singlecontrolmodule_from_com(m)
-                if !ok do return
-                append(&dscms, scms)
+            cms, ok = controlmodule_from_com(cm)
+            if !ok do return
+            append(&dcm, cms)
+        } else {
+            scm: SingleControlModule
+            scm, ok = icontrolmodule_as_singlecontrolmodule(im)
+            if !ok do return
+            defer release(scm)
+
+            cms, ok = singlecontrolmodule_from_com(scm)
+            if !ok do return
+            append(&dcm, cms)
         }
     }
 
-    return dcms, dscms, true
+    return {}, false
 }
 
-controlmodules_to_com :: proc(cms: ControlModules, dcms: []t.ControlModule, dscms: []t.SingleControlModule) -> (ok: bool) {
+controlmodules_to_com :: proc(cms: ControlModules, dcm: []t.ControlModule) -> (ok: bool) {
     if cms == nil do return
 
-    for m in dcms {
-        cm: ControlModule
-        cm, ok = controlmodule_to_com(m)
-        if !ok do return
-        defer release(cm)
+    for m in dcm {
 
-        ok = controlmodule_add(cms, cm)
-        if !ok do return
-    }
+        if m.kind == .ControlModule {
+            cm: ControlModule
+            cm, ok = controlmodule_to_com(m)
+            if !ok do return
+            defer release(cm)
 
-    for m in dscms {
-        scm: SingleControlModule
-        scm, ok = singlecontrolmodule_to_com(m)
-        if !ok do return
-        defer release(scm)
+            _, ok = controlmodules_controlmodule_add(cms, m.name, m.type_name)
+            if !ok do return
+        }
 
-        ok = controlmodule_add(cms, scm)
-        if !ok do return
+        if m.kind == .SingleControlModule {
+            scm: SingleControlModule
+            scm, ok = singlecontrolmodule_to_com(m)
+            if !ok do return
+            defer release(scm)
+
+            _, ok = controlmodules_singlecontrolmodule_add(cms, m.name)
+            if !ok do return
+        }
     }
 
     return true
@@ -1511,7 +1548,7 @@ controlmoduletype_from_com :: proc(cmt: ControlModuleType, allocator := context.
         c, ok = controlmodules(cmt)
         if !ok do return
         defer release(c)
-        result.control_modules, result.single_control_modules, ok = controlmodules_from_com(c)
+        result.control_modules, ok = controlmodules_from_com(c)
         if !ok do return
     }
 
@@ -1601,7 +1638,7 @@ controlmoduletype_to_com :: proc(src: t.ControlModuleType) -> (result: ControlMo
         c, ok = controlmodules(cmt)
         if !ok do return
         defer release(c)
-        ok = controlmodules_to_com(c, src.control_modules[:], src.single_control_modules[:])
+        ok = controlmodules_to_com(c, src.control_modules[:])
         if !ok do return
     }
 
@@ -1919,7 +1956,7 @@ singlecontrolmodule_release :: proc(singlecontrolmodule: SingleControlModule) {
     }
 }
 
-singlecontrolmodule_from_com :: proc(inst: SingleControlModule, allocator := context.allocator) -> (result: t.SingleControlModule, ok: bool) {
+singlecontrolmodule_from_com :: proc(inst: SingleControlModule, allocator := context.allocator) -> (result: t.ControlModule, ok: bool) {
     if inst == nil do return
     context.allocator = allocator
 
@@ -1962,7 +1999,7 @@ singlecontrolmodule_from_com :: proc(inst: SingleControlModule, allocator := con
     return result, true
 }
 
-singlecontrolmodule_to_com :: proc(src: t.SingleControlModule) -> (result: SingleControlModule, ok: bool) {
+singlecontrolmodule_to_com :: proc(src: t.ControlModule) -> (result: SingleControlModule, ok: bool) {
     gp: GraphPos
     gp, ok = graphpos_to_com(src.graph_pos)
     if !ok do return

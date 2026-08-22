@@ -608,7 +608,7 @@ diagram_from_com :: proc(diagram: Diagram, allocator := context.allocator) -> (r
         c, ok = controlmodules(diagram)
         if !ok do return
         defer release(c)
-        result.control_modules, result.single_control_modules, ok = controlmodules_from_com(c)
+        result.control_modules, ok = controlmodules_from_com(c)
         if !ok do return
     }
     {
@@ -703,7 +703,7 @@ diagram_to_com :: proc(src: t.Diagram) -> (result: Diagram, ok: bool) {
         c, ok = controlmodules(diagram)
         if !ok do return
         defer release(c)
-        ok = controlmodules_to_com(c, src.control_modules[:], src.single_control_modules[:])
+        ok = controlmodules_to_com(c, src.control_modules[:])
         if !ok do return
     }
     {
@@ -1763,7 +1763,7 @@ diagramtype_from_com :: proc(dt: DiagramType, allocator := context.allocator) ->
         c, ok = controlmodules(dt)
         if !ok do return
         defer release(c)
-        result.control_modules, result.single_control_modules, ok = controlmodules_from_com(c)
+        result.control_modules, ok = controlmodules_from_com(c)
         if !ok do return
     }
     {
@@ -1844,7 +1844,7 @@ diagramtype_to_com :: proc(src: t.DiagramType) -> (result: DiagramType, ok: bool
         c, ok = controlmodules(dt)
         if !ok do return
         defer release(c)
-        ok = controlmodules_to_com(c, src.control_modules[:], src.single_control_modules[:])
+        ok = controlmodules_to_com(c, src.control_modules[:])
         if !ok do return
     }
     {
